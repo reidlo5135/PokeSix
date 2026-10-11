@@ -41,6 +41,13 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
 5. Windows 설정이 레지스트리 → `%APPDATA%\YamadaStudio\PokeSix.ini`로 바뀌었다(2026-10-07). 이전에 레지스트리에 저장된 세대 · 게임은 이어지지 않는다(한 번 다시 고르면 끝). 레지스트리 잔여물은 `HKCU\Software\YamadaStudio`에 남아 있어도 무해하다
 6. ~~**Windows .msi 검증**~~ → 2026-10-09 집 PC에서 통과(WiX 3.14 winget 설치 · `package.bat` → msi · 설치 → 사용자 시작 메뉴 바로가기 → 설치된 exe 실행 → 제거 깨끗). 남은 것: CI 러너(windows-2022, WiX 프리인스톨)에서 msi가 나오는지는 v0.2.0 태그 실행으로 확인
 7. macOS 공증(notarization): Apple Developer(연 99달러) + CI secrets(`notarytool`)를 붙이면 내려받은 dmg의 Gatekeeper "손상됨" 차단이 사라진다. 그 전까지는 README Download 절 + dmg 안 `READ ME FIRST - macOS.txt`의 `xattr` 안내로 운용(2026-10-09). **무료 대안**: GitHub에 `yamada-studio/homebrew-tap` 리포를 만들고 cask를 두면 Mac 사용자는 `brew install --cask --no-quarantine yamada-studio/tap/pokesix` 한 줄로 격리 없이 설치한다(새 리포 생성은 사용자 결정). 확인 필요: 친구 Mac에서 **v0.2.0** dmg + xattr 절차로 실제로 뜨는지(v0.1.0은 재서명 전이라 xattr을 풀어도 arm64에서 안 뜰 수 있다)
+8. **테마 전환 [라이트 | 다크 | 시스템]** — 사용자 요청(2026-10-12): 앱 막대의 세대 버튼 바로 왼쪽에 흔한 SVG 아이콘 3칸(해 · 달 · 모니터, Lucide ISC 추천).
+   v0.2.1의 `setColorScheme(Light)`는 임시방편. **H6 끝난 뒤 시작**(사용자 결정). 막히는 것 셋: ① 토큰이 `constexpr`(53파일 552회) · QSS는 시작 때 한 번 치환 →
+   실행 중 전환 불가 ② 핸드오프 `darkOverrides`는 11개뿐 — tint · rowSel · cell.border · line.strong · text.disabled 등 40여 개 다크 값 없음
+   ③ `white`가 "바탕"과 "색 위 흰 글자"(히트맵 · 마크 버튼 · 분류 칸 · QSS `color: @white`) 두 뜻 → `onColor` 분리 필요.
+   제안 순서: F3a 런타임 팔레트(`Palette` kLight · kDark를 바꿔 끼움, QSS 재적용 · 다시 칠하기, `--theme dark` 검증) → F3b 빠진 다크 값 →
+   F2' 모드 설정(`QStyleHints::colorScheme` · `colorSchemeChanged`, QSettings `theme/mode`) + 앱 막대 3칸. 핸드오프는 설정 화면 테마 카드(라이트/다크)라 위치 · "시스템"은 이탈.
+   **시작할 때 물을 것**: 토큰 치환 방식(`tok::palette().paper` 추천, 기계적 치환은 Claude), 빠진 다크 값(디자인 요청서 vs Claude 제안값), 설정 화면 카드도 둘지
 
 ---
 
