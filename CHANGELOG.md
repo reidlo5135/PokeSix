@@ -6,6 +6,51 @@ and the project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-10-09
+
+Two fixes for people who installed 0.2.0: the squad analysis panel went black on a Windows PC in
+dark mode, and the macOS dmg now explains the Gatekeeper dialog where it appears.
+
+### Fixed
+- The analysis panel (and anything else that relied on a transparent background over the paper)
+  turned black on Windows PCs set to dark mode: since Qt 6.5 the Windows platform applies a dark
+  palette when the system is dark, and the app never set its own. The paper theme is light by
+  design (a dark theme is Phase F3), so the theme now pins the color scheme to light
+  (`QStyleHints::setColorScheme`) and fills the palette roles from the design tokens.
+
+### Changed
+- The macOS dmg carries `READ ME FIRST - macOS.txt` next to the app: Gatekeeper's "damaged and
+  can't be opened" dialog (quarantine on a non-notarized, ad-hoc-signed app) appears right over the
+  dmg window, so the one-time `xattr -d com.apple.quarantine` fix is now readable there, in Korean
+  and English. README adds the eject step and the `curl -LO` download that carries no flag.
+
+## [0.2.0] - 2026-10-09
+
+Save-file import (Phase H1–H2), a Windows .msi installer and a build identity string, plus the
+Windows database-swap fix. Features shipped mid-phase, so this is a MINOR bump
+(versioning-and-git.md §1).
+
+### Fixed
+- Windows packages carry the MSVC runtime (`msvcp140.dll`, `vcruntime140.dll`, `vcruntime140_1.dll`)
+  next to the exe: windeployqt's `--compiler-runtime` only finds `vc_redist.x64.exe` inside a VS
+  developer environment, so neither the scripts nor CI had been shipping any runtime. CMake's
+  `InstallRequiredSystemLibraries` now installs the DLLs app-local, as the VS redistribution terms
+  allow (THIRD_PARTY_NOTICES.md).
+- `package.bat` stops with a clear message when the package folder cannot be cleared because a
+  PokeSix started from it (quickstart does that) is still running, instead of failing later in
+  `cmake --install`.
+- The msi was built and verified on a real Windows 11 (install → Start menu → run → uninstall).
+- Windows: updating to a new schema while another PokeSix window was open (e.g. the installed
+  0.1.0 next to a dev build) ended in "데이터를 받지 못했어요 — cannot move …pokesix.sqlite.importing":
+  Windows will not delete or rename a database file another process has open, Linux will. The
+  importer now keeps the finished temporary database when the swap is blocked, the first-run
+  panel explains the real cause ("다른 PokeSix 창이 열려 있으면 모두 닫고 다시 시도") instead of blaming
+  the network, [다시 시도] swaps the kept file in without a second 30-second import, and the next
+  launch adopts it automatically before anything opens the database. The updater also tells the
+  window to close its own connection before the swap (`aboutToReplaceDatabase`), and a temporary
+  file from another build or a crashed import is discarded (schema version and CSV commit must
+  match).
+
 ### Added
 - The Squad page imports a party straight from a 4th-gen game save (H2 — written by the user
   following the H2 guide): [Import] accepts `.sav` / `.dsv` next to `.pks`, and dropping one of

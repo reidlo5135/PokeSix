@@ -264,6 +264,26 @@ CMake Error at .../GoogleTestAddTests.cmake:132 (message):
 - 이 리포는 Qt에 링크하는 테스트에 `DISCOVERY_MODE PRE_TEST`를 줘서 목록 읽기를 **ctest 실행 시점**(테스트 프리셋이 PATH에 Qt bin을 넣는다)으로 미뤘다. Qt에 링크하는 테스트 타깃을 새로 만들면 같은 옵션을 준다
 - core 테스트(`pokesix_core_tests`)는 Qt를 쓰지 않으므로 그대로 둔다
 
+<a id="db-swap-blocked"></a>
+### 5-8. Windows: 첫 실행 패널 "데이터를 바꿔 넣지 못했어요" / 로그 `cannot remove … pokesix.sqlite (opened by another process?)`
+
+```
+W pokesix.data: cannot remove "C:/Users/<me>/AppData/Roaming/YamadaStudio/PokeSix/pokesix.sqlite" (opened by another process?)
+W pokesix.data: import failed: "cannot replace … (opened by another PokeSix window?) — the new data is kept as …pokesix.sqlite.importing"
+```
+- 변환은 임시 파일(`pokesix.sqlite.importing`)에 만든 뒤 `pokesix.sqlite` 자리에 바꿔 넣는다. **Windows는 다른 프로세스가 열어 둔 파일을 지우거나 이름을 바꾸지 못한다**(Linux는 된다 — 그래서 Linux에서는 안 보인다)
+- 전형적인 경우: 설치본(예: `C:\PokeSix\bin\PokeSix.exe`, 옛 스키마)을 띄워 둔 채 새 빌드(스키마가 올라감)를 실행 → 새 빌드가 데이터를 다시 만들고 바꿔 넣으려는 순간 설치본이 옛 DB를 읽기 전용으로 잡고 있다
+- 2026-10-09부터 앱이 처리한다: 완성된 임시 DB를 남겨 두고 패널이 "다른 PokeSix 창을 닫고 다시 시도"를 안내한다. [다시 시도]는 다시 받지 않고 그 파일만 바꿔 넣고, 다음 실행 때는 `Application`이 아무것도 DB를 열기 전에 넣는다(`gamedatabase::adoptPendingImport`). 같은 프로세스의 연결은 변환 전에 `DataUpdater::aboutToReplaceDatabase`로 닫는다
+- 스키마 버전이나 PokéAPI CSV 커밋이 다른 임시 파일(옛 빌드 · 죽은 변환)은 버린다
+- 그래도 안 되면: 작업 관리자에서 `PokeSix.exe`를 모두 끝내고 다시 실행한다. 어느 프로세스가 잡고 있는지는 PowerShell `[System.IO.File]::Open(path,'Open','ReadWrite','None')`가 던지는 예외나 Sysinternals `handle.exe pokesix.sqlite`로 본다
+
+<a id="dark-mode"></a>
+### 5-9. Windows 다크 모드 PC에서 패널 바탕이 검게 보임 (v0.2.0 이하)
+
+- Qt 6.5부터 Windows 플랫폼 플러그인은 시스템이 다크 모드면 앱 팔레트를 어둡게 만든다. 이 앱은 QSS와 직접 그리기에만 기대고 팔레트를 정하지 않아서, QSS가 `background: transparent`로 비워 둔 자리(스쿼드 분석 창의 스크롤 영역 등)에 어두운 `Window` 색이 비쳤다
+- v0.2.1부터 `theme::apply`가 색 구성표를 밝음으로 고정(`QStyleHints::setColorScheme(Light)`)하고 팔레트 역할을 토큰으로 채운다. 다크 테마는 Phase F3에서 토큰 교체로 한다
+- 재현 · 확인: `HKCU\…\Themes\Personalize\AppsUseLightTheme`을 0으로 바꾸고 `--screenshot squad 1440x900 out.png`(offscreen 말고 실제 창)로 찍는다. 끝나면 1로 되돌린다
+
 ---
 
 ## 6. IDE
