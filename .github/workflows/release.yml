@@ -1,5 +1,6 @@
 # 릴리스 빌드(3 OS): 태그(v*)를 푸시하면 패키지를 만들어 GitHub Release에 첨부한다.
 # 수동 실행(workflow_dispatch)은 아티팩트만 올린다 — 태그 전에 확인용.
+# 릴리스 노트: 세 패키지가 다 붙은 뒤 notes 잡이 docs/release-notes/<태그>.md + SHA-256을 본문으로 올린다.
 # Qt는 scripts/QT_VERSION 한 곳을 읽고, setup 스크립트와 같은 최소 아카이브만 받는다.
 name: release
 
@@ -102,3 +103,31 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: build/package/PokeSix-*-macos.dmg
+
+  # 세 OS 패키지가 모두 붙은 뒤 Release 본문을 채운다: docs/release-notes/<태그>.md(있으면) + 파일 4개의 SHA-256.
+  # 노트 파일이 없어도 SHA-256만은 올라간다. 이 잡이 실패해도 패키지는 이미 Release에 붙어 있다(본문만 손으로).
+  notes:
+    needs: [linux, windows, macos]
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - name: Compose the release body
+        run: |
+          notes="docs/release-notes/${GITHUB_REF_NAME}.md"
+          {
+            if [ -f "$notes" ]; then cat "$notes"; echo; fi
+            echo 'SHA-256'
+            echo '```'
+            (cd dist && sha256sum PokeSix-*)
+            echo '```'
+          } > release-body.md
+          cat release-body.md
+      - uses: softprops/action-gh-release@v2
+        with:
+          name: PokeSix ${{ github.ref_name }}
+          body_path: release-body.md
