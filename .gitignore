@@ -52,3 +52,5 @@ aqtinstall.log
 *.sav
 *.dsv
 *.nds
+
+Testing/
