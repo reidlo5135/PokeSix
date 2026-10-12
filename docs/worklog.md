@@ -54,6 +54,11 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
    Windows에서 커밋한 파일(`csvimporter.h` · `dataupdater.h` · `firstrunpanel.h` · `homepage.cpp`)을 Linux에서 돌리면 바뀌고, 반대도 마찬가지다.
    2026-10-12 사용자 작업 트리에 `homepage.cpp`의 정렬만 바뀐 변경이 남아 있다(커밋 안 함). 해결안: 두 머신이 같은 버전을 쓰게 고정
    (예: `uv tool install clang-format==<버전>` — PyPI 휠, setup 스크립트에 넣기)하고 한 번 전체 포맷 커밋. 사용자 결정 대기
+10. **AppImage 자기 등록(앱 메뉴)** — 사용자 결정(2026-10-12): Linux 배포는 AppImage 하나뿐이니 **AppImage만 실행해도 메뉴에 등록**돼야 한다(별도 CLI 불편).
+    방법: 시작할 때 환경 변수 `APPIMAGE`(런타임이 넣는 파일 절대 경로)가 있으면 `~/.local/share/applications/com.yamada.studio.pokesix.desktop`이 없거나
+    `Exec`가 다를 때 다시 쓰고, 아이콘은 qrc에서 `~/.local/share/icons/hicolor/<크기>/apps/pokesix.png`로(지금 `package.sh --install`이 하는 일과 같은 결과).
+    app 레이어 한 파일, `#ifdef Q_OS_LINUX`. 한계: 첫 실행은 손으로, 파일을 지우면 메뉴 항목이 남음(README에 제거법), 끄는 스위치는 E4 설정 때.
+    **순서: H8 마무리 → 이것 → 전체 검증 → 릴리스.** 사용자는 "0.3.1"이라 했지만 기능 추가라 규칙상 0.4.0 — 릴리스 때 확인. 구현을 가이드로 할지 Claude가 할지는 시작 때 묻기
 
 ---
 
