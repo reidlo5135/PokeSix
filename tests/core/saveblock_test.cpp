@@ -146,6 +146,9 @@ TEST(SaveBlock, ChecksThePartyBlockCrcInBothPlaces) // H6-CP3-2
 {
     EXPECT_TRUE(partyBlockValid(
             buildTableSave(kBwSeries, TableSaveSpec {.party = {synth::MemberSpec {}}}), kBw));
+    // B2W2는 모음 블록이 다른 자리(0x25F00)라 사본도 다른 자리 — 위치를 행(check)에서 계산해야 맞다
+    EXPECT_TRUE(partyBlockValid(
+            buildTableSave(kB2w2Series, TableSaveSpec {.party = {synth::MemberSpec {}}}), kB2w2));
     auto save = buildTableSave(
             kBwSeries, TableSaveSpec {.party = {synth::MemberSpec {}}, .corruptParty = true});
     EXPECT_FALSE(partyBlockValid(save, kBw));
