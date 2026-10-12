@@ -23,15 +23,12 @@ QJsonObject memberToJson(const SquadMember &m)
     for (const int move : m.moves)
         moves.append(move);
 
-    // TODO(H8-CP2-1) 위의 return을 QJsonObject json = { … };으로 받고, m.hasStats()일 때만
-    //   "level"(정수)과 "stats"(정수 6개 배열 — moves와 같은 요령)를 json.insert한 뒤 return json
-
     QJsonObject json {
             {QStringLiteral("pokemon"), m.pokemonId}, {QStringLiteral("memo"), m.memo},
             {QStringLiteral("moves"), moves},         {QStringLiteral("ability"), m.abilityId},
             {QStringLiteral("nature"), m.natureId},   {QStringLiteral("item"), m.itemId}};
 
-    if (m.hasStats()) {
+    if (m.hasStats()) { // 세이브에서 가져온 멤버만. 손으로 넣은 멤버는 키 자체를 쓰지 않는다
         json.insert(QStringLiteral("level"), m.level);
 
         QJsonArray stats;
@@ -54,8 +51,7 @@ SquadMember memberFromJson(const QJsonObject &object)
     member.abilityId = object.value(QStringLiteral("ability")).toInt();
     member.natureId = object.value(QStringLiteral("nature")).toInt();
     member.itemId = object.value(QStringLiteral("item")).toInt();
-    // TODO(H8-CP2-2) "level"과 "stats"를 읽는다. 키가 없으면(H8 전에 저장한 파일) toInt()가 0을
-    //   돌려주므로 level = 0 = 모름이 저절로 된다 — 따로 분기하지 않아도 된다
+    // 키가 없으면(H8 전에 저장한 파일 · 손으로 넣은 멤버) toInt()가 0 → level 0 = 모름
     member.level = object.value(QStringLiteral("level")).toInt();
     const QJsonArray stats = object.value(QStringLiteral("stats")).toArray();
     for (qsizetype j = 0; j < stats.size() && j < qsizetype(member.stats.size()); ++j)

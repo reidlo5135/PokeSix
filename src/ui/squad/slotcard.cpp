@@ -501,12 +501,8 @@ void SlotCard::paintFilled(QPainter &painter, const Geometry &g)
     const QRect iconBox(x, g.header.top() + 2, 36, kHeader - 4);
     DexRowDelegate::paintPokemonIcon(&painter, QRectF(iconBox), detail.pokemonId, m_pokemonIcons);
     x = iconBox.right() + 6;
-    // TODO(H8-CP3) 이름 오른쪽에 작게 "Lv.48" — m_session->member(m_slot).hasStats()일 때만.
-    //   ① 레벨 글자 폭을 먼저 재서(QFontMetrics::horizontalAdvance) 이름 칸(nameWidth)에서 뺀다
-    //   ② 이름을 그린 뒤, 실제로 그려진 이름의 폭만큼 x를 옮겨 레벨을 그린다(줄인 이름 = elidedText
-    //   결과) 글꼴은 번호와 같은 도트(theme::kFamilyPixel 11), 색은 headerText
+    // 이름 오른쪽에 작게 레벨(세이브에서 가져온 멤버만). 레벨 폭을 먼저 이름 칸에서 뺀다
     const SquadMember &member = m_session->member(m_slot);
-
     const QString level = member.hasStats() ? QStringLiteral("Lv.%1").arg(member.level) : QString();
     const QFont levelFont = theme::font(theme::kFamilyPixel, 11);
     const int levelWidth
@@ -514,7 +510,6 @@ void SlotCard::paintFilled(QPainter &painter, const Geometry &g)
     const int nameWidth
             = (m_warning.isEmpty() ? g.swap.left() : g.warn.left()) - x - 4 - levelWidth;
 
-    // Draw name
     painter.setFont(theme::font(theme::kFamilyTitle, 19));
     painter.setPen(QColor(headerText));
     const QString name
@@ -523,7 +518,7 @@ void SlotCard::paintFilled(QPainter &painter, const Geometry &g)
     painter.drawText(QRect(x, g.header.top(), nameWidth, kHeader), Qt::AlignLeft | Qt::AlignVCenter,
                      name);
 
-    // Draw level
+    // 실제로 그려진(줄였으면 줄인) 이름 바로 뒤
     const int levelX = x + QFontMetrics(painter.font()).horizontalAdvance(name) + 6;
     painter.setFont(levelFont);
     painter.drawText(QRect(levelX, g.header.top(), levelWidth, kHeader),

@@ -41,15 +41,13 @@ void StatRadar::setNature(int increased, int decreased)
 
 void StatRadar::setTrainedStats(std::optional<std::array<int, 6>> stats)
 {
-    // TODO(H8-CP4-1) setStats와 같은 모양: 멤버에 담고 다시 그리기를 요청한다
     m_trained = stats;
     QWidget::update();
 }
 
 int StatRadar::scaleMax() const
 {
-    // TODO(H8-CP4-2) 파랑이 있고 그 최댓값이 kScaleMax보다 크면, 그 값을 덮는 가장 작은 kRingStep의
-    //   배수(예: 231 → 250)를 돌려준다. 아니면 kScaleMax. 최댓값은 std::ranges::max(배열)
+    // 파랑의 최댓값이 kScaleMax를 넘으면 그 값을 덮는 가장 작은 kRingStep 배수(231 → 250)
     if (m_trained) {
         const int top = std::ranges::max(*m_trained);
         if (top <= kScaleMax)
@@ -97,11 +95,9 @@ void StatRadar::paintEvent(QPaintEvent *)
     for (int axis = 0; axis < 6; ++axis)
         painter.drawLine(center, point(axis, radius));
 
-    // TODO(H8-CP4-3) 인게임 능력치 도형(파랑): m_trained가 있으면 아래 "종족값 도형"과 같은
-    //   순서로 — 점 6개 → 채움(tok::kBlue, 알파 kFillAlpha) · 선(tok::kBlueDeep). 빨강보다 먼저
-    //   그린다: 파랑이 대개 더 커서, 위에 덮으면 빨강이 탁해진다
+    // 2) 인게임 능력치 도형(파랑) — 빨강보다 먼저: 파랑이 대개 더 커서, 위에 덮으면 빨강이 탁해진다
     if (m_trained) {
-        std::array<int, 6UL> trained = *m_trained;
+        const std::array<int, 6> &trained = *m_trained;
 
         QPolygonF shape;
         for (int axis = 0; axis < 6; ++axis) {
@@ -113,12 +109,13 @@ void StatRadar::paintEvent(QPaintEvent *)
         painter.setBrush(fill);
         painter.setPen(QPen(QColor(tok::kBlueDeep), 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
         painter.drawPolygon(shape);
+        painter.setPen(Qt::NoPen);
         painter.setBrush(QColor(tok::kBlue));
         for (const QPointF &p : shape)
             painter.drawEllipse(p, 2.5, 2.5);
     }
 
-    // 2) 종족값 도형
+    // 3) 종족값 도형(빨강)
     QPolygonF shape;
     for (int axis = 0; axis < 6; ++axis) {
         const int value = std::min(m_stats[kAxisToStat[axis]], scale);
@@ -134,7 +131,7 @@ void StatRadar::paintEvent(QPaintEvent *)
     for (const QPointF &p : shape)
         painter.drawEllipse(p, 2.5, 2.5);
 
-    // 3) 축 이름 + 값: 축 끝 바깥에. 위 · 아래 축은 가운데 정렬, 왼쪽 · 오른쪽 축은 바깥쪽으로
+    // 4) 축 이름 + 값: 축 끝 바깥에. 위 · 아래 축은 가운데 정렬, 왼쪽 · 오른쪽 축은 바깥쪽으로
     // 붙인다.
     const QFont nameFont = theme::font(theme::kFamilyBody, 12, QFont::ExtraBold);
     const QFont valueFont = theme::font(theme::kFamilyData, 13, QFont::Bold);
@@ -174,13 +171,11 @@ void StatRadar::paintEvent(QPaintEvent *)
         painter.setPen(QColor(m_stats[stat] >= 100 ? tok::kText1 : tok::kText3));
         painter.drawText(QRectF(box.left(), box.top() + 16, box.width(), 18),
                          horizontal | Qt::AlignVCenter, QString::number(m_stats[stat]));
-        // TODO(H8-CP4-4) m_trained가 있으면 종족값 아래 한 줄(box.top() + 34)에 그 능력치를
-        //   파랑(tok::kBlueDeep)으로. 줄이 늘면 아래 축 글자가 위젯 밖으로 잘리므로, 파랑이 있을
-        //   때는 radius를 구할 때 빼는 바깥 여백을 한 줄(18)만큼 더 준다
+        // 인게임 능력치는 종족값 아래 한 줄(그만큼 radius의 바깥 여백이 18 늘었다)
         if (m_trained) {
             painter.setPen(QColor(tok::kBlueDeep));
-            const auto &trained = *m_trained;
-            painter.drawText(QRectF(box.left(), box.top() + 34, box.width(), 16), horizontal | Qt::AlignVCenter, QString::number(trained[stat]));
+            painter.drawText(QRectF(box.left(), box.top() + 34, box.width(), 18),
+                             horizontal | Qt::AlignVCenter, QString::number((*m_trained)[stat]));
         }
     }
 }

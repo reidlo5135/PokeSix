@@ -7,11 +7,10 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
 
 ---
 
-## 지금 상태 — 2026-10-12
+## 지금 상태 — 2026-10-13
 
-- **`v0.3.0`(2026-10-12, MINOR) 준비 완료 — 사용자 push 대기**: 5세대(BW · B2W2) 세이브 불러오기(H6). 릴리스 커밋 · 태그는 Linux 세션이 로컬에 만들었다.
-  `git push origin main --follow-tags` 후 확인할 것: Actions `release` 4잡(linux · windows · macos · **notes**) 초록, Release 본문 = `docs/release-notes/v0.3.0.md` + SHA-256.
-  notes 잡은 이번이 첫 실행(검증 안 됨) — 실패하면 패키지는 이미 붙어 있으니 본문만 웹에서 붙여 넣는다
+- **`main`에 H8 merge(2026-10-13), 아직 미릴리스** — 다음 릴리스는 AppImage 자기 등록(열린 일 10)까지 넣고 전체 검증 뒤. 버전은 규칙상 0.4.0(사용자는 0.3.1을 말함 — 릴리스 때 확인)
+- **`v0.3.0`(2026-10-12, MINOR) 공개됨**: 5세대(BW · B2W2) 세이브 불러오기(H6). 사용자가 push했고 내려받기 확인(사용자 PC의 AppImage가 0.3.0)
 - **`v0.2.1`(2026-10-09, PATCH)**: Windows 다크 모드 검은 패널 수정 + dmg 안의 macOS 안내문. https://github.com/yamada-studio/PokeSix/releases/tag/v0.2.1 — CI가 4개 파일 첨부(msi 18.5MB · zip 18.2MB · AppImage 39.5MB · dmg 32.1MB), 노트 · SHA-256은 API로
 - **`v0.2.0` 릴리스(2026-10-09)**: https://github.com/yamada-studio/PokeSix/releases/tag/v0.2.0 — 이번에는 **CI가 Release를 스스로 만들고 4개 파일(zip · msi · AppImage · dmg)을 붙였다**(`permissions: contents: write` 확인). 노트 본문 · SHA-256만 API로 채웠다. 러너의 WiX 3.14로 msi도 나온다
 - 2026-10-09(집 Windows): 회사 세션의 H1 · H2(스키마 12)를 Windows에서 처음 돌리다 만난 **DB 교체 실패(파일 잠금)** 를 고쳤다 — [build.md §5-8](build.md#db-swap-blocked). 145 테스트 통과. Windows 패키지에 빠져 있던 MSVC 런타임을 동봉했고 msi를 실기 검증했다
@@ -30,7 +29,7 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
 
 ### 진행 중
 
-- **H8 — 사용자 구현 대기**(브랜치 `feat/h8-trained-stats`, [가이드](guides/h8-trained-stats.md)): 불러온 개체의 레벨 · 인게임 능력치 → 카드 제목 · 상세 레이더 파랑. 뼈대 · 테스트 커밋됨, 빨강 4개(CP3 · CP4는 화면이라 눈으로). 사용자 아이디어(2026-10-12)로 테마 전환보다 먼저. 그다음 **테마 전환**(열린 일 8).
+- **AppImage 자기 등록**(열린 일 10) — 사용자 결정(2026-10-13): **Claude가 구현**. 그다음 전체 검증 → 릴리스 → **테마 전환**(열린 일 8).
   그 밖의 후보: 폼 표 · 세이브 파일 감시 · 전투 분석 입력 넓히기([data/battle-inputs.md](data/battle-inputs.md) §4) · Phase B · E4
 
 ### 열린 일 (작은 것부터)
@@ -81,6 +80,14 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
 ---
 
 ## 최근 세션 (역순)
+
+### 2026-10-13 — H8 완료 · merge (Linux 세션)
+
+- 사용자 구현 CP1–CP4. 진단 · 구현 중 짚은 것: `QFontMetrics`는 글꼴마다 따로(바꾸기 전에 재기), 위치와 폭을 섞음, `setAlpha(0.28)`(0–255 정수) vs `setAlphaF`,
+  scaleMax에서 확인 전 역참조, 진화 트리로 옮긴 뒤 파랑이 남음(`else` → `std::nullopt` — 렌더 도구로 맘모꾸리 → 메꾸리 확인)
+- 정리: TODO → 짧은 한국어 주석, 파랑 점의 테두리 제거(`NoPen` — 빨강과 같게), 셋째 줄 높이 18, 배열 복사 → const 참조
+- 클린 빌드 경고 0 · 173 통과. `RealSave` 소울실버 + **화이트(BW) 실파일 첫 통과** — 5세대 BW 수치 확인([data/gen5/](data/gen5/README.md))
+- 렌더 도구(`detailshot` — `DexDetailPage`를 offscreen으로 그려 PNG)는 scratch 워크트리에서만 만들고 지웠다. 필요하면 다시 만든다: `tools/CMakeLists.txt`에 실행 파일 하나 + `pokesix_ui` · `pokesix_data` 링크
 
 ### 2026-10-12 — v0.3.0 릴리스 준비 · H8 시작 (Linux 세션)
 
