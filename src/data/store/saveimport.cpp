@@ -14,7 +14,6 @@ namespace {
 // TODO(H6-CP5-1) 이 상수를 지운다 — 이제 세대는 세이브가 알려 준다(party->generation).
 //   지우면 쓰던 세 곳이 컴파일 오류로 나온다: versionsOfGroup(세대를 인자로 받게),
 //   itemIdForGameIndex, portable.generation
-constexpr int kGeneration = 4;
 
 QString tr(const char *text)
 {
@@ -22,10 +21,10 @@ QString tr(const char *text)
 }
 
 // 게임 묶음("heartgold-soulsilver")의 버전들({"heartgold", "soulsilver"}) — DB의 게임 표에서
-QStringList versionsOfGroup(Repository &repository,
-                            const QString &versionGroup) // TODO(H6-CP5-2) int generation 인자
+QStringList versionsOfGroup(Repository &repository, const QString &versionGroup,
+                            int generation) // TODO(H6-CP5-2) int generation 인자
 {
-    for (const GameInfo &game : repository.gamesForGeneration(kGeneration)) {
+    for (const GameInfo &game : repository.gamesForGeneration(generation)) {
         if (game.versionGroup == versionGroup)
             return game.versions;
     }
@@ -44,7 +43,9 @@ QString versionOfOriginGame(int originGame)
     static const QHash<int, QString> versions = {
             {7, QStringLiteral("heartgold")}, {8, QStringLiteral("soulsilver")},
             {10, QStringLiteral("diamond")},  {11, QStringLiteral("pearl")},
-            {12, QStringLiteral("platinum")},
+            {12, QStringLiteral("platinum")}, {20, QStringLiteral("white")},
+            {21, QStringLiteral("black")},    {22, QStringLiteral("white-2")},
+            {23, QStringLiteral("black-2")}
             // TODO(H6-CP5-3) 5세대: 20 white · 21 black · 22 white-2 · 23 black-2
     };
     return versions.value(originGame);
@@ -68,7 +69,7 @@ std::optional<squadfile::Portable> load(const QString &path, Repository &reposit
     const auto party = save::readParty(bytes); // raw가 살아 있는 동안만 bytes를 쓴다
     if (!party) {
         if (error)
-            *error = tr("4세대(DP · Pt · HGSS) 세이브가 아니에요");
+            *error = tr("4세대(DP · Pt · HGSS) · 5세대(BW · B2W2) 세이브가 아니에요");
         return std::nullopt;
     }
 
@@ -77,7 +78,7 @@ std::optional<squadfile::Portable> load(const QString &path, Repository &reposit
     //   데려온 포켓몬뿐) 묶음의 첫 버전
     const QString versionGroup
             = QString::fromUtf8(party->versionGroup.data(), qsizetype(party->versionGroup.size()));
-    const QStringList versions = versionsOfGroup(repository, versionGroup);
+    const QStringList versions = versionsOfGroup(repository, versionGroup, party->generation);
     QHash<QString, int> votes; // 버전 → 그 버전 출신 멤버 수
     for (const save::ReadMember &member : party->members) {
         const QString version = versionOfOriginGame(member.originGame);
@@ -111,11 +112,11 @@ std::optional<squadfile::Portable> load(const QString &path, Repository &reposit
         out.natureId = repository.natureIdForGameIndex(member.nature);
         out.itemId = member.heldItem == 0
                              ? 0
-                             : repository.itemIdForGameIndex(kGeneration, member.heldItem);
+                             : repository.itemIdForGameIndex(party->generation, member.heldItem);
     }
 
     // ⑤ 이름은 비워 둔다 — 스쿼드 화면이 기본 이름("소울실버 스쿼드")을 보인다
-    portable.generation = kGeneration;
+    portable.generation = party->generation;
     portable.game = chosen;
     qCInfo(lcData).noquote() << QStringLiteral("save import: %1 · %2 members")
                                         .arg(portable.game)

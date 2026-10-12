@@ -50,7 +50,7 @@ DecodedPkm decodePkm(Bytes encrypted)
     // TODO(H6-CP4-1) PK5 파티(kPk5.partySize = 220)도 받는다: 크기 검사를 "kPk4.partySize 또는
     //   kPk5.partySize"로, std::copy는 encrypted 길이만큼(그대로 두면 된다), 아래 배틀 스탯
     //   cryptArray의 길이를 kPartyPkmSize − kStoredSize 대신 encrypted.size() − kStoredSize로
-    if (encrypted.size() != kPartyPkmSize)
+    if (encrypted.size() != kPk4.partySize && encrypted.size() != kPk5.partySize)
         return pkm;
     std::copy(encrypted.begin(), encrypted.end(), pkm.data.begin());
     pkm.decoded = true;
@@ -58,7 +58,7 @@ DecodedPkm decodePkm(Bytes encrypted)
     pkm.storedChecksum = readU16(pkm.data, 0x06);
     cryptArray(std::span(pkm.data).subspan(kHeaderSize, kStoredSize - kHeaderSize),
                pkm.storedChecksum);
-    cryptArray(std::span(pkm.data).subspan(kStoredSize, kPartyPkmSize - kStoredSize), pkm.pid);
+    cryptArray(std::span(pkm.data).subspan(kStoredSize, encrypted.size() - kStoredSize), pkm.pid);
     pkm.shuffle = shuffleIndex(pkm.pid);
     std::array<std::uint8_t, kBlocksSize> unshuffled
             = unshuffle(std::span(pkm.data).subspan(kHeaderSize, kBlocksSize), pkm.shuffle);

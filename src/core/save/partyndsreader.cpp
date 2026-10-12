@@ -44,9 +44,9 @@ std::optional<ReadParty> PartyNdsReader::readSeries(Bytes save, const NdsSeries 
         // TODO(H6-CP4-3) ② 추출: 한 마리 크기를 kPartyPkmSize(PK4 고정) 대신
         //   series.pkm->partySize로, parseMember에는 형식(*series.pkm)을 넘긴다
         //   — 그래야 BW · B2W2가 PK5로 읽힌다
-        const std::size_t at = party.partyOffset + std::size_t(i) * kPartyPkmSize;
-        const DecodedPkm pkm = decodePkm(save.subspan(at, kPartyPkmSize));
-        party.members.push_back(parseMember(pkm));
+        const std::size_t at = party.partyOffset + std::size_t(i) * series.pkm->partySize;
+        const DecodedPkm pkm = decodePkm(save.subspan(at, series.pkm->partySize));
+        party.members.push_back(parseMember(pkm, *series.pkm));
     }
     return party;
 }

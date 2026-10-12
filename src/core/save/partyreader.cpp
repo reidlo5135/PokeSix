@@ -17,7 +17,11 @@ ReadMember parseMember(const DecodedPkm &pkm, const PkmFormat &format)
     // TODO(H6-CP4-2) 형식이 자리를 알려 주면(optional에 값이 있으면) 그 자리에서 읽는다:
     //   format.natureAt이 있으면 member.nature = 그 바이트(5세대는 성격을 따로 저장한다)
     //   format.hiddenAbilityAt이 있으면 member.hiddenAbility = 그 바이트의 비트 0
-    (void)format;
+    if (format.natureAt)
+        member.nature = data[*format.natureAt];
+    if (format.hiddenAbilityAt)
+        member.hiddenAbility = (data[*format.hiddenAbilityAt] & 0x01) != 0;
+
     for (int k = 0; k < 4; ++k) {
         member.moves[k] = readU16(data, 0x28 + 2 * k);
     }
