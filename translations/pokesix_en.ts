@@ -1790,7 +1790,11 @@ that game&apos;s wild encounters</translation>
     </message>
     <message>
         <source>4세대(DP · Pt · HGSS) 세이브가 아니에요</source>
-        <translation>Not a 4th-generation (DP · Pt · HGSS) save</translation>
+        <translation type="vanished">Not a 4th-generation (DP · Pt · HGSS) save</translation>
+    </message>
+    <message>
+        <source>4세대(DP · Pt · HGSS) · 5세대(BW · B2W2) 세이브가 아니에요</source>
+        <translation>Not a 4th-generation (DP · Pt · HGSS) or 5th-generation (BW · B2W2) save</translation>
     </message>
 </context>
 <context>

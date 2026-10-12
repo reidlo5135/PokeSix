@@ -1,7 +1,9 @@
 #include "core/save/partyreader.h"
 
+#include "core/save/partyndsreader.h"
+
 namespace com::yamada::studio::save {
-ReadMember parseMember(const DecodedPkm &pkm)
+ReadMember parseMember(const DecodedPkm &pkm, const PkmFormat &format)
 {
     ReadMember member;
     const Bytes data(pkm.data);
@@ -12,6 +14,11 @@ ReadMember parseMember(const DecodedPkm &pkm)
     member.ability = data[0x15];
     member.form = data[0x40] >> 3;
     member.nature = member.pid % 25;
+    if (format.natureAt)
+        member.nature = data[*format.natureAt];
+    if (format.hiddenAbilityAt)
+        member.hiddenAbility = (data[*format.hiddenAbilityAt] & 0x01) != 0;
+
     for (int k = 0; k < 4; ++k) {
         member.moves[k] = readU16(data, 0x28 + 2 * k);
     }
@@ -30,28 +37,21 @@ ReadMember parseMember(const DecodedPkm &pkm)
     return member;
 }
 
+std::span<const PartyReader *const> partyReaders()
+{
+    // 자식(PartyNdsReader)의 주소를 부모 포인터(const PartyReader *)로 담는다 — 부르는 쪽은 어느
+    // 기기인지 몰라도 reader->read(save)만 부르면 자식의 read가 불린다(가상 함수)
+    static const PartyNdsReader nds;
+    static const std::array<const PartyReader *, 1> readers = {&nds};
+    return readers;
+}
+
 std::optional<ReadParty> readParty(Bytes save)
 {
-    if (save.size() < kSaveSize)
-        return std::nullopt;
-    for (const SaveLayout &layout : kGen4Layouts) {
-        if (const auto start = activeGeneralBlock(save, layout)) {
-            ReadParty party;
-            party.layout = &layout;
-            party.generalStart = *start;
-            party.footer = readFooter(save, *start, layout);
-            const int count = save[party.generalStart + layout.partyCountOffset];
-            if (count < 1 || count > 6) {
-                return std::nullopt;
-            }
-            for (int i = 0; i < count; ++i) {
-                const std::size_t at
-                        = party.generalStart + layout.partyOffset + std::size_t(i) * kPartyPkmSize;
-                const DecodedPkm pkm = decodePkm(save.subspan(at, kPartyPkmSize));
-                party.members.push_back(parseMember(pkm));
-            }
-            return party;
-        }
+    const auto &readers = partyReaders();
+    for (const auto &reader : readers) {
+        if (auto r = reader->read(save))
+            return r;
     }
     return std::nullopt;
 }

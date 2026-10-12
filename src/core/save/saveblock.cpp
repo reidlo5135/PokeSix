@@ -5,10 +5,10 @@
 #include <utility> // std::pair
 
 namespace com::yamada::studio::save {
-BlockFooter readFooter(Bytes save, std::size_t blockStart, const SaveLayout &layout)
+BlockFooter readFooter(Bytes save, std::size_t blockStart, const FooterSlots &check)
 {
     BlockFooter footer;
-    const std::size_t end = blockStart + layout.generalSize;
+    const std::size_t end = blockStart + check.generalSize;
     if (end > save.size())
         return footer;
     footer.inFile = true;
@@ -17,16 +17,15 @@ BlockFooter readFooter(Bytes save, std::size_t blockStart, const SaveLayout &lay
     footer.size = readU32(save, end - 0x0C);
     footer.magic = readU32(save, end - 0x08);
     footer.storedCrc = readU16(save, end - 0x02);
-    footer.computedCrc
-            = crc16Ccitt(save.subspan(blockStart, layout.generalSize - layout.footerSize));
+    footer.computedCrc = crc16Ccitt(save.subspan(blockStart, check.generalSize - check.footerSize));
 
     return footer;
 }
 
-std::optional<std::size_t> activeGeneralBlock(Bytes save, const SaveLayout &layout)
+std::optional<std::size_t> activeGeneralBlock(Bytes save, const FooterSlots &check)
 {
-    const BlockFooter slot0Footer = readFooter(save, 0, layout);
-    const BlockFooter slot1Footer = readFooter(save, kSlotSize, layout);
+    const BlockFooter slot0Footer = readFooter(save, 0, check);
+    const BlockFooter slot1Footer = readFooter(save, kSlotSize, check);
     if (slot0Footer.crcOk() && slot1Footer.crcOk()) {
         if (std::pair {slot0Footer.major, slot0Footer.minor}
             > std::pair {slot1Footer.major, slot1Footer.minor}) {
@@ -44,5 +43,33 @@ std::optional<std::size_t> activeGeneralBlock(Bytes save, const SaveLayout &layo
     } else {
         return std::nullopt;
     }
+}
+
+std::size_t checksumTableStart(const ChecksumTable &check)
+{
+    return check.mainSize - 0x100;
+}
+
+bool checksumTableValid(Bytes save, const ChecksumTable &check)
+{
+    const std::size_t start = checksumTableStart(check);
+    const std::size_t at = start + check.tableLength + 0x0E;
+
+    // 파일 밖은 읽지 않는다 — span은 범위를 검사하지 않는다
+    if (at + 2 > save.size())
+        return false;
+
+    return crc16Ccitt(save.subspan(start, check.tableLength)) == readU16(save, at);
+}
+
+bool partyBlockValid(Bytes save, const ChecksumTable &check)
+{
+    const std::size_t mirror = checksumTableStart(check) + check.partyCrcMirror;
+    if (check.partyCrcAt + 2 > save.size() || mirror + 2 > save.size())
+        return false;
+
+    const std::uint16_t crc = crc16Ccitt(save.subspan(check.partyBlock, check.partyBlockSize));
+
+    return crc == readU16(save, check.partyCrcAt) && crc == readU16(save, mirror);
 }
 } // namespace com::yamada::studio::save

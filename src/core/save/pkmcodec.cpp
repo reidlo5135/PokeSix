@@ -47,7 +47,7 @@ std::uint16_t pkmChecksum(const Pkm &decrypted)
 DecodedPkm decodePkm(Bytes encrypted)
 {
     DecodedPkm pkm;
-    if (encrypted.size() != kPartyPkmSize)
+    if (encrypted.size() != kPk4.partySize && encrypted.size() != kPk5.partySize)
         return pkm;
     std::copy(encrypted.begin(), encrypted.end(), pkm.data.begin());
     pkm.decoded = true;
@@ -55,7 +55,7 @@ DecodedPkm decodePkm(Bytes encrypted)
     pkm.storedChecksum = readU16(pkm.data, 0x06);
     cryptArray(std::span(pkm.data).subspan(kHeaderSize, kStoredSize - kHeaderSize),
                pkm.storedChecksum);
-    cryptArray(std::span(pkm.data).subspan(kStoredSize, kPartyPkmSize - kStoredSize), pkm.pid);
+    cryptArray(std::span(pkm.data).subspan(kStoredSize, encrypted.size() - kStoredSize), pkm.pid);
     pkm.shuffle = shuffleIndex(pkm.pid);
     std::array<std::uint8_t, kBlocksSize> unshuffled
             = unshuffle(std::span(pkm.data).subspan(kHeaderSize, kBlocksSize), pkm.shuffle);
