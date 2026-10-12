@@ -6,6 +6,11 @@ and the project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-12
+
+Squad import reads 5th-generation saves (Black · White, Black 2 · White 2) as well as 4th-generation
+ones. A new feature mid-phase, so this is a MINOR bump.
+
 ### Added
 - Squad import reads 5th-generation saves (Black · White, Black 2 · White 2) as well as 4th-generation
   ones. The save alone tells the generation and series: each series is a row checked by its own

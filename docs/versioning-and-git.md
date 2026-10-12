@@ -168,8 +168,9 @@ Phase의 모든 단계가 ✅가 되면 다음 순서로 릴리스한다.
 3. `CMakeLists.txt`의 `project(... VERSION x.y.z)`를 올린다
 4. 커밋한다: `chore(release): vX.Y.Z`
 5. 태그를 단다: `git tag -a vX.Y.Z -m "PokeSix vX.Y.Z — <Phase 요약>"`
-6. (원격이 생기면) `git push --follow-tags`
-7. [roadmap.md](roadmap.md)의 Phase 제목 옆에 버전을 적는다
+6. 릴리스 노트 `docs/release-notes/vX.Y.Z.md`를 같은 커밋에 넣는다 — 태그를 푸시하면 CI가 Release 본문으로 올린다([README](release-notes/README.md))
+7. `git push origin main --follow-tags`
+8. [roadmap.md](roadmap.md)의 Phase 제목 옆에 버전을 적는다
 
 ## 5. CHANGELOG
 
