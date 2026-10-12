@@ -10,7 +10,10 @@ std::optional<ReadParty> PartyNdsReader::read(Bytes save) const
 {
     // TODO(H6-CP2-1) kNdsSeries를 차례로 readSeries(save, series)에 넣어 값이 나오면 돌려준다.
     //   끝까지 없으면 nullopt (H1의 kGen4Layouts 반복과 같은 모양)
-    (void)save;
+    for (const auto &knds : kNdsSeries) {
+        if (auto s = readSeries(save, knds))
+            return s;
+    }
     return std::nullopt;
 }
 
@@ -23,7 +26,9 @@ std::optional<ReadParty> PartyNdsReader::readSeries(Bytes save, const NdsSeries 
     //           [&](const auto &check) { return findBase(save, check); }, series.check);
     //   람다의 auto 인자는 variant에 든 실제 타입(FooterSlots 또는 ChecksumTable)이 되고, 그 타입에
     //   맞는 findBase 오버로드가 컴파일 때 정해진다
-    const std::optional<std::size_t> base;
+    const std::optional<std::size_t> base
+            = std::visit([&](const auto &check) { return findBase(save, check); }, series.check);
+
     if (!base)
         return std::nullopt;
 
@@ -49,17 +54,16 @@ std::optional<ReadParty> PartyNdsReader::readSeries(Bytes save, const NdsSeries 
 std::optional<std::size_t> PartyNdsReader::findBase(Bytes save, const FooterSlots &check)
 {
     // TODO(H6-CP2-3) 4세대식: H1의 activeGeneralBlock이 바로 이것이다 — 한 줄
-    (void)save;
-    (void)check;
-    return std::nullopt;
+    return activeGeneralBlock(save, check);
 }
 
 std::optional<std::size_t> PartyNdsReader::findBase(Bytes save, const ChecksumTable &check)
 {
     // TODO(H6-CP3-3) 5세대식: checksumTableValid와 partyBlockValid가 둘 다 맞으면 0(파일 시작이
     //   기준), 아니면 nullopt
-    (void)save;
-    (void)check;
+    if (checksumTableValid(save, check) && partyBlockValid(save, check))
+        return 0;
+
     return std::nullopt;
 }
 } // namespace com::yamada::studio::save

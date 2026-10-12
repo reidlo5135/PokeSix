@@ -44,14 +44,20 @@ std::span<const PartyReader *const> partyReaders()
     //   return readers;
     // 자식(PartyNdsReader)의 주소를 부모 포인터(const PartyReader *)로 담는다 — 부르는 쪽은 어느
     // 기기인지 몰라도 reader->read(save)만 부르면 자식의 read가 불린다(가상 함수)
-    return {};
+    static const PartyNdsReader nds;
+    static const std::array<const PartyReader *, 1> readers = {&nds};
+    return readers;
 }
 
 std::optional<ReadParty> readParty(Bytes save)
 {
     // TODO(H6-CP1-2) partyReaders()를 차례로 돌며 reader->read(save)가 값을 주면 그것을 돌려준다.
     //   끝까지 없으면 nullopt
-    (void)save;
+    const auto &readers = partyReaders();
+    for (const auto &reader : readers) {
+        if (auto r = reader->read(save))
+            return r;
+    }
     return std::nullopt;
 }
 } // namespace com::yamada::studio::save

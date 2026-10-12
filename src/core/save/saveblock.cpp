@@ -55,9 +55,14 @@ bool checksumTableValid(Bytes save, const ChecksumTable &check)
     // TODO(H6-CP3-1) 모음 블록 = [checksumTableStart, + tableLength). 그 CRC(crc16Ccitt)가
     //   checksumTableStart + tableLength + 0x0E에 저장된 u16과 같은가. 파일이 그 u16의 끝보다
     //   짧으면 먼저 false — readFooter의 inFile과 같은 이유(파일 밖은 0 = 0으로 맞아 보인다)
-    (void)save;
-    (void)check;
-    return false;
+
+    const std::size_t start = checksumTableStart(check);
+    const std::size_t at = start + check.tableLength + 0x0E;
+
+    if (at + 2 > save.size())
+        return false;
+
+    return crc16Ccitt(save.subspan(start, check.tableLength)) == readU16(save, at);
 }
 
 bool partyBlockValid(Bytes save, const ChecksumTable &check)
@@ -65,8 +70,12 @@ bool partyBlockValid(Bytes save, const ChecksumTable &check)
     // TODO(H6-CP3-2) 파티 블록 [partyBlock, + partyBlockSize)의 CRC를 계산해서
     //   ① partyCrcAt에 저장된 u16  ② checksumTableStart + partyCrcMirror에 저장된 u16
     //   둘 다와 같은가. 여기서도 두 위치가 파일 안에 있는지부터
-    (void)save;
-    (void)check;
-    return false;
+    const std::size_t mirror = (checksumTableStart(check) + check.partyCrcMirror);
+    if (check.partyCrcAt + 2 > save.size() || mirror + 2 > save.size())
+        return false;
+
+    const std::uint16_t crc = crc16Ccitt(save.subspan(check.partyBlock, check.partyBlockSize));
+
+    return crc == readU16(save, check.partyCrcAt) && crc == readU16(save, mirror);
 }
 } // namespace com::yamada::studio::save
