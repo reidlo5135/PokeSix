@@ -29,7 +29,8 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
 
 ### 진행 중
 
-- **AppImage 자기 등록**(열린 일 10) — 사용자 결정(2026-10-13): **Claude가 구현**. 그다음 전체 검증 → 릴리스 → **테마 전환**(열린 일 8).
+- **AppImage 자기 등록 — 구현 · 실험 통과, 사용자 PC 확인 대기**(브랜치 `feat/appimage-self-register`, Claude 구현 — 사용자 결정 2026-10-13).
+  다음: 사용자 PC에서 실제 메뉴에 뜨는지 → 전체 검증 → 릴리스(0.4.0 vs 0.3.1 확인) → **테마 전환**(열린 일 8).
   그 밖의 후보: 폼 표 · 세이브 파일 감시 · 전투 분석 입력 넓히기([data/battle-inputs.md](data/battle-inputs.md) §4) · Phase B · E4
 
 ### 열린 일 (작은 것부터)
@@ -53,7 +54,7 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
    Windows에서 커밋한 파일(`csvimporter.h` · `dataupdater.h` · `firstrunpanel.h` · `homepage.cpp`)을 Linux에서 돌리면 바뀌고, 반대도 마찬가지다.
    2026-10-12 사용자 작업 트리에 `homepage.cpp`의 정렬만 바뀐 변경이 남아 있다(커밋 안 함). 해결안: 두 머신이 같은 버전을 쓰게 고정
    (예: `uv tool install clang-format==<버전>` — PyPI 휠, setup 스크립트에 넣기)하고 한 번 전체 포맷 커밋. 사용자 결정 대기
-10. **AppImage 자기 등록(앱 메뉴)** — 사용자 결정(2026-10-12): Linux 배포는 AppImage 하나뿐이니 **AppImage만 실행해도 메뉴에 등록**돼야 한다(별도 CLI 불편).
+10. ~~**AppImage 자기 등록(앱 메뉴)**~~ → 2026-10-13 구현(`src/app/desktopentry.cpp`, 아이콘 · .desktop은 qrc가 아니라 `$APPDIR/usr/share`에서 — package.sh와 같은 원본). 아래는 당시 계획. 사용자 결정(2026-10-12): Linux 배포는 AppImage 하나뿐이니 **AppImage만 실행해도 메뉴에 등록**돼야 한다(별도 CLI 불편).
     방법: 시작할 때 환경 변수 `APPIMAGE`(런타임이 넣는 파일 절대 경로)가 있으면 `~/.local/share/applications/com.yamada.studio.pokesix.desktop`이 없거나
     `Exec`가 다를 때 다시 쓰고, 아이콘은 qrc에서 `~/.local/share/icons/hicolor/<크기>/apps/pokesix.png`로(지금 `package.sh --install`이 하는 일과 같은 결과).
     app 레이어 한 파일, `#ifdef Q_OS_LINUX`. 한계: 첫 실행은 손으로, 파일을 지우면 메뉴 항목이 남음(README에 제거법), 끄는 스위치는 E4 설정 때.
@@ -81,12 +82,14 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
 
 ## 최근 세션 (역순)
 
-### 2026-10-13 — H8 완료 · merge (Linux 세션)
+### 2026-10-13 — H8 완료 · merge, AppImage 자기 등록 (Linux 세션)
 
 - 사용자 구현 CP1–CP4. 진단 · 구현 중 짚은 것: `QFontMetrics`는 글꼴마다 따로(바꾸기 전에 재기), 위치와 폭을 섞음, `setAlpha(0.28)`(0–255 정수) vs `setAlphaF`,
   scaleMax에서 확인 전 역참조, 진화 트리로 옮긴 뒤 파랑이 남음(`else` → `std::nullopt` — 렌더 도구로 맘모꾸리 → 메꾸리 확인)
 - 정리: TODO → 짧은 한국어 주석, 파랑 점의 테두리 제거(`NoPen` — 빨강과 같게), 셋째 줄 높이 18, 배열 복사 → const 참조
 - 클린 빌드 경고 0 · 173 통과. `RealSave` 소울실버 + **화이트(BW) 실파일 첫 통과** — 5세대 BW 수치 확인([data/gen5/](data/gen5/README.md))
+- AppImage 자기 등록(Claude 구현): 격리한 `XDG_DATA_HOME`에서 실제 AppImage로 확인 — 첫 실행에 .desktop + 아이콘 8개, 두 번째는 쓰지 않음(mtime 그대로),
+  공백 · `$` 든 경로의 Exec를 GLib(`shell_parse_argv`)가 원래 경로로 되돌림, `desktop-file-validate` 통과, 파일을 옮기면 Exec 갱신, 지우면 `Gio.DesktopAppInfo`가 NULL(TryExec로 숨음)
 - 렌더 도구(`detailshot` — `DexDetailPage`를 offscreen으로 그려 PNG)는 scratch 워크트리에서만 만들고 지웠다. 필요하면 다시 만든다: `tools/CMakeLists.txt`에 실행 파일 하나 + `pokesix_ui` · `pokesix_data` 링크
 
 ### 2026-10-12 — v0.3.0 릴리스 준비 · H8 시작 (Linux 세션)

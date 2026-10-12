@@ -1,6 +1,7 @@
 #include "app/application.h"
 
 #include "app/buildinfo.h"
+#include "app/desktopentry.h"
 #include "data/db/gamedatabase.h"
 #include "data/repository/repository.h"
 #include "data/state/appstate.h"
@@ -235,6 +236,7 @@ int Application::run()
     buildObjects();
 
     if (!m_screenshot) {
+        desktopentry::registerAppImage(); // AppImage로 실행했으면 앱 메뉴에 등록(Linux)
         m_window->show();
         return m_app.exec();
     }

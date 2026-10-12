@@ -10,6 +10,9 @@ and the project uses [Semantic Versioning](https://semver.org/).
 - Squad members imported from a save keep their level and in-game stats. The card title shows the
   level next to the name, and the detail view draws the in-game stats in blue over the base stats
   (the scale grows past 200 in steps of 50 when a stat needs it). Members added by hand look as before.
+- Linux: running the AppImage adds PokeSix to the application menu (a `.desktop` entry and icons
+  under `~/.local/share`), pointing at the AppImage wherever it is. Deleting the AppImage hides
+  the entry; the README lists the two files to remove.
 
 ### Changed
 - 5th-generation save reading is now checked against a real Pokémon White save.
