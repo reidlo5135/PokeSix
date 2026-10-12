@@ -85,6 +85,10 @@ void StatRadar::paintEvent(QPaintEvent *)
     for (int axis = 0; axis < 6; ++axis)
         painter.drawLine(center, point(axis, radius));
 
+    // TODO(H8-CP4-3) 인게임 능력치 도형(파랑): m_trained가 있으면 아래 "종족값 도형"과 같은
+    //   순서로 — 점 6개 → 채움(tok::kBlue, 알파 kFillAlpha) · 선(tok::kBlueDeep). 빨강보다 먼저
+    //   그린다: 파랑이 대개 더 커서, 위에 덮으면 빨강이 탁해진다
+
     // 2) 종족값 도형
     QPolygonF shape;
     for (int axis = 0; axis < 6; ++axis) {
@@ -100,11 +104,6 @@ void StatRadar::paintEvent(QPaintEvent *)
     painter.setBrush(QColor(tok::kRed));
     for (const QPointF &p : shape)
         painter.drawEllipse(p, 2.5, 2.5);
-
-    // TODO(H8-CP4-3) 인게임 능력치 도형(파랑): m_trained가 있으면 바로 위 "종족값 도형"과 같은
-    // 순서로
-    //   — 점 6개 → 채움(tok::kBlue, 알파 kFillAlpha) · 선(tok::kBlueDeep) · 꼭짓점. 빨강 위에
-    //   겹친다
 
     // 3) 축 이름 + 값: 축 끝 바깥에. 위 · 아래 축은 가운데 정렬, 왼쪽 · 오른쪽 축은 바깥쪽으로
     // 붙인다.
@@ -146,9 +145,9 @@ void StatRadar::paintEvent(QPaintEvent *)
         painter.setPen(QColor(m_stats[stat] >= 100 ? tok::kText1 : tok::kText3));
         painter.drawText(QRectF(box.left(), box.top() + 16, box.width(), 18),
                          horizontal | Qt::AlignVCenter, QString::number(m_stats[stat]));
-        // TODO(H8-CP4-4) m_trained가 있으면 종족값 아래 한 줄(box.top() + 34)에 그 능력치를 파랑
-        //   (tok::kBlueDeep)으로. 줄이 하나 늘어나니 위쪽 축(top)의 box는 그만큼 더 올려야 도형과
-        //   안 겹친다 — 위의 moveCenter 오프셋을 보라
+        // TODO(H8-CP4-4) m_trained가 있으면 종족값 아래 한 줄(box.top() + 34)에 그 능력치를
+        //   파랑(tok::kBlueDeep)으로. 줄이 늘면 아래 축 글자가 위젯 밖으로 잘리므로, 파랑이 있을
+        //   때는 radius를 구할 때 빼는 바깥 여백을 한 줄(18)만큼 더 준다
     }
 }
 } // namespace com::yamada::studio
