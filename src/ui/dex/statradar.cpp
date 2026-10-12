@@ -7,6 +7,8 @@
 #include <QPainterPath>
 #include <QtMath>
 
+#include <algorithm>
+
 namespace {
 constexpr int kScaleMax = 200;
 constexpr int kRingStep = 50;      // 눈금 간격: 50 · 100 · 150 · 200(· 250 …)
@@ -40,14 +42,23 @@ void StatRadar::setNature(int increased, int decreased)
 void StatRadar::setTrainedStats(std::optional<std::array<int, 6>> stats)
 {
     // TODO(H8-CP4-1) setStats와 같은 모양: 멤버에 담고 다시 그리기를 요청한다
-    (void)stats;
+    m_trained = stats;
+    QWidget::update();
 }
 
 int StatRadar::scaleMax() const
 {
     // TODO(H8-CP4-2) 파랑이 있고 그 최댓값이 kScaleMax보다 크면, 그 값을 덮는 가장 작은 kRingStep의
     //   배수(예: 231 → 250)를 돌려준다. 아니면 kScaleMax. 최댓값은 std::ranges::max(배열)
-    return kScaleMax;
+    if (m_trained) {
+        const int top = std::ranges::max(*m_trained);
+        if (top <= kScaleMax)
+            return kScaleMax;
+        else
+            return (top + kRingStep - 1) / kRingStep * kRingStep;
+    } else {
+        return kScaleMax;
+    }
 }
 
 QSize StatRadar::sizeHint() const
@@ -63,7 +74,8 @@ void StatRadar::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing, true);
 
     const QPointF center = QRectF(rect()).center();
-    const qreal radius = std::max(10.0, std::min(width(), height()) / 2.0 - kLabelMargin);
+    const qreal half = std::min(width(), height()) / 2.0;
+    const qreal radius = std::max(10.0, m_trained ? half - kLabelMargin - 18 : half - kLabelMargin);
     // 축 i의 끝점(반지름 r). 0번 축이 위(−90°)이고 60°씩 시계방향.
     auto point = [&](int axis, qreal r) {
         const qreal angle = qDegreesToRadians(-90.0 + 60.0 * axis);
@@ -88,6 +100,23 @@ void StatRadar::paintEvent(QPaintEvent *)
     // TODO(H8-CP4-3) 인게임 능력치 도형(파랑): m_trained가 있으면 아래 "종족값 도형"과 같은
     //   순서로 — 점 6개 → 채움(tok::kBlue, 알파 kFillAlpha) · 선(tok::kBlueDeep). 빨강보다 먼저
     //   그린다: 파랑이 대개 더 커서, 위에 덮으면 빨강이 탁해진다
+    if (m_trained) {
+        std::array<int, 6UL> trained = *m_trained;
+
+        QPolygonF shape;
+        for (int axis = 0; axis < 6; ++axis) {
+            const int value = std::min(trained[kAxisToStat[axis]], scale);
+            shape << point(axis, radius * value / scale);
+        }
+        QColor fill(tok::kBlue);
+        fill.setAlphaF(kFillAlpha);
+        painter.setBrush(fill);
+        painter.setPen(QPen(QColor(tok::kBlueDeep), 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+        painter.drawPolygon(shape);
+        painter.setBrush(QColor(tok::kBlue));
+        for (const QPointF &p : shape)
+            painter.drawEllipse(p, 2.5, 2.5);
+    }
 
     // 2) 종족값 도형
     QPolygonF shape;
@@ -148,6 +177,11 @@ void StatRadar::paintEvent(QPaintEvent *)
         // TODO(H8-CP4-4) m_trained가 있으면 종족값 아래 한 줄(box.top() + 34)에 그 능력치를
         //   파랑(tok::kBlueDeep)으로. 줄이 늘면 아래 축 글자가 위젯 밖으로 잘리므로, 파랑이 있을
         //   때는 radius를 구할 때 빼는 바깥 여백을 한 줄(18)만큼 더 준다
+        if (m_trained) {
+            painter.setPen(QColor(tok::kBlueDeep));
+            const auto &trained = *m_trained;
+            painter.drawText(QRectF(box.left(), box.top() + 34, box.width(), 16), horizontal | Qt::AlignVCenter, QString::number(trained[stat]));
+        }
     }
 }
 } // namespace com::yamada::studio
