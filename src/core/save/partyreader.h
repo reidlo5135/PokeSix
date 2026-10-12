@@ -47,9 +47,12 @@ struct ReadMember
     bool egg = false;          // 0x38 u32의 비트 30
     // 0x5F u8: 출신 게임 7 HG · 8 SS · 10 D · 11 P · 12 Pt · 20 W · 21 B · 22 W2 · 23 B2 (H2 · H6)
     int originGame = 0;
-    int level = 0;              // 0x8C u8 (배틀 스탯)
-    int hp = 0;                 // 0x8E u16
-    int maxHp = 0;              // 0x90 u16
+    int level = 0; // 0x8C u8 (배틀 스탯)
+    int hp = 0;    // 0x8E u16
+    int maxHp = 0; // 0x90 u16
+    // 0x90 u16 × 6: 인게임 "능력치 보기"의 숫자 — 최대 HP · 공격 · 방어 · 스피드 · 특공 · 특방
+    // (게임 순서 — 스피드가 넷째). 게임이 저장할 때 계산해 둔 값이다 (H8)
+    std::array<int, 6> stats {};
     bool checksumOk = false;    // DecodedPkm::ok()
     bool hiddenAbility = false; // PK5 0x42 비트 0 (PK4는 늘 false) (H6)
 };

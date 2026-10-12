@@ -6,6 +6,9 @@ PK4는 [gen4/pk4.md](../gen4/pk4.md). 구현 가이드: [guides/h6-multigen-save
 > **이 문서의 수치는 모두 ◇**(PKHeX `SaveUtil` · `SAV5` · `SaveBlockAccessor5BW/B2W2` · `PK5`의 값, 실파일 미검증).
 > 코드는 이 값으로 만든 합성 세이브(`tests/core/syntheticsave.h`의 `buildGen5Save`)로만 확인했다.
 > BW · B2W2 세이브가 생기면 `POKESIX_SAVE_BW` · `POKESIX_SAVE_B2W2`로 `RealSave` 테스트를 돌려 ✓로 바꾼다.
+>
+> **2026-10-13 BW는 실파일로 통과**(화이트 한국판, `RealSave.BlackWhite`): 체크섬 표 · 파티 CRC 두 곳 · PK5 복호화 · 특성 · 성격 · 레벨 · 능력치가
+> 맞게 나온다. 아래 표의 BW 열은 사실상 ✓이고, B2W2 열은 아직 ◇.
 
 ## 1. 파일 전체
 

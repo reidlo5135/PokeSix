@@ -501,12 +501,29 @@ void SlotCard::paintFilled(QPainter &painter, const Geometry &g)
     const QRect iconBox(x, g.header.top() + 2, 36, kHeader - 4);
     DexRowDelegate::paintPokemonIcon(&painter, QRectF(iconBox), detail.pokemonId, m_pokemonIcons);
     x = iconBox.right() + 6;
+    // 이름 오른쪽에 작게 레벨(세이브에서 가져온 멤버만). 레벨 폭을 먼저 이름 칸에서 뺀다
+    const SquadMember &member = m_session->member(m_slot);
+    const QString level = member.hasStats() ? QStringLiteral("Lv.%1").arg(member.level) : QString();
+    const QFont levelFont = theme::font(theme::kFamilyPixel, 11);
+    const int levelWidth
+            = level.isEmpty() ? 0 : QFontMetrics(levelFont).horizontalAdvance(level) + 6;
+    const int nameWidth
+            = (m_warning.isEmpty() ? g.swap.left() : g.warn.left()) - x - 4 - levelWidth;
+
     painter.setFont(theme::font(theme::kFamilyTitle, 19));
     painter.setPen(QColor(headerText));
-    const int nameWidth = (m_warning.isEmpty() ? g.swap.left() : g.warn.left()) - x - 4;
+    const QString name
+            = QFontMetricsF(painter.font())
+                      .elidedText(detail.name.text(m_language), Qt::ElideRight, nameWidth);
     painter.drawText(QRect(x, g.header.top(), nameWidth, kHeader), Qt::AlignLeft | Qt::AlignVCenter,
-                     QFontMetricsF(painter.font())
-                             .elidedText(detail.name.text(m_language), Qt::ElideRight, nameWidth));
+                     name);
+
+    // 실제로 그려진(줄였으면 줄인) 이름 바로 뒤
+    const int levelX = x + QFontMetrics(painter.font()).horizontalAdvance(name) + 6;
+    painter.setFont(levelFont);
+    painter.drawText(QRect(levelX, g.header.top(), levelWidth, kHeader),
+                     Qt::AlignLeft | Qt::AlignVCenter, level);
+
     if (m_hot == Hit::Swap || m_hot == Hit::Remove || m_hot == Hit::Detail) {
         painter.setPen(Qt::NoPen);
         QColor glow(tok::kWhite);

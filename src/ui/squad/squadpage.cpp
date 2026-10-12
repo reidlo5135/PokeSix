@@ -1369,6 +1369,12 @@ void SquadPage::showMemberDetail(int slot)
             kPageMargins); // 도감 화면과 같은 여백(버튼 · 스크롤바가 창에 붙지 않게)
     DexDetailPage *detail = new DexDetailPage(m_repository, m_state);
     detail->setFollowsAppGame(false); // 모달의 칩은 모달 안에서만(뒤의 스쿼드는 그대로)
+    // 세이브에서 가져온 멤버면 능력치(파랑)와 성격을 미리 — showPokemon이 레이더를 바로 그린다
+    const SquadMember &member = m_session->member(slot);
+    if (member.hasStats())
+        detail->setTrainedStats(pokemonId, member.stats);
+    if (member.natureId > 0)
+        detail->presetNature(member.natureId);
     detail->showPokemon(pokemonId, m_session->version());
     layout->addWidget(detail);
     connect(detail, &DexDetailPage::backRequested, &dialog, &QDialog::accept); // [← 목록] = 닫기

@@ -106,6 +106,11 @@ std::optional<squadfile::Portable> load(const QString &path, Repository &reposit
         out.itemId = member.heldItem == 0
                              ? 0
                              : repository.itemIdForGameIndex(party->generation, member.heldItem);
+        // 능력치는 게임 순서(… 방어 · 스피드 · 특공 · 특방) → DB 순서(… 방어 · 특공 · 특방 ·
+        // 스피드)
+        out.level = member.level;
+        const std::array<int, 6> &stats = member.stats;
+        out.stats = {stats[0], stats[1], stats[2], stats[4], stats[5], stats[3]};
     }
 
     // ⑤ 이름은 비워 둔다 — 스쿼드 화면이 기본 이름("소울실버 스쿼드")을 보인다

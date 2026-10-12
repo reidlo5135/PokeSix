@@ -43,6 +43,11 @@ public:
     // 기준 게임 칩이 앱 전체의 게임(AppState)을 바꾸는가(도감 화면 — 기본). false면 이 화면
     // 안에서만 바꾼다(스쿼드 멤버 모달: 뒤의 스쿼드가 다른 버전으로 바뀌지 않게)
     void setFollowsAppGame(bool follows) { m_followsAppGame = follows; }
+    // 스쿼드 모달 전용(H8): 그 포켓몬일 때만 레이더에 인게임 능력치를 겹친다. 모달 안에서 진화
+    // 트리로 다른 포켓몬을 열면 파랑은 사라진다(능력치는 그 개체의 것이다). showPokemon보다 먼저
+    void setTrainedStats(int pokemonId, const std::array<int, 6> &stats);
+    // 성격을 미리 골라 둔다(▲▼ 표시) — 스쿼드 개체의 성격. 0 = 그대로
+    void presetNature(int natureId);
 
 signals:
     void backRequested(); // [← 목록] · Esc · 지금 세대에 없는 포켓몬이 되었을 때
@@ -73,7 +78,9 @@ private:
     PanelFrame *m_statsPanel = nullptr;
     DropdownButton *m_natureButton = nullptr; // 종족값 카드 머리 [성격 ▾]
     AbilityList *m_abilities = nullptr;
-    QList<Nature> m_natures; // 처음 성격표를 열 때 읽는다
+    QList<Nature> m_natures;         // 처음 성격표를 열 때 읽는다
+    int m_trainedFor = 0;            // 파랑을 보일 포켓몬(0 = 없음) (H8)
+    std::array<int, 6> m_trained {}; // 그 개체의 인게임 능력치
     int m_natureId = 0; // 고른 성격(포켓몬을 바꿔도 그대로 — 같은 성격으로 견줘 보게). 0 = 없음
     EncounterList *m_encounters = nullptr;
     QLabel *m_evolutionLabel = nullptr;

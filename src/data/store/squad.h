@@ -15,10 +15,16 @@ struct SquadMember
     int abilityId = 0;           // 0 = 고르지 않음(3세대부터)
     int natureId = 0;            // 0 = 고르지 않음(3세대부터)
     int itemId = 0;              // 지닌 물건, 0 = 없음(2세대부터)
+    // 세이브에서 불러온 개체만 아는 값 (H8). 손으로 넣은 개체는 level 0 = 모름.
+    // stats = 인게임 능력치, Repository 순서(HP · 공격 · 방어 · 특공 · 특방 · 스피드 — 종족값과
+    // 같은 순서)
+    int level = 0;
+    std::array<int, 6> stats {};
 
     static constexpr int kMemoLength = 40;
 
     bool isEmpty() const { return pokemonId <= 0; }
+    bool hasStats() const { return level > 0; } // 세이브에서 온 개체인가
     bool operator==(const SquadMember &) const = default;
 };
 

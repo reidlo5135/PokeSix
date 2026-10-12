@@ -108,6 +108,26 @@ TEST_F(SaveImportTest, TurnsAPartyIntoASquad) // H2-CP4-3 … 7
     EXPECT_EQ(loaded->squad.filled(), 2);
 }
 
+TEST_F(SaveImportTest, CarriesTheLevelAndStatsInDexOrder) // H8-CP2-3
+{
+    MemberSpec trained
+            = member(445, 8); // 픽스처에 있는 종(한카리아스)에 프테라 Lv.48의 숫자를 얹는다
+    trained.level = 48;
+    trained.maxHp = 151;
+    trained.battleStats = {139, 88, 152, 75, 74}; // 게임 순서: 공격 방어 스피드 특공 특방
+    const auto bytes = synth::buildSave(synth::seriesOf("heartgold-soulsilver"),
+                                        SlotSpec {.party = {trained}});
+    Repository repository(s_dbPath);
+    QString error;
+    const auto loaded
+            = saveimport::load(writeSave(bytes, QStringLiteral("ss.sav")), repository, &error);
+    ASSERT_TRUE(loaded.has_value()) << qPrintable(error);
+    const SquadMember &first = loaded->squad.members[0];
+    EXPECT_EQ(first.level, 48);
+    // DB 순서(HP 공격 방어 특공 특방 스피드) — 스피드 152가 맨 뒤로
+    EXPECT_EQ(first.stats, (std::array<int, 6> {151, 139, 88, 75, 74, 152}));
+}
+
 TEST_F(SaveImportTest, LeavesEggsOutOfTheSquad) // H2-CP4-6
 {
     MemberSpec egg = member(35, 12);

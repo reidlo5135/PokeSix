@@ -41,6 +41,9 @@ struct MemberSpec
     std::uint8_t level = 50;
     std::uint16_t hp = 100;
     std::uint16_t maxHp = 120;
+    // 0x92 u16 × 5: 공격 · 방어 · 스피드 · 특공 · 특방(게임 순서). 값을 다 다르게 둬서 순서가
+    // 바뀌면 드러난다
+    std::array<std::uint16_t, 5> battleStats {101, 102, 103, 104, 105};
     std::uint8_t originGame = 8; // 0x5F 출신 게임(8 = 소울실버)
     std::uint8_t natureByte = 0; // 0x41 — 5세대의 성격(4세대에서는 빛나는 잎 자리, 테스트는 0)
     bool hiddenAbility = false; // 0x42 비트 0 — 5세대
@@ -66,6 +69,8 @@ inline Pkm plainPkm(const MemberSpec &m)
     p[0x8C] = m.level;
     putU16(p, 0x8E, m.hp);
     putU16(p, 0x90, m.maxHp);
+    for (std::size_t k = 0; k < 5; ++k)
+        putU16(p, 0x92 + 2 * k, m.battleStats[k]);
     putU16(p, 0x06, pkmChecksum(p));
     return p;
 }
