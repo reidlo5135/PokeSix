@@ -14,9 +14,6 @@ ReadMember parseMember(const DecodedPkm &pkm, const PkmFormat &format)
     member.ability = data[0x15];
     member.form = data[0x40] >> 3;
     member.nature = member.pid % 25;
-    // TODO(H6-CP4-2) 형식이 자리를 알려 주면(optional에 값이 있으면) 그 자리에서 읽는다:
-    //   format.natureAt이 있으면 member.nature = 그 바이트(5세대는 성격을 따로 저장한다)
-    //   format.hiddenAbilityAt이 있으면 member.hiddenAbility = 그 바이트의 비트 0
     if (format.natureAt)
         member.nature = data[*format.natureAt];
     if (format.hiddenAbilityAt)
@@ -42,10 +39,6 @@ ReadMember parseMember(const DecodedPkm &pkm, const PkmFormat &format)
 
 std::span<const PartyReader *const> partyReaders()
 {
-    // TODO(H6-CP1-1) 기기 리더 목록. 리더 객체와 목록을 함수 안의 static으로 둔다:
-    //   static const PartyNdsReader nds;
-    //   static const std::array<const PartyReader *, 1> readers = {&nds};
-    //   return readers;
     // 자식(PartyNdsReader)의 주소를 부모 포인터(const PartyReader *)로 담는다 — 부르는 쪽은 어느
     // 기기인지 몰라도 reader->read(save)만 부르면 자식의 read가 불린다(가상 함수)
     static const PartyNdsReader nds;
@@ -55,8 +48,6 @@ std::span<const PartyReader *const> partyReaders()
 
 std::optional<ReadParty> readParty(Bytes save)
 {
-    // TODO(H6-CP1-2) partyReaders()를 차례로 돌며 reader->read(save)가 값을 주면 그것을 돌려준다.
-    //   끝까지 없으면 nullopt
     const auto &readers = partyReaders();
     for (const auto &reader : readers) {
         if (auto r = reader->read(save))

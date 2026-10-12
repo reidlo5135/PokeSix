@@ -103,6 +103,18 @@ TEST(PartyReader, ReadsTheNatureAndHiddenAbilityOfAPk5) // H6-CP4-1 · 2
     EXPECT_EQ(m.level, 50); // 배틀 스탯(84바이트)도 풀린다
 }
 
+TEST(PartyReader, HiddenAbilityIsBitZeroOnly) // H6-CP4-2
+{
+    // 0x42의 다른 비트(비트 1)만 켜진 PK5 — 숨겨진 특성이 아니다
+    Pkm plain = synth::plainPkm({});
+    plain[0x42] = 0x02;
+    synth::putU16(plain, 0x06, pkmChecksum(plain));
+    const Pkm encrypted = synth::encodePkm(plain);
+    const ReadMember m = parseMember(decodePkm(Bytes(encrypted).first(kPk5.partySize)), kPk5);
+    EXPECT_TRUE(m.checksumOk);
+    EXPECT_FALSE(m.hiddenAbility);
+}
+
 // ── H6 CP1 기기 리더 등록 · readParty ─────────────────────────
 
 TEST(PartyReader, ListsTheNdsReader) // H6-CP1-1

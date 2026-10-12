@@ -1790,7 +1790,11 @@
     </message>
     <message>
         <source>4세대(DP · Pt · HGSS) 세이브가 아니에요</source>
-        <translation>第4世代(DP · Pt · HGSS)のセーブではありません</translation>
+        <translation type="vanished">第4世代(DP · Pt · HGSS)のセーブではありません</translation>
+    </message>
+    <message>
+        <source>4세대(DP · Pt · HGSS) · 5세대(BW · B2W2) 세이브가 아니에요</source>
+        <translation>第4世代(DP · Pt · HGSS) · 第5世代(BW · B2W2)のセーブではありません</translation>
     </message>
 </context>
 <context>

@@ -11,18 +11,13 @@
 
 namespace com::yamada::studio::saveimport {
 namespace {
-// TODO(H6-CP5-1) 이 상수를 지운다 — 이제 세대는 세이브가 알려 준다(party->generation).
-//   지우면 쓰던 세 곳이 컴파일 오류로 나온다: versionsOfGroup(세대를 인자로 받게),
-//   itemIdForGameIndex, portable.generation
-
 QString tr(const char *text)
 {
     return QCoreApplication::translate("com::yamada::studio::saveimport", text);
 }
 
 // 게임 묶음("heartgold-soulsilver")의 버전들({"heartgold", "soulsilver"}) — DB의 게임 표에서
-QStringList versionsOfGroup(Repository &repository, const QString &versionGroup,
-                            int generation) // TODO(H6-CP5-2) int generation 인자
+QStringList versionsOfGroup(Repository &repository, const QString &versionGroup, int generation)
 {
     for (const GameInfo &game : repository.gamesForGeneration(generation)) {
         if (game.versionGroup == versionGroup)
@@ -40,14 +35,12 @@ bool isSaveFile(const QString &path)
 
 QString versionOfOriginGame(int originGame)
 {
-    static const QHash<int, QString> versions = {
-            {7, QStringLiteral("heartgold")}, {8, QStringLiteral("soulsilver")},
-            {10, QStringLiteral("diamond")},  {11, QStringLiteral("pearl")},
-            {12, QStringLiteral("platinum")}, {20, QStringLiteral("white")},
-            {21, QStringLiteral("black")},    {22, QStringLiteral("white-2")},
-            {23, QStringLiteral("black-2")}
-            // TODO(H6-CP5-3) 5세대: 20 white · 21 black · 22 white-2 · 23 black-2
-    };
+    static const QHash<int, QString> versions
+            = {{7, QStringLiteral("heartgold")}, {8, QStringLiteral("soulsilver")},
+               {10, QStringLiteral("diamond")},  {11, QStringLiteral("pearl")},
+               {12, QStringLiteral("platinum")}, {20, QStringLiteral("white")},
+               {21, QStringLiteral("black")},    {22, QStringLiteral("white-2")},
+               {23, QStringLiteral("black-2")}};
     return versions.value(originGame);
 }
 
