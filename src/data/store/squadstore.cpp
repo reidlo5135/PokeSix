@@ -22,11 +22,25 @@ QJsonObject memberToJson(const SquadMember &m)
     QJsonArray moves;
     for (const int move : m.moves)
         moves.append(move);
-    return {{QStringLiteral("pokemon"), m.pokemonId}, {QStringLiteral("memo"), m.memo},
-            {QStringLiteral("moves"), moves},         {QStringLiteral("ability"), m.abilityId},
-            {QStringLiteral("nature"), m.natureId},   {QStringLiteral("item"), m.itemId}};
+
     // TODO(H8-CP2-1) 위의 return을 QJsonObject json = { … };으로 받고, m.hasStats()일 때만
     //   "level"(정수)과 "stats"(정수 6개 배열 — moves와 같은 요령)를 json.insert한 뒤 return json
+
+    QJsonObject json {
+            {QStringLiteral("pokemon"), m.pokemonId}, {QStringLiteral("memo"), m.memo},
+            {QStringLiteral("moves"), moves},         {QStringLiteral("ability"), m.abilityId},
+            {QStringLiteral("nature"), m.natureId},   {QStringLiteral("item"), m.itemId}};
+
+    if (m.hasStats()) {
+        json.insert(QStringLiteral("level"), m.level);
+
+        QJsonArray stats;
+        for (const int stat : m.stats)
+            stats.append(stat);
+        json.insert(QStringLiteral("stats"), stats);
+    }
+
+    return json;
 }
 
 SquadMember memberFromJson(const QJsonObject &object)
@@ -42,6 +56,11 @@ SquadMember memberFromJson(const QJsonObject &object)
     member.itemId = object.value(QStringLiteral("item")).toInt();
     // TODO(H8-CP2-2) "level"과 "stats"를 읽는다. 키가 없으면(H8 전에 저장한 파일) toInt()가 0을
     //   돌려주므로 level = 0 = 모름이 저절로 된다 — 따로 분기하지 않아도 된다
+    member.level = object.value(QStringLiteral("level")).toInt();
+    const QJsonArray stats = object.value(QStringLiteral("stats")).toArray();
+    for (qsizetype j = 0; j < stats.size() && j < qsizetype(member.stats.size()); ++j)
+        member.stats[std::size_t(j)] = stats.at(j).toInt();
+
     return member;
 }
 

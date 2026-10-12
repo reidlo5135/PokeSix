@@ -110,6 +110,10 @@ std::optional<squadfile::Portable> load(const QString &path, Repository &reposit
         //   세이브(게임 순서):  HP · 공격 · 방어 · 스피드 · 특공 · 특방
         //   스쿼드(DB 순서):    HP · 공격 · 방어 · 특공 · 특방 · 스피드
         //   — 앞 셋은 같고 스피드만 맨 뒤로 간다
+        out.level = member.level;
+
+        const std::array<int, 6UL> &mstats = member.stats;
+        out.stats = {mstats[0], mstats[1], mstats[2], mstats[4], mstats[5], mstats[3]};
     }
 
     // ⑤ 이름은 비워 둔다 — 스쿼드 화면이 기본 이름("소울실버 스쿼드")을 보인다
