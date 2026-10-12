@@ -115,6 +115,22 @@ TEST(PartyReader, HiddenAbilityIsBitZeroOnly) // H6-CP4-2
     EXPECT_FALSE(m.hiddenAbility);
 }
 
+// ── H8 CP1 저장된 능력치 ──────────────────────────────────
+
+TEST(PartyReader, ReadsTheStoredStats) // H8-CP1
+{
+    MemberSpec spec;
+    spec.maxHp = 151;
+    spec.battleStats = {139, 88, 152, 75,
+                        74}; // 프테라 Lv.48(SS 실파일)의 공격 · 방어 · 스피드 · 특공 · 특방
+    EXPECT_EQ(roundTrip(spec).stats, (std::array<int, 6> {151, 139, 88, 152, 75, 74})); // 게임 순서
+}
+
+TEST(PartyReader, ReadsTheStoredStatsOfAPk5) // H8-CP1 — 220바이트에도 같은 자리
+{
+    EXPECT_EQ(roundTripPk5({}).stats, (std::array<int, 6> {120, 101, 102, 103, 104, 105}));
+}
+
 // ── H6 CP1 기기 리더 등록 · readParty ─────────────────────────
 
 TEST(PartyReader, ListsTheNdsReader) // H6-CP1-1

@@ -42,7 +42,12 @@ void checkRealSave(const char *envName, std::string_view expectedGroup)
         std::printf("  %zu  #%d Lv.%d  moves %d %d %d %d  item %d  ability %d  nature %d%s\n",
                     i + 1, m.species, m.level, m.moves[0], m.moves[1], m.moves[2], m.moves[3],
                     m.heldItem, m.ability, m.nature, m.egg ? "  (egg)" : "");
+        std::printf("     stats %d %d %d %d %d %d (HP 공격 방어 스피드 특공 특방)\n", m.stats[0],
+                    m.stats[1], m.stats[2], m.stats[3], m.stats[4], m.stats[5]);
         EXPECT_TRUE(m.checksumOk) << "member " << i + 1;
+        if (!m.egg) {
+            EXPECT_EQ(m.stats[0], m.maxHp) << "member " << i + 1; // H8: 능력치 첫 칸 = 최대 HP
+        }
         EXPECT_GE(m.species, 1) << "member " << i + 1;
         EXPECT_LE(m.species, 649) << "member " << i + 1; // 5세대 전국도감 끝
         if (!m.egg) {

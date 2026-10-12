@@ -34,6 +34,7 @@ ReadMember parseMember(const DecodedPkm &pkm, const PkmFormat &format)
     member.level = data[0x8C];
     member.hp = readU16(data, 0x8E);
     member.maxHp = readU16(data, 0x90);
+    // TODO(H8-CP1) member.stats[k] = 0x90 + 2k의 u16 (k = 0–5). 위의 기술 반복문과 같은 모양
     return member;
 }
 

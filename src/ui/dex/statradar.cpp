@@ -9,7 +9,7 @@
 
 namespace {
 constexpr int kScaleMax = 200;
-constexpr int kRings = 4;          // 50 · 100 · 150 · 200
+constexpr int kRingStep = 50;      // 눈금 간격: 50 · 100 · 150 · 200(· 250 …)
 constexpr int kLabelMargin = 44;   // 축 이름 · 값이 들어갈 바깥 여백
 constexpr qreal kFillAlpha = 0.28; // 도형 채움(빨강 옅게)
 
@@ -37,6 +37,19 @@ void StatRadar::setNature(int increased, int decreased)
     QWidget::update();
 }
 
+void StatRadar::setTrainedStats(std::optional<std::array<int, 6>> stats)
+{
+    // TODO(H8-CP4-1) setStats와 같은 모양: 멤버에 담고 다시 그리기를 요청한다
+    (void)stats;
+}
+
+int StatRadar::scaleMax() const
+{
+    // TODO(H8-CP4-2) 파랑이 있고 그 최댓값이 kScaleMax보다 크면, 그 값을 덮는 가장 작은 kRingStep의
+    //   배수(예: 231 → 250)를 돌려준다. 아니면 kScaleMax. 최댓값은 std::ranges::max(배열)
+    return kScaleMax;
+}
+
 QSize StatRadar::sizeHint() const
 {
     return {260, 260};
@@ -57,13 +70,15 @@ void StatRadar::paintEvent(QPaintEvent *)
         return center + QPointF(std::cos(angle) * r, std::sin(angle) * r);
     };
 
-    // 1) 눈금 육각형 · 축선
+    // 1) 눈금 육각형 · 축선 — 바깥 눈금 = scale(보통 200)
+    const int scale = scaleMax();
+    const int rings = scale / kRingStep;
     painter.setBrush(Qt::NoBrush);
-    for (int ring = 1; ring <= kRings; ++ring) {
+    for (int ring = 1; ring <= rings; ++ring) {
         QPolygonF hexagon;
         for (int axis = 0; axis < 6; ++axis)
-            hexagon << point(axis, radius * ring / kRings);
-        painter.setPen(QPen(QColor(ring == kRings ? tok::kLineStrong : tok::kLine), 1));
+            hexagon << point(axis, radius * ring / rings);
+        painter.setPen(QPen(QColor(ring == rings ? tok::kLineStrong : tok::kLine), 1));
         painter.drawPolygon(hexagon);
     }
     painter.setPen(QPen(QColor(tok::kLine), 1));
@@ -73,8 +88,8 @@ void StatRadar::paintEvent(QPaintEvent *)
     // 2) 종족값 도형
     QPolygonF shape;
     for (int axis = 0; axis < 6; ++axis) {
-        const int value = std::min(m_stats[kAxisToStat[axis]], kScaleMax);
-        shape << point(axis, radius * value / kScaleMax);
+        const int value = std::min(m_stats[kAxisToStat[axis]], scale);
+        shape << point(axis, radius * value / scale);
     }
     QColor fill(tok::kRed);
     fill.setAlphaF(kFillAlpha);
@@ -85,6 +100,11 @@ void StatRadar::paintEvent(QPaintEvent *)
     painter.setBrush(QColor(tok::kRed));
     for (const QPointF &p : shape)
         painter.drawEllipse(p, 2.5, 2.5);
+
+    // TODO(H8-CP4-3) 인게임 능력치 도형(파랑): m_trained가 있으면 바로 위 "종족값 도형"과 같은
+    // 순서로
+    //   — 점 6개 → 채움(tok::kBlue, 알파 kFillAlpha) · 선(tok::kBlueDeep) · 꼭짓점. 빨강 위에
+    //   겹친다
 
     // 3) 축 이름 + 값: 축 끝 바깥에. 위 · 아래 축은 가운데 정렬, 왼쪽 · 오른쪽 축은 바깥쪽으로
     // 붙인다.
@@ -126,6 +146,9 @@ void StatRadar::paintEvent(QPaintEvent *)
         painter.setPen(QColor(m_stats[stat] >= 100 ? tok::kText1 : tok::kText3));
         painter.drawText(QRectF(box.left(), box.top() + 16, box.width(), 18),
                          horizontal | Qt::AlignVCenter, QString::number(m_stats[stat]));
+        // TODO(H8-CP4-4) m_trained가 있으면 종족값 아래 한 줄(box.top() + 34)에 그 능력치를 파랑
+        //   (tok::kBlueDeep)으로. 줄이 하나 늘어나니 위쪽 축(top)의 box는 그만큼 더 올려야 도형과
+        //   안 겹친다 — 위의 moveCenter 오프셋을 보라
     }
 }
 } // namespace com::yamada::studio

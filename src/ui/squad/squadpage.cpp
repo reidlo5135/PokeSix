@@ -1369,6 +1369,8 @@ void SquadPage::showMemberDetail(int slot)
             kPageMargins); // 도감 화면과 같은 여백(버튼 · 스크롤바가 창에 붙지 않게)
     DexDetailPage *detail = new DexDetailPage(m_repository, m_state);
     detail->setFollowsAppGame(false); // 모달의 칩은 모달 안에서만(뒤의 스쿼드는 그대로)
+    // TODO(H8-CP4-8) 이 자리의 멤버(m_session->member(slot))가 hasStats()면 그 능력치를,
+    //   성격을 골라 뒀으면(natureId > 0) 그 성격을 detail에 넘긴다 — showPokemon 전에
     detail->showPokemon(pokemonId, m_session->version());
     layout->addWidget(detail);
     connect(detail, &DexDetailPage::backRequested, &dialog, &QDialog::accept); // [← 목록] = 닫기

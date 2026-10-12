@@ -357,6 +357,21 @@ void DexDetailPage::reload()
     applyLanguage();
 }
 
+void DexDetailPage::setTrainedStats(int pokemonId, const std::array<int, 6> &stats)
+{
+    // TODO(H8-CP4-5) 두 멤버(m_trainedFor · m_trained)에 담기만 한다 — 그리는 건 applyLanguage가
+    (void)pokemonId;
+    (void)stats;
+}
+
+void DexDetailPage::presetNature(int natureId)
+{
+    // TODO(H8-CP4-6) m_natureId에 담고 applyNature(). applyNature는 m_natures에서 찾으므로, 비어
+    // 있으면
+    //   먼저 읽어 둔다(showNaturePicker의 첫 줄과 같은 요령)
+    (void)natureId;
+}
+
 void DexDetailPage::showNaturePicker()
 {
     if (m_natures.isEmpty())
@@ -402,6 +417,8 @@ void DexDetailPage::applyLanguage()
     m_games->setGames(m_gameList, language, m_version);
     m_profile->setDetail(m_detail, language);
     m_stats->setStats(m_detail.stats);
+    // TODO(H8-CP4-7) 지금 보이는 포켓몬이 m_trainedFor면 m_stats->setTrainedStats(m_trained),
+    //   아니면 std::nullopt (진화 트리로 옮겨 간 경우)
     m_statsPanel->setTitle(tr("종족값"), tr("합계 %1").arg(m_detail.total));
     const bool evolves = !m_detail.evolution.isEmpty();
     m_evolutionLabel->setVisible(evolves);
