@@ -6,6 +6,16 @@ and the project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- Squad import reads 5th-generation saves (Black · White, Black 2 · White 2) as well as 4th-generation
+  ones. The save alone tells the generation and series: each series is a row checked by its own
+  checksums (gen 4: two slots and a block footer; gen 5: the checksum table and the party block's
+  CRC kept in two places). Gen 5 numbers follow PKHeX and are not yet checked against a real save.
+
+### Changed
+- Save readers are organised per hardware platform (ADR 0019): `PartyReader` with `PartyNdsReader`
+  for DS games, series as table rows, and the Pokémon record format (PK4 · PK5) as data.
+
 ## [0.2.1] - 2026-10-09
 
 Two fixes for people who installed 0.2.0: the squad analysis panel went black on a Windows PC in

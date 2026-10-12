@@ -27,9 +27,8 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
 
 ### 진행 중
 
-- **H6 — 사용자 구현 대기**(브랜치 `feat/h6-multigen-save`, [가이드](guides/h6-multigen-save.md)). 뼈대 · 테스트는 커밋돼 있고 빨강 19개가
-  CP1–CP5를 채우면 초록이 된다. 구조는 기기별 리더([ADR 0019](decisions/0019-save-readers-per-platform.md)). 이 브랜치는 빨강이라 main에 merge하지 않았다(가이드 · 로드맵 · data/gen5만 main에 먼저 반영).
-  H6 뒤 후보: 폼 표 · 세이브 파일 감시 · 전투 분석 입력 넓히기([data/battle-inputs.md](data/battle-inputs.md) §4) · Phase B · E4
+- 없음. **H6 완료**(2026-10-12, 세이브가 세대를 알려 준다 — 4세대 + 5세대 BW · B2W2). **다음은 테마 전환**(열린 일 8 — 사용자가 H6 뒤로 정함).
+  그 밖의 후보: 폼 표 · 세이브 파일 감시 · 전투 분석 입력 넓히기([data/battle-inputs.md](data/battle-inputs.md) §4) · Phase B · E4
 
 ### 열린 일 (작은 것부터)
 
@@ -48,6 +47,10 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
    제안 순서: F3a 런타임 팔레트(`Palette` kLight · kDark를 바꿔 끼움, QSS 재적용 · 다시 칠하기, `--theme dark` 검증) → F3b 빠진 다크 값 →
    F2' 모드 설정(`QStyleHints::colorScheme` · `colorSchemeChanged`, QSettings `theme/mode`) + 앱 막대 3칸. 핸드오프는 설정 화면 테마 카드(라이트/다크)라 위치 · "시스템"은 이탈.
    **시작할 때 물을 것**: 토큰 치환 방식(`tok::palette().paper` 추천, 기계적 치환은 Claude), 빠진 다크 값(디자인 요청서 vs Claude 제안값), 설정 화면 카드도 둘지
+9. **clang-format 버전이 머신마다 다르다**: Linux는 18.1.3(apt), Windows는 VS 번들(`VC\Tools\Llvm\bin`, 더 새 버전). 줄 끝 주석 정렬이 달라서
+   Windows에서 커밋한 파일(`csvimporter.h` · `dataupdater.h` · `firstrunpanel.h` · `homepage.cpp`)을 Linux에서 돌리면 바뀌고, 반대도 마찬가지다.
+   2026-10-12 사용자 작업 트리에 `homepage.cpp`의 정렬만 바뀐 변경이 남아 있다(커밋 안 함). 해결안: 두 머신이 같은 버전을 쓰게 고정
+   (예: `uv tool install clang-format==<버전>` — PyPI 휠, setup 스크립트에 넣기)하고 한 번 전체 포맷 커밋. 사용자 결정 대기
 
 ---
 
@@ -70,6 +73,17 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
 ---
 
 ## 최근 세션 (역순)
+
+### 2026-10-12 — H6 완료 · merge (Linux 세션)
+
+- 사용자 구현 CP1–CP5(기기 리더 목록 · NDS 시리즈 판별 `std::visit` · 5세대 체크섬 검증 · PK5 · Portable 세대). 진단 · 구현 중 짚은 것:
+  반복문 안의 `else return nullopt`(첫 행에서 끝남 + 반복문 뒤 return 없음 = 정의되지 않은 동작, `-Wreturn-type`), `uint16_t`에 파일 위치를 담아
+  잘림(0x23F8C → 0x3F8C), 파일 밖 검사 뒤 return 없이 계속 읽어 SEGFAULT, 사본 위치를 BW 숫자(0x23F34)로 하드코딩(→ B2W2 테스트 보강),
+  `decodePkm`의 `||`(늘 참 — 내 TODO 문구 "236 또는 220"이 오해를 부름), `x & 0x01 != 0` 우선순위, `portable.generation`을 채우기 전에 읽음
+  (가이드 · TODO가 그 이름을 고칠 자리로 나열해 오해를 부름 — 가이드 수정)
+- 정리: 다 채운 TODO 삭제(CP6만 남김), 숨겨진 특성 비트 1 테스트, 오류 문구(사용자가 "4세대 · 5세대"를 나열한 문구를 일단 유지) 번역 2벌
+- 검증: 클린 빌드 경고 0 · 테스트 167 · RealSave(SS 한국판) 6마리 H1과 동일 · readsav 출력 동일. 앱에서의 불러오기는 사용자 확인 필요
+- 집 Windows 세션(10-09)의 origin/main과 이 머신의 main이 갈라져 있던 것을 merge로 합쳤다(worklog 충돌만)
 
 ### 2026-10-09 — Windows: 스키마 12 첫 실행의 DB 교체 실패 (집 세션)
 

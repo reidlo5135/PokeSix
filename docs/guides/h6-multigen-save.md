@@ -1,6 +1,6 @@
 # H6 — 세이브가 세대를 알려 준다 (기기별 리더 · 4세대 + 5세대 BW · B2W2)
 
-> 학습 루프 ① 가이드. 브랜치: `feat/h6-multigen-save` (Claude가 만들어 둠)
+> **완료(2026-10-12).** 학습 루프 ① 가이드. 브랜치: `feat/h6-multigen-save` (Claude가 만들어 둠)
 > 뼈대 · 테스트는 준비돼 있다. **`// TODO(H6-CPn-m)`만 채우면 된다.** 빈칸이 있어도 빌드된다.
 > 앞 단계: [H1](h1-save-reader.md)(4세대 core 파서) · [H2](h2-squad-sav-import.md)(앱에서 불러오기) ·
 > 구조 결정: [ADR 0019](../decisions/0019-save-readers-per-platform.md) · 5세대 수치: [data/gen5/](../data/gen5/README.md)
@@ -53,13 +53,13 @@ src/core/save/
 
 | 단계 | | 체크포인트 | 파일 | 배우는 것 |
 |---|---|---|---|---|
-| ① 판별 | ⬜ | **CP1 기기 리더 등록** | `partyreader.cpp` | 가상 함수 · 부모 포인터로 자식 부르기(다형성) · 함수 안의 `static` |
-| ① 판별 | ⬜ | **CP2 NDS 시리즈 판별** | `partyndsreader.cpp` | `std::variant` · `std::visit` · 오버로드 · `static` 멤버 함수 |
-| ① 판별 | ⬜ | **CP3 5세대식 검증** | `saveblock.cpp` · `partyndsreader.cpp` | 두 겹 CRC(블록 CRC + 모음 블록 사본), 파일 밖 읽기 막기 |
-| ② 추출 | ⬜ | **CP4 PK5** | `pkmcodec.cpp` · `partyreader.cpp` · `partyndsreader.cpp` | `std::optional`로 "칸이 있을 때만", 스트림 암호의 앞부분 |
-| ③ 구성 | ⬜ | **CP5 Portable** | `src/data/store/saveimport.cpp` | 상수 지우고 컴파일러에게 고칠 곳 묻기 |
+| ① 판별 | ✅ | **CP1 기기 리더 등록** | `partyreader.cpp` | 가상 함수 · 부모 포인터로 자식 부르기(다형성) · 함수 안의 `static` |
+| ① 판별 | ✅ | **CP2 NDS 시리즈 판별** | `partyndsreader.cpp` | `std::variant` · `std::visit` · 오버로드 · `static` 멤버 함수 |
+| ① 판별 | ✅ | **CP3 5세대식 검증** | `saveblock.cpp` · `partyndsreader.cpp` | 두 겹 CRC(블록 CRC + 모음 블록 사본), 파일 밖 읽기 막기 |
+| ② 추출 | ✅ | **CP4 PK5** | `pkmcodec.cpp` · `partyreader.cpp` · `partyndsreader.cpp` | `std::optional`로 "칸이 있을 때만", 스트림 암호의 앞부분 |
+| ③ 구성 | ✅ | **CP5 Portable** | `src/data/store/saveimport.cpp` | 상수 지우고 컴파일러에게 고칠 곳 묻기 |
 | (선택) | ⬜ | **CP6 readsav 로그** | `tools/readsav/main.cpp` | 판별 과정 찍기 |
-| | ⬜ | **완료 확인** | 테스트 · 실파일 · 앱 | 4세대 회귀 없음 |
+| | ✅ | **완료 확인** | 테스트 · 실파일 · 앱 | 4세대 회귀 없음 |
 
 ### 준비된 것 (Claude가 만들어 둠)
 
@@ -304,9 +304,11 @@ PK4는 `natureAt`이 비어 있어 이 줄을 건너뛰고, 위에서 계산한 
   상수가 하던 일을 이제 `party->generation`(① 단계의 결과)이 한다
   ```
   saveimport.cpp:…: error: 'kGeneration' was not declared in this scope   ← versionsOfGroup 안
-  saveimport.cpp:…: error: 'kGeneration' was not declared in this scope   ← itemIdForGameIndex
-  saveimport.cpp:…: error: 'kGeneration' was not declared in this scope   ← portable.generation
+  saveimport.cpp:…: error: 'kGeneration' was not declared in this scope   ← 물건 변환(itemIdForGameIndex)
+  saveimport.cpp:…: error: 'kGeneration' was not declared in this scope   ← 결과에 세대 적기(portable.generation = …)
   ```
+  세 곳 모두 **`party->generation`(출처)을 읽는다.** `portable.generation`은 결과에 *적는* 자리다 — 물건 변환에서 `portable.generation`을
+  읽으면, 반복문이 돌 때는 아직 채우기 전(0)이라 물건이 전부 사라진다(구현 중 실제로 겪은 일)
 - `TODO(H6-CP5-2)` `versionsOfGroup(repository, versionGroup)` → `versionsOfGroup(repository, generation, versionGroup)`.
   안에서 `gamesForGeneration(generation)`. 부르는 쪽은 `party->generation`을 넘긴다. 나머지 두 곳도 `party->generation`으로
 - `TODO(H6-CP5-3)` `versionOfOriginGame`의 표에 5세대 네 줄: `{20, "white"}` · `{21, "black"}` · `{22, "white-2"}` · `{23, "black-2"}`
