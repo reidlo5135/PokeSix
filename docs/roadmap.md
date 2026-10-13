@@ -194,7 +194,10 @@ E2(스쿼드) 이어서. 순서는 가벼운 것부터.
 |---|---|---|
 | ⬜ | **F1** | `ResponsiveController` — 폭 구간(1360/1100/1024/960), 히스테리시스, 드로어. 기준: `20_dex_1024_drawer.png`, `21_squad_1024.png` |
 | ⬜ | **F2** | `Settings`(QSettings 래퍼) — [conventions.md §8](conventions.md#8-설정-qsettings) 키, 즉시 적용 |
-| ⬜ | **F3** | 다크 테마 — 토큰 교체만으로 전환되는지 검증. 사용자 요청(2026-10-12): 앱 막대에 [라이트 · 다크 · 시스템] 아이콘 3칸, H6 뒤에 시작 — 걸림돌 · 순서는 [worklog.md](worklog.md) 열린 일 8 |
+| ⬜ | **F3** | 다크 테마 — 사용자 요청(2026-10-12): 앱 막대에 [라이트 · 다크 · 시스템] 아이콘 3칸. 구조: [ADR 0020](decisions/0020-runtime-palette.md). 세 단계로: |
+| ⬜ | **F3a** ([가이드](guides/f3a-runtime-palette.md)) | 런타임 팔레트 — `tok::Palette` · `tok::palette()` · 역할(멤버 포인터) · `onColor`, `--theme dark`로 시작. 기계적 치환은 Claude(사용자 결정 2026-10-13) |
+| ⬜ | **F3b** | 빠진 다크 값 40여 칸 — Claude 제안값을 캡처로 같이 확인(사용자 결정), JSON 색(버전 · 분류 · 카드)의 다크 |
+| ⬜ | **F2'** | 실행 중 전환 + 앱 막대 3칸(해 · 달 · 모니터) + 시스템 모드(`QStyleHints::colorSchemeChanged`) + `theme/mode` 저장. 위치는 앱 막대만(사용자 결정) |
 
 ## Phase G — 배포 준비 → v1.0.0
 

@@ -33,6 +33,10 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
 
 - **AppImage 자기 등록 — 완료 · merge**(Claude 구현 — 사용자 결정 2026-10-13). 사용자 PC(Ubuntu GNOME)에서 메뉴 항목이 지워진 상태로 새 AppImage를 한 번 실행 → 앱 메뉴에 생김 확인.
   다음: v0.4.1 push(사용자) → **테마 전환**(열린 일 8).
+- **F3a 런타임 팔레트 — 사용자 구현 대기**(브랜치 `feat/f3a-runtime-palette`, [가이드](guides/f3a-runtime-palette.md), [ADR 0020](decisions/0020-runtime-palette.md)).
+  뼈대 · 테스트(`tests/ui`, 빨강 4) · 기계적 치환(552곳 → `tok::palette()`, white 74 + QSS 21곳 분류 → `onColor` 28 + QSS 5줄)은 Claude.
+  라이트 픽셀 비교 0.4.1과 동일(인트로 버전 글자만), 참조 구현으로 다크 캡처 확인 → F3b 대상: 세대 버튼 · 규칙 알약 · 버전 칩의 연한 바탕 글자, 필터 타입 칩, 히트맵 연한 칸.
+  `homepage.cpp` 정렬 변경은 `git stash`에 보관(stash@{0}) — 이 브랜치의 치환과 섞이지 않게. 포맷은 `git clang-format`(바꾼 줄만)
   그 밖의 후보: 폼 표 · 세이브 파일 감시 · 전투 분석 입력 넓히기([data/battle-inputs.md](data/battle-inputs.md) §4) · Phase B · E4
 
 ### 열린 일 (작은 것부터)
@@ -45,7 +49,7 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
 5. Windows 설정이 레지스트리 → `%APPDATA%\YamadaStudio\PokeSix.ini`로 바뀌었다(2026-10-07). 이전에 레지스트리에 저장된 세대 · 게임은 이어지지 않는다(한 번 다시 고르면 끝). 레지스트리 잔여물은 `HKCU\Software\YamadaStudio`에 남아 있어도 무해하다
 6. ~~**Windows .msi 검증**~~ → 2026-10-09 집 PC에서 통과(WiX 3.14 winget 설치 · `package.bat` → msi · 설치 → 사용자 시작 메뉴 바로가기 → 설치된 exe 실행 → 제거 깨끗). 남은 것: CI 러너(windows-2022, WiX 프리인스톨)에서 msi가 나오는지는 v0.2.0 태그 실행으로 확인
 7. macOS 공증(notarization): Apple Developer(연 99달러) + CI secrets(`notarytool`)를 붙이면 내려받은 dmg의 Gatekeeper "손상됨" 차단이 사라진다. 그 전까지는 README Download 절 + dmg 안 `READ ME FIRST - macOS.txt`의 `xattr` 안내로 운용(2026-10-09). **무료 대안**: GitHub에 `yamada-studio/homebrew-tap` 리포를 만들고 cask를 두면 Mac 사용자는 `brew install --cask --no-quarantine yamada-studio/tap/pokesix` 한 줄로 격리 없이 설치한다(새 리포 생성은 사용자 결정). 확인 필요: 친구 Mac에서 **v0.2.0** dmg + xattr 절차로 실제로 뜨는지(v0.1.0은 재서명 전이라 xattr을 풀어도 arm64에서 안 뜰 수 있다)
-8. **테마 전환 [라이트 | 다크 | 시스템]** — 사용자 요청(2026-10-12): 앱 막대의 세대 버튼 바로 왼쪽에 흔한 SVG 아이콘 3칸(해 · 달 · 모니터, Lucide ISC 추천).
+8. **테마 전환 [라이트 | 다크 | 시스템]** → 2026-10-13 시작(F3a). 결정 셋: 치환은 Claude · 빠진 다크 값은 Claude 제안 · 위치는 앱 막대만. 아래는 당시 분석. — 사용자 요청(2026-10-12): 앱 막대의 세대 버튼 바로 왼쪽에 흔한 SVG 아이콘 3칸(해 · 달 · 모니터, Lucide ISC 추천).
    v0.2.1의 `setColorScheme(Light)`는 임시방편. **H6 끝난 뒤 시작**(사용자 결정). 막히는 것 셋: ① 토큰이 `constexpr`(53파일 552회) · QSS는 시작 때 한 번 치환 →
    실행 중 전환 불가 ② 핸드오프 `darkOverrides`는 11개뿐 — tint · rowSel · cell.border · line.strong · text.disabled 등 40여 개 다크 값 없음
    ③ `white`가 "바탕"과 "색 위 흰 글자"(히트맵 · 마크 버튼 · 분류 칸 · QSS `color: @white`) 두 뜻 → `onColor` 분리 필요.
