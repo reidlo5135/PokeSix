@@ -44,7 +44,7 @@ QList<homecards::Card> load()
         card.rangeTo = range.size() > 1 ? range.at(1).toInt() : 0;
         card.accent = QColor::fromString(c.value(QStringLiteral("accent")).toString());
         if (!card.accent.isValid())
-            card.accent = QColor(tok::kWhite);
+            card.accent = QColor(tok::palette().white);
         for (const QJsonValue &value : c.value(QStringLiteral("regions")).toArray()) {
             const QJsonObject region = value.toObject();
             card.regions.append({region.value(QStringLiteral("ko")).toString(),

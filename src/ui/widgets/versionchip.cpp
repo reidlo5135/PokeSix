@@ -150,7 +150,7 @@ void VersionChip::paintEvent(QPaintEvent *)
     const QRectF box(1, 1, width() - 2, kChipHeight - 2);
     if (on) { // 켠 칩만 아래 그림자(눌린 버튼처럼 떠 보이게)
         painter.setPen(Qt::NoPen);
-        painter.setBrush(QColor(tok::kInk));
+        painter.setBrush(QColor(tok::palette().ink));
         painter.drawRoundedRect(box.translated(0, 2), 5, 5);
     }
     // 바탕: 약칭 자리만 조각마다 버전 색(글자 폭 비율), 뒤에 붙는 이름 자리는 흰 바탕
@@ -158,7 +158,7 @@ void VersionChip::paintEvent(QPaintEvent *)
     clip.addRoundedRect(box, 5, 5);
     painter.save();
     painter.setClipPath(clip);
-    painter.fillRect(box, QColor(tok::kWhite));
+    painter.fillRect(box, QColor(tok::palette().white));
     const QFontMetricsF metrics(chipFont());
     const QList<qreal> ends = boundaries();
     qreal x = box.left();
@@ -168,18 +168,19 @@ void VersionChip::paintEvent(QPaintEvent *)
         if (dimmedPart(i)) // 고르지 않은 버전: 흰 바탕(마우스가 오르면 버전 색을 옅게)
             fill = i == m_hoverPart
                            ? QColor::fromRgbF(fill.redF(), fill.greenF(), fill.blueF(), 0.55)
-                           : QColor(tok::kWhite);
+                           : QColor(tok::palette().white);
         painter.fillRect(QRectF(x, box.top(), end - x, box.height()), fill);
         if (i > 0 && m_selectedPart >= 0 && on) // 버전 조각 사이 금
-            painter.fillRect(QRectF(x - 0.5, box.top(), 1, box.height()), QColor(tok::kLine));
+            painter.fillRect(QRectF(x - 0.5, box.top(), 1, box.height()),
+                             QColor(tok::palette().line));
         x = end;
     }
     if (!m_suffix.isEmpty()) {
-        painter.setPen(QPen(QColor(tok::kLine), 1));
+        painter.setPen(QPen(QColor(tok::palette().line), 1));
         painter.drawLine(QPointF(x, box.top()), QPointF(x, box.bottom()));
     }
     painter.restore();
-    painter.setPen(QPen(QColor(on ? tok::kInk : tok::kLineStrong), on ? 2 : 1.5));
+    painter.setPen(QPen(QColor(on ? tok::palette().ink : tok::palette().lineStrong), on ? 2 : 1.5));
     painter.setBrush(Qt::NoBrush);
     painter.drawRoundedRect(box, 5, 5);
 
@@ -198,12 +199,12 @@ void VersionChip::paintEvent(QPaintEvent *)
     }
     if (!m_suffix.isEmpty()) {
         painter.setFont(suffixFont());
-        painter.setPen(QColor(tok::kText2));
+        painter.setPen(QColor(tok::palette().text2));
         painter.drawText(QRectF(textX + 7, box.top(), width() - textX, box.height()),
                          Qt::AlignLeft | Qt::AlignVCenter, m_suffix);
     }
     if (hasFocus()) {
-        painter.setPen(QPen(QColor(tok::kBlue), 2));
+        painter.setPen(QPen(QColor(tok::palette().blue), 2));
         painter.drawRoundedRect(box.adjusted(-0.5, -0.5, 0.5, 0.5), 6, 6);
     }
 }

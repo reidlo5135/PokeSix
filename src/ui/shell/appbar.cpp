@@ -71,7 +71,7 @@ void AppBar::paintEvent(QPaintEvent *event)
     // 빨강 바탕 + 아래 먹선 3. 활성 탭은 자식이라 이 위에 그려져 먹선을 덮는다(부모 → 자식 순서로
     // 그린다).
     QPainter painter(this);
-    painter.fillRect(rect(), QColor(tok::kRed));
-    painter.fillRect(0, height() - kBottomLine, width(), kBottomLine, QColor(tok::kInk));
+    painter.fillRect(rect(), QColor(tok::palette().red));
+    painter.fillRect(0, height() - kBottomLine, width(), kBottomLine, QColor(tok::palette().ink));
 }
 } // namespace com::yamada::studio

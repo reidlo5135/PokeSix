@@ -34,9 +34,10 @@ SearchField::SearchField(const QString &placeholder, const QString &shortcutText
     layout->setSpacing(kGap);
 
     QLabel *icon = new QLabel;
-    icon->setPixmap(svgicon::pixmap(
-            QString::fromLatin1(kSearchSvg).arg(QColor(com::yamada::studio::tok::kText3).name()),
-            kIconSize, devicePixelRatioF()));
+    icon->setPixmap(
+            svgicon::pixmap(QString::fromLatin1(kSearchSvg)
+                                    .arg(QColor(com::yamada::studio::tok::palette().text3).name()),
+                            kIconSize, devicePixelRatioF()));
     layout->addWidget(icon);
 
     m_edit = new QLineEdit;
@@ -112,8 +113,9 @@ void SearchField::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
     const qreal half = kBorder / 2.0;
-    painter.setPen(QPen(QColor(m_edit->hasFocus() ? tok::kBlue : tok::kInk), kBorder));
-    painter.setBrush(QColor(tok::kWhite));
+    painter.setPen(
+            QPen(QColor(m_edit->hasFocus() ? tok::palette().blue : tok::palette().ink), kBorder));
+    painter.setBrush(QColor(tok::palette().white));
     painter.drawRoundedRect(QRectF(rect()).adjusted(half, half, -half, -half), kRadius - half,
                             kRadius - half);
 }

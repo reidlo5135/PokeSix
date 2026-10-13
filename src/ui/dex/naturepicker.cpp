@@ -63,8 +63,8 @@ void NaturePicker::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
     // 창: 흰 바탕 · 먹선 2 · 반경 6
-    painter.setPen(QPen(QColor(tok::kInk), 2));
-    painter.setBrush(QColor(tok::kWhite));
+    painter.setPen(QPen(QColor(tok::palette().ink), 2));
+    painter.setBrush(QColor(tok::palette().white));
     painter.drawRoundedRect(QRectF(rect()).adjusted(1, 1, -1, -1), 6, 6);
 
     const QFont headerFont = theme::font(theme::kFamilyBody, 11, QFont::ExtraBold);
@@ -73,10 +73,10 @@ void NaturePicker::paintEvent(QPaintEvent *)
     const int top = kPadding + kHeaderHeight;
     painter.setFont(headerFont);
     for (int i = 0; i < kStats; ++i) { // 머리: ▼ 내리는(칸) · ▲ 오르는(줄)
-        painter.setPen(QColor(tok::kBlueDeep));
+        painter.setPen(QColor(tok::palette().blueDeep));
         painter.drawText(QRect(left + i * kCellWidth, kPadding, kCellWidth, kHeaderHeight),
                          Qt::AlignCenter, QStringLiteral("▼") + stats[i]);
-        painter.setPen(QColor(tok::kRed));
+        painter.setPen(QColor(tok::palette().red));
         painter.drawText(QRect(kPadding, top + i * kCellHeight, kHeaderWidth - 4, kCellHeight),
                          Qt::AlignRight | Qt::AlignVCenter, QStringLiteral("▲") + stats[i]);
     }
@@ -88,8 +88,9 @@ void NaturePicker::paintEvent(QPaintEvent *)
             const bool current = id != 0 && id == m_current;
             const bool hovered = m_hover == row * kStats + column;
             if (current || hovered) {
-                painter.setPen(current ? QPen(QColor(tok::kInk), 1.5) : Qt::NoPen);
-                painter.setBrush(QColor(current ? tok::kYellow : tok::kYellowTint));
+                painter.setPen(current ? QPen(QColor(tok::palette().ink), 1.5) : Qt::NoPen);
+                painter.setBrush(
+                        QColor(current ? tok::palette().yellow : tok::palette().yellowTint));
                 painter.drawRoundedRect(cell, 4, 4);
             }
             QString name;
@@ -97,8 +98,8 @@ void NaturePicker::paintEvent(QPaintEvent *)
                 if (n.id == id)
                     name = n.name.text(m_language);
             painter.setFont(cellFont);
-            painter.setPen(
-                    QColor(row == column ? tok::kTextDisabled : tok::kText1)); // 대각선 = 무보정
+            painter.setPen(QColor(row == column ? tok::palette().textDisabled
+                                                : tok::palette().text1)); // 대각선 = 무보정
             painter.drawText(cell, Qt::AlignCenter, name);
         }
     }
@@ -107,11 +108,11 @@ void NaturePicker::paintEvent(QPaintEvent *)
                       kFooterHeight - 6);
     if (m_hover == kNoneCell) {
         painter.setPen(Qt::NoPen);
-        painter.setBrush(QColor(tok::kPaperAlt));
+        painter.setBrush(QColor(tok::palette().paperAlt));
         painter.drawRoundedRect(none, 4, 4);
     }
     painter.setFont(cellFont);
-    painter.setPen(QColor(tok::kText2));
+    painter.setPen(QColor(tok::palette().text2));
     painter.drawText(none, Qt::AlignCenter, tr("성격 없음"));
 }
 

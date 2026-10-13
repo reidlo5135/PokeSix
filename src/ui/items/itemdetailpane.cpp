@@ -52,8 +52,8 @@ protected:
 
         // 아이콘 칸 (paper.alt · line 테), 가운데에 2배 도트
         const QRect frame((width() - kIconBox) / 2, 0, kIconBox, kIconBox);
-        painter.setPen(QPen(QColor(tok::kLine), 1.5));
-        painter.setBrush(QColor(tok::kPaperAlt));
+        painter.setPen(QPen(QColor(tok::palette().line), 1.5));
+        painter.setBrush(QColor(tok::palette().paperAlt));
         painter.drawRoundedRect(QRectF(frame).adjusted(0.75, 0.75, -0.75, -0.75), 6, 6);
         // 아이콘 키는 목록과 같은 규칙(기술머신 = 담긴 기술의 타입 CD, 1–5세대 = BW 모양)
         const QString key
@@ -67,7 +67,7 @@ protected:
 
         int y = frame.bottom() + 8;
         painter.setFont(theme::font(theme::kFamilyTitle, 20));
-        painter.setPen(QColor(tok::kText1));
+        painter.setPen(QColor(tok::palette().text1));
         painter.drawText(QRect(0, y, width(), 26), Qt::AlignHCenter | Qt::AlignVCenter,
                          m_item.name.text(m_language));
         y += 28;
@@ -81,12 +81,12 @@ protected:
             qreal x = (width() - chipWidth - moveWidth) / 2;
             if (type)
                 x += typechip::paint(painter, QPointF(x, y), *type, m_language) + 6;
-            painter.setPen(QColor(tok::kText1));
+            painter.setPen(QColor(tok::palette().text1));
             painter.drawText(QPointF(x, y + typechip::kHeight - 5), move);
         }
         y += 24;
         painter.setFont(theme::font(theme::kFamilyData, 12, QFont::Bold));
-        painter.setPen(QColor(tok::kText3));
+        painter.setPen(QColor(tok::palette().text3));
         painter.drawText(QRect(0, y, width(), 18), Qt::AlignHCenter | Qt::AlignVCenter,
                          m_item.cost > 0 ? ItemDetailPane::tr("%L1원").arg(m_item.cost)
                                          : ItemDetailPane::tr("비매품"));
@@ -128,15 +128,15 @@ protected:
         for (int generation = 1; generation <= count; ++generation) {
             const QRectF cell(x, 0, kCell, kCell);
             const bool exists = m_generations & (1u << (generation - 1));
-            painter.setPen(QPen(QColor(tok::kInk), 1.2));
-            painter.setBrush(QColor(exists ? tok::kGreen : tok::kPaperAlt));
+            painter.setPen(QPen(QColor(tok::palette().ink), 1.2));
+            painter.setBrush(QColor(exists ? tok::palette().green : tok::palette().paperAlt));
             painter.drawRoundedRect(cell, 3, 3);
             if (generation == m_current) { // 지금 세대: 노란 테
-                painter.setPen(QPen(QColor(tok::kYellow), 2));
+                painter.setPen(QPen(QColor(tok::palette().yellow), 2));
                 painter.setBrush(Qt::NoBrush);
                 painter.drawRoundedRect(cell.adjusted(-1.5, -1.5, 1.5, 1.5), 4, 4);
             }
-            painter.setPen(QColor(exists ? tok::kWhite : tok::kText3));
+            painter.setPen(QColor(exists ? tok::palette().onColor : tok::palette().text3));
             painter.drawText(cell, Qt::AlignCenter, QString::number(generation));
             x += step;
         }
@@ -194,7 +194,7 @@ protected:
                     x += kIcon + 2;
                 }
                 painter.setFont(nameFont);
-                painter.setPen(QColor(tok::kText1));
+                painter.setPen(QColor(tok::palette().text1));
                 const qreal w = QFontMetricsF(nameFont).horizontalAdvance(name);
                 painter.drawText(QRectF(x, top, w + 1, kRowHeight),
                                  Qt::AlignLeft | Qt::AlignVCenter, name);
@@ -202,7 +202,7 @@ protected:
             };
             if (!row.from.isEmpty()) {
                 pokemon(row.fromPokemonId, row.from);
-                painter.setPen(QColor(tok::kText3));
+                painter.setPen(QColor(tok::palette().text3));
                 painter.drawText(QRectF(x, top, 22, kRowHeight), Qt::AlignCenter,
                                  QStringLiteral("→"));
                 x += 22;
@@ -210,7 +210,7 @@ protected:
             pokemon(row.toPokemonId, row.to);
             if (!row.note.isEmpty()) {
                 painter.setFont(noteFont);
-                painter.setPen(QColor(tok::kText3));
+                painter.setPen(QColor(tok::palette().text3));
                 const QRectF rest(x + 6, top, width() - x - 6, kRowHeight);
                 painter.drawText(
                         rest, Qt::AlignLeft | Qt::AlignVCenter,

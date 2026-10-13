@@ -44,7 +44,7 @@ void AbilityList::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing, true);
     if (m_abilities.isEmpty()) {
         painter.setFont(theme::font(theme::kFamilyBody, 13));
-        painter.setPen(QColor(tok::kText3));
+        painter.setPen(QColor(tok::palette().text3));
         painter.drawText(rect(), Qt::AlignLeft | Qt::AlignVCenter,
                          m_generation < kFirstAbilityGeneration ? tr("특성은 3세대부터 있어요.")
                                                                 : tr("특성 정보가 없어요."));
@@ -57,10 +57,10 @@ void AbilityList::paintEvent(QPaintEvent *)
         const AbilityEntry &ability = m_abilities.at(i);
         const int top = int(i) * kRowHeight;
         if (i % 2 == 1)
-            painter.fillRect(QRect(0, top, width(), kRowHeight), QColor(tok::kPaperAlt));
+            painter.fillRect(QRect(0, top, width(), kRowHeight), QColor(tok::palette().paperAlt));
         qreal x = 6;
         painter.setFont(nameFont);
-        painter.setPen(QColor(tok::kText1));
+        painter.setPen(QColor(tok::palette().text1));
         const QString name = ability.name.text(m_language);
         painter.drawText(QRectF(x, top, kNameWidth, kRowHeight), Qt::AlignLeft | Qt::AlignVCenter,
                          name);
@@ -69,18 +69,18 @@ void AbilityList::paintEvent(QPaintEvent *)
             const QString tag = tr("숨겨진 특성");
             const qreal w = QFontMetricsF(tagFont).horizontalAdvance(tag) + 10;
             const QRectF box(x, top + (kRowHeight - 16) / 2.0, w, 16);
-            QPen dashed(QColor(tok::kBlue), 1.2);
+            QPen dashed(QColor(tok::palette().blue), 1.2);
             dashed.setStyle(Qt::DashLine);
             painter.setPen(dashed);
-            painter.setBrush(QColor(tok::kBlueTint));
+            painter.setBrush(QColor(tok::palette().blueTint));
             painter.drawRoundedRect(box, 3, 3);
             painter.setFont(tagFont);
-            painter.setPen(QColor(tok::kBlueDeep));
+            painter.setPen(QColor(tok::palette().blueDeep));
             painter.drawText(box, Qt::AlignCenter, tag);
         }
         const qreal effectLeft = 6 + kNameWidth + 70 + kGap; // 이름 · 꼬리표 자리 뒤로 맞춘다
         painter.setFont(effectFont);
-        painter.setPen(QColor(tok::kText2));
+        painter.setPen(QColor(tok::palette().text2));
         const QRectF effect(effectLeft, top, width() - effectLeft - 6, kRowHeight);
         painter.drawText(effect, Qt::AlignLeft | Qt::AlignVCenter,
                          QFontMetricsF(effectFont)

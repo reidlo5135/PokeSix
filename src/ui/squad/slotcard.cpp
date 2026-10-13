@@ -460,7 +460,7 @@ void SlotCard::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing, true);
     const Geometry g = areas();
     if (m_selected || m_alert) { // 바깥 테: 경고(빨강)가 선택(노랑)보다 앞선다
-        painter.setPen(QPen(QColor(m_alert ? tok::kRed : tok::kYellow), kRing));
+        painter.setPen(QPen(QColor(m_alert ? tok::palette().red : tok::palette().yellow), kRing));
         painter.setBrush(Qt::NoBrush);
         painter.drawRoundedRect(QRectF(rect()).adjusted(1.5, 1.5, -1.5, -1.5), 10, 10);
     }
@@ -474,15 +474,15 @@ void SlotCard::paintFilled(QPainter &painter, const Geometry &g)
 {
     const PokemonDetail &detail = m_session->detail(m_slot);
     const tok::TypeColor *type = firstType(detail);
-    const QRgb headerText = type ? type->text : tok::kWhite;
+    const QRgb headerText = type ? type->text : tok::palette().onColor;
     paintPanel(painter, g.card,
                PanelStyle {.outline = 2,
                            .radius = 8,
                            .shadow = 3,
-                           .fill = tok::kWhite,
-                           .ink = tok::kInk,
+                           .fill = &tok::Palette::white,
+                           .ink = &tok::Palette::ink,
                            .header = kHeader,
-                           .headerColor = type ? type->fill : tok::kInk});
+                           .headerColor = type ? tok::Color(type->fill) : &tok::Palette::ink});
 
     // 머리: [▶] 01 [아이콘] 이름 ······ ⋯
     int x = g.header.left() + 10;
@@ -526,7 +526,7 @@ void SlotCard::paintFilled(QPainter &painter, const Geometry &g)
 
     if (m_hot == Hit::Swap || m_hot == Hit::Remove || m_hot == Hit::Detail) {
         painter.setPen(Qt::NoPen);
-        QColor glow(tok::kWhite);
+        QColor glow(tok::palette().onColor);
         glow.setAlpha(60);
         painter.setBrush(glow);
         const QRect &hot = m_hot == Hit::Swap ? g.swap : m_hot == Hit::Remove ? g.remove : g.detail;
@@ -534,11 +534,11 @@ void SlotCard::paintFilled(QPainter &painter, const Geometry &g)
     }
     paintHeaderButtons(painter, g, QColor(headerText));
     if (!m_warning.isEmpty()) { // 경고: 빨강 원 "!"(흰 테 — 어떤 타입 색 머리 위에서도 보이게)
-        painter.setPen(QPen(QColor(tok::kWhite), 2));
-        painter.setBrush(QColor(tok::kRed));
+        painter.setPen(QPen(QColor(tok::palette().onColor), 2));
+        painter.setBrush(QColor(tok::palette().red));
         painter.drawEllipse(QRectF(g.warn).adjusted(1, 1, -1, -1));
         painter.setFont(theme::font(theme::kFamilyBody, 12, QFont::ExtraBold));
-        painter.setPen(QColor(tok::kWhite));
+        painter.setPen(QColor(tok::palette().onColor));
         painter.drawText(g.warn, Qt::AlignCenter, QStringLiteral("!"));
     }
 
@@ -553,7 +553,7 @@ void SlotCard::paintFilled(QPainter &painter, const Geometry &g)
     const GenerationFeatures features = featuresOf(m_session->generation());
     if (!features.abilities && !features.natures && !features.heldItems) {
         painter.setFont(theme::font(theme::kFamilyBody, 12));
-        painter.setPen(QColor(tok::kText3));
+        painter.setPen(QColor(tok::palette().text3));
         painter.drawText(QRect(g.types.left(), g.memo.bottom() + 8, g.types.width(), 24),
                          Qt::AlignLeft | Qt::AlignVCenter,
                          tr("1세대에는 특성 · 성격 · 지닌 물건이 없어요"));
@@ -580,7 +580,7 @@ void SlotCard::paintFilled(QPainter &painter, const Geometry &g)
 
     // 약점: ×4 먼저, 그다음 타입 순
     painter.setFont(theme::font(theme::kFamilyBody, 11, QFont::Bold));
-    painter.setPen(QColor(tok::kText3));
+    painter.setPen(QColor(tok::palette().text3));
     const QString label = tr("약점");
     painter.drawText(g.weak, Qt::AlignLeft | Qt::AlignVCenter, label);
     qreal wx = g.weak.left() + QFontMetricsF(painter.font()).horizontalAdvance(label) + 8;
@@ -611,7 +611,7 @@ void SlotCard::paintFilled(QPainter &painter, const Geometry &g)
     }
     if (!any) {
         painter.setFont(theme::font(theme::kFamilyBody, 11, QFont::Bold));
-        painter.setPen(QColor(tok::kText3));
+        painter.setPen(QColor(tok::palette().text3));
         painter.drawText(QRectF(wx, g.weak.top(), g.weak.right() - wx, 20),
                          Qt::AlignLeft | Qt::AlignVCenter, tr("없음"));
     }
@@ -620,8 +620,8 @@ void SlotCard::paintFilled(QPainter &painter, const Geometry &g)
 void SlotCard::paintTrait(QPainter &painter, const QRect &rect, const QString &label,
                           const QString &value, bool hot, const QString &itemIcon)
 {
-    painter.setPen(QPen(QColor(hot ? tok::kInk : tok::kLineStrong), 1.5));
-    painter.setBrush(QColor(hot ? tok::kYellowTint : tok::kWhite));
+    painter.setPen(QPen(QColor(hot ? tok::palette().ink : tok::palette().lineStrong), 1.5));
+    painter.setBrush(QColor(hot ? tok::palette().yellowTint : tok::palette().white));
     painter.drawRoundedRect(QRectF(rect).adjusted(0.75, 0.75, -0.75, -0.75), 5, 5);
     int x = rect.left() + 7;
     if (!itemIcon.isEmpty()) {
@@ -636,14 +636,14 @@ void SlotCard::paintTrait(QPainter &painter, const QRect &rect, const QString &l
     } else {
         const QFont labelFont = theme::font(theme::kFamilyBody, 10, QFont::Bold);
         painter.setFont(labelFont);
-        painter.setPen(QColor(tok::kText3));
+        painter.setPen(QColor(tok::palette().text3));
         painter.drawText(QRect(x, rect.top(), rect.width(), rect.height()),
                          Qt::AlignLeft | Qt::AlignVCenter, label);
         x += int(QFontMetricsF(labelFont).horizontalAdvance(label)) + 5;
     }
     const QFont valueFont = theme::font(theme::kFamilyBody, 11, QFont::ExtraBold);
     painter.setFont(valueFont);
-    painter.setPen(QColor(value.isEmpty() ? tok::kTextDisabled : tok::kText1));
+    painter.setPen(QColor(value.isEmpty() ? tok::palette().textDisabled : tok::palette().text1));
     const int width = rect.right() - 14 - x;
     painter.drawText(QRect(x, rect.top(), width, rect.height()), Qt::AlignLeft | Qt::AlignVCenter,
                      QFontMetricsF(valueFont).elidedText(
@@ -652,7 +652,7 @@ void SlotCard::paintTrait(QPainter &painter, const QRect &rect, const QString &l
                                                         : QStringLiteral("—"))
                                              : value,
                              Qt::ElideRight, width));
-    painter.setPen(QColor(tok::kText3));
+    painter.setPen(QColor(tok::palette().text3));
     painter.drawText(QRect(rect.right() - 14, rect.top(), 12, rect.height()), Qt::AlignCenter,
                      QStringLiteral("▾"));
 }
@@ -662,24 +662,24 @@ void SlotCard::paintMove(QPainter &painter, const QRect &rect, int index, bool h
     const auto &slotMove = m_session->slotMoves(m_slot)[std::size_t(index)];
     const QRectF box = QRectF(rect).adjusted(0.75, 0.75, -0.75, -0.75);
     if (!slotMove) { // 빈 칸: 점선 "+ 기술 추가"
-        QPen pen(QColor(hot ? tok::kBlue : tok::kLineStrong), 1.5, Qt::DashLine);
+        QPen pen(QColor(hot ? tok::palette().blue : tok::palette().lineStrong), 1.5, Qt::DashLine);
         painter.setPen(pen);
-        painter.setBrush(QColor(hot ? tok::kBlueTint : tok::kWhite));
+        painter.setBrush(QColor(hot ? tok::palette().blueTint : tok::palette().white));
         painter.drawRoundedRect(box, 4, 4);
         painter.setFont(theme::font(theme::kFamilyBody, 12, QFont::Bold));
-        painter.setPen(QColor(hot ? tok::kBlueDeep : tok::kText3));
+        painter.setPen(QColor(hot ? tok::palette().blueDeep : tok::palette().text3));
         painter.drawText(rect, Qt::AlignCenter, tr("+ 기술 추가"));
         return;
     }
     const MoveEntry &move = slotMove->move;
-    QPen pen(QColor(slotMove->learnable ? tok::kInk : tok::kRed), 1.5,
+    QPen pen(QColor(slotMove->learnable ? tok::palette().ink : tok::palette().red), 1.5,
              slotMove->learnable ? Qt::SolidLine : Qt::DashLine);
     painter.setPen(pen);
-    painter.setBrush(QColor(hot ? tok::kYellowTint : tok::kWhite));
+    painter.setBrush(QColor(hot ? tok::palette().yellowTint : tok::palette().white));
     painter.drawRoundedRect(box, 4, 4);
     // 타입 색 네모 · 이름 · 분류 배지
     if (const tok::TypeColor *type = typechip::find(move.type)) {
-        painter.setPen(QPen(QColor(tok::kInk), 1));
+        painter.setPen(QPen(QColor(tok::palette().ink), 1));
         painter.setBrush(QColor(type->fill));
         painter.drawRect(QRectF(rect.left() + 8, rect.center().y() - 4.5, 9, 9));
     }
@@ -710,7 +710,7 @@ void SlotCard::paintMove(QPainter &painter, const QRect &rect, int index, bool h
                                                                   : source.text;
             const QFont small = theme::font(theme::kFamilyData, 9, QFont::Bold);
             painter.setFont(small);
-            painter.setPen(QColor(tok::kText3));
+            painter.setPen(QColor(tok::palette().text3));
             const qreal textWidth = QFontMetricsF(small).horizontalAdvance(text);
             markerLeft -= textWidth;
             painter.drawText(QRectF(markerLeft, rect.top(), textWidth, rect.height()),
@@ -720,7 +720,7 @@ void SlotCard::paintMove(QPainter &painter, const QRect &rect, int index, bool h
     }
     const QFont font = theme::font(theme::kFamilyBody, 12, QFont::ExtraBold);
     painter.setFont(font);
-    painter.setPen(QColor(slotMove->learnable ? tok::kText1 : tok::kRedText));
+    painter.setPen(QColor(slotMove->learnable ? tok::palette().text1 : tok::palette().redText));
     const int left = rect.left() + 24;
     const int width = int(markerLeft) - 4 - left;
     painter.drawText(
@@ -732,40 +732,40 @@ void SlotCard::paintEmpty(QPainter &painter, const Geometry &g)
 {
     // 점선 테 · 가운데 + 원 · "06 빈 슬롯" · [+ 개체 추가] · 제안 문구
     const bool hot = m_hot == Hit::Add;
-    QPen pen(QColor(hot ? tok::kInk : tok::kLineStrong), 2, Qt::DashLine);
+    QPen pen(QColor(hot ? tok::palette().ink : tok::palette().lineStrong), 2, Qt::DashLine);
     painter.setPen(pen);
-    painter.setBrush(QColor(hot ? tok::kPaperAlt : tok::kPaper));
+    painter.setBrush(QColor(hot ? tok::palette().paperAlt : tok::palette().paper));
     painter.drawRoundedRect(QRectF(g.card).adjusted(1, 1, -4, -4), 8, 8);
 
     const QPointF center(g.card.center().x() - 1.5, g.card.top() + 40);
-    painter.setPen(QPen(QColor(tok::kLineStrong), 2));
-    painter.setBrush(QColor(tok::kWhite));
+    painter.setPen(QPen(QColor(tok::palette().lineStrong), 2));
+    painter.setBrush(QColor(tok::palette().white));
     painter.drawEllipse(center, 15, 15);
     painter.setFont(theme::font(theme::kFamilyBody, 18, QFont::Bold));
-    painter.setPen(QColor(tok::kText3));
+    painter.setPen(QColor(tok::palette().text3));
     painter.drawText(QRectF(center.x() - 15, center.y() - 15, 30, 30), Qt::AlignCenter,
                      QStringLiteral("+"));
 
     painter.setFont(theme::font(theme::kFamilyTitle, 18));
-    painter.setPen(QColor(tok::kText2));
+    painter.setPen(QColor(tok::palette().text2));
     painter.drawText(QRect(g.card.left(), g.card.top() + 62, g.card.width() - 3, 30),
                      Qt::AlignCenter, tr("%1 빈 슬롯").arg(m_slot + 1, 2, 10, QLatin1Char('0')));
 
     // [+ 개체 추가]: 빨강 채움 · 먹선 · 아래 그림자
     const QRectF button(g.add);
     painter.setPen(Qt::NoPen);
-    painter.setBrush(QColor(tok::kInk));
+    painter.setBrush(QColor(tok::palette().ink));
     painter.drawRoundedRect(button.translated(0, 3), 6, 6);
-    painter.setPen(QPen(QColor(tok::kInk), 2));
-    painter.setBrush(QColor(hot ? tok::kRedDeep : tok::kRed));
+    painter.setPen(QPen(QColor(tok::palette().ink), 2));
+    painter.setBrush(QColor(hot ? tok::palette().redDeep : tok::palette().red));
     painter.drawRoundedRect(button.adjusted(1, 1, -1, -1), 6, 6);
     painter.setFont(theme::font(theme::kFamilyTitle, 18));
-    painter.setPen(QColor(tok::kWhite));
+    painter.setPen(QColor(tok::palette().onColor));
     painter.drawText(button, Qt::AlignCenter, tr("+ 개체 추가"));
 
     if (!m_suggestion.isEmpty()) {
         painter.setFont(theme::font(theme::kFamilyBody, 12));
-        painter.setPen(QColor(tok::kText3));
+        painter.setPen(QColor(tok::palette().text3));
         painter.drawText(QRect(g.card.left() + 18, g.add.bottom() + 14, g.card.width() - 39, 60),
                          Qt::AlignHCenter | Qt::AlignTop | Qt::TextWordWrap, m_suggestion);
     }

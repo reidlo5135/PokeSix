@@ -84,7 +84,7 @@ void PanelFrame::paintEvent(QPaintEvent *event)
                       m_style.header);
     const QFont titleFont = theme::font(theme::kFamilyTitle, 20);
     const QFont detailFont = theme::font(theme::kFamilyData, 13, QFont::Bold);
-    painter.setPen(QColor(tok::kWhite));
+    painter.setPen(QColor(tok::palette().onColor));
     painter.setFont(titleFont);
     painter.drawText(band, Qt::AlignLeft | Qt::AlignVCenter, m_title);
     if (!m_detail.isEmpty()) {

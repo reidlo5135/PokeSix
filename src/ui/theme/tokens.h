@@ -10,7 +10,9 @@
 #include <array>
 
 namespace com::yamada::studio::tok {
-// 라이트 테마(기본). 줄 끝 주석은 tokens.json의 이름이며, QSS에서 @이름으로 쓴다.
+// 라이트 테마(기본) 값. 줄 끝 주석은 tokens.json의 이름이며, QSS에서 @이름으로 쓴다.
+// 화면 코드는 이 상수를 직접 쓰지 않고 tok::palette()를 읽는다(아래 Palette).
+namespace light {
 inline constexpr QRgb kRed = 0xFFD8322B;              // red
 inline constexpr QRgb kRedDeep = 0xFFB8241D;          // red.deep
 inline constexpr QRgb kRedTint = 0xFFFDE7E4;          // red.tint
@@ -64,7 +66,9 @@ inline constexpr QRgb kPlateLinuxFace = 0xFFFFFDF8;   // plate.linuxFace
 inline constexpr QRgb kIntroStripe = 0xFFEFEADF;      // intro.stripe
 inline constexpr QRgb kIntroTitleShadow = 0xFFF2C12E; // intro.titleShadow
 inline constexpr QRgb kMenuPressed = 0xFFF2C12E;      // menu.pressed
+} // namespace light
 
+// 다크 테마 값(핸드오프 darkOverrides — 아직 11개뿐, 나머지는 F3b). kRaised는 아직 쓰는 곳이 없다
 namespace dark {
 inline constexpr QRgb kPaper = 0xFF1B1B21;    // paper
 inline constexpr QRgb kWhite = 0xFF25252D;    // white
@@ -78,6 +82,161 @@ inline constexpr QRgb kText3 = 0xFF9F9AA8;    // text.3
 inline constexpr QRgb kLine = 0xFF3A3A45;     // line
 inline constexpr QRgb kLineSoft = 0xFF2F2F38; // line.soft
 } // namespace dark
+
+// 테마 하나의 색 전부(F3a, ADR 0020). 필드 이름 = 위 상수에서 k를 뗀 것, 줄 끝 주석 = QSS의 @이름.
+// 화면 코드는 tok::palette().red처럼 "지금 테마의 값"을 그릴 때마다 읽는다(상수를 직접 쓰지
+// 않는다).
+struct Palette
+{
+    QRgb red;     // red
+    QRgb redDeep; // red.deep
+    QRgb redTint; // red.tint
+    QRgb redText; // red.text
+    QRgb white;   // white
+    QRgb onColor; // on.color — 색 채움(빨강 · 파랑 · 타입 · 먹) 위의 흰 글자 · 그림
+    QRgb paper;            // paper
+    QRgb paperAlt;         // paper.alt
+    QRgb paperStripe;      // paper.stripe
+    QRgb blue;             // blue
+    QRgb blueDeep;         // blue.deep
+    QRgb blueTint;         // blue.tint
+    QRgb blueCell;         // blue.cell
+    QRgb blueFocusRing;    // blue.focusRing
+    QRgb green;            // green
+    QRgb greenTint;        // green.tint
+    QRgb yellow;           // yellow
+    QRgb yellowTint;       // yellow.tint
+    QRgb yellowSoft;       // yellow.soft
+    QRgb yellowRowSel;     // yellow.rowSel
+    QRgb ink;              // ink
+    QRgb text1;            // text.1
+    QRgb text2;            // text.2
+    QRgb text3;            // text.3
+    QRgb textDisabled;     // text.disabled
+    QRgb line;             // line
+    QRgb lineSoft;         // line.soft
+    QRgb lineStrong;       // line.strong
+    QRgb cellBorder;       // cell.border
+    QRgb statLow;          // stat.low
+    QRgb statMid;          // stat.mid
+    QRgb statGood;         // stat.good
+    QRgb statHigh;         // stat.high
+    QRgb catPhysical;      // cat.physical
+    QRgb catSpecial;       // cat.special
+    QRgb catStatus;        // cat.status
+    QRgb heatX4;           // heat.x4
+    QRgb heatX2;           // heat.x2
+    QRgb heatX2Text;       // heat.x2.text
+    QRgb heatHalf;         // heat.half
+    QRgb heatHalfText;     // heat.half.text
+    QRgb heatQuarter;      // heat.quarter
+    QRgb heatZero;         // heat.zero
+    QRgb capsuleRed;       // capsule.red
+    QRgb capsuleCream;     // capsule.cream
+    QRgb capsuleBlush;     // capsule.blush
+    QRgb capsuleGloss;     // capsule.gloss
+    QRgb plateMacTop;      // plate.macTop
+    QRgb plateMacBottom;   // plate.macBottom
+    QRgb plateLinuxBase;   // plate.linuxBase
+    QRgb plateLinuxFace;   // plate.linuxFace
+    QRgb introStripe;      // intro.stripe
+    QRgb introTitleShadow; // intro.titleShadow
+    QRgb menuPressed;      // menu.pressed
+};
+
+// 라이트 = 핸드오프의 기본값 그대로
+inline constexpr Palette kLight {
+        .red = light::kRed,
+        .redDeep = light::kRedDeep,
+        .redTint = light::kRedTint,
+        .redText = light::kRedText,
+        .white = light::kWhite,
+        .onColor = light::kWhite,
+        .paper = light::kPaper,
+        .paperAlt = light::kPaperAlt,
+        .paperStripe = light::kPaperStripe,
+        .blue = light::kBlue,
+        .blueDeep = light::kBlueDeep,
+        .blueTint = light::kBlueTint,
+        .blueCell = light::kBlueCell,
+        .blueFocusRing = light::kBlueFocusRing,
+        .green = light::kGreen,
+        .greenTint = light::kGreenTint,
+        .yellow = light::kYellow,
+        .yellowTint = light::kYellowTint,
+        .yellowSoft = light::kYellowSoft,
+        .yellowRowSel = light::kYellowRowSel,
+        .ink = light::kInk,
+        .text1 = light::kText1,
+        .text2 = light::kText2,
+        .text3 = light::kText3,
+        .textDisabled = light::kTextDisabled,
+        .line = light::kLine,
+        .lineSoft = light::kLineSoft,
+        .lineStrong = light::kLineStrong,
+        .cellBorder = light::kCellBorder,
+        .statLow = light::kStatLow,
+        .statMid = light::kStatMid,
+        .statGood = light::kStatGood,
+        .statHigh = light::kStatHigh,
+        .catPhysical = light::kCatPhysical,
+        .catSpecial = light::kCatSpecial,
+        .catStatus = light::kCatStatus,
+        .heatX4 = light::kHeatX4,
+        .heatX2 = light::kHeatX2,
+        .heatX2Text = light::kHeatX2Text,
+        .heatHalf = light::kHeatHalf,
+        .heatHalfText = light::kHeatHalfText,
+        .heatQuarter = light::kHeatQuarter,
+        .heatZero = light::kHeatZero,
+        .capsuleRed = light::kCapsuleRed,
+        .capsuleCream = light::kCapsuleCream,
+        .capsuleBlush = light::kCapsuleBlush,
+        .capsuleGloss = light::kCapsuleGloss,
+        .plateMacTop = light::kPlateMacTop,
+        .plateMacBottom = light::kPlateMacBottom,
+        .plateLinuxBase = light::kPlateLinuxBase,
+        .plateLinuxFace = light::kPlateLinuxFace,
+        .introStripe = light::kIntroStripe,
+        .introTitleShadow = light::kIntroTitleShadow,
+        .menuPressed = light::kMenuPressed,
+};
+
+// 다크 = 라이트를 복사한 뒤 dark::의 값만 덮어쓴다(핸드오프에 있는 11개. 나머지는 F3b)
+// TODO(F3a-CP1) constexpr 람다로: 1. Palette p = kLight;
+//   2. p.paper = dark::kPaper; … dark:: 상수 11개를 같은 이름의 필드에 (kRaised는 필드 없음 →
+//   건너뜀)
+//   3. return p;   — 모양: inline constexpr Palette kDark = [] { /* ? */ }();
+inline constexpr Palette kDark = kLight;
+
+// 지금 테마의 팔레트(theme.cpp — theme::setMode가 바꾼다). 기본은 kLight
+const Palette &palette();
+
+// 팔레트의 한 칸을 가리키는 "역할"(멤버 포인터). palette().*role = 지금 테마의 그 색
+using Role = QRgb Palette::*;
+
+// 오래 들고 있는 색(PanelStyle 등)은 값 대신 이것을 담는다: 역할이면 그릴 때 지금 테마에서 읽고,
+// 고정 색(타입 색처럼 테마와 무관)이면 그대로. 그래서 테마가 바뀌어도 다시 넣을 필요가 없다.
+//   tok::Color fill = &tok::Palette::white;   // 역할
+//   tok::Color header = type->fill;           // 고정 색
+class Color
+{
+public:
+    constexpr Color(Role role)
+        : m_role(role)
+    {
+    }
+    constexpr Color(QRgb fixed)
+        : m_fixed(fixed)
+    {
+    }
+    // TODO(F3a-CP3) 역할이면 지금 팔레트(palette())에서 읽는다. 지금은 늘 라이트에서 읽는다
+    QRgb rgb() const { return m_role ? kLight.*m_role : m_fixed; }
+
+private:
+    Role m_role = nullptr;
+    QRgb m_fixed = 0;
+};
 
 struct TypeColor
 {

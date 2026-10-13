@@ -86,7 +86,7 @@ void MarkButton::paintEvent(QPaintEvent *event)
 
     // hover · 키보드 포커스: 연노랑 점선 테
     if (QAbstractButton::underMouse() || m_keyboardFocus) {
-        QPen pen(QColor(tok::kYellowSoft), kOutline, Qt::DashLine);
+        QPen pen(QColor(tok::palette().yellowSoft), kOutline, Qt::DashLine);
         painter.setPen(pen);
         painter.setBrush(Qt::NoBrush);
         const qreal half = kOutline / 2.0;
@@ -104,9 +104,9 @@ void MarkButton::paintEvent(QPaintEvent *event)
     const qreal baseline = box.center().y() + (metrics.ascent() - metrics.descent()) / 2.0;
     const qreal x = markTopLeft.x() + kMarkSize + kGap;
     const QString poke = QStringLiteral("POKE");
-    painter.setPen(QColor(tok::kWhite));
+    painter.setPen(QColor(tok::palette().onColor));
     painter.drawText(QPointF(x, baseline), poke);
-    painter.setPen(QColor(tok::kYellowSoft));
+    painter.setPen(QColor(tok::palette().yellowSoft));
     painter.drawText(QPointF(x + metrics.horizontalAdvance(poke), baseline), QStringLiteral("SIX"));
 }
 } // namespace com::yamada::studio

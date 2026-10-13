@@ -28,14 +28,14 @@ void DexHeaderView::paintSection(QPainter *painter, const QRect &rect, int logic
 {
     painter->save();
     const QRectF cell = rect;
-    painter->fillRect(cell, QColor(tok::kWhite));
+    painter->fillRect(cell, QColor(tok::palette().white));
     painter->fillRect(
             QRectF(cell.left(), cell.bottom() - kBottomLine + 1, cell.width(), kBottomLine),
-            QColor(tok::kInk));
+            QColor(tok::palette().ink));
 
     const QString text = model()->headerData(logicalIndex, orientation()).toString();
     const bool sorted = isSortIndicatorShown() && sortIndicatorSection() == logicalIndex;
-    const QColor color(sorted ? tok::kRed : tok::kText2);
+    const QColor color(sorted ? tok::palette().red : tok::palette().text2);
 
     // 글자 자리: 데이터 칸과 같은 함수. 세로는 먹선 위 글자 줄의 가운데.
     const QRectF line = cell.adjusted(0, 0, 0, -kBottomLine);

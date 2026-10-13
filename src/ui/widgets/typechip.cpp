@@ -68,7 +68,7 @@ qreal paint(QPainter &painter, const QPointF &topLeft, const tok::TypeColor &typ
     const qreal half = kBorder / 2.0;
     painter.save();
     painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setPen(QPen(QColor(tok::kInk), kBorder));
+    painter.setPen(QPen(QColor(tok::palette().ink), kBorder));
     painter.setBrush(QColor(type.fill));
     painter.drawRoundedRect(chip.adjusted(half, half, -half, -half), kRadius - half,
                             kRadius - half);

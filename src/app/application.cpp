@@ -125,6 +125,12 @@ bool Application::parseArguments()
             QStringLiteral("Milliseconds to wait before capturing (default %1).")
                     .arg(kDefaultScreenshotDelayMs),
             QStringLiteral("ms"), QString::number(kDefaultScreenshotDelayMs));
+    // TODO(F3a-CP5) --theme light|dark 옵션 — 위 languageOption과 같은 모양으로:
+    //   1. QCommandLineOption themeOption: 이름 "theme", 값 이름 "mode", 기본값 "light"
+    //   2. 아래에서 parser.addOption(themeOption)
+    //   3. parser.process(m_app) 뒤: 값이 "dark"면 theme::setMode(theme::Mode::Dark)
+    //   4. light · dark가 아니면 usageError(…) 하고 return false
+    //   5. application.h 맨 위 사용법 주석에 [--theme light|dark]를 더한다
     parser.addOption(languageOption);
     parser.addOption(screenshotOption);
     parser.addOption(delayOption);

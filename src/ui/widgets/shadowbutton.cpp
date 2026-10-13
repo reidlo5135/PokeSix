@@ -72,15 +72,16 @@ void ShadowButton::paintEvent(QPaintEvent *event)
     if (!down) {
         QPainterPath shadow;
         shadow.addRoundedRect(box.translated(0, kShadow), kRadius, kRadius);
-        painter.fillPath(shadow, QColor(tok::kInk));
+        painter.fillPath(shadow, QColor(tok::palette().ink));
     }
 
     // 2) 본체: 채움 + 먹선. 펜은 선 가운데를 따라가므로 반 폭 안쪽으로 들인다.
     const qreal half = kBorder / 2.0;
-    QColor fill = primary ? QColor(tok::kRed) : QColor(tok::kWhite);
+    QColor fill = primary ? QColor(tok::palette().red) : QColor(tok::palette().white);
     if (down)
-        fill = primary ? QColor(tok::kRedDeep) : QColor(tok::kPaper); // 눌림은 한 톤 어둡게
-    painter.setPen(QPen(QColor(tok::kInk), kBorder));
+        fill = primary ? QColor(tok::palette().redDeep)
+                       : QColor(tok::palette().paper); // 눌림은 한 톤 어둡게
+    painter.setPen(QPen(QColor(tok::palette().ink), kBorder));
     painter.setBrush(fill);
     painter.drawRoundedRect(box.adjusted(half, half, -half, -half), kRadius - half, kRadius - half);
 
@@ -97,7 +98,7 @@ void ShadowButton::paintEvent(QPaintEvent *event)
         x += kIconSize + kIconGap;
     }
     painter.setFont(m_font);
-    painter.setPen(primary ? QColor(tok::kWhite) : QColor(tok::kText1));
+    painter.setPen(primary ? QColor(tok::palette().onColor) : QColor(tok::palette().text1));
     painter.drawText(QRectF(x, box.top(), box.right() - x, box.height()),
                      Qt::AlignLeft | Qt::AlignVCenter, label);
 }

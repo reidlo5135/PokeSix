@@ -48,7 +48,7 @@ QString damageClassAbbr(int damageClass)
 void paintTypeBox(QPainter &painter, const QRectF &rect, const tok::TypeColor &type,
                   const QString &text, int fontSize)
 {
-    painter.setPen(QPen(QColor(tok::kInk), 1.5));
+    painter.setPen(QPen(QColor(tok::palette().ink), 1.5));
     painter.setBrush(QColor(type.fill));
     painter.drawRoundedRect(rect.adjusted(0.75, 0.75, -0.75, -0.75), 3, 3);
     painter.setFont(theme::font(theme::kFamilyBody, fontSize, QFont::ExtraBold));
@@ -58,14 +58,14 @@ void paintTypeBox(QPainter &painter, const QRectF &rect, const tok::TypeColor &t
 
 void paintDamageClass(QPainter &painter, const QRectF &rect, int damageClass)
 {
-    const QRgb fill = damageClass == 2   ? tok::kCatPhysical
-                      : damageClass == 3 ? tok::kCatSpecial
-                                         : tok::kCatStatus;
-    painter.setPen(QPen(QColor(tok::kInk), 1.2));
+    const QRgb fill = damageClass == 2   ? tok::palette().catPhysical
+                      : damageClass == 3 ? tok::palette().catSpecial
+                                         : tok::palette().catStatus;
+    painter.setPen(QPen(QColor(tok::palette().ink), 1.2));
     painter.setBrush(QColor(fill));
     painter.drawRoundedRect(rect.adjusted(0.6, 0.6, -0.6, -0.6), 3, 3);
     painter.setFont(theme::font(theme::kFamilyBody, 10, QFont::ExtraBold));
-    painter.setPen(QColor(damageClass == 1 ? tok::kInk : tok::kWhite));
+    painter.setPen(QColor(damageClass == 1 ? tok::palette().ink : tok::palette().onColor));
     painter.drawText(rect, Qt::AlignCenter, damageClassAbbr(damageClass));
 }
 
@@ -73,8 +73,8 @@ void paintHatch(QPainter &painter, const QRectF &rect)
 {
     painter.save();
     painter.setClipRect(rect);
-    painter.fillRect(rect, QColor(tok::kPaperAlt));
-    painter.setPen(QPen(QColor(tok::kLine), 1));
+    painter.fillRect(rect, QColor(tok::palette().paperAlt));
+    painter.setPen(QPen(QColor(tok::palette().line), 1));
     for (qreal x = rect.left() - rect.height(); x < rect.right(); x += 5)
         painter.drawLine(QPointF(x, rect.bottom()), QPointF(x + rect.height(), rect.top()));
     painter.restore();

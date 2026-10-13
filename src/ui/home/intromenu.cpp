@@ -128,7 +128,7 @@ void IntroMenu::paintEvent(QPaintEvent *event)
     const qreal outset = kFocusGap + half;
     const QRectF ring
             = QRectF(m_items[m_current]->geometry()).adjusted(-outset, -outset, outset, outset);
-    painter.setPen(QPen(QColor(tok::kBlueFocusRing), tok::kSizeFocusRing));
+    painter.setPen(QPen(QColor(tok::palette().blueFocusRing), tok::kSizeFocusRing));
     painter.setBrush(Qt::NoBrush);
     painter.drawRoundedRect(ring, kCardRadius + outset, kCardRadius + outset);
 }

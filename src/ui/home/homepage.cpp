@@ -51,14 +51,14 @@ constexpr int kBandLine = 3;
 
 void paintIntroBackground(QPainter &painter, const QRect &rect)
 {
-    painter.fillRect(rect, QColor(tok::kPaper));
+    painter.fillRect(rect, QColor(tok::palette().paper));
 
     // 사선 띠: x + y 가 [a, b) 인 영역 = 두 직선 사이의 평행사변형. 넘치는 부분은 위젯 경계에서
     // 잘린다.
     painter.save();
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setPen(Qt::NoPen);
-    painter.setBrush(QColor(tok::kIntroStripe));
+    painter.setBrush(QColor(tok::palette().introStripe));
     const qreal h = rect.height();
     const qreal maxSum = rect.width() + h; // 오른쪽 아래 모서리의 x + y
     const qreal scale = M_SQRT2;           // t(거리) → x + y
@@ -72,10 +72,11 @@ void paintIntroBackground(QPainter &painter, const QRect &rect)
 
     // 위 · 아래 빨강 띠와 먹선
     const int w = rect.width();
-    painter.fillRect(0, 0, w, kBandHeight, QColor(tok::kRed));
-    painter.fillRect(0, kBandHeight, w, kBandLine, QColor(tok::kInk));
-    painter.fillRect(0, rect.height() - kBandHeight - kBandLine, w, kBandLine, QColor(tok::kInk));
-    painter.fillRect(0, rect.height() - kBandHeight, w, kBandHeight, QColor(tok::kRed));
+    painter.fillRect(0, 0, w, kBandHeight, QColor(tok::palette().red));
+    painter.fillRect(0, kBandHeight, w, kBandLine, QColor(tok::palette().ink));
+    painter.fillRect(0, rect.height() - kBandHeight - kBandLine, w, kBandLine,
+                     QColor(tok::palette().ink));
+    painter.fillRect(0, rect.height() - kBandHeight, w, kBandHeight, QColor(tok::palette().red));
 }
 
 QLabel *makeLabel(const QString &text, const char *objectName)

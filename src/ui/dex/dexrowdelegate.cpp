@@ -45,10 +45,10 @@ QRect opaqueBounds(const QImage &source)
 QColor statColor(int value)
 {
     if (value >= 120)
-        return QColor(tok::kBlueDeep);
+        return QColor(tok::palette().blueDeep);
     if (value <= 59)
-        return QColor(tok::kRedDeep);
-    return QColor(tok::kText1);
+        return QColor(tok::palette().redDeep);
+    return QColor(tok::palette().text1);
 }
 } // namespace
 
@@ -129,16 +129,16 @@ void DexRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
 
     // 줄 바탕: 선택 > 짝수 줄 > 흰색. 행 번호는 프록시(보이는 순서) 기준이라 정렬 · 검색 뒤에도
     // 줄무늬가 맞다.
-    QColor background = QColor(tok::kWhite);
+    QColor background = QColor(tok::palette().white);
     if (selected)
-        background = QColor(tok::kYellowTint);
+        background = QColor(tok::palette().yellowTint);
     else if (m_hover && m_hover->row() == index.row())
-        background = QColor(tok::kYellowRowSel); // 호버: 선택보다 옅은 노랑
+        background = QColor(tok::palette().yellowRowSel); // 호버: 선택보다 옅은 노랑
     else if (index.row() % 2 == 1)
-        background = QColor(tok::kPaperAlt);
+        background = QColor(tok::palette().paperAlt);
     painter->fillRect(cell, background);
     painter->fillRect(QRectF(cell.left(), cell.bottom(), cell.width(), 1),
-                      QColor(tok::kLineSoft)); // 아래 선
+                      QColor(tok::palette().lineSoft)); // 아래 선
 
     const int column = index.column();
     const QRectF content = contentRect(cell, column);
@@ -155,12 +155,12 @@ void DexRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
             triangle.lineTo(c + QPointF(kCursor.width() / 2, 0));
             triangle.lineTo(c + QPointF(-kCursor.width() / 2, kCursor.height() / 2));
             triangle.closeSubpath();
-            painter->fillPath(triangle, QColor(tok::kInk));
+            painter->fillPath(triangle, QColor(tok::palette().ink));
         }
         break;
     case SpeciesTableModel::NumberColumn:
         painter->setFont(theme::font(theme::kFamilyData, 13, QFont::Bold));
-        painter->setPen(QColor(tok::kText3));
+        painter->setPen(QColor(tok::palette().text3));
         painter->drawText(content, align, value.toString());
         break;
     case SpeciesTableModel::IconColumn:
@@ -169,7 +169,7 @@ void DexRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
         break;
     case SpeciesTableModel::NameColumn:
         painter->setFont(theme::font(theme::kFamilyBody, 14, QFont::ExtraBold));
-        painter->setPen(QColor(tok::kText1));
+        painter->setPen(QColor(tok::palette().text1));
         painter->drawText(content, align, value.toString());
         break;
     case SpeciesTableModel::TypesColumn: {
@@ -183,7 +183,7 @@ void DexRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
     }
     case SpeciesTableModel::TotalColumn:
         painter->setFont(theme::font(theme::kFamilyData, 14, QFont::Bold));
-        painter->setPen(QColor(tok::kRed));
+        painter->setPen(QColor(tok::palette().red));
         painter->drawText(content, align, value.toString());
         break;
     default: { // 종족값 6칸

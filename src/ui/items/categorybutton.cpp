@@ -59,9 +59,9 @@ void CategoryButton::paintEvent(QPaintEvent *)
     const qreal half = kBorder / 2.0;
     const QRectF box = QRectF(rect()).adjusted(half, half, -half, -half);
     if (on || underMouse() || hasFocus()) {
-        const QColor ink(hasFocus() ? tok::kBlue : tok::kInk);
+        const QColor ink(hasFocus() ? tok::palette().blue : tok::palette().ink);
         painter.setPen(on || hasFocus() ? QPen(ink, kBorder) : Qt::NoPen);
-        painter.setBrush(QColor(on ? tok::kYellowTint : tok::kPaperAlt));
+        painter.setBrush(QColor(on ? tok::palette().yellowTint : tok::palette().paperAlt));
         painter.drawRoundedRect(box, kRadius - half, kRadius - half);
     }
 
@@ -75,13 +75,13 @@ void CategoryButton::paintEvent(QPaintEvent *)
         triangle.lineTo(cx + kCursor.width() / 2, cy);
         triangle.lineTo(cx - kCursor.width() / 2, cy + kCursor.height() / 2);
         triangle.closeSubpath();
-        painter.fillPath(triangle, QColor(tok::kInk));
+        painter.fillPath(triangle, QColor(tok::palette().ink));
     }
     x += kCursorSlot + kGap;
 
     // 3) 색 견본
     const qreal inset = kSwatchBorder / 2.0;
-    painter.setPen(QPen(QColor(tok::kInk), kSwatchBorder));
+    painter.setPen(QPen(QColor(tok::palette().ink), kSwatchBorder));
     painter.setBrush(m_group.color);
     painter.drawRoundedRect(
             QRectF(x, cy - kSwatch / 2.0, kSwatch, kSwatch).adjusted(inset, inset, -inset, -inset),
@@ -90,7 +90,7 @@ void CategoryButton::paintEvent(QPaintEvent *)
 
     // 4) 이름
     painter.setFont(m_font);
-    painter.setPen(QColor(tok::kText1));
+    painter.setPen(QColor(tok::palette().text1));
     painter.drawText(QRectF(x, 0, width() - x - kPaddingX, height()),
                      Qt::AlignLeft | Qt::AlignVCenter, text());
 }

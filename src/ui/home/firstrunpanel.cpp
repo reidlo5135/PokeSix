@@ -19,11 +19,17 @@ namespace {
 using namespace com::yamada::studio;
 
 // IntroStates.dc.html의 패널: 먹선 3 · 반경 10 · 그림자 4 · 안쪽 여백 14 · 줄 사이 gap 10
-constexpr PanelStyle kNormal {
-        .outline = 3, .radius = 10, .shadow = 4, .fill = tok::kWhite, .ink = tok::kInk};
+constexpr PanelStyle kNormal {.outline = 3,
+                              .radius = 10,
+                              .shadow = 4,
+                              .fill = &tok::Palette::white,
+                              .ink = &tok::Palette::ink};
 // 실패: 테두리와 그림자가 빨강, 바탕이 red.tint
-constexpr PanelStyle kFailed {
-        .outline = 3, .radius = 10, .shadow = 4, .fill = tok::kRedTint, .ink = tok::kRed};
+constexpr PanelStyle kFailed {.outline = 3,
+                              .radius = 10,
+                              .shadow = 4,
+                              .fill = &tok::Palette::redTint,
+                              .ink = &tok::Palette::red};
 constexpr int kPadding = 14;
 constexpr int kGap = 10;
 constexpr int kIconSize = 15;
@@ -101,8 +107,8 @@ QWidget *FirstRunPanel::buildReadyPage()
 
     m_startButton = new ShadowButton(ShadowButton::Variant::Primary);
     m_startButton->setText(tr("데이터 받기"));
-    m_startButton->setIcon(
-            svgicon::icon(svgWithColor(kDownloadSvg, tok::kWhite), kIconSize, devicePixelRatioF()));
+    m_startButton->setIcon(svgicon::icon(svgWithColor(kDownloadSvg, tok::palette().onColor),
+                                         kIconSize, devicePixelRatioF()));
     layout->addWidget(m_startButton);
     layout->addStretch(); // 페이지 높이가 가장 큰 페이지에 맞춰질 때 남는 칸은 아래로
     return page;
@@ -143,7 +149,7 @@ QWidget *FirstRunPanel::buildFailedPage()
     QHBoxLayout *title = new QHBoxLayout;
     title->setSpacing(8);
     QLabel *icon = new QLabel;
-    icon->setPixmap(svgicon::pixmap(svgWithColor(kWarningSvg, tok::kRed), kWarningSize,
+    icon->setPixmap(svgicon::pixmap(svgWithColor(kWarningSvg, tok::palette().red), kWarningSize,
                                     devicePixelRatioF()));
     title->addWidget(icon);
     m_failedTitle = makeLabel(tr("데이터를 받지 못했어요"), "firstRunFailedTitle");

@@ -131,10 +131,10 @@ void MapView::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
     QPainter painter(this);
-    painter.fillRect(rect(), QColor(tok::kPaperAlt));
+    painter.fillRect(rect(), QColor(tok::palette().paperAlt));
     if (!m_map) {
         painter.setFont(theme::font(theme::kFamilyBody, 14, QFont::Bold));
-        painter.setPen(QColor(tok::kText3));
+        painter.setPen(QColor(tok::palette().text3));
         painter.drawText(rect(), Qt::AlignCenter, tr("이 지방의 지도는 아직 준비 중이에요"));
         return;
     }
@@ -146,8 +146,8 @@ void MapView::paintEvent(QPaintEvent *event)
         // 아직 그림이 없다(받는 중 · 오프라인) — 노드만으로 그리는 스키매틱 폴백
         const int s = scale();
         const QSize view = m_map->canvas;
-        painter.fillRect(QRect(topLeft, view * s), QColor(tok::kPaper));
-        painter.setPen(QPen(QColor(tok::kPaperStripe), 1));
+        painter.fillRect(QRect(topLeft, view * s), QColor(tok::palette().paper));
+        painter.setPen(QPen(QColor(tok::palette().paperStripe), 1));
         for (int x = 0; x <= view.width(); x += 10)
             painter.drawLine(topLeft.x() + x * s, topLeft.y(), topLeft.x() + x * s,
                              topLeft.y() + view.height() * s);
@@ -155,12 +155,12 @@ void MapView::paintEvent(QPaintEvent *event)
             painter.drawLine(topLeft.x(), topLeft.y() + y * s, topLeft.x() + view.width() * s,
                              topLeft.y() + y * s);
         for (const townmapbook::Node &node : m_map->nodes) {
-            painter.setPen(QPen(QColor(tok::kInk), 1.5));
-            painter.setBrush(QColor(tok::kBlueCell));
+            painter.setPen(QPen(QColor(tok::palette().ink), 1.5));
+            painter.setBrush(QColor(tok::palette().blueCell));
             painter.drawRect(nodeRect(node));
         }
         painter.setFont(theme::font(theme::kFamilyBody, 12, QFont::Bold));
-        painter.setPen(QColor(tok::kText3));
+        painter.setPen(QColor(tok::palette().text3));
         painter.drawText(QRect(0, height() - 26, width(), 22), Qt::AlignCenter,
                          tr("지도 그림을 받는 중이에요…"));
     }
@@ -183,9 +183,9 @@ void MapView::paintEvent(QPaintEvent *event)
             else
                 chip.moveTopRight(area.topRight() + QPoint(-8, 8));
             painter.setPen(Qt::NoPen);
-            painter.setBrush(QColor(tok::kInk));
+            painter.setBrush(QColor(tok::palette().ink));
             painter.drawRoundedRect(chip, 6, 6);
-            painter.setPen(QColor(tok::kWhite));
+            painter.setPen(QColor(tok::palette().onColor));
             painter.drawText(chip, Qt::AlignCenter, label);
         }
     }
@@ -203,9 +203,9 @@ void MapView::paintEvent(QPaintEvent *event)
         return first;
     };
     if (!m_selected.isEmpty())
-        outline(m_selected, tok::kYellow, 3);
+        outline(m_selected, tok::palette().yellow, 3);
     if (!m_hover.isEmpty() && m_hover != m_selected) {
-        const QRect r = outline(m_hover, tok::kInk, 2);
+        const QRect r = outline(m_hover, tok::palette().ink, 2);
         // 말풍선: 노드 위(공간이 없으면 아래)에 장소 이름
         const QString name = m_names.value(m_hover).text(m_language);
         if (!name.isEmpty() && !r.isNull()) {
@@ -218,9 +218,9 @@ void MapView::paintEvent(QPaintEvent *event)
                 bubble.moveTop(r.bottom() + 6);
             bubble.moveLeft(std::clamp(bubble.left(), 4.0, width() - bubble.width() - 4));
             painter.setPen(Qt::NoPen);
-            painter.setBrush(QColor(tok::kInk));
+            painter.setBrush(QColor(tok::palette().ink));
             painter.drawRoundedRect(bubble, 5, 5);
-            painter.setPen(QColor(tok::kWhite));
+            painter.setPen(QColor(tok::palette().onColor));
             painter.drawText(bubble, Qt::AlignCenter, name);
         }
     }

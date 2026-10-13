@@ -178,12 +178,12 @@ Parts describe(const MoveEntry &move, int generation, const QStringList &userTyp
     Parts parts;
     auto separator = [&] {
         if (!parts.isEmpty())
-            parts.append({QStringLiteral(" · "), tok::kText3});
+            parts.append({QStringLiteral(" · "), tok::palette().text3});
     };
 
     // 1) 쓰는 포켓몬의 타입에 따라 아예 다른 효과(저주: 고스트)
     if (!rule.userType.isEmpty() && userTypes.contains(rule.userType)) {
-        parts.append({rule.userTypeNote.text(language), tok::kText2});
+        parts.append({rule.userTypeNote.text(language), tok::palette().text2});
         return parts;
     }
 
@@ -210,12 +210,12 @@ Parts describe(const MoveEntry &move, int generation, const QStringList &userTyp
     for (qsizetype i = 0; i < named.size(); ++i) {
         separator();
         if (!self && i == 0)
-            parts.append({t("상대") + QLatin1Char(' '), tok::kText3});
+            parts.append({t("상대") + QLatin1Char(' '), tok::palette().text3});
         const int change = named.at(i).second;
-        parts.append({named.at(i).first + QLatin1Char(' '), tok::kText1});
+        parts.append({named.at(i).first + QLatin1Char(' '), tok::palette().text1});
         parts.append({(change > 0 ? QStringLiteral("▲") : QStringLiteral("▼"))
                               + QString::number(change > 0 ? change : -change),
-                      change > 0 ? tok::kRed : tok::kBlue});
+                      change > 0 ? tok::palette().red : tok::palette().blue});
     }
 
     // 3) 상태이상 · 회복
@@ -223,20 +223,22 @@ Parts describe(const MoveEntry &move, int generation, const QStringList &userTyp
             = rule.ailment.isEmpty() ? ailmentName(move.ailment) : rule.ailment.text(language);
     if (!ailment.isEmpty()) {
         separator();
-        parts.append({(self ? QString() : t("상대") + QLatin1Char(' ')) + ailment, tok::kText1});
+        parts.append({(self ? QString() : t("상대") + QLatin1Char(' ')) + ailment,
+                      tok::palette().text1});
     }
     if (move.healing != 0) {
         separator();
-        parts.append({healingText(move.healing), move.healing > 0 ? tok::kGreen : tok::kText1});
+        parts.append({healingText(move.healing),
+                      move.healing > 0 ? tok::palette().green : tok::palette().text1});
     }
     if (!rule.note.isEmpty()) {
         separator();
-        parts.append({rule.note.text(language), tok::kText2});
+        parts.append({rule.note.text(language), tok::palette().text2});
     }
 
     // 4) 뼈대 · 요약이 없다 → 그 세대의 게임 설명문 첫 문장(전체는 툴팁에서)
     if (parts.isEmpty() && !move.effect.isEmpty())
-        parts.append({firstSentence(move.effect.text(language)), tok::kText3});
+        parts.append({firstSentence(move.effect.text(language)), tok::palette().text3});
     return parts;
 }
 

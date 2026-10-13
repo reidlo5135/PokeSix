@@ -110,9 +110,9 @@ VersionStyle version(const QString &identifier, const QString &fallbackName)
     if (style.shortName.isEmpty())
         style.shortName = fallbackName;
     if (!style.background.isValid())
-        style.background = QColor(tok::kWhite);
+        style.background = QColor(tok::palette().white);
     if (!style.text.isValid())
-        style.text = QColor(tok::kText1);
+        style.text = QColor(tok::palette().text1);
     return style;
 }
 

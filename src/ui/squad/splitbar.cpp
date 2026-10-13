@@ -37,15 +37,15 @@ void SplitBar::paintEvent(QPaintEvent *)
     clip.addRoundedRect(bar, 4, 4);
     painter.save();
     painter.setClipPath(clip);
-    painter.fillRect(bar, QColor(tok::kWhite));
+    painter.fillRect(bar, QColor(tok::palette().white));
     struct Segment
     {
         int count;
         QRgb fill; // 0 = 사선(빈칸)
     };
-    const Segment segments[] = {{m_split.physical, tok::kCatPhysical},
-                                {m_split.special, tok::kCatSpecial},
-                                {m_split.status, tok::kCatStatus},
+    const Segment segments[] = {{m_split.physical, tok::palette().catPhysical},
+                                {m_split.special, tok::palette().catSpecial},
+                                {m_split.status, tok::palette().catStatus},
                                 {m_split.empty, 0}};
     qreal x = bar.left();
     for (const Segment &s : segments) {
@@ -57,13 +57,13 @@ void SplitBar::paintEvent(QPaintEvent *)
             squadpaint::paintHatch(painter, part);
         else
             painter.fillRect(part, QColor(s.fill));
-        painter.setPen(QPen(QColor(tok::kInk), 1.5));
+        painter.setPen(QPen(QColor(tok::palette().ink), 1.5));
         if (x > bar.left())
             painter.drawLine(QPointF(x, bar.top()), QPointF(x, bar.bottom()));
         x += w;
     }
     painter.restore();
-    painter.setPen(QPen(QColor(tok::kInk), 2));
+    painter.setPen(QPen(QColor(tok::palette().ink), 2));
     painter.setBrush(Qt::NoBrush);
     painter.drawRoundedRect(bar, 4, 4);
 
@@ -77,27 +77,27 @@ void SplitBar::paintEvent(QPaintEvent *)
         QString text;
         int count;
     };
-    const Legend legend[] = {{tok::kCatPhysical, tr("물리"), m_split.physical},
-                             {tok::kCatSpecial, tr("특수"), m_split.special},
-                             {tok::kCatStatus, tr("변화"), m_split.status},
+    const Legend legend[] = {{tok::palette().catPhysical, tr("물리"), m_split.physical},
+                             {tok::palette().catSpecial, tr("특수"), m_split.special},
+                             {tok::palette().catStatus, tr("변화"), m_split.status},
                              {0, tr("빈칸"), m_split.empty}};
     int lx = 1;
     for (const Legend &l : legend) {
         const QRectF swatch(lx, top + 4, 12, 12);
         if (l.fill == 0) {
-            painter.setPen(QPen(QColor(tok::kInk), 1, Qt::DashLine));
+            painter.setPen(QPen(QColor(tok::palette().ink), 1, Qt::DashLine));
             painter.setBrush(Qt::NoBrush);
         } else {
-            painter.setPen(QPen(QColor(tok::kInk), 1));
+            painter.setPen(QPen(QColor(tok::palette().ink), 1));
             painter.setBrush(QColor(l.fill));
         }
         painter.drawRect(swatch);
         painter.setFont(font);
-        painter.setPen(QColor(tok::kText2));
+        painter.setPen(QColor(tok::palette().text2));
         const int tw = int(QFontMetricsF(font).horizontalAdvance(l.text));
         painter.drawText(QRect(lx + 17, top, tw + 2, 20), Qt::AlignLeft | Qt::AlignVCenter, l.text);
         painter.setFont(number);
-        painter.setPen(QColor(tok::kText1));
+        painter.setPen(QColor(tok::palette().text1));
         const QString n = QString::number(l.count);
         const int nw = int(QFontMetricsF(number).horizontalAdvance(n));
         painter.drawText(QRect(lx + 21 + tw, top, nw + 2, 20), Qt::AlignLeft | Qt::AlignVCenter, n);

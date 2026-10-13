@@ -38,8 +38,8 @@ constexpr PanelStyle kCardStyle {
         .outline = 2,
         .radius = 10,
         .shadow = 4,
-        .fill = tok::kWhite,
-        .ink = tok::kInk,
+        .fill = &tok::Palette::white,
+        .ink = &tok::Palette::ink,
 };
 
 // Scale2x(EPX): 도트 그림을 2배로 키우면서 계단을 모서리 방향으로 채우는 고전 업스케일러.
@@ -353,9 +353,10 @@ void CardBarrel::paintCard(QPainter &painter, const Layout &barrel, int index) c
     // 윗띠: 세대 번호. 띠 아래 먹선 2px.
     const QRect band(face.left(), face.top(), face.width(), kBandHeight);
     painter.fillRect(band, card.accent);
-    painter.fillRect(QRect(band.left(), band.bottom() + 1, band.width(), 2), QColor(tok::kInk));
+    painter.fillRect(QRect(band.left(), band.bottom() + 1, band.width(), 2),
+                     QColor(tok::palette().ink));
     painter.setFont(theme::font(theme::kFamilyTitle, 20));
-    painter.setPen(QColor(tok::kWhite));
+    painter.setPen(QColor(tok::palette().onColor));
     const QString title = tr("%1세대").arg(card.generation);
     painter.drawText(band, Qt::AlignCenter, title);
     // 고른 카드(= 정면): 띠 글자 앞에 ▶ (메뉴의 선택 커서와 같은 문법)
@@ -367,13 +368,13 @@ void CardBarrel::paintCard(QPainter &painter, const Layout &barrel, int index) c
         cursor.lineTo(textLeft - 6, band.center().y());
         cursor.lineTo(textLeft - 16, band.center().y() + 6);
         cursor.closeSubpath();
-        painter.fillPath(cursor, QColor(tok::kWhite));
+        painter.fillPath(cursor, QColor(tok::palette().onColor));
     }
 
     // 아래: 지방 이름 + 전국도감 구간 — 그림은 이 띠를 침범하지 않는다
     const QRect label(face.left(), face.bottom() - 46, face.width(), 24);
     painter.setFont(theme::font(theme::kFamilyBody, 14, QFont::Bold));
-    painter.setPen(QColor(tok::kText1));
+    painter.setPen(QColor(tok::palette().text1));
     QStringList regions;
     for (const LocalizedText &region : card.regions)
         regions.append(region.text(m_state->language()));
@@ -383,7 +384,7 @@ void CardBarrel::paintCard(QPainter &painter, const Layout &barrel, int index) c
                                          label.width() - 12));
     if (card.rangeFrom > 0) {
         painter.setFont(theme::font(theme::kFamilyData, 11, QFont::Bold));
-        painter.setPen(QColor(tok::kText3));
+        painter.setPen(QColor(tok::palette().text3));
         painter.drawText(QRect(face.left(), label.bottom(), face.width(), 16), Qt::AlignCenter,
                          QStringLiteral("No.%1–%2").arg(card.rangeFrom).arg(card.rangeTo));
     }
@@ -453,9 +454,9 @@ void CardBarrel::paintCard(QPainter &painter, const Layout &barrel, int index) c
             const Spot &spot = spots[slot];
             const qreal cx = stage.center().x() + spot.x * stage.width();
             // 발밑 그림자(눌린 타원) — 서 있는 느낌
-            // `QColor shade(QColor(tok::kInk))`는 함수 선언으로도 읽혀(most vexing parse) MSVC가
-            // 거부한다. 중괄호 초기화는 선언으로 읽힐 수 없다
-            QColor shade {tok::kInk};
+            // `QColor shade(QColor(tok::palette().ink))`는 함수 선언으로도 읽혀(most vexing parse)
+            // MSVC가 거부한다. 중괄호 초기화는 선언으로 읽힐 수 없다
+            QColor shade {tok::palette().ink};
             shade.setAlphaF(0.10);
             const qreal shadowW = stage.width() * (spot.height > 0.42 ? 0.30 : 0.22) * layerScale;
             painter.setPen(Qt::NoPen);
@@ -474,7 +475,7 @@ void CardBarrel::paintCard(QPainter &painter, const Layout &barrel, int index) c
         }
     }
     painter.restore();
-    painter.setPen(QPen(QColor(tok::kLine), 1.5)); // 무대 테
+    painter.setPen(QPen(QColor(tok::palette().line), 1.5)); // 무대 테
     painter.setBrush(Qt::NoBrush);
     painter.drawRoundedRect(QRectF(stage).adjusted(0.75, 0.75, -0.75, -0.75), 8, 8);
 
@@ -482,7 +483,7 @@ void CardBarrel::paintCard(QPainter &painter, const Layout &barrel, int index) c
     if (card.generation == selectedGeneration()) {
         painter.setClipping(false);
         painter.setBrush(Qt::NoBrush);
-        painter.setPen(QPen(QColor(tok::kYellow), 3));
+        painter.setPen(QPen(QColor(tok::palette().yellow), 3));
         painter.drawRoundedRect(QRectF(face).adjusted(2.5, 2.5, -2.5, -2.5), kCardStyle.radius - 3,
                                 kCardStyle.radius - 3);
     }

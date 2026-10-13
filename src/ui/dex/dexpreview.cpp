@@ -50,8 +50,8 @@ protected:
 
         // 그림 칸 (paper.alt · line 테)
         const QRect frame(0, 0, width(), kSpriteBoxHeight);
-        painter.setPen(QPen(QColor(tok::kLine), 1.5));
-        painter.setBrush(QColor(tok::kPaperAlt));
+        painter.setPen(QPen(QColor(tok::palette().line), 1.5));
+        painter.setBrush(QColor(tok::palette().paperAlt));
         painter.drawRoundedRect(QRectF(frame).adjusted(0.75, 0.75, -0.75, -0.75), 6, 6);
         const QString key = spritekeys::front(m_generation, m_row.pokemonId);
         const QString file = m_fronts->path(key);
@@ -63,12 +63,12 @@ protected:
 
         int y = frame.bottom() + 8;
         painter.setFont(theme::font(theme::kFamilyData, 12, QFont::Bold));
-        painter.setPen(QColor(tok::kText3));
+        painter.setPen(QColor(tok::palette().text3));
         painter.drawText(QRect(0, y, width(), 18), Qt::AlignLeft | Qt::AlignVCenter,
                          QStringLiteral("No. %1").arg(m_row.dexNumber, 3, 10, QLatin1Char('0')));
         y += 18;
         painter.setFont(theme::font(theme::kFamilyTitle, 22));
-        painter.setPen(QColor(tok::kText1));
+        painter.setPen(QColor(tok::palette().text1));
         painter.drawText(QRect(0, y, width(), 30), Qt::AlignLeft | Qt::AlignVCenter,
                          m_row.name.text(m_language));
         y += 32;
@@ -112,11 +112,11 @@ protected:
         QPainter painter(this);
         painter.setRenderHint(QPainter::Antialiasing, true);
         int y = 0;
-        paintRow(painter, QStringLiteral("×4"), QColor(tok::kRed), m_quad, y);
-        paintRow(painter, QStringLiteral("×2"), QColor(tok::kText2), m_twice, y);
+        paintRow(painter, QStringLiteral("×4"), QColor(tok::palette().red), m_quad, y);
+        paintRow(painter, QStringLiteral("×2"), QColor(tok::palette().text2), m_twice, y);
         if (m_quad.isEmpty() && m_twice.isEmpty()) {
             painter.setFont(theme::font(theme::kFamilyBody, 12));
-            painter.setPen(QColor(tok::kText3));
+            painter.setPen(QColor(tok::palette().text3));
             painter.drawText(rect(), Qt::AlignLeft | Qt::AlignTop, DexPreview::tr("약점이 없어요"));
         }
     }

@@ -42,10 +42,10 @@ constexpr QMargins kPageMargins {20, 16, 20, 20};
 constexpr PanelStyle kListPanel {.outline = 2,
                                  .radius = 8,
                                  .shadow = 3,
-                                 .fill = tok::kWhite,
-                                 .ink = tok::kInk,
+                                 .fill = &tok::Palette::white,
+                                 .ink = &tok::Palette::ink,
                                  .header = 38,
-                                 .headerColor = tok::kRed};
+                                 .headerColor = &tok::Palette::red};
 constexpr QMargins kBodyMargins {12, 8, 12, 0};
 constexpr int kSearchDebounceMs = 150; // 입력 즉시가 아니라 멈춘 뒤 150ms에 거른다(02 SCR-02)
 
@@ -91,7 +91,7 @@ constexpr int kPreviewWidth = 292; // 오른쪽 미리 보기 창
 constexpr int kColumnGap = 12;
 
 // 옆 창(필터 · 미리 보기)의 겉모양: 목록 창과 같은 틀, 머리 색만 역할대로(파랑 = 필터 · 정보)
-PanelStyle sidePanelStyle(QRgb headerColor)
+PanelStyle sidePanelStyle(tok::Color headerColor)
 {
     PanelStyle style = kListPanel;
     style.headerColor = headerColor;
@@ -140,7 +140,7 @@ DexPage::DexPage(Repository *repository, AppState *state, QWidget *parent)
     row->setSpacing(kColumnGap);
 
     PanelFrame *filterFrame = new PanelFrame;
-    filterFrame->setPanelStyle(sidePanelStyle(tok::kBlue));
+    filterFrame->setPanelStyle(sidePanelStyle(&tok::Palette::blue));
     filterFrame->setTitle(tr("필터"));
     filterFrame->setFixedWidth(kFilterWidth);
     m_filter = new DexFilterPanel;
@@ -155,7 +155,7 @@ DexPage::DexPage(Repository *repository, AppState *state, QWidget *parent)
     row->addWidget(m_panel, 1);
 
     PanelFrame *previewFrame = new PanelFrame;
-    previewFrame->setPanelStyle(sidePanelStyle(tok::kGreen));
+    previewFrame->setPanelStyle(sidePanelStyle(&tok::Palette::green));
     previewFrame->setTitle(tr("미리 보기"));
     previewFrame->setFixedWidth(kPreviewWidth);
     m_preview = new DexPreview;

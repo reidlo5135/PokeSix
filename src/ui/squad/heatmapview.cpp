@@ -39,19 +39,19 @@ std::size_t indexOf(const tok::TypeColor &type)
 // 받는 배율 칸(heat.* 토큰)
 void paintCell(QPainter &painter, const QRectF &cell, double multiplier, bool selectedRow)
 {
-    QRgb fill = selectedRow ? tok::kYellowRowSel : tok::kWhite;
-    QRgb text = tok::kText1;
+    QRgb fill = selectedRow ? tok::palette().yellowRowSel : tok::palette().white;
+    QRgb text = tok::palette().text1;
     if (multiplier >= 4.0)
-        fill = tok::kHeatX4, text = tok::kWhite;
+        fill = tok::palette().heatX4, text = tok::palette().onColor;
     else if (multiplier >= 2.0)
-        fill = tok::kHeatX2, text = tok::kHeatX2Text;
+        fill = tok::palette().heatX2, text = tok::palette().heatX2Text;
     else if (multiplier <= 0.0)
-        fill = tok::kHeatZero, text = tok::kWhite;
+        fill = tok::palette().heatZero, text = tok::palette().onColor;
     else if (multiplier <= 0.25)
-        fill = tok::kHeatQuarter, text = tok::kWhite;
+        fill = tok::palette().heatQuarter, text = tok::palette().onColor;
     else if (multiplier <= 0.5)
-        fill = tok::kHeatHalf, text = tok::kHeatHalfText;
-    painter.setPen(QPen(QColor(tok::kCellBorder), 1));
+        fill = tok::palette().heatHalf, text = tok::palette().heatHalfText;
+    painter.setPen(QPen(QColor(tok::palette().cellBorder), 1));
     painter.setBrush(QColor(fill));
     painter.drawRect(cell);
     painter.setFont(theme::font(theme::kFamilyData, 12, QFont::Bold));
@@ -177,11 +177,11 @@ void HeatmapView::paintEvent(QPaintEvent *)
         if (existing.contains(QLatin1String(type.key))) {
             squadpaint::paintTypeBox(painter, box, type, squadpaint::typeAbbr(type, m_language));
         } else { // 세대에 없는 타입: 흐린 글자 + 점선
-            painter.setPen(QPen(QColor(tok::kLineStrong), 1, Qt::DashLine));
+            painter.setPen(QPen(QColor(tok::palette().lineStrong), 1, Qt::DashLine));
             painter.setBrush(Qt::NoBrush);
             painter.drawRoundedRect(box, 3, 3);
             painter.setFont(theme::font(theme::kFamilyBody, 11, QFont::Bold));
-            painter.setPen(QColor(tok::kTextDisabled));
+            painter.setPen(QColor(tok::palette().textDisabled));
             painter.drawText(box, Qt::AlignCenter, squadpaint::typeAbbr(type, m_language));
         }
     }
@@ -194,14 +194,15 @@ void HeatmapView::paintEvent(QPaintEvent *)
         const bool filled = detail.isValid();
         const bool selected = slot == m_selected && filled;
         if (selected)
-            painter.fillRect(QRect(0, top + 1, left - 4, kRowHeight - 2), QColor(tok::kYellowSoft));
+            painter.fillRect(QRect(0, top + 1, left - 4, kRowHeight - 2),
+                             QColor(tok::palette().yellowSoft));
         painter.setFont(theme::font(theme::kFamilyData, 11, QFont::Bold));
-        painter.setPen(QColor(tok::kText3));
+        painter.setPen(QColor(tok::palette().text3));
         painter.drawText(QRect(6, top, 22, kRowHeight), Qt::AlignLeft | Qt::AlignVCenter,
                          QStringLiteral("%1").arg(slot + 1, 2, 10, QLatin1Char('0')));
         const QFont nameFont = theme::font(theme::kFamilyBody, 12, QFont::ExtraBold);
         painter.setFont(filled ? nameFont : theme::font(theme::kFamilyBody, 12));
-        painter.setPen(QColor(filled ? tok::kText1 : tok::kTextDisabled));
+        painter.setPen(QColor(filled ? tok::palette().text1 : tok::palette().textDisabled));
         const QString name = filled ? detail.name.text(m_language) : tr("빈 슬롯");
         painter.drawText(QRect(30, top, left - 36, kRowHeight), Qt::AlignLeft | Qt::AlignVCenter,
                          QFontMetricsF(painter.font()).elidedText(name, Qt::ElideRight, left - 36));
@@ -211,7 +212,7 @@ void HeatmapView::paintEvent(QPaintEvent *)
             if (!existing.contains(QLatin1String(type.key)))
                 squadpaint::paintHatch(painter, box);
             else if (!filled)
-                painter.fillRect(box, QColor(tok::kPaperAlt));
+                painter.fillRect(box, QColor(tok::palette().paperAlt));
             else
                 paintCell(painter, box, receivedOf(analysis, slot, type), selected);
         }
@@ -223,7 +224,7 @@ void HeatmapView::paintEvent(QPaintEvent *)
     for (int r = 0; r < 3; ++r) {
         const int top = summaryTop + r * kSummaryHeight;
         painter.setFont(theme::font(theme::kFamilyBody, 12, QFont::ExtraBold));
-        painter.setPen(QColor(tok::kText2));
+        painter.setPen(QColor(tok::palette().text2));
         painter.drawText(QRect(6, top, left - 10, kSummaryHeight), Qt::AlignLeft | Qt::AlignVCenter,
                          labels[r]);
         for (int c = 0; c < 18; ++c) {
@@ -231,7 +232,7 @@ void HeatmapView::paintEvent(QPaintEvent *)
             const QRectF box(columnX(c) + 2, top + 2, cell - 4, kSummaryHeight - 4);
             if (!existing.contains(QLatin1String(type.key))) {
                 painter.setFont(theme::font(theme::kFamilyData, 11));
-                painter.setPen(QColor(tok::kTextDisabled));
+                painter.setPen(QColor(tok::palette().textDisabled));
                 painter.drawText(box, Qt::AlignCenter, QStringLiteral("—"));
                 continue;
             }
@@ -240,25 +241,27 @@ void HeatmapView::paintEvent(QPaintEvent *)
             if (r == 0) {
                 const int weak = analysis.weak[i];
                 if (weak >= 2)
-                    painter.fillRect(box, QColor(weak >= 3 ? tok::kHeatX4 : tok::kHeatX2));
-                painter.setPen(QColor(weak >= 3   ? tok::kWhite
-                                      : weak == 2 ? tok::kHeatX2Text
-                                                  : tok::kText3));
+                    painter.fillRect(
+                            box, QColor(weak >= 3 ? tok::palette().heatX4 : tok::palette().heatX2));
+                painter.setPen(QColor(weak >= 3   ? tok::palette().onColor
+                                      : weak == 2 ? tok::palette().heatX2Text
+                                                  : tok::palette().text3));
                 painter.drawText(box, Qt::AlignCenter, QString::number(weak));
             } else if (r == 1) {
                 const int resist = analysis.resist[i];
-                painter.setPen(QColor(resist > 0 ? tok::kBlueDeep : tok::kTextDisabled));
+                painter.setPen(
+                        QColor(resist > 0 ? tok::palette().blueDeep : tok::palette().textDisabled));
                 painter.drawText(box, Qt::AlignCenter, QString::number(resist));
             } else if (!analysis.hasAttackingMove) {
-                painter.setPen(QColor(tok::kTextDisabled));
+                painter.setPen(QColor(tok::palette().textDisabled));
                 painter.drawText(box, Qt::AlignCenter, QStringLiteral("—"));
             } else if (analysis.covered[i]) {
-                painter.fillRect(box, QColor(tok::kGreenTint));
-                painter.setPen(QColor(tok::kGreen));
+                painter.fillRect(box, QColor(tok::palette().greenTint));
+                painter.setPen(QColor(tok::palette().green));
                 painter.drawText(box, Qt::AlignCenter, QStringLiteral("✓"));
             } else {
-                painter.fillRect(box, QColor(tok::kRed));
-                painter.setPen(QColor(tok::kWhite));
+                painter.fillRect(box, QColor(tok::palette().red));
+                painter.setPen(QColor(tok::palette().onColor));
                 painter.drawText(box, Qt::AlignCenter, QStringLiteral("✕"));
             }
         }
@@ -274,11 +277,11 @@ void HeatmapView::paintEvent(QPaintEvent *)
         if (!m_problemTypes.contains(key) && !flashOn && !hot)
             continue;
         if (flashOn) {
-            QColor glow(tok::kYellow);
+            QColor glow(tok::palette().yellow);
             glow.setAlpha(90);
             painter.fillRect(QRectF(columnX(c), 0, cell, bottom), glow);
         }
-        painter.setPen(QPen(QColor(tok::kRed), hot || flashOn ? 3 : 2));
+        painter.setPen(QPen(QColor(tok::palette().red), hot || flashOn ? 3 : 2));
         painter.setBrush(Qt::NoBrush);
         painter.drawRoundedRect(QRectF(columnX(c), 0.5, cell, bottom), 3, 3);
     }
@@ -290,32 +293,32 @@ void HeatmapView::paintEvent(QPaintEvent *)
         QRgb fill;
         QString text;
     };
-    const Legend legend[] = {{tok::kHeatX4, QStringLiteral("×4")},
-                             {tok::kHeatX2, QStringLiteral("×2")},
-                             {tok::kHeatHalf, QStringLiteral("×½")},
-                             {tok::kHeatQuarter, QStringLiteral("×¼")},
-                             {tok::kHeatZero, tr("무효")}};
+    const Legend legend[] = {{tok::palette().heatX4, QStringLiteral("×4")},
+                             {tok::palette().heatX2, QStringLiteral("×2")},
+                             {tok::palette().heatHalf, QStringLiteral("×½")},
+                             {tok::palette().heatQuarter, QStringLiteral("×¼")},
+                             {tok::palette().heatZero, tr("무효")}};
     const QFont legendFont = theme::font(theme::kFamilyBody, 11, QFont::Bold);
     painter.setFont(legendFont);
     int x = 6;
     for (const Legend &l : legend) {
-        painter.setPen(QPen(QColor(tok::kInk), 1));
+        painter.setPen(QPen(QColor(tok::palette().ink), 1));
         painter.setBrush(QColor(l.fill));
         painter.drawRect(QRectF(x, legendTop + 7, 12, 12));
-        painter.setPen(QColor(tok::kText2));
+        painter.setPen(QColor(tok::palette().text2));
         const int w = int(QFontMetricsF(legendFont).horizontalAdvance(l.text));
         painter.drawText(QRect(x + 16, legendTop, w + 4, kLegendHeight),
                          Qt::AlignLeft | Qt::AlignVCenter, l.text);
         x += 16 + w + 14;
     }
-    painter.setPen(QPen(QColor(tok::kRed), 2));
+    painter.setPen(QPen(QColor(tok::palette().red), 2));
     painter.setBrush(Qt::NoBrush);
     painter.drawRect(QRectF(x, legendTop + 7, 12, 12));
-    painter.setPen(QColor(tok::kText2));
+    painter.setPen(QColor(tok::palette().text2));
     painter.drawText(QRect(x + 16, legendTop, 80, kLegendHeight), Qt::AlignLeft | Qt::AlignVCenter,
                      tr("문제 열"));
     painter.setFont(theme::font(theme::kFamilyBody, 11));
-    painter.setPen(QColor(tok::kText3));
+    painter.setPen(QColor(tok::palette().text3));
     painter.drawText(QRect(x + 90, legendTop, width() - x - 92, kLegendHeight),
                      Qt::AlignRight | Qt::AlignVCenter, tr("이름을 누르면 행이 노랗게 강조돼요"));
 }
