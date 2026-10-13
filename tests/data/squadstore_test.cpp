@@ -105,5 +105,26 @@ TEST(SquadStore, ReadsAFileSavedBeforeStats) // H8-CP2-2
     EXPECT_EQ(member.level, 0);
     EXPECT_FALSE(member.hasStats());
 }
+
+// 버전 키가 아직 없는 스쿼드(게임 묶음 키에서 이어받은 것)를 비우면, 빈 스쿼드도 그 버전 키로
+// 남아야 한다. 안 남으면 다시 열 때 묶음 키의 옛 스쿼드가 돌아온다(일괄 비우기 → 게임 전환 → 복귀)
+TEST(SquadStore, KeepsAnEmptySquadOverTheGroupItCameFrom)
+{
+    QTemporaryDir dir;
+    ASSERT_TRUE(dir.isValid());
+    const QString path = dir.filePath(QStringLiteral("squads.json"));
+    {
+        SquadStore store(path);
+        Squad old; // 버전으로 나누기 전에 저장한 스쿼드
+        old.members[0].pokemonId = 6;
+        store.setSquad(3, QStringLiteral("firered-leafgreen"), old);
+        store.setSquad(3, QStringLiteral("firered"), Squad()); // 이어받은 스쿼드를 비웠다
+        EXPECT_TRUE(store.hasSquad(3, QStringLiteral("firered")));
+        ASSERT_TRUE(store.flush());
+    }
+    SquadStore store(path);
+    EXPECT_TRUE(store.hasSquad(3, QStringLiteral("firered"))); // 파일에도 남는다
+    EXPECT_EQ(store.squad(3, QStringLiteral("firered")).filled(), 0);
+}
 } // namespace
 } // namespace com::yamada::studio
