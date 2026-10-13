@@ -6,6 +6,10 @@ and the project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-10-13
+
+One fix for squads carried over from before squads were kept per game.
+
 ### Fixed
 - Clearing a squad with **Clear all** and switching to another game brought the old squad back
   when that squad was still the one shared by both games of a pair (saved before squads were kept
