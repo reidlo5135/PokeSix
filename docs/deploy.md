@@ -233,4 +233,8 @@ macOS 러너(AppleClang 15)는 람다의 구조적 바인딩 캡처를 거부하
   (`~/.local/bin/PokeSix.AppImage` + `.desktop`의 Exec 절대 경로 + hicolor 아이콘 — 옛
   `--install ~/.local` 설치가 남긴 메뉴 항목을 덮어쓴다). AppImage는 `chmod +x` 뒤 더블클릭(또는
   `./PokeSix-….AppImage`)으로 실행되고, 빌드한 배포판보다 오래된 glibc에서는 안 돈다.
+  **앱 메뉴 자기 등록**(2026-10-13): 받은 AppImage를 실행만 해도 `--install`과 같은 결과가 된다 —
+  `src/app/desktopentry.cpp`가 런타임의 `APPIMAGE` · `APPDIR`를 보고 AppImage 안의 `.desktop`
+  (Exec = 그 파일 경로, `TryExec` 추가) · hicolor 아이콘을 `$XDG_DATA_HOME`에 복사한다. 내용이 같으면
+  쓰지 않는다. AppImage를 지우면 TryExec 때문에 메뉴에서 숨는다(파일 정리는 README)
   Flatpak은 KDE 런타임에 Qt 6.8이 있어 대안이 된다

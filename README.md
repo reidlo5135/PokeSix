@@ -172,7 +172,7 @@ setup needed. SHA-256 checksums are in each release's notes.
 |---|---|---|
 | Windows (installer) | `PokeSix-<version>-win64.msi` | Run it — Start-menu shortcut included; a newer msi upgrades in place. SmartScreen warns about an unknown publisher the first time: **More info → Run anyway**. |
 | Windows (portable) | `PokeSix-<version>-win64.zip` | Extract anywhere, run `bin\PokeSix.exe`. Same SmartScreen note. |
-| Linux | `PokeSix-<version>-x86_64.AppImage` | `chmod +x`, then run it. |
+| Linux | `PokeSix-<version>-x86_64.AppImage` | `chmod +x`, then run it. The first run adds PokeSix to the application menu (below). |
 | macOS | `PokeSix-<version>-macos.dmg` | Clear the quarantine flag first (below), then open the dmg and drag the app to Applications. |
 
 **macOS says the app "is damaged and can't be opened"?** It is not damaged. The app is not
@@ -190,6 +190,17 @@ browser downloads and, on Apple Silicon, shows this message for ad-hoc-signed ap
 If the app is already in Applications, clear it there instead: `xattr -cr /Applications/PokeSix.app`.
 Downloading with `curl -LO <release asset URL>` instead of a browser avoids the flag altogether.
 The same steps are in `READ ME FIRST - macOS.txt` inside the dmg.
+
+**Linux application menu.** Running the AppImage adds PokeSix to the desktop's application menu
+by itself: a `.desktop` entry in `~/.local/share/applications/` and icons in
+`~/.local/share/icons/hicolor/`, pointing at wherever the AppImage is. Keep the file somewhere
+stable (for example `~/.local/bin/` or `~/Applications/`) and run it once from there; moving it
+later just needs one more run from the new place. Deleting the AppImage hides the menu entry; to
+remove the leftovers too:
+```bash
+rm ~/.local/share/applications/com.yamada.studio.pokesix.desktop
+rm ~/.local/share/icons/hicolor/*/apps/pokesix.*
+```
 
 ## Building
 
