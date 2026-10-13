@@ -67,12 +67,12 @@ protected:
         painter.setRenderHint(QPainter::Antialiasing, true);
 
         // 1) 본체
-        QColor fill(tok::kWhite);
+        QColor fill(tok::palette().white);
         if (isChecked())
-            fill = QColor(tok::kYellow);
+            fill = QColor(tok::palette().yellow);
         else if (underMouse())
-            fill = QColor(tok::kYellowTint);
-        const QColor ink(hasFocus() ? tok::kBlue : tok::kInk);
+            fill = QColor(tok::palette().yellowTint);
+        const QColor ink(hasFocus() ? tok::palette().blue : tok::palette().ink);
         const qreal half = kBorder / 2.0;
         painter.setPen(QPen(ink, kBorder));
         painter.setBrush(fill);
@@ -83,7 +83,7 @@ protected:
         qreal x = kBorder + kPaddingX;
         const qreal labelWidth = QFontMetricsF(m_labelFont).horizontalAdvance(text());
         painter.setFont(m_labelFont);
-        painter.setPen(QColor(tok::kText1));
+        painter.setPen(QColor(tok::palette().text1));
         painter.drawText(QRectF(x, 0, labelWidth, height()), Qt::AlignLeft | Qt::AlignVCenter,
                          text());
         if (m_badges.isEmpty())
@@ -108,11 +108,11 @@ protected:
             painter.drawText(cell, Qt::AlignCenter, style.shortName);
             if (i > 0)
                 painter.fillRect(QRectF(cellX - 0.5, badge.top(), 1, badge.height()),
-                                 QColor(tok::kInk));
+                                 QColor(tok::palette().ink));
             cellX += cellWidth;
         }
         painter.restore();
-        painter.setPen(QPen(QColor(tok::kInk), kBadgeBorder));
+        painter.setPen(QPen(QColor(tok::palette().ink), kBadgeBorder));
         painter.setBrush(Qt::NoBrush);
         painter.drawPath(outline);
     }

@@ -93,11 +93,11 @@ void ProblemList::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing, true);
     if (m_rows.isEmpty()) { // 문제 없음: 초록 띠
         const QRectF box = QRectF(rect()).adjusted(1, 1, -1, -1);
-        painter.setPen(QPen(QColor(tok::kGreen), 1.5));
-        painter.setBrush(QColor(tok::kGreenTint));
+        painter.setPen(QPen(QColor(tok::palette().green), 1.5));
+        painter.setBrush(QColor(tok::palette().greenTint));
         painter.drawRoundedRect(box, 6, 6);
         painter.setFont(theme::font(theme::kFamilyBody, 13, QFont::ExtraBold));
-        painter.setPen(QColor(tok::kGreen));
+        painter.setPen(QColor(tok::palette().green));
         painter.drawText(box.adjusted(14, 0, -14, 0), Qt::AlignLeft | Qt::AlignVCenter,
                          m_emptyText);
         return;
@@ -108,8 +108,8 @@ void ProblemList::paintEvent(QPaintEvent *)
     for (qsizetype i = 0; i < m_rows.size(); ++i) {
         const Row &row = m_rows.at(i);
         const QRectF box(1, i * (kRowHeight + kGap) + 1, width() - 2, kRowHeight - 2);
-        painter.setPen(QPen(QColor(tok::kRed), i == m_hover ? 2.5 : 1.5));
-        painter.setBrush(QColor(tok::kRedTint));
+        painter.setPen(QPen(QColor(tok::palette().red), i == m_hover ? 2.5 : 1.5));
+        painter.setBrush(QColor(tok::palette().redTint));
         painter.drawRoundedRect(box, 6, 6);
         if (const tok::TypeColor *type = typechip::find(row.typeKey))
             squadpaint::paintTypeBox(painter,
@@ -120,21 +120,21 @@ void ProblemList::paintEvent(QPaintEvent *)
         const qreal tagWidth = QFontMetricsF(tagFont).horizontalAdvance(tag) + 16;
         const QRectF tagBox(box.right() - 10 - tagWidth, box.center().y() - 10, tagWidth, 20);
         painter.setPen(Qt::NoPen);
-        painter.setBrush(QColor(tok::kRed));
+        painter.setBrush(QColor(tok::palette().red));
         painter.drawRoundedRect(tagBox, 4, 4);
         painter.setFont(tagFont);
-        painter.setPen(QColor(tok::kWhite));
+        painter.setPen(QColor(tok::palette().onColor));
         painter.drawText(tagBox, Qt::AlignCenter, tag);
         // 제목 · 설명
         const qreal left = box.left() + 46;
         const int textWidth = int(tagBox.left() - 8 - left);
         painter.setFont(titleFont);
-        painter.setPen(QColor(tok::kRedText));
+        painter.setPen(QColor(tok::palette().redText));
         painter.drawText(QRectF(left, box.top() + 4, textWidth, 20),
                          Qt::AlignLeft | Qt::AlignVCenter,
                          QFontMetricsF(titleFont).elidedText(row.title, Qt::ElideRight, textWidth));
         painter.setFont(detailFont);
-        painter.setPen(QColor(tok::kText2));
+        painter.setPen(QColor(tok::palette().text2));
         painter.drawText(
                 QRectF(left, box.top() + 23, textWidth, 18), Qt::AlignLeft | Qt::AlignVCenter,
                 QFontMetricsF(detailFont).elidedText(row.detail, Qt::ElideRight, textWidth));

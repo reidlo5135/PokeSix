@@ -63,15 +63,16 @@ void ItemRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     const bool selected = option.state & QStyle::State_Selected;
 
     // 줄 바탕(선택 > 홀수 줄 > 흰색) + 아래 선
-    QColor background(tok::kWhite);
+    QColor background(tok::palette().white);
     if (selected)
-        background = QColor(tok::kYellowTint);
+        background = QColor(tok::palette().yellowTint);
     else if (m_hover && m_hover->row() == index.row())
-        background = QColor(tok::kYellowRowSel); // 호버: 선택보다 옅은 노랑
+        background = QColor(tok::palette().yellowRowSel); // 호버: 선택보다 옅은 노랑
     else if (index.row() % 2 == 1)
-        background = QColor(tok::kPaperAlt);
+        background = QColor(tok::palette().paperAlt);
     painter->fillRect(cell, background);
-    painter->fillRect(QRectF(cell.left(), cell.bottom(), cell.width(), 1), QColor(tok::kLineSoft));
+    painter->fillRect(QRectF(cell.left(), cell.bottom(), cell.width(), 1),
+                      QColor(tok::palette().lineSoft));
 
     const QRectF content = cell.adjusted(kCellPadding, 0, -kCellPadding, 0);
     painter->setRenderHint(QPainter::Antialiasing, true);
@@ -84,7 +85,7 @@ void ItemRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
             triangle.lineTo(c + QPointF(kCursor.width() / 2, 0));
             triangle.lineTo(c + QPointF(-kCursor.width() / 2, kCursor.height() / 2));
             triangle.closeSubpath();
-            painter->fillPath(triangle, QColor(tok::kInk));
+            painter->fillPath(triangle, QColor(tok::palette().ink));
         }
         break;
     case ItemTableModel::IconColumn:
@@ -92,7 +93,7 @@ void ItemRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         break;
     case ItemTableModel::NameColumn:
         painter->setFont(theme::font(theme::kFamilyBody, 14, QFont::ExtraBold));
-        painter->setPen(QColor(tok::kText1));
+        painter->setPen(QColor(tok::palette().text1));
         painter->drawText(
                 content, Qt::AlignLeft | Qt::AlignVCenter,
                 QFontMetricsF(painter->font())
@@ -104,7 +105,7 @@ void ItemRowDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     case ItemTableModel::PriceColumn: {
         const int cost = index.data().toInt();
         painter->setFont(theme::font(theme::kFamilyData, 13));
-        painter->setPen(QColor(cost > 0 ? tok::kText1 : tok::kTextDisabled));
+        painter->setPen(QColor(cost > 0 ? tok::palette().text1 : tok::palette().textDisabled));
         // QLocale로 천 단위 쉼표("1,200"). 가격은 최신 게임 기준 하나뿐이다(PokéAPI)
         painter->drawText(content, Qt::AlignRight | Qt::AlignVCenter,
                           cost > 0 ? tr("%1원").arg(QLocale(QLocale::Korean).toString(cost))
@@ -135,8 +136,8 @@ void ItemRowDelegate::paintIcon(QPainter *painter, const QRectF &cell,
         m_sprites->request(key); // 받으면 ready → ItemsPage가 표를 다시 그린다
     }
     if (pixmap.isNull()) {
-        painter->setPen(QPen(QColor(tok::kLineStrong), 1.5));
-        painter->setBrush(QColor(tok::kPaperAlt));
+        painter->setPen(QPen(QColor(tok::palette().lineStrong), 1.5));
+        painter->setBrush(QColor(tok::palette().paperAlt));
         painter->drawEllipse(cell.center(), kPlaceholder / 2, kPlaceholder / 2);
         return;
     }
@@ -160,7 +161,7 @@ void ItemRowDelegate::paintEffect(QPainter *painter, const QRectF &content,
         }
         const QFont moveFont = theme::font(theme::kFamilyBody, 13, QFont::ExtraBold);
         painter->setFont(moveFont);
-        painter->setPen(QColor(tok::kText1));
+        painter->setPen(QColor(tok::palette().text1));
         const QRectF moveRect(x, content.top(), content.right() - x, content.height());
         const QString moveText
                 = QFontMetricsF(moveFont).elidedText(move, Qt::ElideRight, moveRect.width());
@@ -171,7 +172,7 @@ void ItemRowDelegate::paintEffect(QPainter *painter, const QRectF &content,
         return;
     const QFont font = theme::font(theme::kFamilyBody, 13);
     painter->setFont(font);
-    painter->setPen(QColor(tok::kText2));
+    painter->setPen(QColor(tok::palette().text2));
     const QRectF rest(x, content.top(), content.right() - x, content.height());
     painter->drawText(
             rest, Qt::AlignLeft | Qt::AlignVCenter,

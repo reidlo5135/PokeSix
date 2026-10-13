@@ -60,13 +60,8 @@ public:
         QAbstractButton::setCheckable(true);
         QAbstractButton::setCursor(cursors::pointer());
         QAbstractButton::setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        const QString source = QString::fromLatin1(svg);
-        m_iconOn = svgicon::pixmap(
-                QString(source).replace(QStringLiteral("currentColor"), QColor(tok::kRed).name()),
-                kIconSize, dpr);
-        m_iconOff = svgicon::pixmap(
-                QString(source).replace(QStringLiteral("currentColor"), QColor(tok::kWhite).name()),
-                kIconSize, dpr);
+        m_svg = QString::fromLatin1(svg);
+        m_dpr = dpr;
         // 켜지면 안쪽 여백과 테두리가 달라져 폭이 바뀐다 → 레이아웃에 다시 묻게 한다
         connect(this, &QAbstractButton::toggled, this,
                 [this] { QAbstractButton::updateGeometry(); });
@@ -105,7 +100,8 @@ protected:
             fill.quadTo(box.topRight(), QPointF(box.right(), box.top() + kRadius));
             fill.lineTo(box.bottomRight());
             fill.closeSubpath();
-            painter.fillPath(fill, QColor(tok::kPaper)); // 아래 먹선까지 덮는다 → 본문과 이어진다
+            painter.fillPath(
+                    fill, QColor(tok::palette().paper)); // 아래 먹선까지 덮는다 → 본문과 이어진다
 
             QPainterPath border;
             border.moveTo(r.bottomLeft());
@@ -114,7 +110,7 @@ protected:
             border.lineTo(r.right() - kRadius + half, r.top());
             border.quadTo(r.topRight(), QPointF(r.right(), r.top() + kRadius - half));
             border.lineTo(r.bottomRight());
-            painter.strokePath(border, QPen(QColor(tok::kInk), kActiveBorder));
+            painter.strokePath(border, QPen(QColor(tok::palette().ink), kActiveBorder));
         } else {
             QPainterPath fill;
             fill.moveTo(box.bottomLeft());
@@ -124,7 +120,7 @@ protected:
             fill.quadTo(box.topRight(), QPointF(box.right(), box.top() + kRadius));
             fill.lineTo(box.bottomRight());
             fill.closeSubpath();
-            painter.fillPath(fill, QColor(tok::kRedDeep));
+            painter.fillPath(fill, QColor(tok::palette().redDeep));
         }
 
         // 아이콘 + 글자 묶음을 가운데에
@@ -132,17 +128,34 @@ protected:
         const qreal content
                 = kIconSize + kIconGap + metrics.horizontalAdvance(QAbstractButton::text());
         qreal x = box.center().x() - content / 2.0;
+        if (m_iconColor != tok::palette().red) // 처음 · 테마가 바뀐 뒤: 지금 팔레트로 다시 칠한다
+            refreshIcons();
         painter.drawPixmap(QPointF(x, box.center().y() - kIconSize / 2.0),
                            active ? m_iconOn : m_iconOff);
         x += kIconSize + kIconGap;
         painter.setFont(m_font);
-        painter.setPen(QColor(active ? tok::kRed : tok::kWhite));
+        painter.setPen(QColor(active ? tok::palette().red : tok::palette().onColor));
         painter.drawText(QRectF(x, box.top(), box.right() - x, box.height()),
                          Qt::AlignLeft | Qt::AlignVCenter, QAbstractButton::text());
     }
 
 private:
+    void refreshIcons()
+    {
+        m_iconColor = tok::palette().red;
+        const auto colored = [this](QRgb color) {
+            return svgicon::pixmap(
+                    QString(m_svg).replace(QStringLiteral("currentColor"), QColor(color).name()),
+                    kIconSize, m_dpr);
+        };
+        m_iconOn = colored(m_iconColor);
+        m_iconOff = colored(tok::palette().onColor);
+    }
+
     QFont m_font;
+    QString m_svg;
+    qreal m_dpr = 1.0;
+    QRgb m_iconColor = 0; // m_iconOn을 칠한 빨강(0 = 아직 안 만듦)
     QPixmap m_iconOn;
     QPixmap m_iconOff;
 };

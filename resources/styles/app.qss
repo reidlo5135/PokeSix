@@ -1,6 +1,7 @@
-/* PokeSix 앱 전역 스타일시트 (라이트 테마). QSS = Qt Style Sheets, CSS와 비슷한 문법.
+/* PokeSix 앱 전역 스타일시트 (라이트 · 다크 공용). QSS = Qt Style Sheets, CSS와 비슷한 문법.
    출발점은 design/handoff-v2/design/pokesix.qss. 색은 "@이름" 자리표시로 쓰고, 실행 시
-   theme::apply()가 src/ui/theme/tokens.h의 값으로 바꾼다(예: @red.deep → #B8241D).
+   theme::applyColors()가 지금 테마의 팔레트(tokens.h)로 바꾼다(예: @red.deep → #B8241D).
+   @white는 바탕(다크에서는 어두워진다), 색 채움 위의 흰 글자 · 테는 @on.color(늘 흰색).
    창 그림자 · 타입 칩 · 히트맵 · 종족값 바 · 앱 막대 탭처럼 QSS로 안 되는 것은 paintEvent에서 그린다.
    글꼴 이름은 등록된 실제 이름을 쓴다: "NanumGothic"(핸드오프의 "Nanum Gothic" 아님), "NanumGothicCoding". */
 
@@ -27,9 +28,9 @@ QPushButton {
   border: 2px solid @ink; border-radius: 6px;
   background: @white; color: @text.1;
 }
-QPushButton[variant="primary"] { background: @red; color: @white; }
+QPushButton[variant="primary"] { background: @red; color: @on.color; }
 QPushButton[variant="primary"]:pressed { background: @red.deep; }
-QPushButton[variant="info"] { background: @blue; color: @white; }
+QPushButton[variant="info"] { background: @blue; color: @on.color; }
 QPushButton[variant="text"] { border-color: transparent; background: transparent; color: @blue; }
 QPushButton[variant="danger"] { border-color: @red; color: @red.deep; }
 QPushButton:hover { background: @paper; }
@@ -167,8 +168,8 @@ QPushButton#mapRegionChip {
 QPushButton#mapRegionChip:hover { background: @blue.tint; }
 QPushButton#mapRegionChip:checked { background: @yellow.soft; }
 QPushButton#mapInfoTab {
-  background: transparent; border: 1.5px solid @white; border-radius: 10px; padding: 0px 9px;
-  font-family: "Do Hyeon"; font-size: 13px; color: @white;
+  background: transparent; border: 1.5px solid @on.color; border-radius: 10px; padding: 0px 9px;
+  font-family: "Do Hyeon"; font-size: 13px; color: @on.color;
 }
 QPushButton#mapInfoTab:checked { background: @white; color: @text.1; }
 QToolButton#squadIconButton { background: transparent; border: none; border-radius: 6px; padding: 3px; }
@@ -188,7 +189,7 @@ QLabel#squadSaveStatus { font-size: 13px; font-weight: 700; color: @green; }
 QLabel#squadSaveStatus[state="pending"] { color: @text.3; }
 QLabel#squadSaveStatus[state="error"] { color: @red; }
 QLabel#squadProblemPill {
-  background: @red; color: @white; border: 2px solid @white; border-radius: 12px; padding: 1px 10px;
+  background: @red; color: @on.color; border: 2px solid @on.color; border-radius: 12px; padding: 1px 10px;
   font-family: "Do Hyeon"; font-size: 15px;
 }
 QLabel#squadProblemPill[ok="true"] { background: @green; }

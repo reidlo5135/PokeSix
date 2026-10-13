@@ -44,19 +44,19 @@ constexpr int kCardMinWidth
 constexpr int kTopRowHeight = 340;
 constexpr int kSpriteScale = 2; // 80×80 도트를 2배(정수 배라 흐려지지 않는다)
 
-PanelStyle sectionStyle(QRgb headerColor)
+PanelStyle sectionStyle(tok::Color headerColor)
 {
     return {.outline = 2,
             .radius = 8,
             .shadow = 3,
-            .fill = tok::kWhite,
-            .ink = tok::kInk,
+            .fill = &tok::Palette::white,
+            .ink = &tok::Palette::ink,
             .header = 34,
             .headerColor = headerColor};
 }
 
 // 겉모양(PanelFrame) + 안쪽 여백을 둔 몸통 하나
-PanelFrame *section(QRgb headerColor, QWidget *content, QMargins margins = {12, 10, 12, 12})
+PanelFrame *section(tok::Color headerColor, QWidget *content, QMargins margins = {12, 10, 12, 12})
 {
     PanelFrame *frame = new PanelFrame;
     frame->setPanelStyle(sectionStyle(headerColor));
@@ -106,16 +106,16 @@ protected:
                    PanelStyle {.outline = 2,
                                .radius = 8,
                                .shadow = 3,
-                               .fill = tok::kWhite,
-                               .ink = tok::kInk});
+                               .fill = &tok::Palette::white,
+                               .ink = &tok::Palette::ink});
         if (!m_detail.isValid())
             return;
         const int inner = width() - 2 * 14;
         int y = 14;
         // 그림: 바탕 칸(paper.alt) 가운데에 2배
         const QRect frame(14, y, inner, 176);
-        painter.setPen(QPen(QColor(tok::kLine), 1.5));
-        painter.setBrush(QColor(tok::kPaperAlt));
+        painter.setPen(QPen(QColor(tok::palette().line), 1.5));
+        painter.setBrush(QColor(tok::palette().paperAlt));
         painter.drawRoundedRect(QRectF(frame).adjusted(0.75, 0.75, -0.75, -0.75), 6, 6);
         const QString key = spritekeys::front(m_detail.generation, m_detail.pokemonId);
         const QString file = m_fronts->path(key);
@@ -130,12 +130,12 @@ protected:
 
         // 번호 · 이름 · 다른 언어 이름 · 분류
         painter.setFont(theme::font(theme::kFamilyData, 13, QFont::Bold));
-        painter.setPen(QColor(tok::kText3));
+        painter.setPen(QColor(tok::palette().text3));
         painter.drawText(QRect(14, y, inner, 18), Qt::AlignLeft | Qt::AlignVCenter,
                          QStringLiteral("No. %1").arg(m_detail.speciesId, 3, 10, QLatin1Char('0')));
         y += 20;
         painter.setFont(theme::font(theme::kFamilyTitle, 26));
-        painter.setPen(QColor(tok::kText1));
+        painter.setPen(QColor(tok::palette().text1));
         painter.drawText(QRect(14, y, inner, 32), Qt::AlignLeft | Qt::AlignVCenter,
                          m_detail.name.text(m_language));
         y += 32;
@@ -144,12 +144,12 @@ protected:
             if (other != m_language && !m_detail.name.exact(other).isEmpty())
                 others.append(m_detail.name.exact(other));
         painter.setFont(theme::font(theme::kFamilyBody, 12));
-        painter.setPen(QColor(tok::kText3));
+        painter.setPen(QColor(tok::palette().text3));
         painter.drawText(QRect(14, y, inner, 18), Qt::AlignLeft | Qt::AlignVCenter,
                          others.join(QStringLiteral(" · ")));
         y += 20;
         painter.setFont(theme::font(theme::kFamilyBody, 13, QFont::Bold));
-        painter.setPen(QColor(tok::kText2));
+        painter.setPen(QColor(tok::palette().text2));
         painter.drawText(QRect(14, y, inner, 18), Qt::AlignLeft | Qt::AlignVCenter,
                          m_detail.genus.text(m_language));
         y += 26;
@@ -160,7 +160,7 @@ protected:
             if (const tok::TypeColor *type = typechip::find(identifier))
                 x += typechip::paint(painter, QPointF(x, y), *type, m_language) + typechip::kGap;
         painter.setFont(theme::font(theme::kFamilyData, 12, QFont::Bold));
-        painter.setPen(QColor(tok::kText2));
+        painter.setPen(QColor(tok::palette().text2));
         painter.drawText(QRect(int(x) + 6, y, inner, int(typechip::kHeight)),
                          Qt::AlignLeft | Qt::AlignVCenter,
                          QStringLiteral("%1 m · %2 kg")
@@ -248,7 +248,7 @@ QWidget *DexDetailPage::buildContent()
     m_profile = new ProfileCard(m_fronts);
     row->addWidget(m_profile, 1);
     m_stats = new StatRadar;
-    m_statsPanel = section(tok::kBlue, m_stats, {6, 4, 6, 6});
+    m_statsPanel = section(&tok::Palette::blue, m_stats, {6, 4, 6, 6});
     m_statsPanel->setFixedHeight(kTopRowHeight);
     // 머리 띠 오른쪽 [성격 ▾]: 5×5 성격표 팝업 → 레이더에 ▲▼
     m_natureButton = new DropdownButton(tr("성격"));
@@ -280,7 +280,7 @@ QWidget *DexDetailPage::buildContent()
     encounterScroll->setFrameShape(QFrame::NoFrame);
     encounterScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     encounterScroll->setWidget(acquisition);
-    PanelFrame *encounters = section(tok::kGreen, encounterScroll, {12, 8, 6, 10});
+    PanelFrame *encounters = section(&tok::Palette::green, encounterScroll, {12, 8, 6, 10});
     encounters->setTitle(tr("획득법"));
     // 진화 트리의 다른 포켓몬을 누르면 그 상세로
     connect(m_evolution, &EvolutionView::pokemonClicked, this,
@@ -292,32 +292,32 @@ QWidget *DexDetailPage::buildContent()
 
     // 2) 특성(그 세대 · 숨겨진 특성은 5세대부터)
     m_abilities = new AbilityList;
-    PanelFrame *abilities = section(tok::kBlueDeep, m_abilities);
+    PanelFrame *abilities = section(&tok::Palette::blueDeep, m_abilities);
     abilities->setTitle(tr("특성"));
     layout->addWidget(abilities);
 
     // 3) 상성 · 4) 레벨업 기술 · 5) 기술머신
     m_matchups = new MatchupView;
-    PanelFrame *matchups = section(tok::kRed, m_matchups);
+    PanelFrame *matchups = section(&tok::Palette::red, m_matchups);
     matchups->setTitle(tr("타입 상성"));
     layout->addWidget(matchups);
 
     m_levelMoves = new MoveList(MoveList::Mode::LevelUp, m_icons);
-    PanelFrame *level = section(tok::kInk, m_levelMoves, {8, 6, 8, 10});
+    PanelFrame *level = section(&tok::Palette::ink, m_levelMoves, {8, 6, 8, 10});
     level->setTitle(tr("레벨업으로 익히는 기술"));
     layout->addWidget(level);
 
     m_machineMoves = new MoveList(MoveList::Mode::Machine, m_icons);
-    m_machinePanel = section(tok::kBlueDeep, m_machineMoves, {8, 6, 8, 10});
+    m_machinePanel = section(&tok::Palette::blueDeep, m_machineMoves, {8, 6, 8, 10});
     layout->addWidget(m_machinePanel);
 
     // 가르침(NPC 기술 가르침 — 하트비늘의 "기술 떠올리기"와 다르다) · 알 기술. 그 게임에 없으면
     // 창째 숨긴다(3세대 가르침은 에메랄드가 17개, FRLG는 6개 — 게임 칩을 따라간다).
     m_tutorMoves = new MoveList(MoveList::Mode::Plain, m_icons);
-    m_tutorPanel = section(tok::kGreen, m_tutorMoves, {8, 6, 8, 10});
+    m_tutorPanel = section(&tok::Palette::green, m_tutorMoves, {8, 6, 8, 10});
     layout->addWidget(m_tutorPanel);
     m_eggMoves = new MoveList(MoveList::Mode::Plain, m_icons);
-    m_eggPanel = section(tok::kGreen, m_eggMoves, {8, 6, 8, 10});
+    m_eggPanel = section(&tok::Palette::green, m_eggMoves, {8, 6, 8, 10});
     layout->addWidget(m_eggPanel);
     layout->addStretch();
     return content;

@@ -26,11 +26,12 @@ void DropdownButton::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setPen(QPen(QColor(hasFocus() ? tok::kBlue : tok::kInk), 1.5));
-    painter.setBrush(QColor(underMouse() || isDown() ? tok::kYellowTint : tok::kWhite));
+    painter.setPen(QPen(QColor(hasFocus() ? tok::palette().blue : tok::palette().ink), 1.5));
+    painter.setBrush(
+            QColor(underMouse() || isDown() ? tok::palette().yellowTint : tok::palette().white));
     painter.drawRoundedRect(QRectF(rect()).adjusted(0.75, 0.75, -0.75, -0.75), 5, 5);
     painter.setFont(theme::font(theme::kFamilyBody, 12, QFont::ExtraBold));
-    painter.setPen(QColor(tok::kText1));
+    painter.setPen(QColor(tok::palette().text1));
     painter.drawText(rect(), Qt::AlignCenter, text() + QStringLiteral("  ▾"));
 }
 } // namespace com::yamada::studio

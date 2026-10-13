@@ -100,10 +100,10 @@ constexpr QSize kProblemDialogSize {820, 640}; // "크게 보기" 창 — 제목
 constexpr PanelStyle kAnalysisPanel {.outline = 2,
                                      .radius = 8,
                                      .shadow = 3,
-                                     .fill = tok::kWhite,
-                                     .ink = tok::kInk,
+                                     .fill = &tok::Palette::white,
+                                     .ink = &tok::Palette::ink,
                                      .header = 38,
-                                     .headerColor = tok::kBlue};
+                                     .headerColor = &tok::Palette::blue};
 
 QString keyOf(Type type)
 {
@@ -154,8 +154,8 @@ protected:
             const PokemonDetail &detail = m_session->detail(slot);
             const tok::TypeColor *type
                     = detail.types.isEmpty() ? nullptr : typechip::find(detail.types.first());
-            painter.setPen(QPen(QColor(tok::kInk), 1.5));
-            painter.setBrush(QColor(type ? type->fill : tok::kWhite));
+            painter.setPen(QPen(QColor(tok::palette().ink), 1.5));
+            painter.setBrush(QColor(type ? type->fill : tok::palette().white));
             painter.drawRoundedRect(QRectF(slot * 16 + 1, 6, 12, 12), 2, 2);
         }
     }
@@ -304,14 +304,8 @@ QWidget *SquadPage::buildTopBar()
         button->setObjectName(QStringLiteral("squadIconButton"));
         button->setCursor(Qt::PointingHandCursor);
         button->setToolTip(tip);
-        const auto colored = [svg](QRgb color) {
-            return QString::fromLatin1(svg).arg(QColor(color).name());
-        };
-        QIcon icon = svgicon::icon(colored(tok::kText1), 20, devicePixelRatioF());
-        icon.addPixmap(svgicon::pixmap(colored(tok::kText3), 20, devicePixelRatioF()),
-                       QIcon::Disabled);
-        button->setIcon(icon);
         button->setIconSize(QSize(20, 20));
+        m_toolIcons.append({button, svg}); // 아이콘은 refreshToolIcons가 지금 팔레트로 칠한다
         layout->addWidget(button);
         return button;
     };
@@ -321,6 +315,7 @@ QWidget *SquadPage::buildTopBar()
     connect(m_redoButton, &QToolButton::clicked, m_session, &SquadSession::redo);
     m_clearButton = iconButton(kClearSvg,
                                tr("일괄 비우기 — 멤버와 비전셔틀을 모두 비워요(되돌릴 수 있어요)"));
+    refreshToolIcons();
     connect(m_clearButton, &QToolButton::clicked, m_session, &SquadSession::clearAll);
     layout->addStretch();
     // 공유 묶음: 스쿼드를 파일로 주고받거나(불러오기 · 내보내기) 이미지로 공유한다
@@ -818,7 +813,7 @@ void SquadPage::refreshResources()
     // 쓰지 않는다
     QStringList lines;
     const QString warn = QStringLiteral("<span style=\"color:%1\">⚠</span> ")
-                                 .arg(QColor(tok::kRedText).name());
+                                 .arg(QColor(tok::palette().redText).name());
     for (const resourceledger::MachineUse &use : ledger.machines) {
         const QString name = machineNames.value(QString::fromStdString(use.machine));
         const int uses = int(use.members.size());
@@ -984,7 +979,7 @@ void SquadPage::onDragStarted(int slot, const QPoint &globalPos)
     auto *shadow = new QGraphicsDropShadowEffect(card);
     shadow->setBlurRadius(18);
     shadow->setOffset(0, 8);
-    QColor ink(tok::kInk);
+    QColor ink(tok::palette().ink);
     ink.setAlpha(110);
     shadow->setColor(ink);
     card->setGraphicsEffect(shadow);
@@ -1302,16 +1297,16 @@ QPixmap SquadPage::squadImage()
 
     QPixmap image(int(width * dpr), int(height * dpr));
     image.setDevicePixelRatio(dpr);
-    image.fill(QColor(tok::kPaper));
+    image.fill(QColor(tok::palette().paper));
     QPainter painter(&image);
     painter.setRenderHint(QPainter::Antialiasing);
     // 제목 띠: 스쿼드 이름 — 오른쪽에 세대 규칙과 앱 이름
     painter.setFont(theme::font(theme::kFamilyTitle, 26));
-    painter.setPen(QColor(tok::kText1));
+    painter.setPen(QColor(tok::palette().text1));
     painter.drawText(QRect(pad, 0, width - pad * 2, titleHeight), Qt::AlignLeft | Qt::AlignVCenter,
                      m_name->text());
     painter.setFont(theme::font(theme::kFamilyBody, 13, QFont::ExtraBold));
-    painter.setPen(QColor(tok::kText3));
+    painter.setPen(QColor(tok::palette().text3));
     painter.drawText(QRect(pad, 0, width - pad * 2, titleHeight), Qt::AlignRight | Qt::AlignVCenter,
                      tr("PokeSix · %1세대 규칙").arg(m_session->generation()));
     m_cardArea->render(&painter, QPoint(pad, titleHeight), QRegion(), QWidget::DrawChildren);
@@ -1443,7 +1438,7 @@ void SquadPage::pickPokemon(int slot)
                                                       bool) {
                 if (i < 0) { // 칸 제목
                     painter.setFont(theme::font(theme::kFamilyBody, 11, QFont::ExtraBold));
-                    painter.setPen(QColor(tok::kText3));
+                    painter.setPen(QColor(tok::palette().text3));
                     painter.drawText(QRect(r.left() + 14, r.top(), 60, r.height()),
                                      Qt::AlignLeft | Qt::AlignVCenter, tr("No."));
                     painter.drawText(QRect(r.left() + 112, r.top(), 100, r.height()),
@@ -1457,11 +1452,12 @@ void SquadPage::pickPokemon(int slot)
                 const SpeciesRow &row = rows.at(i);
                 const QString warning = warnings.value(i);
                 if (!warning.isEmpty()) { // 경고 줄: 빨강 연한 바탕 + 왼쪽 빨강 띠
-                    painter.fillRect(r, QColor(tok::kRedTint));
-                    painter.fillRect(QRect(r.left(), r.top(), 4, r.height()), QColor(tok::kRed));
+                    painter.fillRect(r, QColor(tok::palette().redTint));
+                    painter.fillRect(QRect(r.left(), r.top(), 4, r.height()),
+                                     QColor(tok::palette().red));
                 }
                 painter.setFont(theme::font(theme::kFamilyData, 12, QFont::Bold));
-                painter.setPen(QColor(tok::kText3));
+                painter.setPen(QColor(tok::palette().text3));
                 painter.drawText(QRect(r.left() + 14, r.top(), 52, r.height()),
                                  Qt::AlignLeft | Qt::AlignVCenter,
                                  QStringLiteral("%1").arg(row.dexNumber, 3, 10, QLatin1Char('0')));
@@ -1469,7 +1465,7 @@ void SquadPage::pickPokemon(int slot)
                         &painter, QRectF(r.left() + 62, r.top() + 3, 40, r.height() - 6),
                         row.pokemonId, icons);
                 painter.setFont(theme::font(theme::kFamilyBody, 14, QFont::ExtraBold));
-                painter.setPen(QColor(tok::kText1));
+                painter.setPen(QColor(tok::palette().text1));
                 if (warning.isEmpty()) {
                     painter.drawText(QRect(r.left() + 112, r.top(), 170, r.height()),
                                      Qt::AlignLeft | Qt::AlignVCenter, row.name.text(language));
@@ -1477,7 +1473,7 @@ void SquadPage::pickPokemon(int slot)
                     painter.drawText(QRect(r.left() + 112, r.top() + 2, 170, 20),
                                      Qt::AlignLeft | Qt::AlignVCenter, row.name.text(language));
                     painter.setFont(theme::font(theme::kFamilyBody, 11, QFont::ExtraBold));
-                    painter.setPen(QColor(tok::kRed));
+                    painter.setPen(QColor(tok::palette().red));
                     const int width = r.right() - 100 - (r.left() + 112);
                     painter.drawText(QRect(r.left() + 112, r.top() + 21, width, 16),
                                      Qt::AlignLeft | Qt::AlignVCenter,
@@ -1494,7 +1490,7 @@ void SquadPage::pickPokemon(int slot)
                         x += typechip::paint(painter, QPointF(x, chipTop), *type, language)
                              + typechip::kGap;
                 painter.setFont(theme::font(theme::kFamilyData, 12, QFont::Bold));
-                painter.setPen(QColor(tok::kText2));
+                painter.setPen(QColor(tok::palette().text2));
                 painter.drawText(QRect(r.right() - 90, r.top(), 76, r.height()),
                                  Qt::AlignRight | Qt::AlignVCenter,
                                  QStringLiteral("%1").arg(row.total));
@@ -1570,7 +1566,7 @@ void SquadPage::pickMove(int slot, int index)
                                                         bool) {
                 if (i < 0) { // 칸 제목
                     painter.setFont(theme::font(theme::kFamilyBody, 11, QFont::ExtraBold));
-                    painter.setPen(QColor(tok::kText3));
+                    painter.setPen(QColor(tok::palette().text3));
                     const std::pair<int, QString> titles[]
                             = {{14, tr("타입")}, {96, tr("기술")}, {236, tr("분류")}};
                     for (const auto &[x, text] : titles)
@@ -1595,7 +1591,7 @@ void SquadPage::pickMove(int slot, int index)
                                     QPointF(r.left() + 14, r.center().y() - typechip::kHeight / 2),
                                     *type, language);
                 painter.setFont(theme::font(theme::kFamilyBody, 13, QFont::ExtraBold));
-                painter.setPen(QColor(tok::kText1));
+                painter.setPen(QColor(tok::palette().text1));
                 painter.drawText(
                         QRect(r.left() + 96, line.top(), 140, line.height()),
                         Qt::AlignLeft | Qt::AlignVCenter,
@@ -1605,7 +1601,7 @@ void SquadPage::pickMove(int slot, int index)
                                              QRectF(r.left() + 240, line.center().y() - 9, 22, 18),
                                              move.damageClass);
                 painter.setFont(theme::font(theme::kFamilyData, 12, QFont::Bold));
-                painter.setPen(QColor(tok::kText2));
+                painter.setPen(QColor(tok::palette().text2));
                 auto number = [](int value) {
                     return value > 0 ? QString::number(value) : QStringLiteral("—");
                 };
@@ -1618,7 +1614,7 @@ void SquadPage::pickMove(int slot, int index)
                     moveeffect::paint(painter, QRectF(r.left() + 96, r.top() + 19, 314, 15), effect,
                                       theme::font(theme::kFamilyBody, 11, QFont::Bold));
                 painter.setFont(theme::font(theme::kFamilyBody, 11, QFont::Bold));
-                painter.setPen(QColor(tok::kText3));
+                painter.setPen(QColor(tok::palette().text3));
                 const int left = r.left() + 420;
                 painter.drawText(
                         QRect(left, r.top(), r.right() - 12 - left, r.height()),
@@ -1716,14 +1712,14 @@ void SquadPage::pickItem(int slot)
                 if (!pixmap.isNull())
                     painter.drawPixmap(QRect(r.left() + 12, r.center().y() - 15, 30, 30), pixmap);
                 painter.setFont(theme::font(theme::kFamilyBody, 13, QFont::ExtraBold));
-                painter.setPen(QColor(tok::kText1));
+                painter.setPen(QColor(tok::palette().text1));
                 painter.drawText(
                         QRect(r.left() + 52, r.top(), 170, r.height()),
                         Qt::AlignLeft | Qt::AlignVCenter,
                         QFontMetricsF(painter.font())
                                 .elidedText(item.name.text(language), Qt::ElideRight, 170));
                 painter.setFont(theme::font(theme::kFamilyBody, 12));
-                painter.setPen(QColor(tok::kText3));
+                painter.setPen(QColor(tok::palette().text3));
                 const int left = r.left() + 230;
                 painter.drawText(QRect(left, r.top(), r.right() - 12 - left, r.height()),
                                  Qt::AlignLeft | Qt::AlignVCenter,
@@ -1739,5 +1735,25 @@ void SquadPage::pickItem(int slot)
     if (picker.exec() != QDialog::Accepted)
         return;
     m_session->setItem(slot, picker.chosenRow() < 0 ? 0 : rows.at(picker.chosenRow()).id);
+}
+void SquadPage::refreshToolIcons()
+{
+    // 색을 입혀 만든 아이콘은 테마를 따라가지 않는다 → 처음과 테마가 바뀔 때 지금 팔레트로 만든다
+    for (const auto &[button, svg] : std::as_const(m_toolIcons)) {
+        const auto colored = [svg](QRgb color) {
+            return QString::fromLatin1(svg).arg(QColor(color).name());
+        };
+        QIcon icon = svgicon::icon(colored(tok::palette().text1), 20, devicePixelRatioF());
+        icon.addPixmap(svgicon::pixmap(colored(tok::palette().text3), 20, devicePixelRatioF()),
+                       QIcon::Disabled);
+        button->setIcon(icon);
+    }
+}
+
+void SquadPage::changeEvent(QEvent *event)
+{
+    QWidget::changeEvent(event);
+    if (event->type() == QEvent::StyleChange) // theme::applyColors가 app.qss를 다시 입혔다
+        refreshToolIcons();
 }
 } // namespace com::yamada::studio

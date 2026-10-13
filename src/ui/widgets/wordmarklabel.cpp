@@ -52,13 +52,13 @@ void WordmarkLabel::paintEvent(QPaintEvent *event)
     const QPointF sixOffset(metrics.horizontalAdvance(poke), 0);
 
     // 1) 그림자: 같은 글자를 (5, 5) 옮겨 노랑으로 먼저 그린다.
-    painter.setPen(QColor(tok::kIntroTitleShadow));
+    painter.setPen(QColor(tok::palette().introTitleShadow));
     painter.drawText(origin + QPointF(kShadow, kShadow), poke + six);
 
     // 2) 본 글자: POKE는 본문 글자색(text.1), SIX는 빨강.
-    painter.setPen(QColor(tok::kText1));
+    painter.setPen(QColor(tok::palette().text1));
     painter.drawText(origin, poke);
-    painter.setPen(QColor(tok::kRed));
+    painter.setPen(QColor(tok::palette().red));
     painter.drawText(origin + sixOffset, six);
 }
 } // namespace com::yamada::studio

@@ -6,6 +6,15 @@ and the project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- Theme switch in the app bar, left of the generation button: light, dark, or follow the system
+  setting. The choice is remembered, and the whole window repaints at once. Some light-only colours
+  (generation and version chips, filter type chips, pale heatmap cells) still need dark values.
+
+### Changed
+- Colours come from one runtime palette (ADR 0020): white text on coloured fills is its own token,
+  and panels and icons pick up a theme change without being rebuilt.
+
 ## [0.4.1] - 2026-10-13
 
 One fix for squads carried over from before squads were kept per game.

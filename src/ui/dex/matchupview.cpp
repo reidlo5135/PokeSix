@@ -100,7 +100,7 @@ int MatchupView::layout(int width, QPainter *painter) const
             const bool firstOfSection = i == 0 || row.defense != previousDefense;
             if (firstOfSection) {
                 painter->setFont(sectionFont);
-                painter->setPen(QColor(tok::kText1));
+                painter->setPen(QColor(tok::palette().text1));
                 painter->drawText(QRect(0, top, kSectionWidth, int(typechip::kHeight)),
                                   Qt::AlignLeft | Qt::AlignVCenter,
                                   row.defense ? tr("받을 때") : tr("줄 때"));
@@ -108,7 +108,9 @@ int MatchupView::layout(int width, QPainter *painter) const
             painter->setFont(labelFont);
             const bool strong = row.defense ? row.multiplier > 1 : row.multiplier > 1;
             const bool weak = row.multiplier < 1;
-            painter->setPen(QColor(strong ? tok::kRed : weak ? tok::kBlueDeep : tok::kText3));
+            painter->setPen(QColor(strong ? tok::palette().red
+                                   : weak ? tok::palette().blueDeep
+                                          : tok::palette().text3));
             painter->drawText(QRect(kSectionWidth, top, kLabelWidth, int(typechip::kHeight)),
                               Qt::AlignLeft | Qt::AlignVCenter, multiplierText(row.multiplier));
         }

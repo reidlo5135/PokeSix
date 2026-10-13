@@ -1,5 +1,7 @@
 #pragma once
 
+#include "data/state/appstate.h"
+
 #include <QFont>
 #include <QString>
 
@@ -9,11 +11,23 @@ class QApplication;
 namespace com::yamada::studio::theme {
 // 앱 전체에 디자인 스타일을 입힌다.
 //   1) resources/fonts의 번들 글꼴을 등록한다(설치하지 않아도 앱 안에서 쓸 수 있게)
-//   2) :/styles/app.qss를 읽어 @이름 자리를 tokens.h의 색으로 바꾸고 setStyleSheet 한다
+//   2) 색을 입힌다(applyColors)
 // QApplication을 만든 직후, 위젯을 만들기 전에 한 번 부른다(main.cpp).
 void apply(QApplication &app);
 
-// QSS 문자열 안의 @이름(예: @red.deep)을 #RRGGBB로 바꾼다. 모르는 이름은 그대로 두고 로그를 남긴다.
+// 테마(F3a, ADR 0020). 시스템(OS 설정을 따름)은 F2'에서 더한다
+enum class Mode { Light, Dark };
+// tok::palette()가 돌려줄 팔레트를 바꾼다. 이미 입힌 QSS · 앱 팔레트는 그대로 — applyColors로 다시
+void setMode(Mode mode);
+Mode mode();
+// 색만 다시 입힌다: 앱 QPalette · app.qss의 @이름 → 지금 팔레트
+void applyColors(QApplication &app);
+// 사용자가 고른 테마(라이트 · 다크 · 시스템)를 입힌다: 색 구성표 → 모드 → applyColors.
+// 시작할 때(apply) · 앱 막대의 테마 스위치 · 시스템을 골랐을 때 OS 설정이 바뀌면(MainWindow)
+void applyTheme(QApplication &app, AppState::Theme theme);
+
+// QSS 문자열 안의 @이름(예: @red.deep)을 지금 팔레트의 #RRGGBB로 바꾼다. 모르는 이름은 그대로 두고
+// 로그를 남긴다.
 QString substituteTokens(const QString &styleSheet);
 
 // 등록된 글꼴 이름(fc-scan으로 확인한 실제 family 이름).

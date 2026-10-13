@@ -39,8 +39,8 @@ constexpr com::yamada::studio::PanelStyle kEntryCard {
         .outline = 2,
         .radius = 10,
         .shadow = 3,
-        .fill = com::yamada::studio::tok::kWhite,
-        .ink = com::yamada::studio::tok::kInk,
+        .fill = &com::yamada::studio::tok::Palette::white,
+        .ink = &com::yamada::studio::tok::Palette::ink,
 };
 
 // CSS의 줄 상자(line box) 안에 글자를 넣을 때의 기준선 y.
@@ -122,7 +122,7 @@ void IntroMenuItem::paintCard(QPainter &painter, const QRectF &row)
 {
     PanelStyle style = kEntryCard;
     if (m_kind == Kind::Primary)
-        style.fill = tok::kRed; // 주 행동(스쿼드)은 빨강 카드 + 흰 글자
+        style.fill = &tok::Palette::red; // 주 행동(스쿼드)은 빨강 카드 + 흰 글자
     if (QAbstractButton::isDown())
         style.shadow = 1;
     paintPanel(painter, row.toRect(), style);
@@ -131,26 +131,26 @@ void IntroMenuItem::paintCard(QPainter &painter, const QRectF &row)
 
     // 선택(키보드 ↑↓ · hover): 면 안쪽 노란 테 — 세대 카드와 같은 문법
     if (m_selected) {
-        painter.setPen(QPen(QColor(tok::kYellow), 3));
+        painter.setPen(QPen(QColor(tok::palette().yellow), 3));
         painter.setBrush(Qt::NoBrush);
         painter.drawRoundedRect(face.adjusted(2.5, 2.5, -2.5, -2.5), style.radius - 3,
                                 style.radius - 3);
     }
 
     const bool primary = m_kind == Kind::Primary;
-    const QColor title = primary ? QColor(tok::kWhite) : QColor(tok::kText1);
-    QColor sub = primary ? QColor(tok::kWhite) : QColor(tok::kText2);
+    const QColor title = primary ? QColor(tok::palette().onColor) : QColor(tok::palette().text1);
+    QColor sub = primary ? QColor(tok::palette().onColor) : QColor(tok::palette().text2);
     if (primary)
         sub.setAlpha(215);
 
     // 왼쪽 아이콘 배지: 먹색 둥근 네모 + 흰 그림
     const QRectF badge(face.left() + kCardPadX, face.center().y() - kBadge / 2.0, kBadge, kBadge);
     painter.setPen(Qt::NoPen);
-    painter.setBrush(QColor(tok::kInk));
+    painter.setBrush(QColor(tok::palette().ink));
     painter.drawRoundedRect(badge, kBadgeRadius, kBadgeRadius);
     if (m_icon.isNull() && !m_iconSvg.isEmpty())
         m_icon = svgicon::pixmap(QString(m_iconSvg).replace(QStringLiteral("currentColor"),
-                                                            QColor(tok::kWhite).name()),
+                                                            QColor(tok::palette().onColor).name()),
                                  kBadgeIcon, devicePixelRatio());
     if (!m_icon.isNull())
         painter.drawPixmap(badge.center() - QPointF(kBadgeIcon / 2.0, kBadgeIcon / 2.0), m_icon);

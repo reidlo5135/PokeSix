@@ -48,15 +48,15 @@ public:
         painter->setRenderHint(QPainter::Antialiasing, true);
         const bool selected = option.state & QStyle::State_Selected;
         const bool hot = m_hover->row() == index.row();
-        QColor background(index.row() % 2 == 1 ? tok::kPaperAlt : tok::kWhite);
+        QColor background(index.row() % 2 == 1 ? tok::palette().paperAlt : tok::palette().white);
         if (hot)
-            background = QColor(tok::kYellowTint);
+            background = QColor(tok::palette().yellowTint);
         if (selected)
-            background = QColor(tok::kYellowRowSel);
+            background = QColor(tok::palette().yellowRowSel);
         painter->fillRect(option.rect, background);
         if (selected) { // ▶ 표시 대신 왼쪽 노랑 띠
             painter->fillRect(QRect(option.rect.left(), option.rect.top(), 4, option.rect.height()),
-                              QColor(tok::kYellow));
+                              QColor(tok::palette().yellow));
         }
         m_painter(*painter, option.rect, m_proxy->mapToSource(index).row(), hot || selected);
         painter->restore();

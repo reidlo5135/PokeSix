@@ -41,12 +41,12 @@ void paintPanel(QPainter &painter, const QRect &rect, const PanelStyle &style)
     if (style.shadow > 0) {
         QPainterPath shadow;
         shadow.addRoundedRect(box.translated(0, style.shadow), style.radius, style.radius);
-        painter.fillPath(shadow, QColor(style.ink));
+        painter.fillPath(shadow, QColor(style.ink.rgb()));
     }
 
     // 2) 본체: 바탕(브러시) + 먹선(펜)을 한 번에. 그림자 위를 덮으므로 그림자는 아래쪽만 남는다.
-    painter.setPen(QPen(QColor(style.ink), style.outline));
-    painter.setBrush(QColor(style.fill));
+    painter.setPen(QPen(QColor(style.ink.rgb()), style.outline));
+    painter.setBrush(QColor(style.fill.rgb()));
     painter.drawPath(strokePath(box, style.radius, style.outline));
 
     // 2-1) 컬러 머리: 둥근 상자 모양으로 잘라(clip) 위쪽 띠를 칠하고, 그 아래에 먹선을 긋는다.
@@ -59,11 +59,11 @@ void paintPanel(QPainter &painter, const QRect &rect, const PanelStyle &style)
                               style.radius - o / 2.0, style.radius - o / 2.0);
         painter.setClipPath(inside);
         const QRectF band(box.left(), box.top(), box.width(), style.outline + style.header);
-        painter.fillRect(band, QColor(style.headerColor));
+        painter.fillRect(band, QColor(style.headerColor.rgb()));
         painter.fillRect(QRectF(box.left(), band.bottom(), box.width(), style.headerLine),
-                         QColor(style.ink));
+                         QColor(style.ink.rgb()));
         painter.restore();
-        painter.setPen(QPen(QColor(style.ink), style.outline));
+        painter.setPen(QPen(QColor(style.ink.rgb()), style.outline));
         painter.setBrush(Qt::NoBrush);
         painter.drawPath(strokePath(box, style.radius, style.outline));
     }
@@ -72,7 +72,7 @@ void paintPanel(QPainter &painter, const QRect &rect, const PanelStyle &style)
     if (style.innerLine > 0) {
         const qreal inset = style.outline + style.innerInset;
         const QRectF inner = box.adjusted(inset, inset, -inset, -inset);
-        painter.setPen(QPen(QColor(style.innerColor), style.innerLine));
+        painter.setPen(QPen(QColor(style.innerColor.rgb()), style.innerLine));
         painter.setBrush(Qt::NoBrush);
         painter.drawPath(strokePath(inner, style.innerRadius, style.innerLine));
     }

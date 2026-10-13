@@ -88,8 +88,8 @@ protected:
         painter.setRenderHint(QPainter::Antialiasing);
         // 틀: 흰 바탕 + 먹선 2 (app.qss의 QMenu와 같은 말투)
         const qreal half = kBorderWidth / 2.0;
-        painter.setPen(QPen(QColor(tok::kInk), kBorderWidth));
-        painter.setBrush(QColor(tok::kWhite));
+        painter.setPen(QPen(QColor(tok::palette().ink), kBorderWidth));
+        painter.setBrush(QColor(tok::palette().white));
         painter.drawRoundedRect(QRectF(rect()).adjusted(half, half, -half, -half), kRadius - half,
                                 kRadius - half);
         QPainterPath inner;
@@ -103,12 +103,12 @@ protected:
             // 줄 배경 = 그 세대의 단색 띠(버튼과 같은 배열)
             const QList<QColor> colors = dexstyle::generationColors(m_first + i);
             if (colors.isEmpty())
-                painter.fillRect(row, QColor(tok::kWhite));
+                painter.fillRect(row, QColor(tok::palette().white));
             else
                 painter.fillRect(row, stripesOf(colors, row.topLeft(), row.topRight()));
             if (i == m_hover) // 올린 줄: 먹색을 옅게 덮는다
                 painter.fillRect(row, QColor(0, 0, 0, 26));
-            painter.setPen(QColor(tok::kText1));
+            painter.setPen(QColor(tok::palette().text1));
             painter.setFont(m_font);
             const QString label = GenerationButton::tr("%1세대").arg(m_first + i);
             painter.drawText(row, Qt::AlignCenter, label);
@@ -121,7 +121,7 @@ protected:
             }
             if (i < m_rows - 1) // 줄 구분: 마지막만 빼고 아래 먹선 1px
                 painter.fillRect(QRectF(row.left(), row.bottom() - 1, row.width(), 1),
-                                 QColor(tok::kInk));
+                                 QColor(tok::palette().ink));
         }
     }
 
@@ -259,7 +259,7 @@ void GenerationButton::paintEvent(QPaintEvent *event)
     if (!down) {
         QPainterPath shadow;
         shadow.addRoundedRect(box.translated(0, m.shadow), radius, radius);
-        painter.fillPath(shadow, QColor(tok::kInk));
+        painter.fillPath(shadow, QColor(tok::palette().ink));
     }
 
     // 2) 본체: 그 세대 시리즈 색의 단색 띠 바탕(1세대 = [레드|그린|블루|옐로]) + 먹선 2.
@@ -267,10 +267,10 @@ void GenerationButton::paintEvent(QPaintEvent *event)
     // 그리므로 반 폭 안쪽으로.
     const qreal half = kBorder / 2.0;
     const QList<QColor> colors = dexstyle::generationColors(m_number);
-    QBrush body(QColor(down ? tok::kYellowTint : tok::kWhite));
+    QBrush body(QColor(down ? tok::palette().yellowTint : tok::palette().white));
     if (!colors.isEmpty())
         body = stripesOf(colors, box.topLeft(), box.topRight());
-    painter.setPen(QPen(QColor(tok::kInk), kBorder));
+    painter.setPen(QPen(QColor(tok::palette().ink), kBorder));
     painter.setBrush(body);
     painter.drawRoundedRect(box.adjusted(half, half, -half, -half), radius - half, radius - half);
 
@@ -283,7 +283,7 @@ void GenerationButton::paintEvent(QPaintEvent *event)
     chevron.moveTo(topLeft + QPointF(6, 9) * scale);
     chevron.lineTo(topLeft + QPointF(12, 15) * scale);
     chevron.lineTo(topLeft + QPointF(18, 9) * scale);
-    QPen chevronPen(QColor(tok::kText1), 2.6 * scale);
+    QPen chevronPen(QColor(tok::palette().text1), 2.6 * scale);
     chevronPen.setCapStyle(Qt::FlatCap);    // SVG 기본값(stroke-linecap: butt)과 같게
     chevronPen.setJoinStyle(Qt::MiterJoin); // SVG 기본값(stroke-linejoin: miter)과 같게
     painter.setPen(chevronPen);
@@ -295,7 +295,7 @@ void GenerationButton::paintEvent(QPaintEvent *event)
     const QString text = label();
     const qreal textW = QFontMetricsF(m_font).horizontalAdvance(text);
     painter.setFont(m_font);
-    painter.setPen(QColor(tok::kText1));
+    painter.setPen(QColor(tok::palette().text1));
     painter.drawText(QRectF(x, box.top(), textW, box.height()), Qt::AlignVCenter | Qt::AlignLeft,
                      text);
 }

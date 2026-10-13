@@ -137,6 +137,8 @@ qt_add_library(pokesix_ui STATIC
     shell/apptabbar.cpp
     shell/markbutton.h
     shell/markbutton.cpp
+    shell/themeswitch.h
+    shell/themeswitch.cpp
     shell/mainwindow.h
     shell/mainwindow.cpp
 )

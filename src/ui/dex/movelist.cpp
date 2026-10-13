@@ -42,17 +42,17 @@ void paintClass(QPainter &painter, const QRectF &cell, int damageClass)
     const QString text = damageClass == 2   ? MoveList::tr("물리")
                          : damageClass == 3 ? MoveList::tr("특수")
                                             : MoveList::tr("변화");
-    const QRgb fill = damageClass == 2   ? tok::kCatPhysical
-                      : damageClass == 3 ? tok::kCatSpecial
-                                         : tok::kCatStatus;
+    const QRgb fill = damageClass == 2   ? tok::palette().catPhysical
+                      : damageClass == 3 ? tok::palette().catSpecial
+                                         : tok::palette().catStatus;
     const QFont font = theme::font(theme::kFamilyBody, 11, QFont::ExtraBold);
     const qreal w = QFontMetricsF(font).horizontalAdvance(text) + 12;
     const QRectF chip(cell.left(), cell.center().y() - 9, w, 18);
-    painter.setPen(QPen(QColor(tok::kInk), 1.5));
+    painter.setPen(QPen(QColor(tok::palette().ink), 1.5));
     painter.setBrush(QColor(fill));
     painter.drawRoundedRect(chip.adjusted(0.75, 0.75, -0.75, -0.75), 3, 3);
     painter.setFont(font);
-    painter.setPen(QColor(damageClass == 1 ? tok::kText1 : tok::kWhite));
+    painter.setPen(QColor(damageClass == 1 ? tok::palette().text1 : tok::palette().onColor));
     painter.drawText(chip, Qt::AlignCenter, text);
 }
 } // namespace
@@ -158,7 +158,7 @@ void MoveList::paintEvent(QPaintEvent *)
     // 머리 줄
     const QFont headerFont = theme::font(theme::kFamilyBody, 11, QFont::ExtraBold);
     painter.setFont(headerFont);
-    painter.setPen(QColor(tok::kText2));
+    painter.setPen(QColor(tok::palette().text2));
     const QString headers[] = {m_mode == Mode::LevelUp   ? tr("Lv")
                                : m_mode == Mode::Machine ? tr("번호")
                                                          : QString(),
@@ -175,11 +175,11 @@ void MoveList::paintEvent(QPaintEvent *)
         painter.drawText(cell(int(i), 0, kHeaderHeight),
                          (numeric ? Qt::AlignRight : Qt::AlignLeft) | Qt::AlignVCenter, headers[i]);
     }
-    painter.fillRect(QRectF(0, kHeaderHeight - 2, width(), 2), QColor(tok::kInk));
+    painter.fillRect(QRectF(0, kHeaderHeight - 2, width(), 2), QColor(tok::palette().ink));
 
     if (m_moves.isEmpty()) {
         painter.setFont(theme::font(theme::kFamilyBody, 13));
-        painter.setPen(QColor(tok::kText3));
+        painter.setPen(QColor(tok::palette().text3));
         painter.drawText(QRect(kPadding, kHeaderHeight, width(), kRowHeight),
                          Qt::AlignLeft | Qt::AlignVCenter, tr("이 게임에서는 배울 수 없어요"));
         return;
@@ -192,12 +192,13 @@ void MoveList::paintEvent(QPaintEvent *)
         const MoveEntry &move = m_moves.at(i);
         const int top = kHeaderHeight + int(i) * kRowHeight;
         if (i % 2 == 1)
-            painter.fillRect(QRect(0, top, width(), kRowHeight), QColor(tok::kPaperAlt));
-        painter.fillRect(QRect(0, top + kRowHeight - 1, width(), 1), QColor(tok::kLineSoft));
+            painter.fillRect(QRect(0, top, width(), kRowHeight), QColor(tok::palette().paperAlt));
+        painter.fillRect(QRect(0, top + kRowHeight - 1, width(), 1),
+                         QColor(tok::palette().lineSoft));
 
         // 첫 칸: Lv(+ 하트비늘) · 기술머신 번호(TM06 · HM01)
         painter.setFont(dataFont);
-        painter.setPen(QColor(tok::kText1));
+        painter.setPen(QColor(tok::palette().text1));
         if (m_mode == Mode::LevelUp) {
             const QRectF first = cell(0, top, kRowHeight);
             painter.drawText(first, Qt::AlignLeft | Qt::AlignVCenter, QString::number(move.level));
@@ -239,7 +240,8 @@ void MoveList::paintEvent(QPaintEvent *)
             QString text = values[k] > 0 ? QString::number(values[k]) : QStringLiteral("—");
             if (variable)
                 text = tr("변동");
-            painter.setPen(QColor(values[k] > 0 && !variable ? tok::kText1 : tok::kText3));
+            painter.setPen(QColor(values[k] > 0 && !variable ? tok::palette().text1
+                                                             : tok::palette().text3));
             painter.drawText(cell(4 + k, top, kRowHeight), Qt::AlignRight | Qt::AlignVCenter, text);
         }
         // 효과: 변화 기술만("공격 ▲2" · "상대 마비" · 그 세대의 게임 설명문)
@@ -252,7 +254,8 @@ void MoveList::paintEvent(QPaintEvent *)
             const QString cost = m_costs.value(i);
             const QRectF where = cell(costColumn(), top, kRowHeight);
             painter.setFont(placeFont);
-            painter.setPen(QColor(cost.isEmpty() ? tok::kTextDisabled : tok::kText2));
+            painter.setPen(
+                    QColor(cost.isEmpty() ? tok::palette().textDisabled : tok::palette().text2));
             painter.drawText(where, Qt::AlignLeft | Qt::AlignVCenter,
                              cost.isEmpty() ? QStringLiteral("—")
                                             : QFontMetricsF(placeFont).elidedText(
@@ -263,7 +266,8 @@ void MoveList::paintEvent(QPaintEvent *)
             const QString places = placesOf(move);
             const QRectF where = cell(placesColumn(), top, kRowHeight);
             painter.setFont(placeFont);
-            painter.setPen(QColor(places.isEmpty() ? tok::kTextDisabled : tok::kText2));
+            painter.setPen(
+                    QColor(places.isEmpty() ? tok::palette().textDisabled : tok::palette().text2));
             painter.drawText(where, Qt::AlignLeft | Qt::AlignVCenter,
                              places.isEmpty() ? tr("획득처 정보 없음")
                                               : QFontMetricsF(placeFont).elidedText(

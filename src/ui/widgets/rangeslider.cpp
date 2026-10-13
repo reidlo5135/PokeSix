@@ -110,10 +110,10 @@ void RangeSlider::paintEvent(QPaintEvent *event)
     const qreal mid = height() / 2.0;
     // 트랙과 고른 구간
     painter.setPen(Qt::NoPen);
-    painter.setBrush(QColor(tok::kLine));
+    painter.setBrush(QColor(tok::palette().line));
     painter.drawRoundedRect(QRectF(kSidePad, mid - kTrack / 2, width() - 2 * kSidePad, kTrack), 2,
                             2);
-    painter.setBrush(QColor(tok::kYellow));
+    painter.setBrush(QColor(tok::palette().yellow));
     painter.drawRoundedRect(
             QRectF(xOf(m_lower), mid - kTrack / 2, xOf(m_upper) - xOf(m_lower), kTrack), 2, 2);
 
@@ -121,10 +121,10 @@ void RangeSlider::paintEvent(QPaintEvent *event)
     for (const int value : {m_lower, m_upper}) {
         const QRectF handle = handleRect(value);
         painter.setPen(Qt::NoPen);
-        painter.setBrush(QColor(tok::kInk));
+        painter.setBrush(QColor(tok::palette().ink));
         painter.drawRoundedRect(handle.translated(0, 1.5), 3, 3);
-        painter.setPen(QPen(QColor(tok::kInk), 1.5));
-        painter.setBrush(QColor(tok::kWhite));
+        painter.setPen(QPen(QColor(tok::palette().ink), 1.5));
+        painter.setBrush(QColor(tok::palette().white));
         painter.drawRoundedRect(handle, 3, 3);
     }
 }

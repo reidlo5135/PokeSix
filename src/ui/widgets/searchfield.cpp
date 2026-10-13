@@ -33,11 +33,9 @@ SearchField::SearchField(const QString &placeholder, const QString &shortcutText
     layout->setContentsMargins(kBorder + kPaddingX, 0, kBorder + kPaddingX, 0);
     layout->setSpacing(kGap);
 
-    QLabel *icon = new QLabel;
-    icon->setPixmap(svgicon::pixmap(
-            QString::fromLatin1(kSearchSvg).arg(QColor(com::yamada::studio::tok::kText3).name()),
-            kIconSize, devicePixelRatioF()));
-    layout->addWidget(icon);
+    m_icon = new QLabel;
+    refreshIcon();
+    layout->addWidget(m_icon);
 
     m_edit = new QLineEdit;
     m_edit->setObjectName(
@@ -112,8 +110,9 @@ void SearchField::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
     const qreal half = kBorder / 2.0;
-    painter.setPen(QPen(QColor(m_edit->hasFocus() ? tok::kBlue : tok::kInk), kBorder));
-    painter.setBrush(QColor(tok::kWhite));
+    painter.setPen(
+            QPen(QColor(m_edit->hasFocus() ? tok::palette().blue : tok::palette().ink), kBorder));
+    painter.setBrush(QColor(tok::palette().white));
     painter.drawRoundedRect(QRectF(rect()).adjusted(half, half, -half, -half), kRadius - half,
                             kRadius - half);
 }
@@ -127,5 +126,18 @@ void SearchField::resizeEvent(QResizeEvent *event)
         // 숨기기가 다시 resize를 부르지 않는다(루프 없음).
         m_shortcut->setVisible(event->size().width() >= kShortcutMinWidth);
     }
+}
+void SearchField::refreshIcon()
+{
+    m_icon->setPixmap(svgicon::pixmap(
+            QString::fromLatin1(kSearchSvg).arg(QColor(tok::palette().text3).name()), kIconSize,
+            devicePixelRatioF()));
+}
+
+void SearchField::changeEvent(QEvent *event)
+{
+    QWidget::changeEvent(event);
+    if (event->type() == QEvent::StyleChange) // theme::applyColors가 app.qss를 다시 입혔다
+        refreshIcon();
 }
 } // namespace com::yamada::studio

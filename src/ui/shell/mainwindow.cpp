@@ -9,7 +9,9 @@
 #include "ui/logging/logging.h"
 #include "ui/map/townmappage.h"
 #include "ui/shell/appbar.h"
+#include "ui/shell/themeswitch.h"
 #include "ui/squad/squadpage.h"
+#include "ui/theme/theme.h"
 #include "ui/widgets/generationbutton.h"
 #include "ui/widgets/searchfield.h"
 
@@ -18,6 +20,7 @@
 #include <QLabel>
 #include <QShortcut>
 #include <QStackedWidget>
+#include <QStyleHints>
 #include <QVBoxLayout>
 
 namespace com::yamada::studio {
@@ -98,6 +101,21 @@ MainWindow::MainWindow(Repository *repository, AppState *state, DataUpdater *dat
             &AppState::setGeneration);
     connect(m_state, &AppState::generationChanged, generationButton,
             &GenerationButton::setGeneration);
+
+    // 테마 스위치도 같은 말투: 스위치는 고름만 알리고, AppState가 저장한 뒤 themeChanged로
+    // 돌려준다. 색을 다시 입히는 건 theme::applyTheme(시작할 때의 색은 Application이 theme::apply로
+    // 이미 입혔다)
+    ThemeSwitch *themeSwitch = m_appBar->themeSwitch();
+    themeSwitch->setTheme(m_state->theme());
+    connect(themeSwitch, &ThemeSwitch::themeSelected, m_state, &AppState::setTheme);
+    connect(m_state, &AppState::themeChanged, themeSwitch, &ThemeSwitch::setTheme);
+    connect(m_state, &AppState::themeChanged, this,
+            [](AppState::Theme theme) { theme::applyTheme(*qApp, theme); });
+    // 시스템을 골랐으면 OS의 라이트 · 다크가 바뀔 때도 다시 입힌다(실행 중에 OS 설정을 바꾼 경우)
+    connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged, this, [this] {
+        if (m_state->theme() == AppState::Theme::System)
+            theme::applyTheme(*qApp, AppState::Theme::System);
+    });
 
     // 본 화면의 단축키. shell에 달고 WidgetWithChildrenShortcut으로 두면 본 화면이 보일 때만
     // 동작한다 (인트로에서는 1–4 키가 메뉴에 있고, 잠긴 메뉴를 단축키로 우회하지 못한다).

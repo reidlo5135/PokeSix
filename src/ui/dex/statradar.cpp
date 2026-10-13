@@ -88,10 +88,11 @@ void StatRadar::paintEvent(QPaintEvent *)
         QPolygonF hexagon;
         for (int axis = 0; axis < 6; ++axis)
             hexagon << point(axis, radius * ring / rings);
-        painter.setPen(QPen(QColor(ring == rings ? tok::kLineStrong : tok::kLine), 1));
+        painter.setPen(
+                QPen(QColor(ring == rings ? tok::palette().lineStrong : tok::palette().line), 1));
         painter.drawPolygon(hexagon);
     }
-    painter.setPen(QPen(QColor(tok::kLine), 1));
+    painter.setPen(QPen(QColor(tok::palette().line), 1));
     for (int axis = 0; axis < 6; ++axis)
         painter.drawLine(center, point(axis, radius));
 
@@ -104,13 +105,14 @@ void StatRadar::paintEvent(QPaintEvent *)
             const int value = std::min(trained[kAxisToStat[axis]], scale);
             shape << point(axis, radius * value / scale);
         }
-        QColor fill(tok::kBlue);
+        QColor fill(tok::palette().blue);
         fill.setAlphaF(kFillAlpha);
         painter.setBrush(fill);
-        painter.setPen(QPen(QColor(tok::kBlueDeep), 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+        painter.setPen(QPen(QColor(tok::palette().blueDeep), 2, Qt::SolidLine, Qt::RoundCap,
+                            Qt::RoundJoin));
         painter.drawPolygon(shape);
         painter.setPen(Qt::NoPen);
-        painter.setBrush(QColor(tok::kBlue));
+        painter.setBrush(QColor(tok::palette().blue));
         for (const QPointF &p : shape)
             painter.drawEllipse(p, 2.5, 2.5);
     }
@@ -121,13 +123,13 @@ void StatRadar::paintEvent(QPaintEvent *)
         const int value = std::min(m_stats[kAxisToStat[axis]], scale);
         shape << point(axis, radius * value / scale);
     }
-    QColor fill(tok::kRed);
+    QColor fill(tok::palette().red);
     fill.setAlphaF(kFillAlpha);
     painter.setBrush(fill);
-    painter.setPen(QPen(QColor(tok::kRed), 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter.setPen(QPen(QColor(tok::palette().red), 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter.drawPolygon(shape);
     painter.setPen(Qt::NoPen);
-    painter.setBrush(QColor(tok::kRed));
+    painter.setBrush(QColor(tok::palette().red));
     for (const QPointF &p : shape)
         painter.drawEllipse(p, 2.5, 2.5);
 
@@ -155,25 +157,25 @@ void StatRadar::paintEvent(QPaintEvent *)
                                                        : Qt::AlignRight;
         // 성격 보정: 오르는 능력치 "특공 ▲"(빨강) · 내리는 능력치 "공격 ▼"(파랑)
         QString name = names[stat];
-        QColor nameColor(tok::kText2);
+        QColor nameColor(tok::palette().text2);
         if (stat == m_increased) {
             name += QStringLiteral(" ▲");
-            nameColor = QColor(tok::kRed);
+            nameColor = QColor(tok::palette().red);
         } else if (stat == m_decreased) {
             name += QStringLiteral(" ▼");
-            nameColor = QColor(tok::kBlueDeep);
+            nameColor = QColor(tok::palette().blueDeep);
         }
         painter.setFont(nameFont);
         painter.setPen(nameColor);
         painter.drawText(QRectF(box.left(), box.top(), box.width(), 16),
                          horizontal | Qt::AlignVCenter, name);
         painter.setFont(valueFont);
-        painter.setPen(QColor(m_stats[stat] >= 100 ? tok::kText1 : tok::kText3));
+        painter.setPen(QColor(m_stats[stat] >= 100 ? tok::palette().text1 : tok::palette().text3));
         painter.drawText(QRectF(box.left(), box.top() + 16, box.width(), 18),
                          horizontal | Qt::AlignVCenter, QString::number(m_stats[stat]));
         // 인게임 능력치는 종족값 아래 한 줄(그만큼 radius의 바깥 여백이 18 늘었다)
         if (m_trained) {
-            painter.setPen(QColor(tok::kBlueDeep));
+            painter.setPen(QColor(tok::palette().blueDeep));
             painter.drawText(QRectF(box.left(), box.top() + 34, box.width(), 18),
                              horizontal | Qt::AlignVCenter, QString::number((*m_trained)[stat]));
         }

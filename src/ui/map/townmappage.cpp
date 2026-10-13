@@ -31,17 +31,17 @@ constexpr int kDetailWidth = 340;
 constexpr PanelStyle kMapPanel {.outline = 2,
                                 .radius = 8,
                                 .shadow = 3,
-                                .fill = tok::kWhite,
-                                .ink = tok::kInk,
+                                .fill = &tok::Palette::white,
+                                .ink = &tok::Palette::ink,
                                 .header = 38,
-                                .headerColor = tok::kGreen};
+                                .headerColor = &tok::Palette::green};
 constexpr PanelStyle kDetailPanel {.outline = 2,
                                    .radius = 8,
                                    .shadow = 3,
-                                   .fill = tok::kWhite,
-                                   .ink = tok::kInk,
+                                   .fill = &tok::Palette::white,
+                                   .ink = &tok::Palette::ink,
                                    .header = 38,
-                                   .headerColor = tok::kBlue};
+                                   .headerColor = &tok::Palette::blue};
 } // namespace
 
 namespace com::yamada::studio {

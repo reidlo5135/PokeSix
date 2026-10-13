@@ -41,8 +41,11 @@ protected:
     bool eventFilter(QObject *watched,
                      QEvent *event) override; // 입력의 포커스 변화를 엿보고 다시 그린다
     void resizeEvent(QResizeEvent *event) override; // 좁으면 단축키 배지를 숨긴다
+    void changeEvent(QEvent *event) override; // 테마가 바뀌면 돋보기를 다시 칠한다
 
 private:
+    void refreshIcon();
+    QLabel *m_icon = nullptr; // 돋보기
     QLineEdit *m_edit = nullptr;
     QLabel *m_shortcut = nullptr; // "Ctrl K" 배지. 단축키 문구가 없으면 nullptr
     QString m_preedit; // 입력기가 조합 중인 글자(예: 첫 글자 "이"를 치는 동안)

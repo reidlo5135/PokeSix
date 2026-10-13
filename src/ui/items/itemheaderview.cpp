@@ -30,15 +30,15 @@ void ItemHeaderView::paintSection(QPainter *painter, const QRect &rect, int logi
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing, true);
     const QRectF cell = rect;
-    painter->fillRect(cell, QColor(tok::kWhite));
+    painter->fillRect(cell, QColor(tok::palette().white));
     painter->fillRect(
             QRectF(cell.left(), cell.bottom() - kBottomLine + 1, cell.width(), kBottomLine),
-            QColor(tok::kInk));
+            QColor(tok::palette().ink));
 
     const QString text = model()->headerData(logicalIndex, orientation()).toString();
     const bool sorted = isSortIndicatorShown() && sortIndicatorSection() == logicalIndex;
     const bool right = logicalIndex == ItemTableModel::PriceColumn; // 숫자 칸은 오른쪽
-    const QColor color(sorted ? tok::kRed : tok::kText2);
+    const QColor color(sorted ? tok::palette().red : tok::palette().text2);
     const QRectF line = cell.adjusted(0, 0, 0, -kBottomLine);
     const QRectF content = line.adjusted(kPadding, 0, -kPadding, 0);
     const QFont font = theme::font(theme::kFamilyBody, 11, QFont::ExtraBold);

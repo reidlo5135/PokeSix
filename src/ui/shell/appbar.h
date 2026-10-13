@@ -8,9 +8,10 @@ namespace com::yamada::studio {
 class AppTabBar;
 class GenerationButton;
 class MarkButton;
+class ThemeSwitch;
 
 // 본 화면 맨 위의 빨강 앱 막대 (디자인 v2 02b SCR-00): 높이 60 · 아래 먹선 3.
-//   [마크 + POKESIX] [도감 · 아이템 · 스쿼드 · 설정 탭]            [GEN 4 ▾]
+//   [마크 + POKESIX] [도감 · 아이템 · 스쿼드 · 설정 탭]     [☀ ☾ 🖥] [GEN 4 ▾]
 // 막대는 무엇이 눌렸는지만 알린다(homeRequested · pageSelected). 화면을 바꾸는 일은 MainWindow가
 // 한다.
 class AppBar : public QWidget
@@ -21,6 +22,7 @@ public:
 
     void setCurrentPage(Page page); // 활성 탭 표시만 바꾼다
     GenerationButton *generationButton() const { return m_generation; }
+    ThemeSwitch *themeSwitch() const { return m_theme; }
 
 signals:
     void homeRequested();                              // 마크 버튼 → 인트로
@@ -32,6 +34,7 @@ protected:
 private:
     MarkButton *m_mark = nullptr;
     AppTabBar *m_tabs = nullptr;
+    ThemeSwitch *m_theme = nullptr;
     GenerationButton *m_generation = nullptr;
 };
 } // namespace com::yamada::studio

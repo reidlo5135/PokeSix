@@ -27,3 +27,4 @@
 | [0017](0017-build-identity-string.md) | 빌드 식별 문자열: git describe를 빌드마다 헤더로 생성, Debug는 C++에서 표시 | Accepted |
 | [0018](0018-save-import-read-only.md) | 세이브(.sav)는 읽기 전용으로, 새 화면 없이 스쿼드 "불러오기"에서 받는다. 1차 4세대, 파서는 사용자 구현 | Accepted |
 | [0019](0019-save-readers-per-platform.md) | 세이브 리더는 기기별 클래스(`PartyReader` → `PartyNdsReader` …), 기기 안의 시리즈는 표의 행, 함수는 검증 구조마다 | Accepted |
+| [0020](0020-runtime-palette.md) | 색은 실행 중에 바꿀 수 있는 팔레트로: `tok::palette()` · 역할(멤버 포인터) · `onColor` | Accepted |

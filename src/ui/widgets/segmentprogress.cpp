@@ -42,8 +42,8 @@ void SegmentProgress::paintEvent(QPaintEvent *event)
     painter.setRenderHint(QPainter::Antialiasing, true);
 
     const qreal half = kBorder / 2.0;
-    painter.setPen(QPen(QColor(com::yamada::studio::tok::kInk), kBorder));
-    painter.setBrush(QColor(tok::kWhite));
+    painter.setPen(QPen(QColor(com::yamada::studio::tok::palette().ink), kBorder));
+    painter.setBrush(QColor(tok::palette().white));
     painter.drawRoundedRect(QRectF(rect()).adjusted(half, half, -half, -half), kRadius - half,
                             kRadius - half);
 
@@ -53,7 +53,7 @@ void SegmentProgress::paintEvent(QPaintEvent *event)
     const int filled = m_percent / 10; // 60% → 6칸
     painter.setPen(Qt::NoPen);
     for (int i = 0; i < kSegments; ++i) {
-        painter.setBrush(QColor(i < filled ? tok::kStatGood : tok::kLineSoft));
+        painter.setBrush(QColor(i < filled ? tok::palette().statGood : tok::palette().lineSoft));
         painter.drawRoundedRect(
                 QRectF(inner.left() + i * (cellWidth + kGap), inner.top(), cellWidth, kCellHeight),
                 kCellRadius, kCellRadius);

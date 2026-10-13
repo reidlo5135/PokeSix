@@ -175,7 +175,7 @@ void EvolutionView::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.fillRect(rect(), QColor(tok::kWhite));
+    painter.fillRect(rect(), QColor(tok::palette().white));
     const QFont nameFont = theme::font(theme::kFamilyBody, 13, QFont::ExtraBold);
     const QFont conditionFont = theme::font(theme::kFamilyBody, 12);
     const QList<int> tops = rowTops();
@@ -186,12 +186,12 @@ void EvolutionView::paintEvent(QPaintEvent *)
         const bool current = step.speciesId == m_current;
         if (current) {
             painter.setPen(Qt::NoPen);
-            painter.setBrush(QColor(tok::kYellowTint));
+            painter.setBrush(QColor(tok::palette().yellowTint));
             painter.drawRoundedRect(QRectF(0, top + 1, width(), tops.at(i + 1) - top - 2), 4, 4);
         }
         qreal x = step.depth * kIndent;
         if (step.depth > 0) { // ↳ 꺾은 선
-            painter.setPen(QPen(QColor(tok::kLineStrong), 1.5));
+            painter.setPen(QPen(QColor(tok::palette().lineStrong), 1.5));
             const qreal cx = x - kIndent / 2.0;
             painter.drawLine(QPointF(cx, top + 4), QPointF(cx, top + kRowHeight / 2.0));
             painter.drawLine(QPointF(cx, top + kRowHeight / 2.0),
@@ -202,7 +202,7 @@ void EvolutionView::paintEvent(QPaintEvent *)
         x += kIconWidth + kNameGap;
         const QString name = step.name.text(m_language);
         painter.setFont(nameFont);
-        painter.setPen(QColor(tok::kText1));
+        painter.setPen(QColor(tok::palette().text1));
         const qreal nameWidth = QFontMetricsF(nameFont).horizontalAdvance(name);
         painter.drawText(QRectF(x, top, nameWidth + 1, kRowHeight),
                          Qt::AlignLeft | Qt::AlignVCenter, name);
@@ -210,7 +210,7 @@ void EvolutionView::paintEvent(QPaintEvent *)
         const QString conditions = conditionsOf(step);
         if (!conditions.isEmpty() && x < width()) {
             painter.setFont(conditionFont);
-            painter.setPen(QColor(tok::kText2));
+            painter.setPen(QColor(tok::palette().text2));
             painter.drawText(QRectF(x, top, width() - x - 4, kRowHeight),
                              Qt::AlignLeft | Qt::AlignVCenter,
                              QFontMetricsF(conditionFont)
@@ -221,7 +221,7 @@ void EvolutionView::paintEvent(QPaintEvent *)
         if (!sources.isEmpty()) {
             const qreal sx = step.depth * kIndent + kIconWidth + kNameGap;
             painter.setFont(sourceFont);
-            painter.setPen(QColor(tok::kText3));
+            painter.setPen(QColor(tok::palette().text3));
             painter.drawText(QRectF(sx, top + kRowHeight - 4, width() - sx - 4, kSourceHeight),
                              Qt::AlignLeft | Qt::AlignVCenter,
                              QFontMetricsF(sourceFont)
