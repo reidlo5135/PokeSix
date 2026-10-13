@@ -83,8 +83,8 @@ constexpr auto kColors = std::to_array<NamedColor>({
         {"menu.pressed", &tok::Palette::menuPressed},
 });
 
-// TODO(F3a-CP2) 지금 모드를 담는 변수 하나: Mode g_mode = Mode::Light;
-//   palette() · mode()가 읽고 setMode가 바꾼다
+// 지금 칠하는 모드. palette() · mode()가 읽고 setMode만 바꾼다(UI 스레드에서만 — 잠금 없음)
+Mode g_mode = Mode::Light;
 
 // qrc 안의 :/fonts/*.ttf를 전부 등록한다. 등록된 글꼴은 이 프로세스 안에서만 쓸 수 있고,
 // 사용자의 시스템에 설치되지는 않는다.
@@ -101,14 +101,12 @@ void loadBundledFonts()
 
 Mode mode()
 {
-    // TODO(F3a-CP2) g_mode를 돌려준다
-    return Mode::Light;
+    return g_mode;
 }
 
 void setMode(Mode mode)
 {
-    // TODO(F3a-CP2) g_mode에 담는다
-    (void)mode;
+    g_mode = mode;
 }
 
 QString substituteTokens(const QString &styleSheet)
@@ -127,8 +125,7 @@ QString substituteTokens(const QString &styleSheet)
             return c.name == std::string_view(name.constData(), name.size());
         });
         if (found != kColors.end()) {
-            // TODO(F3a-CP3) 지금 팔레트(tok::palette())에서 읽는다. 지금은 늘 라이트에서 읽는다
-            result += QColor(tok::kLight.*found->role).name(QColor::HexRgb).toUpper();
+            result += QColor(tok::palette().*found->role).name(QColor::HexRgb).toUpper();
         } else {
             qCWarning(lcUi) << "unknown style token" << m.captured(0);
             result += m.captured(0);
@@ -142,18 +139,15 @@ QString substituteTokens(const QString &styleSheet)
 void apply(QApplication &app)
 {
     loadBundledFonts();
-    // TODO(F3a-CP6) 아래 applyColors(app) 대신 applyTheme(app, AppState::savedTheme())
-    //   — 시작할 때부터 저장된 테마로(위젯을 만들기 전이라 생성자에서 굳히는 색까지 맞는다)
-    // TODO(F3a-CP4) 아래 "색" 부분을 applyColors로 옮기고, 여기서는 applyColors(app) 한 줄만
-    //   (테마를 실행 중에 바꿀 때 F2'가 applyColors만 다시 부른다)
+    // 저장된 테마로 시작한다 — 위젯을 만들기 전이라 생성자에서 굳히는 색까지 처음부터 맞는다
+    applyTheme(app, AppState::savedTheme());
+}
 
-    // 종이 테마는 OS 설정과 무관하게 밝다(다크 테마는 Phase F3에서 토큰 교체로). Windows는
-    // Qt 6.5부터 시스템이 다크 모드면 앱 팔레트를 어둡게 바꾸는데, QSS가 `background:
-    // transparent`로 비워 둔 자리(분석 창의 스크롤 영역 등)에는 그 어두운 Window 색이 비쳐 검은
-    // 상자가 됐다(v0.2.0 msi, 다크 모드 PC). 색 구성표를 밝음으로 고정하고 팔레트의 기본 역할도
-    // 토큰으로 채운다 — QSS가 정하지 않은 위젯도 종이 위에 선다.
-    // TODO(F3a-CP4) 색 구성표도 mode()를 따른다: Dark면 Qt::ColorScheme::Dark
-    QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Light);
+void applyColors(QApplication &app)
+{
+    // 팔레트의 기본 역할도 토큰으로 채운다 — QSS가 정하지 않은 위젯도 종이 위에 선다. QSS가
+    // `background: transparent`로 비워 둔 자리(분석 창의 스크롤 영역 등)에는 Window 색이 비친다
+    // (v0.2.0 msi: Windows 다크 모드에서 Qt 기본 팔레트가 비쳐 검은 상자가 됐다).
     QPalette palette = app.palette();
     palette.setColor(QPalette::Window, QColor(tok::palette().paper));
     palette.setColor(QPalette::WindowText, QColor(tok::palette().text1));
@@ -179,22 +173,23 @@ void apply(QApplication &app)
     app.setStyleSheet(substituteTokens(QString::fromUtf8(file.readAll())));
 }
 
-void applyColors(QApplication &app)
-{
-    // TODO(F3a-CP4) apply의 "색" 부분(setColorScheme ~ setStyleSheet)이 여기로 온다
-    (void)app;
-}
-
 void applyTheme(QApplication &app, AppState::Theme theme)
 {
-    // TODO(F3a-CP6) 고른 테마를 실제로 입힌다:
-    //   1. 라이트 · 다크: styleHints()->setColorScheme(Light / Dark)로 고정, 모드도 그대로
-    //   2. 시스템: styleHints()->unsetColorScheme()으로 고정을 푼 뒤,
-    //      styleHints()->colorScheme()이 Dark면 다크 모드, 아니면 라이트 모드
-    //   3. setMode(모드) → applyColors(app)
-    //   (그래서 applyColors 안의 setColorScheme 줄은 지운다 — 시스템일 때 OS 값을 덮어쓰면 안 된다)
-    Q_UNUSED(app);
-    Q_UNUSED(theme);
+    // 고른 것(라이트 · 다크 · 시스템) → 칠할 것(라이트 · 다크). 색 구성표는 OS가 그리는 창(파일
+    // 대화상자)과 Windows 기본 팔레트가 따른다. 시스템이면 고정을 풀어야 OS 값을 읽을 수 있고,
+    // OS 설정이 바뀔 때 colorSchemeChanged도 온다(MainWindow가 받아 이 함수를 다시 부른다).
+    QStyleHints *hints = QGuiApplication::styleHints();
+    Mode chosen = Mode::Light;
+    if (theme == AppState::Theme::System) {
+        hints->unsetColorScheme();
+        chosen = hints->colorScheme() == Qt::ColorScheme::Dark ? Mode::Dark : Mode::Light;
+    } else {
+        chosen = theme == AppState::Theme::Dark ? Mode::Dark : Mode::Light;
+        hints->setColorScheme(chosen == Mode::Dark ? Qt::ColorScheme::Dark
+                                                   : Qt::ColorScheme::Light);
+    }
+    setMode(chosen);
+    applyColors(app);
 }
 
 QFont font(const char *family, int pixelSize, QFont::Weight weight)
@@ -211,7 +206,6 @@ QFont font(const char *family, int pixelSize, QFont::Weight weight)
 namespace com::yamada::studio::tok {
 const Palette &palette()
 {
-    // TODO(F3a-CP2) theme::mode()가 Dark면 kDark, 아니면 kLight
-    return kLight;
+    return theme::mode() == theme::Mode::Dark ? kDark : kLight;
 }
 } // namespace com::yamada::studio::tok

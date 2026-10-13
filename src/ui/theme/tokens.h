@@ -203,11 +203,20 @@ inline constexpr Palette kLight {
 };
 
 // 다크 = 라이트를 복사한 뒤 dark::의 값만 덮어쓴다(핸드오프에 있는 11개. 나머지는 F3b)
-// TODO(F3a-CP1) constexpr 람다로: 1. Palette p = kLight;
-//   2. p.paper = dark::kPaper; … dark:: 상수 11개를 같은 이름의 필드에 (kRaised는 필드 없음 →
-//   건너뜀)
-//   3. return p;   — 모양: inline constexpr Palette kDark = [] { /* ? */ }();
-inline constexpr Palette kDark = kLight;
+inline constexpr Palette kDark = [] {
+    Palette p = kLight;
+    p.red = dark::kRed;
+    p.white = dark::kWhite;
+    p.paper = dark::kPaper;
+    p.paperAlt = dark::kPaperAlt;
+    p.ink = dark::kInk;
+    p.text1 = dark::kText1;
+    p.text2 = dark::kText2;
+    p.text3 = dark::kText3;
+    p.line = dark::kLine;
+    p.lineSoft = dark::kLineSoft;
+    return p;
+}();
 
 // 지금 테마의 팔레트(theme.cpp — theme::setMode가 바꾼다). 기본은 kLight
 const Palette &palette();
@@ -230,8 +239,7 @@ public:
         : m_fixed(fixed)
     {
     }
-    // TODO(F3a-CP3) 역할이면 지금 팔레트(palette())에서 읽는다. 지금은 늘 라이트에서 읽는다
-    QRgb rgb() const { return m_role ? kLight.*m_role : m_fixed; }
+    QRgb rgb() const { return m_role ? palette().*m_role : m_fixed; }
 
 private:
     Role m_role = nullptr;

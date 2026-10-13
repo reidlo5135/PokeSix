@@ -78,23 +78,42 @@ void ThemeSwitch::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
-    // TODO(F3a-CP5) 세 칸을 그린다 — 색은 모두 tok::palette()에서:
-    //   1. 틀: 둥근 네모(kRadius) 바탕 + 먹선 kBorder — 세대 버튼과 같은 모양
-    //   2. 고른 칸(indexOf(m_theme))만 바탕을 칠한다 → segmentRect로 자리를 얻는다
-    //   3. 마우스가 올라간 칸(m_hover)은 옅게 칠한다(고른 칸이면 건너뜀)
-    //   4. 칸마다 아이콘: icon(i, 색) → 칸 가운데에 drawPixmap. 고른 칸과 아닌 칸의 색을 다르게
-    //   5. 칸 사이 세로 금(1px)은 선택 — 있으면 칸이 더 또렷하다
-    //   크기는 논리 px — pixmap은 devicePixelRatio가 들어 있어 가운데를 잡을 때 kIconSize로 계산
-    Q_UNUSED(painter);
+    const tok::Palette &c = tok::palette();
+
+    // 틀: 흰 바탕 + 먹선 2 — 세대 버튼과 같은 모양. 선 두께의 반(1)만큼 안으로 들여 그린다
+    painter.setPen(QPen(QColor(c.ink), kBorder));
+    painter.setBrush(QColor(c.white));
+    painter.drawRoundedRect(QRectF(rect()).adjusted(1, 1, -1, -1), kRadius, kRadius);
+
+    // 칸 칠하기는 틀 안쪽 둥근 네모로 자른다 — 양 끝 칸의 모서리가 틀 밖으로 삐져나오지 않게
+    QPainterPath clip;
+    clip.addRoundedRect(QRectF(rect()).adjusted(kBorder, kBorder, -kBorder, -kBorder),
+                        kRadius - kBorder, kRadius - kBorder);
+    painter.setClipPath(clip);
+
+    // 고른 칸만 먹색 + 흰 아이콘(사진 속 스위치처럼), 나머지는 회색 아이콘. 마우스가 오르면 옅은
+    // 노랑
+    const int selected = indexOf(m_theme);
+    for (int i = 0; i < kSegments; ++i) {
+        const QRect r = segmentRect(i);
+        if (i == selected)
+            painter.fillRect(r, QColor(c.ink));
+        else if (i == m_hover)
+            painter.fillRect(r, QColor(c.yellowTint));
+        if (i > 0) // 칸 사이 금
+            painter.fillRect(QRect(r.left(), r.top(), 1, r.height()), QColor(c.line));
+        const QPointF topLeft = QRectF(r).center() - QPointF(kIconSize / 2.0, kIconSize / 2.0);
+        painter.drawPixmap(topLeft, icon(i, i == selected ? c.onColor : c.text2));
+    }
 }
 
 void ThemeSwitch::mousePressEvent(QMouseEvent *event)
 {
-    // TODO(F3a-CP5) 누른 자리의 칸(segmentAt(event->position().toPoint()))을 찾아서
-    //   1. 칸 밖(−1)이거나 왼쪽 버튼이 아니면 그냥 return
-    //   2. themeSelected(themeAt(칸))을 보낸다 — m_theme은 여기서 바꾸지 않는다
-    //      (AppState가 저장한 뒤 themeChanged → MainWindow가 setTheme으로 돌려준다)
-    Q_UNUSED(event);
+    // 고름만 알린다 — m_theme은 AppState가 저장한 뒤 themeChanged → setTheme으로 돌아와 바뀐다
+    const int i = segmentAt(event->position().toPoint());
+    if (i < 0 || event->button() != Qt::LeftButton)
+        return;
+    emit themeSelected(themeAt(i));
 }
 
 void ThemeSwitch::mouseMoveEvent(QMouseEvent *event)
