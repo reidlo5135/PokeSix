@@ -148,10 +148,9 @@ QWidget *FirstRunPanel::buildFailedPage()
     // ⚠ 아이콘 + 제목 한 줄
     QHBoxLayout *title = new QHBoxLayout;
     title->setSpacing(8);
-    QLabel *icon = new QLabel;
-    icon->setPixmap(svgicon::pixmap(svgWithColor(kWarningSvg, tok::palette().red), kWarningSize,
-                                    devicePixelRatioF()));
-    title->addWidget(icon);
+    m_warningIcon = new QLabel;
+    refreshWarningIcon();
+    title->addWidget(m_warningIcon);
     m_failedTitle = makeLabel(tr("데이터를 받지 못했어요"), "firstRunFailedTitle");
     title->addWidget(m_failedTitle);
     title->addStretch();
@@ -229,5 +228,17 @@ void FirstRunPanel::paintEvent(QPaintEvent *event)
     Q_UNUSED(event);
     QPainter painter(this);
     paintPanel(painter, rect(), m_state == State::Failed ? kFailed : kNormal);
+}
+void FirstRunPanel::refreshWarningIcon()
+{
+    m_warningIcon->setPixmap(svgicon::pixmap(svgWithColor(kWarningSvg, tok::palette().red),
+                                             kWarningSize, devicePixelRatioF()));
+}
+
+void FirstRunPanel::changeEvent(QEvent *event)
+{
+    QWidget::changeEvent(event);
+    if (event->type() == QEvent::StyleChange && m_warningIcon) // 테마가 바뀌었다
+        refreshWarningIcon();
 }
 } // namespace com::yamada::studio

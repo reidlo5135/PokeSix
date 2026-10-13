@@ -304,14 +304,8 @@ QWidget *SquadPage::buildTopBar()
         button->setObjectName(QStringLiteral("squadIconButton"));
         button->setCursor(Qt::PointingHandCursor);
         button->setToolTip(tip);
-        const auto colored = [svg](QRgb color) {
-            return QString::fromLatin1(svg).arg(QColor(color).name());
-        };
-        QIcon icon = svgicon::icon(colored(tok::palette().text1), 20, devicePixelRatioF());
-        icon.addPixmap(svgicon::pixmap(colored(tok::palette().text3), 20, devicePixelRatioF()),
-                       QIcon::Disabled);
-        button->setIcon(icon);
         button->setIconSize(QSize(20, 20));
+        m_toolIcons.append({button, svg}); // 아이콘은 refreshToolIcons가 지금 팔레트로 칠한다
         layout->addWidget(button);
         return button;
     };
@@ -321,6 +315,7 @@ QWidget *SquadPage::buildTopBar()
     connect(m_redoButton, &QToolButton::clicked, m_session, &SquadSession::redo);
     m_clearButton = iconButton(kClearSvg,
                                tr("일괄 비우기 — 멤버와 비전셔틀을 모두 비워요(되돌릴 수 있어요)"));
+    refreshToolIcons();
     connect(m_clearButton, &QToolButton::clicked, m_session, &SquadSession::clearAll);
     layout->addStretch();
     // 공유 묶음: 스쿼드를 파일로 주고받거나(불러오기 · 내보내기) 이미지로 공유한다
@@ -1740,5 +1735,25 @@ void SquadPage::pickItem(int slot)
     if (picker.exec() != QDialog::Accepted)
         return;
     m_session->setItem(slot, picker.chosenRow() < 0 ? 0 : rows.at(picker.chosenRow()).id);
+}
+void SquadPage::refreshToolIcons()
+{
+    // 색을 입혀 만든 아이콘은 테마를 따라가지 않는다 → 처음과 테마가 바뀔 때 지금 팔레트로 만든다
+    for (const auto &[button, svg] : std::as_const(m_toolIcons)) {
+        const auto colored = [svg](QRgb color) {
+            return QString::fromLatin1(svg).arg(QColor(color).name());
+        };
+        QIcon icon = svgicon::icon(colored(tok::palette().text1), 20, devicePixelRatioF());
+        icon.addPixmap(svgicon::pixmap(colored(tok::palette().text3), 20, devicePixelRatioF()),
+                       QIcon::Disabled);
+        button->setIcon(icon);
+    }
+}
+
+void SquadPage::changeEvent(QEvent *event)
+{
+    QWidget::changeEvent(event);
+    if (event->type() == QEvent::StyleChange) // theme::applyColors가 app.qss를 다시 입혔다
+        refreshToolIcons();
 }
 } // namespace com::yamada::studio

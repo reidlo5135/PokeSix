@@ -61,6 +61,7 @@ protected:
     // 스크롤 viewport의 크기 변화를 엿본다 — SquadPage::resizeEvent 시점에는 viewport가 아직
     // 옛 크기라서, 카드 높이를 거기서 재면 분석 창과 바닥이 어긋난다
     bool eventFilter(QObject *watched, QEvent *event) override;
+    void changeEvent(QEvent *event) override; // 테마가 바뀌면 도구 아이콘을 다시 칠한다
 
 private:
     QWidget *buildTopBar();
@@ -127,6 +128,9 @@ private:
     QLabel *m_count = nullptr;
     QPushButton *m_shuttleButton = nullptr; // [비전셔틀 · 잠만보] — 누르면 셔틀 창
     QToolButton *m_undoButton = nullptr;    // 되돌리기 ↶
+    QList<std::pair<QToolButton *, const char *>>
+            m_toolIcons; // 도구 버튼과 그 아이콘(svg, %1 = 색)
+    void refreshToolIcons();
     QToolButton *m_redoButton = nullptr;    // 다시 실행 ↷
     QToolButton *m_clearButton = nullptr;   // 일괄 비우기 ⟳
     QLabel *m_saveStatus = nullptr;

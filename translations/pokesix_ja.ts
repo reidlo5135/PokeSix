@@ -1623,6 +1623,21 @@
     </message>
 </context>
 <context>
+    <name>com::yamada::studio::ThemeSwitch</name>
+    <message>
+        <source>라이트</source>
+        <translation>ライト</translation>
+    </message>
+    <message>
+        <source>다크</source>
+        <translation>ダーク</translation>
+    </message>
+    <message>
+        <source>시스템 설정 따르기</source>
+        <translation>システム設定に合わせる</translation>
+    </message>
+</context>
+<context>
     <name>com::yamada::studio::TownMapPage</name>
     <message>
         <source>타운맵 백과</source>

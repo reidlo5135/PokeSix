@@ -1,5 +1,7 @@
 #pragma once
 
+#include "data/state/appstate.h"
+
 #include <QFont>
 #include <QString>
 
@@ -18,8 +20,11 @@ enum class Mode { Light, Dark };
 // tok::palette()가 돌려줄 팔레트를 바꾼다. 이미 입힌 QSS · 앱 팔레트는 그대로 — applyColors로 다시
 void setMode(Mode mode);
 Mode mode();
-// 색만 다시 입힌다: 앱 QPalette · 색 구성표(라이트/다크) · app.qss의 @이름 → 지금 팔레트
+// 색만 다시 입힌다: 앱 QPalette · app.qss의 @이름 → 지금 팔레트
 void applyColors(QApplication &app);
+// 사용자가 고른 테마(라이트 · 다크 · 시스템)를 입힌다: 색 구성표 → 모드 → applyColors.
+// 시작할 때(apply) · 앱 막대의 테마 스위치 · 시스템을 골랐을 때 OS 설정이 바뀌면(MainWindow)
+void applyTheme(QApplication &app, AppState::Theme theme);
 
 // QSS 문자열 안의 @이름(예: @red.deep)을 지금 팔레트의 #RRGGBB로 바꾼다. 모르는 이름은 그대로 두고
 // 로그를 남긴다.

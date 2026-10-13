@@ -1,15 +1,19 @@
-# F3a — 런타임 팔레트: `--theme dark`로 어둡게 띄우기
+# F3a — 런타임 팔레트와 앱 막대의 테마 스위치
 
 > 학습 루프 ① 가이드. 브랜치: `feat/f3a-runtime-palette` (Claude가 만들어 둠)
 > 뼈대 · 테스트 · **기계적 치환(552곳)은 끝나 있다.** `// TODO(F3a-CPn)`만 채우면 된다. 빈칸이 있어도 빌드된다.
-> 결정 근거: [ADR 0020](../decisions/0020-runtime-palette.md). 다음: F3b(빠진 다크 값) → F2'(실행 중 전환 + 앱 막대 3칸)
+> 결정 근거: [ADR 0020](../decisions/0020-runtime-palette.md). 다음: F3b(빠진 다크 값)
 
 ## 무엇을 만드나
 
-```bash
-build/linux-debug/src/PokeSix --theme dark
 ```
-이 한 줄로 앱이 **어두운 테마로 뜨게** 한다. 실행 중에 바꾸는 버튼은 F2'에서 — 이번에는 "색이 한 곳에서 바뀌는 구조"를 완성하는 단계다.
+ 앱 막대                                              ┌────┬────┬────┐ ┌────────┐
+ [◉ POKESIX] [도감] [아이템] [타운맵] [스쿼드] [설정]   │ ☀  │ ☾  │ 🖥 │ │ 4세대 ▾ │
+                                                     └────┴────┴────┘ └────────┘
+                                                      라이트 다크 시스템
+```
+
+세대 버튼 바로 왼쪽의 세 칸으로 **실행 중에** 라이트 · 다크 · 시스템(OS 설정을 따름)을 바꾼다. 고른 값은 저장돼서 다음 실행도 그 테마로 뜬다.
 
 ### 이미 바뀐 것 (Claude)
 
@@ -25,20 +29,26 @@ build/linux-debug/src/PokeSix --theme dark
 | `tok::palette()` | 지금 테마의 팔레트를 돌려준다 — **이번에 채울 곳** | `src/ui/theme/theme.cpp` |
 | `onColor` | 색 위의 흰 글자 전용 칸(빨강 버튼 글자, 패널 머리 제목). `white`는 이제 "바탕"만 | tokens.h · `app.qss`의 `@on.color` |
 | `tok::Color` | `PanelStyle`처럼 색을 오래 들고 있는 곳이 담는 것 — 값이 아니라 "팔레트의 어느 칸" | tokens.h |
+| `AppState::Theme` | 고른 테마(라이트 · 다크 · 시스템) 저장 · `themeChanged` — 세대와 같은 방식 | `src/data/state/appstate.*` |
+| `ThemeSwitch` | 앱 막대의 세 칸 위젯. 칸 자리 · 아이콘 · 툴팁 · hover는 됨, **그리기와 누르기가 이번에 채울 곳** | `src/ui/shell/themeswitch.*` |
+| 연결 | 스위치 → AppState → 스위치 표시 + `theme::applyTheme`, OS 설정이 바뀌면(시스템일 때) 다시 | `mainwindow.cpp` |
+| 굳은 아이콘 | 색을 입혀 만든 아이콘(탭 · 스쿼드 도구 · 검색 · ⚠)이 테마를 따라 다시 칠해지게 | 각 위젯 `changeEvent(StyleChange)` |
 
 라이트 화면은 하나도 안 바뀌었다(0.4.1과 픽셀 비교로 확인).
 
 ## 흐름
 
 ```
-        --theme dark                    시작할 때 한 번
-  CP5 ─────────────▶ theme::setMode(Dark) ──▶ theme::apply(app)
-                          │  CP2                  │  CP4: applyColors
-                          ▼                       ▼
-                    tok::palette() ──▶ kDark   앱 QPalette · 색 구성표 · app.qss(@이름 → 값, CP3)
-                          │              CP1
-                          ▼
-              모든 paintEvent: tok::palette().text1 …  → 어두운 화면
+ 시작할 때                                         실행 중
+ theme::apply(app)                                 [☾] 클릭 ─▶ ThemeSwitch::themeSelected   (CP5)
+  └ applyTheme(app, AppState::savedTheme())  (CP6)        ─▶ AppState::setTheme (저장)
+                                                          ─▶ themeChanged ─▶ theme::applyTheme   (CP6)
+
+ applyTheme(app, 고른 테마)                                                                  (CP6)
+  ├ 색 구성표: 라이트 · 다크는 고정 / 시스템은 풀고 OS 값을 읽는다
+  ├ setMode(라이트 | 다크) ──▶ tok::palette() ──▶ kLight | kDark               (CP2 · CP1)
+  └ applyColors(app): 앱 QPalette · app.qss(@이름 → 지금 팔레트 값)            (CP4 · CP3)
+       └ app.setStyleSheet → 모든 위젯이 다시 다듬어지고 다시 그려진다 → paintEvent가 새 팔레트를 읽는다
 ```
 
 | | 체크포인트 | 파일 | 배우는 것 |
@@ -46,8 +56,9 @@ build/linux-debug/src/PokeSix --theme dark
 | ⬜ | **CP1 다크 팔레트** | `tokens.h` | `constexpr` 람다로 "복사 + 몇 칸 덮어쓰기" |
 | ⬜ | **CP2 지금 모드** | `theme.cpp` | 파일 안에만 보이는 상태(익명 namespace), 모드 → 팔레트 |
 | ⬜ | **CP3 역할로 읽기** | `theme.cpp` · `tokens.h` | 멤버 포인터 `.*` |
-| ⬜ | **CP4 색 입히기 떼어 내기** | `theme.cpp` | `QPalette` · `QStyleHints::setColorScheme` · QSS 다시 입히기 |
-| ⬜ | **CP5 `--theme` 옵션** | `src/app/application.cpp` | (복습) `QCommandLineParser` |
+| ⬜ | **CP4 색 입히기 떼어 내기** | `theme.cpp` | `QPalette` · QSS 다시 입히기 |
+| ⬜ | **CP5 테마 스위치 그리기 · 누르기** | `src/ui/shell/themeswitch.cpp` | (복습) `paintEvent` · 클리핑, 마우스 이벤트 → 시그널 |
+| ⬜ | **CP6 고른 테마 입히기** | `theme.cpp` | `QStyleHints` 색 구성표(고정 ↔ 시스템 따르기) |
 
 지금 상태: `tests/ui/theme_test.cpp`의 4개가 빨강.
 
@@ -180,7 +191,6 @@ QSS 이름표와 `tok::Color`는 색 **값**이 아니라 **팔레트의 어느 
 apply(app)            ── 시작할 때 한 번
  ├ loadBundledFonts()
  └ applyColors(app)   ── F2'에서 테마를 바꿀 때 이것만 다시 부른다
-     ├ 색 구성표(라이트/다크)
      ├ 앱 QPalette (tok::palette()로)
      └ app.qss 다시 읽어 치환 → setStyleSheet
 ```
@@ -188,7 +198,7 @@ apply(app)            ── 시작할 때 한 번
 ### 알아 둘 것
 
 - **`QStyleHints::setColorScheme`**: Qt에게 "이 앱은 라이트/다크다"라고 알린다. 파일 대화상자 같은 **OS가 그리는 창**과
-  Windows의 기본 팔레트가 이걸 따른다. 지금은 늘 `Light`로 고정 — `mode()`를 따르게 바꾼다
+  Windows의 기본 팔레트가 이걸 따른다. → 이 줄은 CP6에서 `applyTheme`으로 옮긴다(시스템을 고르면 고정을 풀어야 해서)
 - **`app.setStyleSheet(…)`를 다시 부르면** 모든 위젯이 새 스타일로 다시 다듬어진다(polish). 같은 문자열이면 아무 일도 안 한다
 - 팔레트 색 줄(`palette.setColor(…, QColor(tok::palette().paper))`)은 이미 `tok::palette()`를 읽는다 — 옮기기만 하면 된다
 
@@ -206,56 +216,109 @@ void apply(QApplication &app)
 
 ### 확인
 
-빌드 · 테스트 그대로 초록, 라이트로 띄운 앱이 전과 같다(CP5 전이라 아직 다크로 띄울 방법은 없다).
+빌드 · 테스트 그대로 초록, 라이트로 띄운 앱이 전과 같다(다크로 띄우는 건 CP5 · CP6 뒤).
 
 ---
 
-## CP5 — `--theme` 옵션 (`TODO(F3a-CP5)`, application.cpp)
+## CP5 — 테마 스위치 그리기 · 누르기 (`TODO(F3a-CP5)`, themeswitch.cpp)
 
 ### 아이디어
 
-시작 순서가 중요하다: **모드를 먼저 정하고 → 색을 입히고 → 위젯을 만든다.**
+세 칸이 붙은 버튼 하나다. 칸 자리(`segmentRect`), 아이콘(`icon(i, 색)`), 마우스 위치의 칸(`segmentAt`), 툴팁 · hover(`m_hover`)는
+준비돼 있다. **그리기와 누르기만** 채운다.
 
 ```
-run()
- ├ parseArguments()   ← 여기서 setMode(Dark)   (CP5)
- └ buildObjects()
-     ├ theme::apply(app)  ← 다크 팔레트로 QSS · QPalette
-     └ MainWindow 생성    ← 생성자에서 굳히는 색까지 다크로
+ kBorder 2 ┌──────────┬──────────┬──────────┐
+           │    ☀     │▓▓▓ ☾ ▓▓▓│    🖥    │   ▓ = 고른 칸(m_theme) — 바탕을 칠하고 아이콘 색을 바꾼다
+           │          │▓▓▓▓▓▓▓▓▓│          │   ░ = 마우스가 올라간 칸(m_hover) — 옅게
+           └──────────┴──────────┴──────────┘
+             칸 0        칸 1        칸 2       segmentRect(i) = 먹선 안쪽의 한 칸(34 × 32)
 ```
 
-위젯을 만들기 전에 모드를 정하니, 생성 때 색을 굳혀 두는 곳(아이콘 색칠 등)도 이번에는 문제가 없다. 실행 중 전환(F2')에서 다시 다룬다.
+모양은 자유. 참고: 사진처럼 **고른 칸만 진하게**(예: 바탕 `ink` + 아이콘 `onColor`), 나머지는 바탕 `white` + 아이콘 `text2`,
+hover는 `yellowTint`. 색은 모두 `tok::palette()`에서 — 그래야 다크로 바뀌면 스위치도 같이 바뀐다.
+
+누르면: 스위치는 **고름만 알린다**(`themeSelected`). `m_theme`을 직접 바꾸지 않는다 — AppState가 저장한 뒤
+`themeChanged`가 돌아와 `setTheme`이 표시를 바꾼다. 세대 버튼과 같은 말투다(ROS 2로 치면 요청 토픽 → 노드 → 상태 토픽).
 
 ### 알아 둘 것
 
-- 바로 위 `languageOption`과 같은 모양이다(이름 · 설명 · 값 이름 · 기본값)
-- 잘못된 값은 `usageError(…)` + `return false` → `run()`이 사용법 오류 코드로 끝낸다(`--screenshot`의 잘못된 화면 이름과 같은 처리)
+- 틀 모양: `drawRoundedRect` + 먹선. 테 두께의 반만큼 안으로 들여 그려야 선이 잘리지 않는다(`QRectF(rect()).adjusted(1, 1, -1, -1)`)
+- 고른 칸을 칠하면 모서리가 틀 밖으로 삐져나온다 → `setClipPath`(틀 안쪽 둥근 네모)로 자른 뒤 칠한다
+- `icon()`이 주는 pixmap은 논리 크기 `kIconSize`(18). 가운데: `r.center() - QPointF(kIconSize / 2.0, kIconSize / 2.0)`
+- `event->button() == Qt::LeftButton`, 위치는 `event->position().toPoint()`
 
 ### 시작 코드
 
 ```cpp
-const QCommandLineOption themeOption(QStringLiteral("theme"), QStringLiteral(/* ? 설명 */),
-                                     QStringLiteral("mode"), QStringLiteral("light"));
-// parser.process 뒤:
-const QString theme = parser.value(themeOption);
-if (theme == QLatin1String("dark")) { /* ? */ }
-else if (theme != QLatin1String("light")) { /* ? usageError + return false */ }
+const tok::Palette &c = tok::palette();   // 긴 이름을 한 번만
+const int selected = indexOf(m_theme);
+for (int i = 0; i < kSegments; ++i) {
+    const QRect r = segmentRect(i);
+    if (i == selected) { /* ? 바탕 */ }
+    painter.drawPixmap(/* ? 가운데 */, icon(i, /* ? 고른 칸이면 … */));
+}
 ```
 
 ### 확인
 
-```bash
-build/linux-debug/src/PokeSix --theme dark
-build/linux-debug/src/PokeSix --theme dark --screenshot squad 1440x900 /tmp/squad-dark.png
-build/linux-debug/src/PokeSix --theme blue      # → error: … 종료 코드 2
+앱을 띄우면 세대 버튼 왼쪽에 세 칸, 처음에는 🖥(시스템)가 골라져 있다. 칸 위에 마우스 → 옅게 + 툴팁.
+누르면 아직 아무 일도 안 일어난다 — 저장은 되지만(`~/.config/YamadaStudio/PokeSix.ini`의 `theme=`) 색을 입히는 CP6가 비어 있다.
+(스위치 표시는 바뀐다: `themeChanged` → `setTheme`)
+
+---
+
+## CP6 — 고른 테마 입히기 (`TODO(F3a-CP6)`, theme.cpp)
+
+### 아이디어
+
+"고른 것"(라이트 · 다크 · 시스템)과 "칠할 것"(라이트 · 다크)은 다르다. 시스템이면 **지금 OS가 어느 쪽인지** 물어서 정한다.
+
+```
+ 고른 테마 ──┬─ 라이트 ─▶ 색 구성표 Light 고정 ─────────────┐
+            ├─ 다크  ─▶ 색 구성표 Dark 고정 ──────────────┼─▶ setMode(모드) ─▶ applyColors(app)
+            └─ 시스템 ─▶ 고정을 풂 → OS 값(colorScheme()) ─┘
 ```
 
-**보이는 것**: 바탕 · 패널 · 표 · 글자가 어둡게, 빨강 · 파랑 머리와 타입 칩은 그대로.
-**아직 어색한 것(정상 — F3b 몫)**: 세대 버튼 · "4세대 규칙" 알약 · 버전 칩처럼 연한 색 위의 글자, 필터 타입 칩, 히트맵 연한 칸.
-라이트 값 그대로인 40여 칸이 어두운 바탕 위에 있기 때문이다.
+시스템을 고른 채로 OS 설정을 바꾸면 Qt가 `QStyleHints::colorSchemeChanged`를 보낸다 → MainWindow가 `applyTheme(System)`을 다시 부른다(연결은 돼 있다).
+
+할 일 둘:
+
+1. `applyTheme` 몸통 (TODO 순서대로)
+2. `apply`의 `applyColors(app)` 한 줄을 `applyTheme(app, AppState::savedTheme())`로 — 시작할 때부터 저장된 테마로.
+   그리고 CP4에서 `applyColors`에 넣은 `setColorScheme` 줄은 지운다(1이 대신한다)
+
+### 알아 둘 것
+
+- **`setColorScheme(x)`는 OS 값을 덮어쓴다.** 덮어쓴 동안 `colorScheme()`은 x를 돌려준다 → 시스템일 때는 먼저
+  `unsetColorScheme()`(Qt 6.8)으로 풀어야 OS 값을 읽을 수 있다
+- 되먹임 걱정 없음: 라이트 · 다크에서 `setColorScheme`이 `colorSchemeChanged`를 보내도 MainWindow는 "지금 시스템인가"를 보고 무시한다
+- 시작할 때(`apply`)는 위젯이 아직 없다 → 생성자에서 색을 굳히는 곳까지 처음부터 맞다. 실행 중 전환은 `app.setStyleSheet`가
+  모든 위젯에 `QEvent::StyleChange`를 보내 다시 그리게 한다. 색을 입혀 만든 아이콘은 그 이벤트에서 다시 만든다(Claude가 해 둠)
+
+### 시작 코드
+
+```cpp
+QStyleHints *hints = QGuiApplication::styleHints();
+Mode mode = /* ? theme이 Dark면 Dark, 아니면 Light */;
+if (theme == AppState::Theme::System) {
+    /* ? 풀고 → OS 값으로 mode */
+} else {
+    hints->setColorScheme(/* ? */);
+}
+/* ? setMode → applyColors */
+```
+
+### 확인
+
+- 클릭: ☾ → 화면 전체가 바로 어두워진다, ☀ → 돌아온다. 앱을 끄고 다시 켜면 마지막에 고른 테마로 뜬다
+- 🖥: OS 설정(Ubuntu: 설정 → 모양 → 어둡게 · Windows: 개인 설정 → 색 → 모드)을 바꾸면 앱이 따라간다
+- **아직 어색한 것(정상 — F3b 몫)**: 세대 버튼 · "4세대 규칙" 알약 · 버전 칩처럼 연한 색 위의 글자, 필터 타입 칩, 히트맵 연한 칸.
+  라이트 값 그대로인 40여 칸이 어두운 바탕 위에 있기 때문이다
 
 ---
 
 ## 끝나면
 
-"F3a 진단해줘" → Claude가 확인한다: 테스트 · 라이트 픽셀 비교 · 다크 캡처 · `--theme` 오류 처리. 그다음 F3b(빠진 다크 값 제안 → 캡처로 같이 보기).
+"F3a 진단해줘" → Claude가 확인한다: 테스트 · 라이트 픽셀 비교 · "시작할 때 다크"와 "실행 중 다크로 전환"의 캡처가 같은지 · 시스템 모드.
+그다음 F3b(빠진 다크 값 제안 → 캡처로 같이 보기).

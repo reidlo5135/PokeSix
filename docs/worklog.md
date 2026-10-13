@@ -33,7 +33,10 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
 
 - **AppImage 자기 등록 — 완료 · merge**(Claude 구현 — 사용자 결정 2026-10-13). 사용자 PC(Ubuntu GNOME)에서 메뉴 항목이 지워진 상태로 새 AppImage를 한 번 실행 → 앱 메뉴에 생김 확인.
   다음: v0.4.1 push(사용자) → **테마 전환**(열린 일 8).
-- **F3a 런타임 팔레트 — 사용자 구현 대기**(브랜치 `feat/f3a-runtime-palette`, [가이드](guides/f3a-runtime-palette.md), [ADR 0020](decisions/0020-runtime-palette.md)).
+- **F3a 런타임 팔레트 + 테마 스위치 — 사용자 구현 중(CP1–CP4 해 옴, 2026-10-13)**. 사용자 지적으로 CP5를 `--theme` 옵션 → **앱 막대 스위치**로 바꿈
+  (처음 요청이 버튼이었는데 내가 F2'로 미루고 CLI를 끼워 넣었다 — 설명 없이 바꾸지 말 것). CP5 스위치 그리기 · 누르기, CP6 `applyTheme`(시스템 모드).
+  실행 중 전환은 참조 구현으로 확인: 시작-다크와 전환-다크 캡처가 6화면 픽셀 동일(굳은 아이콘 4곳은 Claude가 `changeEvent(StyleChange)`로).
+  커밋 주의: 작업 트리의 `theme.cpp`에 사용자 CP와 Claude 뼈대가 섞여 있어 Claude 몫만 index에 따로 올려 커밋했다(브랜치 `feat/f3a-runtime-palette`, [가이드](guides/f3a-runtime-palette.md), [ADR 0020](decisions/0020-runtime-palette.md)).
   뼈대 · 테스트(`tests/ui`, 빨강 4) · 기계적 치환(552곳 → `tok::palette()`, white 74 + QSS 21곳 분류 → `onColor` 28 + QSS 5줄)은 Claude.
   라이트 픽셀 비교 0.4.1과 동일(인트로 버전 글자만), 참조 구현으로 다크 캡처 확인 → F3b 대상: 세대 버튼 · 규칙 알약 · 버전 칩의 연한 바탕 글자, 필터 타입 칩, 히트맵 연한 칸.
   `homepage.cpp` 정렬 변경은 `git stash`에 보관(stash@{0}) — 이 브랜치의 치환과 섞이지 않게. 포맷은 `git clang-format`(바꾼 줄만)

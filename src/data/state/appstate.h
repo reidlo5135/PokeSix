@@ -22,6 +22,9 @@ namespace com::yamada::studio {
 // 롬이라 스쿼드가 따로 있고, 버전 한정 포켓몬 · 아이템이 다르다. 세대를 바꾸면 그 세대에서 마지막에
 // 고른 버전으로 돌아간다. 빈 칸 = 아직 안 골랐다(Repository::resolveVersion이 대표 게임을 고른다).
 //
+// 테마(F3a): 라이트 · 다크 · 시스템(OS 설정을 따름) 중 사용자가 고른 것. 실제로 칠할 색을 정하는 일
+// (시스템 → 지금 OS가 다크인가)은 ui가 한다 — data는 "무엇을 골랐나"만 저장하고 알린다.
+//
 // 언어: 게임 데이터 이름(포켓몬 · 아이템 · 기술 · 지방 · 효과 문구)은 languageChanged를 받은 화면이
 // 바로 바꿔 그린다. 화면 문구(tr() — 버튼 · 제목)는 앱을 시작할 때 번역 파일을 한 번 불러 정한다
 // (main.cpp). 실행 중에 바꾼 언어는 화면 문구에는 다음 실행부터 적용된다.
@@ -53,13 +56,22 @@ public:
     static Language savedLanguage();
     static void saveLanguage(Language language);
 
+    enum class Theme { Light, Dark, System };
+    Q_ENUM(Theme)
+    Theme theme() const { return m_theme; }
+    void setTheme(Theme theme); // 같은 값이면 시그널 없음
+    // 저장된 테마(앱 시작 때 위젯을 만들기 전에 색을 정하려고 읽는다). 없으면 System
+    static Theme savedTheme();
+
 signals:
     void generationChanged(int generation); // 게임도 그 세대의 것으로 바뀐다(gameChanged는 없다)
     void gameChanged(const QString &version); // 같은 세대 안에서 버전만 바꿨다
     void languageChanged(com::yamada::studio::Language language);
+    void themeChanged(com::yamada::studio::AppState::Theme theme);
 
 private:
     int m_generation = kDefaultGeneration;
     Language m_language = Language::Korean;
+    Theme m_theme = Theme::System;
 };
 } // namespace com::yamada::studio

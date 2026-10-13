@@ -26,15 +26,19 @@
    타입 색처럼 테마와 무관한 색은 고정 색으로 넣는다
 6. **QSS 이름표도 역할로**(`{"red.deep", &tok::Palette::redDeep}`) — 표 하나로 두 테마. `theme::applyColors`가 앱 `QPalette` ·
    색 구성표 · QSS를 지금 팔레트로 다시 입힌다
-7. **순서**: F3a 시작할 때 모드 고르기(`--theme dark`) → F3b 빠진 다크 값 → F2' 실행 중 전환 + 앱 막대 3칸 + 시스템 모드
+7. **고르는 곳은 앱 막대의 세 칸(라이트 · 다크 · 시스템) 하나**, 세대 버튼 바로 왼쪽(사용자 결정). 명령행 옵션은 두지 않는다.
+   고른 값은 data의 `AppState::Theme`(QSettings `theme`)이 저장하고, 칠할 모드를 정하는 일(시스템 → OS가 다크인가)은 ui의 `theme::applyTheme`이 한다.
+   시스템이면 `QStyleHints::unsetColorScheme`으로 고정을 풀고 `colorSchemeChanged`를 따라간다
+8. **실행 중 전환**: `app.setStyleSheet`가 모든 위젯에 `QEvent::StyleChange`를 보내 다시 그리게 한다. 색을 입혀 만든 아이콘
+   (탭 · 스쿼드 도구 · 검색 · ⚠)은 그 이벤트(`changeEvent`) 또는 그릴 때 색이 바뀐 걸 보고 다시 만든다
+9. **순서**: F3a(팔레트 + 스위치 + 실행 중 전환 + 시스템) → F3b(빠진 다크 값)
 
 ## 결과
 
 - 라이트 화면은 그대로다 — 도감 · 아이템 · 타운맵 · 스쿼드 · 설정 캡처가 0.4.1과 픽셀 단위로 같다(인트로는 하단 버전 글자만 다름)
 - `paintEvent`에서 읽는 색은 테마가 바뀌어도 다시 그리기만 하면 따라온다. QSS도 `setStyleSheet`가 모든 위젯을 다시 다듬는다
 - 대가: `QColor(tok::palette().text1)`처럼 글자가 길어졌다. 한 함수에서 많이 쓰면 `const tok::Palette &c = tok::palette();`로 줄인다
-- **F2'(실행 중 전환)의 숙제** — 생성 때 색을 굳혀 두는 곳. 시작할 때 고르는 F3a에서는 문제가 없다:
-  - 색을 입혀 만든 아이콘(`svgicon` + `currentColor` 치환): 스쿼드 도구 버튼(`text1`) 등. `onColor`로 만든 것(앱 막대 · 인트로 배지 · 받기 버튼)은 흰색이라 그대로
-  - 생성 때 넣는 칩 색(`VersionChip` 조각의 `white` 바탕), `homecards`의 기본 띠 색
-  - JSON의 버전 · 분류 색(`dexstyle.json` · `itemstyle.json` · `homecards.json`) — 라이트 전용 파스텔. F3b에서 다크 값을 정한다
-  - 고치는 방법은 Qt의 `changeEvent(QEvent::PaletteChange)`(앱 팔레트가 바뀌면 모든 위젯이 받는다)에서 다시 만들기
+- 실행 중 전환 확인(참조 구현, 2026-10-13): 라이트로 띄운 뒤 다크로 바꾼 캡처가 처음부터 다크로 띄운 캡처와 픽셀 단위로 같다
+  (도감 · 아이템 · 타운맵 · 스쿼드 · 설정 · 인트로). 다르던 두 곳(활성 탭 아이콘 · 스쿼드 도구 아이콘)은 결정 8로 고쳤다
+- 남은 숙제(F3b): 생성 때 넣는 칩 색(`VersionChip` 조각의 `white` 바탕), JSON의 버전 · 분류 · 카드 색(라이트 전용 파스텔),
+  캡처에 안 잡힌 화면(상세 · 대화상자)의 굳은 색

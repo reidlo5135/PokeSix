@@ -142,6 +142,8 @@ QString substituteTokens(const QString &styleSheet)
 void apply(QApplication &app)
 {
     loadBundledFonts();
+    // TODO(F3a-CP6) 아래 applyColors(app) 대신 applyTheme(app, AppState::savedTheme())
+    //   — 시작할 때부터 저장된 테마로(위젯을 만들기 전이라 생성자에서 굳히는 색까지 맞는다)
     // TODO(F3a-CP4) 아래 "색" 부분을 applyColors로 옮기고, 여기서는 applyColors(app) 한 줄만
     //   (테마를 실행 중에 바꿀 때 F2'가 applyColors만 다시 부른다)
 
@@ -181,6 +183,18 @@ void applyColors(QApplication &app)
 {
     // TODO(F3a-CP4) apply의 "색" 부분(setColorScheme ~ setStyleSheet)이 여기로 온다
     (void)app;
+}
+
+void applyTheme(QApplication &app, AppState::Theme theme)
+{
+    // TODO(F3a-CP6) 고른 테마를 실제로 입힌다:
+    //   1. 라이트 · 다크: styleHints()->setColorScheme(Light / Dark)로 고정, 모드도 그대로
+    //   2. 시스템: styleHints()->unsetColorScheme()으로 고정을 푼 뒤,
+    //      styleHints()->colorScheme()이 Dark면 다크 모드, 아니면 라이트 모드
+    //   3. setMode(모드) → applyColors(app)
+    //   (그래서 applyColors 안의 setColorScheme 줄은 지운다 — 시스템일 때 OS 값을 덮어쓰면 안 된다)
+    Q_UNUSED(app);
+    Q_UNUSED(theme);
 }
 
 QFont font(const char *family, int pixelSize, QFont::Weight weight)

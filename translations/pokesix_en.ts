@@ -1623,6 +1623,21 @@ abilities &amp; natures (gen 3+) and held items (gen 2+)</translation>
     </message>
 </context>
 <context>
+    <name>com::yamada::studio::ThemeSwitch</name>
+    <message>
+        <source>라이트</source>
+        <translation>Light</translation>
+    </message>
+    <message>
+        <source>다크</source>
+        <translation>Dark</translation>
+    </message>
+    <message>
+        <source>시스템 설정 따르기</source>
+        <translation>Follow system</translation>
+    </message>
+</context>
+<context>
     <name>com::yamada::studio::TownMapPage</name>
     <message>
         <source>타운맵 백과</source>

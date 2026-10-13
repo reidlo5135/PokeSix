@@ -8,6 +8,7 @@ namespace {
 constexpr char kGenerationKey[] = "generation";
 constexpr char kLanguageKey[] = "language"; // "ko" · "en" · "ja"
 constexpr char kGamesGroup[] = "games";     // games/4 = "soulsilver"
+constexpr char kThemeKey[] = "theme";       // "light" · "dark" · "system"
 } // namespace
 
 namespace com::yamada::studio {
@@ -24,6 +25,28 @@ AppState::AppState(QObject *parent)
     m_generation
             = (saved >= kMinGeneration && saved <= kMaxGeneration) ? saved : kDefaultGeneration;
     m_language = savedLanguage();
+    m_theme = savedTheme();
+}
+
+AppState::Theme AppState::savedTheme()
+{
+    const QString value = QSettings().value(kThemeKey).toString();
+    if (value == QLatin1String("light"))
+        return Theme::Light;
+    if (value == QLatin1String("dark"))
+        return Theme::Dark;
+    return Theme::System; // 처음 실행 · 모르는 값
+}
+
+void AppState::setTheme(Theme theme)
+{
+    if (theme == m_theme)
+        return;
+    m_theme = theme;
+    const char *value = theme == Theme::Light ? "light" : theme == Theme::Dark ? "dark" : "system";
+    QSettings().setValue(kThemeKey, QLatin1String(value));
+    qCInfo(lcData) << "theme" << value;
+    emit themeChanged(theme);
 }
 
 Language AppState::savedLanguage()
