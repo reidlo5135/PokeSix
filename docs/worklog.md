@@ -9,14 +9,15 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
 
 ## 지금 상태 — 2026-10-13
 
-- **`main`에 H8 merge(2026-10-13), 아직 미릴리스** — 다음 릴리스는 AppImage 자기 등록(열린 일 10)까지 넣고 전체 검증 뒤. 버전은 규칙상 0.4.0(사용자는 0.3.1을 말함 — 릴리스 때 확인)
+- **`v0.4.0`(2026-10-13, MINOR — 사용자 확인) 준비 완료 — 사용자 push 대기**: H8(가져온 멤버의 레벨 · 인게임 능력치) + AppImage 앱 메뉴 자기 등록. 릴리스 커밋 · 태그는 Linux 세션이 로컬에 만들었다.
+  `git push origin main --follow-tags` 후 확인할 것: Actions `release` 4잡 초록, Release 본문 = `docs/release-notes/v0.4.0.md` + SHA-256
 - **`v0.3.0`(2026-10-12, MINOR) 공개됨**: 5세대(BW · B2W2) 세이브 불러오기(H6). 사용자가 push했고 내려받기 확인(사용자 PC의 AppImage가 0.3.0)
 - **`v0.2.1`(2026-10-09, PATCH)**: Windows 다크 모드 검은 패널 수정 + dmg 안의 macOS 안내문. https://github.com/yamada-studio/PokeSix/releases/tag/v0.2.1 — CI가 4개 파일 첨부(msi 18.5MB · zip 18.2MB · AppImage 39.5MB · dmg 32.1MB), 노트 · SHA-256은 API로
 - **`v0.2.0` 릴리스(2026-10-09)**: https://github.com/yamada-studio/PokeSix/releases/tag/v0.2.0 — 이번에는 **CI가 Release를 스스로 만들고 4개 파일(zip · msi · AppImage · dmg)을 붙였다**(`permissions: contents: write` 확인). 노트 본문 · SHA-256만 API로 채웠다. 러너의 WiX 3.14로 msi도 나온다
 - 2026-10-09(집 Windows): 회사 세션의 H1 · H2(스키마 12)를 Windows에서 처음 돌리다 만난 **DB 교체 실패(파일 잠금)** 를 고쳤다 — [build.md §5-8](build.md#db-swap-blocked). 145 테스트 통과. Windows 패키지에 빠져 있던 MSVC 런타임을 동봉했고 msi를 실기 검증했다
 - `v0.1.0`(2026-10-07)은 Phase A 완료 태그. 그때는 조직의 read-only 토큰 때문에 Release를 손으로 올렸다
 - 원격 `origin` = github.com/yamada-studio/PokeSix. `main`과 동기화.
-- 버전 `0.3.0`. Phase B · C · D · E · T가 섞여 진행 중이고 Phase G는 "lite"(패키징 스크립트 · CI)만. 단계별 상태는 roadmap.md.
+- 버전 `0.4.0`. Phase B · C · D · E · T가 섞여 진행 중이고 Phase G는 "lite"(패키징 스크립트 · CI)만. 단계별 상태는 roadmap.md.
 
 ### 검증 매트릭스
 
@@ -30,7 +31,7 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
 ### 진행 중
 
 - **AppImage 자기 등록 — 완료 · merge**(Claude 구현 — 사용자 결정 2026-10-13). 사용자 PC(Ubuntu GNOME)에서 메뉴 항목이 지워진 상태로 새 AppImage를 한 번 실행 → 앱 메뉴에 생김 확인.
-  다음: 전체 검증 → 릴리스(0.4.0 vs 0.3.1 확인) → **테마 전환**(열린 일 8).
+  다음: v0.4.0 push(사용자) → **테마 전환**(열린 일 8).
   그 밖의 후보: 폼 표 · 세이브 파일 감시 · 전투 분석 입력 넓히기([data/battle-inputs.md](data/battle-inputs.md) §4) · Phase B · E4
 
 ### 열린 일 (작은 것부터)

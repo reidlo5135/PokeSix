@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.21)
 
 project(PokeSix
-    VERSION 0.3.0
+    VERSION 0.4.0
     DESCRIPTION "Generation-aware Pokédex and party analyzer"
     HOMEPAGE_URL "https://github.com/yamada-studio/PokeSix"
     LANGUAGES CXX)

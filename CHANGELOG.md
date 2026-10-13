@@ -6,6 +6,11 @@ and the project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-10-13
+
+Imported squad members show their level and in-game stats, and the Linux AppImage adds itself to
+the application menu. New features, so this is a MINOR bump.
+
 ### Added
 - Squad members imported from a save keep their level and in-game stats. The card title shows the
   level next to the name, and the detail view draws the in-game stats in blue over the base stats
