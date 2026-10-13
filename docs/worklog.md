@@ -61,6 +61,8 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
     `Exec`가 다를 때 다시 쓰고, 아이콘은 qrc에서 `~/.local/share/icons/hicolor/<크기>/apps/pokesix.png`로(지금 `package.sh --install`이 하는 일과 같은 결과).
     app 레이어 한 파일, `#ifdef Q_OS_LINUX`. 한계: 첫 실행은 손으로, 파일을 지우면 메뉴 항목이 남음(README에 제거법), 끄는 스위치는 E4 설정 때.
     **순서: H8 마무리 → 이것 → 전체 검증 → 릴리스.** 사용자는 "0.3.1"이라 했지만 기능 추가라 규칙상 0.4.0 — 릴리스 때 확인. 구현을 가이드로 할지 Claude가 할지는 시작 때 묻기
+11. **업데이트 쉽게** — 사용자(2026-10-13): AppImage 교체(받기 → chmod → `~/.local/bin`에 mv)가 번거롭다. 후보: ① 앱 안 업데이트 알림(시작 때 GitHub 최신 릴리스 확인 → "새 버전 → 받기" 링크, 3 OS, E4에 끄는 스위치 — 추천)
+    ② AppImage zsync 업데이트 정보(CI가 `UPDATE_INFORMATION` + `.zsync` 첨부, Gear Lever · AppImageUpdate용, Linux만). **사용자 결정: 나중에**
 
 ---
 
