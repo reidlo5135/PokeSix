@@ -112,7 +112,10 @@ Squad SquadStore::squad(int generation, const QString &versionGroup) const
 
 void SquadStore::setSquad(int generation, const QString &versionGroup, const Squad &squad)
 {
-    if (m_squads.value(generation).value(versionGroup) == squad)
+    // 키가 있을 때만 비교한다 — value()는 없는 키에 빈 Squad()를 돌려주므로, 그대로 비교하면
+    // 묶음 키에서 이어받은 스쿼드를 비울 때 버전 키가 안 생겨 옛 스쿼드가 돌아온다
+    const QHash<QString, Squad> &games = m_squads.value(generation);
+    if (games.contains(versionGroup) && games.value(versionGroup) == squad)
         return;
     m_squads[generation].insert(versionGroup, squad);
     schedule();
