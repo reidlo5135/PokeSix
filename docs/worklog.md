@@ -9,7 +9,9 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
 
 ## 지금 상태 — 2026-10-13
 
-- **`v0.4.1`(2026-10-13, PATCH) 준비 완료 — 사용자 push 대기**: 일괄 비우기 후 게임을 바꿨다 오면 옛 스쿼드가 돌아오던 버그(사용자 발견). 원인: `SquadStore::setSquad`가 없는 키의
+- **`v0.5.0`(2026-10-13, MINOR) 준비 완료 — 사용자 push 대기**: F3a 테마 스위치(라이트 · 다크 · 시스템). 다크의 연한 칸 몇 곳은 F3b 전이라 어색함 — 릴리스 노트에 적었다.
+  `git push origin main --follow-tags` 후 Actions `release` 4잡 초록 · 본문 확인
+- **`v0.4.1`(2026-10-13, PATCH) 공개됨**: 일괄 비우기 후 게임을 바꿨다 오면 옛 스쿼드가 돌아오던 버그(사용자 발견). 원인: `SquadStore::setSquad`가 없는 키의
   `value()`(빈 Squad)와 비교 → 묶음 키(`firered-leafgreen`)에서 이어받은 스쿼드를 비우면 버전 키가 안 생김. 테스트 `KeepsAnEmptySquadOverTheGroupItCameFrom`, 수정은 사용자
 - **`v0.4.0`(2026-10-13, MINOR) 공개됨**: H8(가져온 멤버의 레벨 · 인게임 능력치) + AppImage 앱 메뉴 자기 등록. 사용자가 push
 - **`v0.3.0`(2026-10-12, MINOR) 공개됨**: 5세대(BW · B2W2) 세이브 불러오기(H6). 사용자가 push했고 내려받기 확인(사용자 PC의 AppImage가 0.3.0)
@@ -18,7 +20,7 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
 - 2026-10-09(집 Windows): 회사 세션의 H1 · H2(스키마 12)를 Windows에서 처음 돌리다 만난 **DB 교체 실패(파일 잠금)** 를 고쳤다 — [build.md §5-8](build.md#db-swap-blocked). 145 테스트 통과. Windows 패키지에 빠져 있던 MSVC 런타임을 동봉했고 msi를 실기 검증했다
 - `v0.1.0`(2026-10-07)은 Phase A 완료 태그. 그때는 조직의 read-only 토큰 때문에 Release를 손으로 올렸다
 - 원격 `origin` = github.com/yamada-studio/PokeSix. `main`과 동기화.
-- 버전 `0.4.1`. Phase B · C · D · E · T가 섞여 진행 중이고 Phase G는 "lite"(패키징 스크립트 · CI)만. 단계별 상태는 roadmap.md.
+- 버전 `0.5.0`. Phase B · C · D · E · T가 섞여 진행 중이고 Phase G는 "lite"(패키징 스크립트 · CI)만. 단계별 상태는 roadmap.md.
 
 ### 검증 매트릭스
 
@@ -32,10 +34,10 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
 ### 진행 중
 
 - **AppImage 자기 등록 — 완료 · merge**(Claude 구현 — 사용자 결정 2026-10-13). 사용자 PC(Ubuntu GNOME)에서 메뉴 항목이 지워진 상태로 새 AppImage를 한 번 실행 → 앱 메뉴에 생김 확인.
-  다음: v0.4.1 push(사용자) → F3b.
+  다음: v0.5.0 push(사용자) → F3b.
 - **F3a 런타임 팔레트 + 테마 스위치 — 완료 · merge(2026-10-13)**. CP1–CP4 사용자, CP5 · CP6은 사용자 요청("그냥 너가 이어서 완성해주라")으로 Claude.
   확인: 테스트 180 통과 · 경고 0, 라이트는 0.4.1과 같은 설정으로 찍어 스위치 자리(x 1215–1321)만 다름, 시작-다크 vs 실행 중 전환-다크 6화면 픽셀 동일.
-  시스템 모드(OS 다크 설정을 바꾸면 따라감)는 offscreen으로 검증 불가 — **사용자 PC에서 확인 필요**. 다음: **F3b**(빠진 다크 값 40여 칸 + JSON 색)(브랜치 `feat/f3a-runtime-palette`, [가이드](guides/f3a-runtime-palette.md), [ADR 0020](decisions/0020-runtime-palette.md)).
+  시스템 모드(OS 다크 설정을 바꾸면 따라감)는 offscreen으로 검증 불가 — **사용자 PC에서 확인 필요**. 다음: **F3b**(빠진 다크 값 40여 칸 + JSON 색 — 0.5.0 캡처로 본 대상: 세대 버튼 · 규칙 알약 · 버전 칩 · 필터 타입 칩 · 스쿼드 문제 카드(red.tint) · 히트맵 연한 칸)(브랜치 `feat/f3a-runtime-palette`, [가이드](guides/f3a-runtime-palette.md), [ADR 0020](decisions/0020-runtime-palette.md)).
   뼈대 · 테스트(`tests/ui`, 빨강 4) · 기계적 치환(552곳 → `tok::palette()`, white 74 + QSS 21곳 분류 → `onColor` 28 + QSS 5줄)은 Claude.
   라이트 픽셀 비교 0.4.1과 동일(인트로 버전 글자만), 참조 구현으로 다크 캡처 확인 → F3b 대상: 세대 버튼 · 규칙 알약 · 버전 칩의 연한 바탕 글자, 필터 타입 칩, 히트맵 연한 칸.
   `homepage.cpp` 정렬 변경은 `git stash`에 보관(stash@{0}) — 이 브랜치의 치환과 섞이지 않게. 포맷은 `git clang-format`(바꾼 줄만)
