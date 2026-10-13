@@ -6,6 +6,12 @@ and the project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+- Clearing a squad with **Clear all** and switching to another game brought the old squad back
+  when that squad was still the one shared by both games of a pair (saved before squads were kept
+  per game, e.g. FireRed · LeafGreen) and nothing was added after clearing. The empty squad now
+  stays.
+
 ## [0.4.0] - 2026-10-13
 
 Imported squad members show their level and in-game stats, and the Linux AppImage adds itself to
