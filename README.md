@@ -165,7 +165,7 @@ follow the same language.
 ## Download
 
 Prebuilt packages for every OS are on the
-[**Releases** page](https://github.com/yamada-studio/PokeSix/releases) — no Qt, compiler or
+[**Releases** page](https://github.com/reidlo5135/PokeSix/releases) — no Qt, compiler or
 setup needed. SHA-256 checksums are in each release's notes.
 
 | OS | File | How to run |
@@ -211,7 +211,7 @@ Requirements: a C++20 compiler, CMake 3.21+, Ninja (Linux/macOS), and **Qt 6.8 o
 release build with tests, a package, and launches it.
 
 ```bash
-git clone https://github.com/yamada-studio/PokeSix.git
+git clone https://github.com/reidlo5135/PokeSix.git
 cd PokeSix
 scripts/linux/quickstart.sh         # Linux: setup → build → AppImage (+ app menu) → run
 ```

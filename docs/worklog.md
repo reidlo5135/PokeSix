@@ -19,7 +19,7 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
 - **`v0.2.0` 릴리스(2026-10-09)**: https://github.com/yamada-studio/PokeSix/releases/tag/v0.2.0 — 이번에는 **CI가 Release를 스스로 만들고 4개 파일(zip · msi · AppImage · dmg)을 붙였다**(`permissions: contents: write` 확인). 노트 본문 · SHA-256만 API로 채웠다. 러너의 WiX 3.14로 msi도 나온다
 - 2026-10-09(집 Windows): 회사 세션의 H1 · H2(스키마 12)를 Windows에서 처음 돌리다 만난 **DB 교체 실패(파일 잠금)** 를 고쳤다 — [build.md §5-8](build.md#db-swap-blocked). 145 테스트 통과. Windows 패키지에 빠져 있던 MSVC 런타임을 동봉했고 msi를 실기 검증했다
 - `v0.1.0`(2026-10-07)은 Phase A 완료 태그. 그때는 조직의 read-only 토큰 때문에 Release를 손으로 올렸다
-- 원격 `origin` = github.com/yamada-studio/PokeSix. `main`과 동기화.
+- 원격 `origin` = github.com/reidlo5135/PokeSix(2026-10-19 yamada-studio 조직에서 Transfer — 릴리스 · 별 · Actions 기록 그대로, 옛 주소는 리디렉트). `main`과 동기화.
 - 버전 `0.5.0`. Phase B · C · D · E · T가 섞여 진행 중이고 Phase G는 "lite"(패키징 스크립트 · CI)만. 단계별 상태는 roadmap.md.
 
 ### 검증 매트릭스
@@ -52,7 +52,7 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
 4. 에뮬레이터 오버레이: [overlay-design.md](overlay-design.md)는 검토 문서. 시작하려면 ADR로 결정을 확정하고 roadmap에 Phase H를 올린다(H1 = core 세이브 파서)
 5. Windows 설정이 레지스트리 → `%APPDATA%\YamadaStudio\PokeSix.ini`로 바뀌었다(2026-10-07). 이전에 레지스트리에 저장된 세대 · 게임은 이어지지 않는다(한 번 다시 고르면 끝). 레지스트리 잔여물은 `HKCU\Software\YamadaStudio`에 남아 있어도 무해하다
 6. ~~**Windows .msi 검증**~~ → 2026-10-09 집 PC에서 통과(WiX 3.14 winget 설치 · `package.bat` → msi · 설치 → 사용자 시작 메뉴 바로가기 → 설치된 exe 실행 → 제거 깨끗). 남은 것: CI 러너(windows-2022, WiX 프리인스톨)에서 msi가 나오는지는 v0.2.0 태그 실행으로 확인
-7. macOS 공증(notarization): Apple Developer(연 99달러) + CI secrets(`notarytool`)를 붙이면 내려받은 dmg의 Gatekeeper "손상됨" 차단이 사라진다. 그 전까지는 README Download 절 + dmg 안 `READ ME FIRST - macOS.txt`의 `xattr` 안내로 운용(2026-10-09). **무료 대안**: GitHub에 `yamada-studio/homebrew-tap` 리포를 만들고 cask를 두면 Mac 사용자는 `brew install --cask --no-quarantine yamada-studio/tap/pokesix` 한 줄로 격리 없이 설치한다(새 리포 생성은 사용자 결정). 확인 필요: 친구 Mac에서 **v0.2.0** dmg + xattr 절차로 실제로 뜨는지(v0.1.0은 재서명 전이라 xattr을 풀어도 arm64에서 안 뜰 수 있다)
+7. macOS 공증(notarization): Apple Developer(연 99달러) + CI secrets(`notarytool`)를 붙이면 내려받은 dmg의 Gatekeeper "손상됨" 차단이 사라진다. 그 전까지는 README Download 절 + dmg 안 `READ ME FIRST - macOS.txt`의 `xattr` 안내로 운용(2026-10-09). **무료 대안**: GitHub에 `reidlo5135/homebrew-tap` 리포를 만들고 cask를 두면 Mac 사용자는 `brew install --cask --no-quarantine reidlo5135/tap/pokesix` 한 줄로 격리 없이 설치한다(새 리포 생성은 사용자 결정). 확인 필요: 친구 Mac에서 **v0.2.0** dmg + xattr 절차로 실제로 뜨는지(v0.1.0은 재서명 전이라 xattr을 풀어도 arm64에서 안 뜰 수 있다)
 8. **테마 전환 [라이트 | 다크 | 시스템]** → 2026-10-13 시작(F3a). 결정 셋: 치환은 Claude · 빠진 다크 값은 Claude 제안 · 위치는 앱 막대만. 아래는 당시 분석. — 사용자 요청(2026-10-12): 앱 막대의 세대 버튼 바로 왼쪽에 흔한 SVG 아이콘 3칸(해 · 달 · 모니터, Lucide ISC 추천).
    v0.2.1의 `setColorScheme(Light)`는 임시방편. **H6 끝난 뒤 시작**(사용자 결정). 막히는 것 셋: ① 토큰이 `constexpr`(53파일 552회) · QSS는 시작 때 한 번 치환 →
    실행 중 전환 불가 ② 핸드오프 `darkOverrides`는 11개뿐 — tint · rowSel · cell.border · line.strong · text.disabled 등 40여 개 다크 값 없음

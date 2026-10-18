@@ -147,7 +147,7 @@ void CsvDownloader::startNext()
     // 누가 받아 가는지 밝힌다(PokéAPI 공정 이용 정책의 "예의 바르게"). 리다이렉트는 Qt 6 기본
     // 정책으로 따라간다.
     request.setHeader(QNetworkRequest::UserAgentHeader,
-                      QStringLiteral("PokeSix/%1 (+https://github.com/yamada-studio/PokeSix)")
+                      QStringLiteral("PokeSix/%1 (+https://github.com/reidlo5135/PokeSix)")
                               .arg(QCoreApplication::applicationVersion()));
     m_reply = m_network->get(request);
 
