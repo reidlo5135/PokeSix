@@ -256,6 +256,26 @@ DP(또는 Pt)로 바꾸고 스쿼드에 **윈디**를 넣는다 →
 - 알 기술 몇 줄이 "알"로 보인다 (가디의 알 기술)
 - 도감 탭의 윈디 상세는 **이전과 똑같다** (B안의 약속)
 
+## 과제 5 (보너스) — 1세대 중복 버전 숨기기
+
+> **문제.** 1세대 게임 버튼이 6개다: PokéAPI가 일본판(`red-green-japan` · `blue-japan`)과
+> 국제판(`red-blue`)을 따로 들고 있어서다. 자력표 · TM은 네 묶음이 전부 같고(4,127행 동일),
+> 다른 건 야생 출현뿐이다. **R · G · B · Y 네 개**가 되게 하라(사용자 결정 2026-10-19):
+> 레드 · 블루는 출현 데이터가 온전한 국제판을, 그린은 일본판(`green-japan`, 출현 703행)을 남기고,
+> 중복인 `red-japan`과 깡통인 `blue-japan`(출현 6행)을 숨긴다.
+
+`src/data/repository/repository.cpp`:
+
+1. 익명 namespace에 숨길 버전 상수를 둔다:
+   `constexpr const char *kHiddenVersions = " AND v.identifier NOT IN ('red-japan', 'blue-japan')"; // 국제판과 중복(자력표 동일) · blue-japan은 출현 6행뿐`
+2. `gamesForGeneration`의 SQL WHERE 끝(`ORDER BY` 앞)에 이어 붙인다 —
+   `QStringLiteral("…") + QLatin1String(kHiddenVersions) + QStringLiteral(" ORDER BY …")`
+3. `readPokemonDetail`의 "5) 야생 출현" 쿼리에도 같은 조각을 붙인다
+   (도감 상세의 출현 표에 레드(일) 줄이 겹쳐 나오는 것도 같이 사라진다)
+
+✅ 확인: 실행해서 1세대로 바꾸면 게임 버튼이 **레드 · 그린 · 블루 · 피카츄** 네 개,
+도감 상세의 출현 표에 같은 장소가 두 번 나오지 않는다. (픽스처는 4세대뿐이라 테스트는 실행 확인으로 갈음)
+
 ## 흔한 문제와 원인
 
 | 증상 | 원인 |
@@ -274,6 +294,7 @@ DP(또는 Pt)로 바꾸고 스쿼드에 **윈디**를 넣는다 →
 - [ ] DP 윈디: 선택 창에 가디 자력기 13 + 알 기술, 고르면 분석 반영
 - [ ] 가디 시절 기술을 가진 `.sav` 멤버가 빨간 빗금 없이 보인다 (실기 세이브로)
 - [ ] 도감 상세의 자력표는 이전과 동일
+- [ ] 1세대 게임 버튼이 R · G · B · Y 네 개 (과제 5)
 - [ ] `update_translations` 돌림 (en/ja는 Claude 몫)
 
 ## 끝나면 붙여넣어 줄 것
