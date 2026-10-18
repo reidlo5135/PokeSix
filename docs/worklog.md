@@ -7,10 +7,11 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
 
 ---
 
-## 지금 상태 — 2026-10-13
+## 지금 상태 — 2026-10-19
 
-- **`v0.5.0`(2026-10-13, MINOR) 준비 완료 — 사용자 push 대기**: F3a 테마 스위치(라이트 · 다크 · 시스템). 다크의 연한 칸 몇 곳은 F3b 전이라 어색함 — 릴리스 노트에 적었다.
-  `git push origin main --follow-tags` 후 Actions `release` 4잡 초록 · 본문 확인
+- **진행 중: E2b**(진화 전 단계 기술 상속 — 가이드 [e2b-preevo-moves.md](guides/e2b-preevo-moves.md), 브랜치 `fix/e2b-preevo-moves`) → 끝나면 v0.5.1(PATCH) 후보. 다음은 **H9 에디터 페이지**(.sav를 스쿼드에서 분리, ADR 0018 대체)
+- **push 대기**: `v0.5.0` 태그(아래)와 리포 주소 수정 커밋(`dff9f78`) — `git push origin main --follow-tags` 후 Actions `release` 4잡 초록 · 본문 확인
+- **`v0.5.0`(2026-10-13, MINOR) 준비 완료**: F3a 테마 스위치(라이트 · 다크 · 시스템). 다크의 연한 칸 몇 곳은 F3b 전이라 어색함 — 릴리스 노트에 적었다
 - **`v0.4.1`(2026-10-13, PATCH) 공개됨**: 일괄 비우기 후 게임을 바꿨다 오면 옛 스쿼드가 돌아오던 버그(사용자 발견). 원인: `SquadStore::setSquad`가 없는 키의
   `value()`(빈 Squad)와 비교 → 묶음 키(`firered-leafgreen`)에서 이어받은 스쿼드를 비우면 버전 키가 안 생김. 테스트 `KeepsAnEmptySquadOverTheGroupItCameFrom`, 수정은 사용자
 - **`v0.4.0`(2026-10-13, MINOR) 공개됨**: H8(가져온 멤버의 레벨 · 인게임 능력치) + AppImage 앱 메뉴 자기 등록. 사용자가 push
@@ -93,6 +94,13 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
 ---
 
 ## 최근 세션 (역순)
+
+### 2026-10-19 — 리포 이전(reidlo5135), E2b 시작 · H9/H10 계획 (Linux 세션)
+
+- **리포 이전**: PokeSix · Tabiji를 GitHub Transfer로 `yamada-studio` 조직 → `reidlo5135` 개인 계정으로 옮겼다(릴리스 · 별 · Actions 기록 유지, 옛 주소는 리디렉트 — 조직을 지우면 리디렉트도 끝). 코드 안 주소는 `dff9f78`로 수정. **GitHub Release 본문 10곳(v0.1.0–v0.5.0)의 옛 링크는 아직** — 사용자가 원하면 API로 수정. 조직에 CodeTerra · ai-model-bloom 2개 남음(조직 삭제 전 정리는 사용자 몫)
+- **사용자 개선 요청 3건** → ① 에디터 페이지 신설(.sav는 거기서만, PkHex류 편집까지) = **H9 · H10**(ADR 0018 뒤집기 — 시작 때 대체 ADR) ② 기술 선택이 진화 전 자력기를 모름 = **E2b 시작**(원인: `readPokemonDetail`의 pokemon_moves 쿼리가 고른 id만 — `fillEvolution`이 이미 읽는 조상 자력표를 내보내면 됨) ③ HP 과다 의심 = **버그 아님 진단**(저장값 0x90 그대로 표시, 실세이브 검증 이력 있음. HP 공식만 `+레벨+10`이라 다른 능력치보다 크게 자람 — 인게임 능력치 화면과 비교하는 확인법 안내)
+- **가이드 스타일 바꿈**(사용자 요청): Tabiji B2처럼 레이아웃 약도 · 위젯(흐름) 트리 · 과제형("~하라" + 입력/출력/조건) — e2b 가이드부터 적용
+- `docs/data/REFER.md`(사용자 작성 중): 세대별 TM/HM · 아이템 외부 링크 모음. **블로그 문장 복사 블록은 커밋 전에 사실 구조화 필요**(저작권 원칙)
 
 ### 2026-10-13 — H8 완료 · merge, AppImage 자기 등록 (Linux 세션)
 
