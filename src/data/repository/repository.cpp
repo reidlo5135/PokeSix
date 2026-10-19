@@ -22,6 +22,12 @@ namespace {
 // 같은 이름의 자리표시(:g)를 두 번 써도 SQLite는 같은 값으로 채운다.
 constexpr int kSpecialStat = 9; // 1세대 전용 "특수"
 
+// 보여 주지 않는 버전: 1세대 일본판 중 국제판과 겹치는 것(자력표 · 기술머신이 같다 —
+// blue-japan은 출현 자료도 6줄뿐). 그린은 국제판에 없어서 남긴다 → 1세대 칩 = 그린 · 레드 ·
+// 블루 · 피카츄(일본판 묶음이 먼저 정렬된다 — 사용자 결정 2026-10-19).
+// versions 표의 별칭이 v인 질의에 AND로 붙인다.
+constexpr char kVisibleVersions[] = "v.identifier NOT IN ('red-japan', 'blue-japan')";
+
 // 질의 결과의 column · column+1 · column+2 열(ko · en · ja)을 하나로
 com::yamada::studio::LocalizedText localized(const QSqlQuery &query, int column)
 {
@@ -376,16 +382,16 @@ QList<DexInfo> Repository::dexesForGeneration(int generation)
     // 줄마다 (도감, 버전) 하나. 게임이 나온 순서(sort_order)대로 읽으면서 도감별로 묶는다.
     // 본편 도감만(is_main_series), 지방이 있는 것만(전국 · conquest 제외 — 전국은 UI가 따로 단다).
     QSqlQuery query(QSqlDatabase::database(m_connection));
-    query.prepare(QStringLiteral(
-            "SELECT d.id, d.identifier, r.name_ko, r.name_en, r.name_ja, v.identifier, v.name_ko, "
-            "v.name_en, v.name_ja, vg.identifier "
-            "FROM pokedexes d "
-            "JOIN pokedex_version_groups pvg ON pvg.pokedex_id = d.id "
-            "JOIN version_groups vg ON vg.id = pvg.version_group_id "
-            "JOIN versions v ON v.version_group_id = vg.id "
-            "JOIN regions r ON r.id = d.region_id "
-            "WHERE vg.generation = :g AND d.is_main_series = 1 "
-            "ORDER BY vg.sort_order, v.id"));
+    query.prepare(QStringLiteral("SELECT d.id, d.identifier, r.name_ko, r.name_en, r.name_ja, "
+                                 "v.identifier, v.name_ko, v.name_en, v.name_ja, vg.identifier "
+                                 "FROM pokedexes d "
+                                 "JOIN pokedex_version_groups pvg ON pvg.pokedex_id = d.id "
+                                 "JOIN version_groups vg ON vg.id = pvg.version_group_id "
+                                 "JOIN versions v ON v.version_group_id = vg.id "
+                                 "JOIN regions r ON r.id = d.region_id "
+                                 "WHERE vg.generation = :g AND d.is_main_series = 1 AND ")
+                  + QLatin1String(kVisibleVersions)
+                  + QStringLiteral(" ORDER BY vg.sort_order, v.id"));
     query.bindValue(QStringLiteral(":g"), generation);
     if (!query.exec()) {
         m_error = query.lastError().text();
@@ -671,8 +677,10 @@ PokemonDetail Repository::readPokemonDetail(int pokemonId, int generation,
             break;
         }
     }
-    query.prepare(QStringLiteral("SELECT identifier, name_ko, name_en, name_ja FROM versions WHERE "
-                                 "version_group_id = :id ORDER BY id"));
+    query.prepare(
+            QStringLiteral("SELECT v.identifier, v.name_ko, v.name_en, v.name_ja FROM versions v "
+                           "WHERE v.version_group_id = :id AND ")
+            + QLatin1String(kVisibleVersions) + QStringLiteral(" ORDER BY v.id"));
     query.bindValue(QStringLiteral(":id"), groupId);
     if (query.exec()) {
         while (query.next()) {
@@ -744,23 +752,26 @@ PokemonDetail Repository::readPokemonDetail(int pokemonId, int generation,
             }
         }
     }
+    fillEvolution(detail, groupId);
+    fillMoves(detail.inheritedMoves, generation);
     fillMoves(detail.levelMoves, generation);
     fillMoves(detail.machineMoves, generation);
     fillMoves(detail.tutorMoves, generation);
     fillMoves(detail.eggMoves, generation);
-    fillEvolution(detail, groupId);
     fillAbilities(detail);
 
     // 5) 야생 출현: 그 세대의 모든 버전(DP · Pt · HGSS)
     query.prepare(QStringLiteral(
-            "SELECT v.identifier, v.name_ko, v.name_en, v.name_ja, l.identifier, l.name_ko, "
-            "l.name_en, l.name_ja, em.identifier, e.min_level, e.max_level, e.rarity "
-            "FROM encounters e JOIN versions v ON v.id = e.version_id "
-            "JOIN version_groups vg ON vg.id = v.version_group_id "
-            "JOIN locations l ON l.id = e.location_id "
-            "JOIN encounter_methods em ON em.id = e.method_id "
-            "WHERE e.pokemon_id = :p AND vg.generation = :g "
-            "ORDER BY v.id, l.id, em.id"));
+                          "SELECT v.identifier, v.name_ko, v.name_en, v.name_ja, l.identifier, "
+                          "l.name_ko, "
+                          "l.name_en, l.name_ja, em.identifier, e.min_level, e.max_level, e.rarity "
+                          "FROM encounters e JOIN versions v ON v.id = e.version_id "
+                          "JOIN version_groups vg ON vg.id = v.version_group_id "
+                          "JOIN locations l ON l.id = e.location_id "
+                          "JOIN encounter_methods em ON em.id = e.method_id "
+                          "WHERE e.pokemon_id = :p AND vg.generation = :g AND ")
+                  + QLatin1String(kVisibleVersions)
+                  + QStringLiteral(" ORDER BY v.id, l.id, em.id"));
     query.bindValue(QStringLiteral(":p"), pokemonId);
     query.bindValue(QStringLiteral(":g"), generation);
     if (query.exec()) {
@@ -860,6 +871,57 @@ void Repository::fillEvolution(PokemonDetail &detail, int versionGroupId)
         path.push_back(std::move(stage));
     }
     const movereach::Reach reach = movereach::reachableMoves(path);
+
+    // 3) 진화 전 단계의 자력기: 진화해도 기술은 남는다(가디 Lv 43 불대문자 → 윈디).
+    // 가까운 단계부터 넣고, 제 자력표에 있는 기술과 이미 넣은 기술은 건너뛴다
+    QSet<int> taken;
+    for (const MoveEntry &move : std::as_const(detail.levelMoves))
+        taken.insert(move.moveId);
+    for (qsizetype k = 0; k < ancestors.size(); ++k) {
+        const movereach::Stage &stage = path[path.size() - 2 - k];
+        const EvolutionStep &from = steps.value(ancestorSpecies.at(k));
+        for (const movereach::LevelMove &learned : stage.learnset) {
+            if (taken.contains(learned.move))
+                continue;
+            taken.insert(learned.move);
+            MoveEntry move;
+            move.moveId = learned.move;
+            move.level = learned.level;
+            move.fromPokemonId = from.pokemonId;
+            move.fromName = from.name;
+            move.needsReminder = reach.obtainable && !reach.moves.contains(move.moveId);
+            detail.inheritedMoves.append(move);
+        }
+    }
+    std::sort(detail.inheritedMoves.begin(), detail.inheritedMoves.end(),
+              [](const MoveEntry &a, const MoveEntry &b) {
+                  if (a.level != b.level)
+                      return (a.level < b.level); // 레벨이 다르면 레벨 순
+                  return (a.moveId < b.moveId);   // 같으면 move id 순
+              });
+
+    // 알 기술은 사슬의 뿌리(ancestors의 마지막)에만 적혀 있다 — 뿌리 것 중 아직 없는 것을 합친다
+    if (!ancestors.isEmpty()) {
+        QSet<int> known; // 이미 eggMoves에 있는 기술
+        for (const MoveEntry &move : std::as_const(detail.eggMoves))
+            known.insert(move.moveId);
+        query.prepare(
+                QStringLiteral("SELECT DISTINCT move_id FROM pokemon_moves WHERE pokemon_id = :p "
+                               "AND version_group_id = :vg AND method = 2 ORDER BY move_id"));
+        query.bindValue(QStringLiteral(":p"), ancestors.last());
+        query.bindValue(QStringLiteral(":vg"), versionGroupId);
+        if (query.exec()) {
+            while (query.next()) {
+                const int moveId = query.value(0).toInt();
+                if (known.contains(moveId))
+                    continue;
+                MoveEntry move;
+                move.moveId = moveId;
+                detail.eggMoves.append(move);
+            }
+        }
+    }
+
     if (reach.obtainable) {
         detail.earliestLevel = reach.earliestLevel;
         for (MoveEntry &move : detail.levelMoves)
@@ -889,7 +951,7 @@ void Repository::fillEvolution(PokemonDetail &detail, int versionGroupId)
     if (steps.size() < 2)
         return; // 진화하지 않는 포켓몬
 
-    // 3) 진화 방법: 종마다 "그 세대 이하에서 방법이 있는 가장 최근 세대"의 줄만
+    // 4) 진화 방법: 종마다 "그 세대 이하에서 방법이 있는 가장 최근 세대"의 줄만
     QStringList ids;
     for (const int id : std::as_const(order))
         ids.append(QString::number(id));
@@ -966,7 +1028,7 @@ void Repository::fillEvolution(PokemonDetail &detail, int versionGroupId)
         steps[species].conditions.append(c);
     }
 
-    // 4) 뿌리부터 깊이 우선(형제는 종 번호 순): 랄토스 → 킬리아 → 가디안 · 엘레이드
+    // 5) 뿌리부터 깊이 우선(형제는 종 번호 순): 랄토스 → 킬리아 → 가디안 · 엘레이드
     QHash<int, QList<int>> children;
     QList<int> roots;
     for (const int id : std::as_const(order)) {
@@ -1139,8 +1201,8 @@ QList<GameInfo> Repository::gamesForGeneration(int generation)
                            "FROM version_groups vg "
                            "JOIN versions v ON v.version_group_id = vg.id WHERE vg.generation = :g "
                            "AND EXISTS (SELECT 1 FROM pokedex_version_groups pvg WHERE "
-                           "pvg.version_group_id = vg.id) "
-                           "ORDER BY vg.sort_order, v.id"));
+                           "pvg.version_group_id = vg.id) AND ")
+            + QLatin1String(kVisibleVersions) + QStringLiteral(" ORDER BY vg.sort_order, v.id"));
     query.bindValue(QStringLiteral(":g"), generation);
     if (query.exec()) {
         while (query.next()) {

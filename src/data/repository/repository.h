@@ -88,6 +88,8 @@ struct MoveEntry
     int healing = 0;                        // HP 회복 %(음수 = 소모)
     QList<std::pair<int, int>> statChanges; // (stat id 2–8, 단계 ±n)
     LocalizedText effect; // 그 세대의 게임 설명문(언어마다 가까운 세대 것)
+    int fromPokemonId = 0;  // 0 = 제 기술, >0 = 이 단계가 배운 기술
+    LocalizedText fromName; // 언어 전환을 따라가게 id가 아니라 이름 묶음
 };
 
 // 야생 출현 한 줄: 버전 · 장소 · 방법마다 레벨 범위와 출현 칸 확률의 합.
@@ -181,9 +183,10 @@ struct PokemonDetail
     QStringList groupVersions; // 그 묶음의 버전 identifier("platinum") — UI가 약칭(Pt)을 붙인다
     QList<EncounterEntry> encounters; // 그 세대 모든 버전(DP · Pt · HGSS)
     QList<MoveEntry> levelMoves;      // 레벨 순(같은 레벨은 게임이 익히는 순서)
+    QList<MoveEntry> inheritedMoves; // 진화 전 단계의 자력기(레벨 순). 제 자력표에 있는 기술은 제외
     QList<MoveEntry> machineMoves;    // 기술머신 번호 순, 비전머신은 뒤에
     QList<MoveEntry> tutorMoves; // 기술 가르침(이름은 fillMoves가 채운다. 순서 = move id)
-    QList<MoveEntry> eggMoves; // 알 기술(진화 전 단계에만 있는 경우가 많다)
+    QList<MoveEntry> eggMoves; // 알 기술(PokéAPI는 사슬의 뿌리에만 적는다 — 뿌리 것도 합쳐 둔다)
     QList<EvolutionStep> evolution; // 그 세대에 있는 종만. 진화하지 않는 포켓몬은 비어 있다
     // 이 게임에서 이 포켓몬을 가장 일찍 가질 수 있는 레벨(잡기 · 받기 · 진화). 0 = 이 게임의 출현
     // 자료로는 얻을 수 없다

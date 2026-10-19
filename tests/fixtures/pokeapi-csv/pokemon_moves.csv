@@ -114,6 +114,7 @@ pokemon_id,version_group_id,move_id,pokemon_move_method_id,level,order,mastery
 1,9,445,4,0,,
 1,9,447,4,0,,
 35,8,1,1,1,1,
+35,9,7,2,0,,
 35,8,45,1,1,2,
 35,8,227,1,4,,
 35,8,47,1,7,,

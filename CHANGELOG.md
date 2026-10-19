@@ -6,6 +6,13 @@ and the project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+- The squad move picker now offers what a Pokémon learned before it evolved: Arcanine lists
+  Growlithe's level-up moves as "Growlithe Lv 43", and egg moves of the first stage are offered
+  to every stage. Moves like these in an imported save are no longer marked unlearnable.
+- Generation 1 shows four games (Green · Red · Blue · Yellow) instead of six: the Japanese Red and
+  Blue duplicated the international ones.
+
 ## [0.5.0] - 2026-10-13
 
 A theme switch (light · dark · system) in the app bar. A new feature, so this is a MINOR bump.
