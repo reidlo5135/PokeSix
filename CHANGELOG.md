@@ -6,6 +6,10 @@ and the project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-10-19
+
+Two fixes: moves learned before evolving, and the generation 1 game list.
+
 ### Fixed
 - The squad move picker now offers what a Pokémon learned before it evolved: Arcanine lists
   Growlithe's level-up moves as "Growlithe Lv 43", and egg moves of the first stage are offered
