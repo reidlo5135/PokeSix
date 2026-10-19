@@ -164,7 +164,7 @@ TEST_F(RepositoryTest, InheritsLevelMovesFromPreEvolutions)
     const PokemonDetail clefable = repository.pokemonDetail(36, 4);
     EXPECT_EQ(clefable.levelMoves.size(), 4); // 제 자력표는 그대로
     ASSERT_EQ(clefable.inheritedMoves.size(), 13); // 삐삐 17 − 겹치는 4
-    // 메테오마시(309): 삐삐가 Lv.43에 배우고 픽시 자력표에는 없다
+    // 코멧펀치(309): 삐삐가 Lv.43에 배우고 픽시 자력표에는 없다
     /* ? — inheritedMoves에서 moveId 309를 찾아
            level == 43, fromPokemonId == 35, 이름이 비어 있지 않음을 단언 */
     // 제가 Lv.1에 배우는 노래하기(47)는 상속 목록에 없다
@@ -186,14 +186,15 @@ scripts/linux/build.sh && build/linux-debug/tests/data/pokesix_data_tests --gtes
 
 ### TODO
 
-1. `fillEvolution`의 상속 루프(과제 1) 뒤에: `ancestors`가 비어 있지 않으면 뿌리의
+1. 자리: `fillEvolution` 안, 과제 1의 `std::sort(detail.inheritedMoves…);` 바로 아래,
+   `if (reach.obtainable) {` 바로 위. `ancestors`가 비어 있지 않으면 뿌리의
    pokemon id(= `ancestors`의 **마지막** 원소)로 method 2를 SELECT한다 — 쿼리 모양은
    `readPokemonDetail`의 "기술 가르침(3) · 알 기술(2)" 블록과 같고, 바인딩만 다르다
 2. 이미 `eggMoves`에 있는 move id는 건너뛰고, 나머지를 `detail.eggMoves`에 붙인다
    (`fromPokemonId`는 채우지 않는다 — 알에서 나올 때 갖고 나오는 건 똑같아서 출처 표시가 필요 없다)
 3. 과제 1의 3번 순서 이동 덕에 `fillMoves(detail.eggMoves, …)`가 뒤에 와서 이름이 채워진다
 4. 픽스처 `tests/fixtures/pokeapi-csv/pokemon_moves.csv`에 삐삐의 알 기술 한 줄을 심는다:
-   `35,8,7,2,0,,` (불꽃펀치 7 — moves.csv에 있고 삐삐 · 픽시 누구도 안 배우는 번호)
+   `35,9,7,2,0,,` (플래티넘 = 버전 묶음 9 · 불꽃펀치 7 — moves.csv에 있고 삐삐 · 픽시 누구도 안 배우는 번호)
 5. 테스트: `pokemonDetail(36, 4).eggMoves`에 7이 있고, `pokemonDetail(35, 4).eggMoves`에도
    7이 있다(제 것 그대로)
 
@@ -260,7 +261,7 @@ DP(또는 Pt)로 바꾸고 스쿼드에 **윈디**를 넣는다 →
 
 > **문제.** 1세대 게임 버튼이 6개다: PokéAPI가 일본판(`red-green-japan` · `blue-japan`)과
 > 국제판(`red-blue`)을 따로 들고 있어서다. 자력표 · TM은 네 묶음이 전부 같고(4,127행 동일),
-> 다른 건 야생 출현뿐이다. **R · G · B · Y 네 개**가 되게 하라(사용자 결정 2026-10-19):
+> 다른 건 야생 출현뿐이다. **네 개**(G · R · B · Y — 일본판 묶음이 먼저 정렬된다)가 되게 하라(사용자 결정 2026-10-19):
 > 레드 · 블루는 출현 데이터가 온전한 국제판을, 그린은 일본판(`green-japan`, 출현 703행)을 남기고,
 > 중복인 `red-japan`과 깡통인 `blue-japan`(출현 6행)을 숨긴다.
 
@@ -290,12 +291,12 @@ DP(또는 Pt)로 바꾸고 스쿼드에 **윈디**를 넣는다 →
 
 ## 완료 조건
 
-- [ ] 새 테스트 2개(과제 1 · 2)와 과제 3 단언이 통과하고, 기존 테스트 180개가 그대로 통과
-- [ ] DP 윈디: 선택 창에 가디 자력기 13 + 알 기술, 고르면 분석 반영
+- [x] 새 테스트 2개(과제 1 · 2)와 과제 3 단언이 통과하고, 기존 테스트 180개가 그대로 통과
+- [x] DP 윈디: 선택 창에 가디 자력기(실제 DB 11개) + 알 기술 9개
 - [ ] 가디 시절 기술을 가진 `.sav` 멤버가 빨간 빗금 없이 보인다 (실기 세이브로)
-- [ ] 도감 상세의 자력표는 이전과 동일
-- [ ] 1세대 게임 버튼이 R · G · B · Y 네 개 (과제 5)
-- [ ] `update_translations` 돌림 (en/ja는 Claude 몫)
+- [x] 도감 상세의 자력표는 이전과 동일
+- [x] 1세대 게임 버튼이 G · R · B · Y 네 개 (과제 5)
+- [x] `update_translations` 돌림, en/ja 채움
 
 ## 끝나면 붙여넣어 줄 것
 
@@ -309,3 +310,15 @@ DP(또는 Pt)로 바꾸고 스쿼드에 **윈디**를 넣는다 →
 - 기술머신 · NPC 가르침의 세대 간 carry-over(진화 전만 TM을 배우는 희귀 케이스) — 실데이터 조사 필요
 - 도감 상세의 자력표에 "진화 전" 절 추가할지 — 사용자 결정
 - 에디터 페이지(H9)가 생기면 `.sav` 불러오기 동선이 바뀐다 — 이 단계의 판정 로직은 그대로 쓰인다
+
+## 완료 기록 (2026-10-19)
+
+- **과제 1은 사용자**, 과제 2–5와 정리는 사용자 요청("E2b를 너가 마저 해주라")으로 Claude가 마무리했다
+- 과제 1에서 짚은 것: 단언을 찾기 루프 **안**에 둠(첫 바퀴에 `nullptr`로 실패), `steps`에 pokemon id를 넣음(키는 species id),
+  `needsReminder`에 `reach.obtainable &&` 빠짐, 정렬 비교 함수 없음 → `return a.level;`(int → bool, 순서가 깨진다 — 가이드 힌트가
+  "레벨 순"이라고만 써서 생긴 일). `std::is_sorted` 단언으로 다시 생기면 잡힌다
+- 과제 2: 픽스처의 알 기술 줄은 **플래티넘(버전 묶음 9)** 이어야 한다 — 4세대 대표 게임. 처음 가이드에 8(DP)로 잘못 적었다
+- 과제 3: `resolveMember`는 목록 순서대로 `insert`(덮어쓰기)라, 상속이면서 기술머신인 기술은 기술머신 항목이 남는다. 판정(`learnable`)만 쓰므로 상관없다
+- 과제 5: 칩 순서는 G · R · B · Y(일본판 묶음이 먼저 정렬). R · G · B · Y로 맞추려면 일본판 레드를 쓰거나(획득 사전이 거의 빔) 표시 순서 표가 필요해서 그대로 두기로 했다(사용자 결정)
+- 실제 DB 확인(DP · Pt 윈디): 가디 자력기 11개가 "자력(가디 N레벨)"으로, 알 기술 9개가 들어온다. 렌트라는 상속 0개(꼬링크 · 럭시오의 자력기를 제 표에 모두 가지고 있다)
+

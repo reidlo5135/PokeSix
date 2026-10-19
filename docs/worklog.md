@@ -9,9 +9,10 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
 
 ## 지금 상태 — 2026-10-19
 
-- **진행 중: E2b**(진화 전 단계 기술 상속 — 가이드 [e2b-preevo-moves.md](guides/e2b-preevo-moves.md), 브랜치 `fix/e2b-preevo-moves`) → 끝나면 v0.5.1(PATCH) 후보. 다음은 **H9 에디터 페이지**(.sav를 스쿼드에서 분리, ADR 0018 대체)
-- **push 대기**: `v0.5.0` 태그(아래)와 리포 주소 수정 커밋(`dff9f78`) — `git push origin main --follow-tags` 후 Actions `release` 4잡 초록 · 본문 확인
-- **`v0.5.0`(2026-10-13, MINOR) 준비 완료**: F3a 테마 스위치(라이트 · 다크 · 시스템). 다크의 연한 칸 몇 곳은 F3b 전이라 어색함 — 릴리스 노트에 적었다
+- **E2b 완료(2026-10-19, main에 merge)**: 진화 전 단계 기술 상속 + 1세대 중복 버전 숨김. CHANGELOG `[Unreleased]` → **v0.5.1(PATCH) 후보** — 릴리스는 사용자 결정 대기
+- **다음: H9 에디터 페이지**(.sav를 스쿼드에서 분리, ADR 0018 대체). 가이드 방식 바꿈(사용자 요청 2026-10-19): 빈칸 채우기가 아니라 **만들 화면 · 기능 · 지킬 조건 · 참고 코드만** 주고 설계는 사용자가 정한다. 빈 탭부터 작게
+- **push 대기**: main이 origin보다 앞섬(리포 주소 수정 `dff9f78` + E2b) — `git push origin main`. v0.5.0은 이미 공개됨(첨부 4개 확인)
+- **`v0.5.0`(2026-10-13, MINOR) 공개됨**: F3a 테마 스위치(라이트 · 다크 · 시스템). 다크의 연한 칸 몇 곳은 F3b 전이라 어색함 — 릴리스 노트에 적었다
 - **`v0.4.1`(2026-10-13, PATCH) 공개됨**: 일괄 비우기 후 게임을 바꿨다 오면 옛 스쿼드가 돌아오던 버그(사용자 발견). 원인: `SquadStore::setSquad`가 없는 키의
   `value()`(빈 Squad)와 비교 → 묶음 키(`firered-leafgreen`)에서 이어받은 스쿼드를 비우면 버전 키가 안 생김. 테스트 `KeepsAnEmptySquadOverTheGroupItCameFrom`, 수정은 사용자
 - **`v0.4.0`(2026-10-13, MINOR) 공개됨**: H8(가져온 멤버의 레벨 · 인게임 능력치) + AppImage 앱 메뉴 자기 등록. 사용자가 push
@@ -70,7 +71,7 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
     `Exec`가 다를 때 다시 쓰고, 아이콘은 qrc에서 `~/.local/share/icons/hicolor/<크기>/apps/pokesix.png`로(지금 `package.sh --install`이 하는 일과 같은 결과).
     app 레이어 한 파일, `#ifdef Q_OS_LINUX`. 한계: 첫 실행은 손으로, 파일을 지우면 메뉴 항목이 남음(README에 제거법), 끄는 스위치는 E4 설정 때.
     **순서: H8 마무리 → 이것 → 전체 검증 → 릴리스.** 사용자는 "0.3.1"이라 했지만 기능 추가라 규칙상 0.4.0 — 릴리스 때 확인. 구현을 가이드로 할지 Claude가 할지는 시작 때 묻기
-11. **획득 사전 보강(REFER.md)**: 사용자가 `docs/data/REFER.md`에 세대별 TM/HM · 아이템 출처 링크를 수집 중(2026-10-19 현재 1–5세대). 끝나면 `resources/data/acquisition/<version-group>.json`에 **사실만 구조화**해 넣는다(블로그 문장 복사 금지 — i18n 저작권 원칙). 목표: 아이템 · TM의 "획득처 정보 없음" 줄이기. 1세대 버전 정리(R·G·B·Y, 사용자 결정)는 E2b 과제 5로
+11. **획득 사전 보강(REFER.md)**: 사용자가 `docs/data/REFER.md`에 세대별 TM/HM · 아이템 출처 링크를 수집 중(2026-10-19 현재 1–5세대). 끝나면 `resources/data/acquisition/<version-group>.json`에 **사실만 구조화**해 넣는다(블로그 문장 복사 금지 — i18n 저작권 원칙). 목표: 아이템 · TM의 "획득처 정보 없음" 줄이기. 1세대 버전 정리(G·R·B·Y 네 개, 사용자 결정)는 E2b 과제 5로 끝남
 12. **업데이트 쉽게** — 사용자(2026-10-13): AppImage 교체(받기 → chmod → `~/.local/bin`에 mv)가 번거롭다. 후보: ① 앱 안 업데이트 알림(시작 때 GitHub 최신 릴리스 확인 → "새 버전 → 받기" 링크, 3 OS, E4에 끄는 스위치 — 추천)
     ② AppImage zsync 업데이트 정보(CI가 `UPDATE_INFORMATION` + `.zsync` 첨부, Gear Lever · AppImageUpdate용, Linux만). **사용자 결정: 나중에**
 

@@ -16,6 +16,8 @@
 
 #include <gtest/gtest.h>
 
+#include <algorithm>
+
 using namespace com::yamada::studio;
 
 namespace {
@@ -932,4 +934,78 @@ TEST_F(RepositoryTest, KnowsWhatEachSpeciesEvolvesFrom)
     const QHash<int, int> parents = repository.evolvesFrom();
     EXPECT_EQ(parents.value(36), 35);  // 픽시 ← 삐삐
     EXPECT_FALSE(parents.contains(1)); // 이상해씨는 진화 전이 없다
+}
+
+TEST_F(RepositoryTest, InheritsLevelMovesFromPreEvolutions)
+{
+    Repository repository(s_dbPath);
+    const PokemonDetail clefable = repository.pokemonDetail(36, 4);
+    EXPECT_EQ(clefable.levelMoves.size(), 4);
+    ASSERT_EQ(clefable.inheritedMoves.size(), 13);
+    EXPECT_TRUE(std::is_sorted(
+            clefable.inheritedMoves.begin(), clefable.inheritedMoves.end(),
+            [](const MoveEntry &a, const MoveEntry &b) { return a.level < b.level; }));
+
+    const MoveEntry *cometPunch = nullptr;
+    const MoveEntry *sing = nullptr;
+    for (const MoveEntry &move : clefable.inheritedMoves) {
+        if (move.moveId == 309)
+            cometPunch = &move;
+        if (move.moveId == 47)
+            sing = &move;
+    }
+
+    // 코멧펀치(309): 삐삐가 Lv.43에 배우고 픽시 자력표에는 없다
+    ASSERT_NE(cometPunch, nullptr);
+    EXPECT_EQ(cometPunch->level, 43);
+    EXPECT_EQ(cometPunch->fromPokemonId, 35);
+    EXPECT_EQ(cometPunch->name.en, QStringLiteral("Meteor Mash"));
+    EXPECT_EQ(cometPunch->fromName.ko, QStringLiteral("삐삐"));
+
+    // 노래하기(47): 픽시가 Lv.1에 직접 배우니 상속 목록에 없어야 한다
+    EXPECT_EQ(sing, nullptr);
+
+    // 진화하지 않는 포켓몬은 빈 목록
+    EXPECT_TRUE(repository.pokemonDetail(445, 4).inheritedMoves.isEmpty());
+}
+
+TEST_F(RepositoryTest, SquadSessionOffersAndAcceptsInheritedMoves)
+{
+    QTemporaryDir settings;
+    QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, settings.path());
+    QTemporaryDir dir;
+    Repository repository(s_dbPath);
+    SquadStore store(dir.filePath(QStringLiteral("squads.json")));
+    AppState state;
+    state.setGeneration(4);
+    SquadSession session(&repository, &store, &state);
+
+    session.setPokemon(0, 36); // 픽시
+    // 고르기 목록: 삐삐가 Lv.43에 배우는 코멧펀치가 레벨업 줄로, 출처와 함께
+    const QList<SquadSession::LearnableMove> rows = session.learnableMoves(0);
+    const auto found = std::find_if(rows.begin(), rows.end(),
+                                    [](const auto &row) { return row.move.moveId == 309; });
+    ASSERT_NE(found, rows.end());
+    EXPECT_EQ(found->level, 43);
+    EXPECT_EQ(found->move.fromPokemonId, 35);
+
+    // 고르면 "배울 수 있는 기술"로 풀린다(세이브에서 가져온 기술도 같은 길)
+    session.setMove(0, 0, 309);
+    ASSERT_TRUE(session.slotMoves(0)[0].has_value());
+    EXPECT_TRUE(session.slotMoves(0)[0]->learnable);
+}
+
+TEST_F(RepositoryTest, EggMovesComeFromTheRootOfTheChain)
+{
+    Repository repository(s_dbPath);
+    // 시드: 불꽃펀치(7)는 삐삐의 알 기술로만 적혀 있다(PokéAPI처럼 뿌리에만)
+    auto hasEggMove = [](const PokemonDetail &detail, int moveId) {
+        return std::any_of(detail.eggMoves.begin(), detail.eggMoves.end(),
+                           [moveId](const MoveEntry &move) { return move.moveId == moveId; });
+    };
+    EXPECT_TRUE(hasEggMove(repository.pokemonDetail(35, 4), 7)); // 제 것 그대로
+    const PokemonDetail clefable = repository.pokemonDetail(36, 4);
+    EXPECT_TRUE(hasEggMove(clefable, 7)); // 뿌리에서 합쳐 온 것
+    ASSERT_EQ(clefable.eggMoves.size(), 1);
+    EXPECT_FALSE(clefable.eggMoves.first().name.en.isEmpty()); // fillMoves가 뒤에서 채웠다
 }

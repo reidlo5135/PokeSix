@@ -128,7 +128,8 @@ void SquadSession::resolveMember(const SquadMember &member, PokemonDetail &detai
     }
     QHash<int, MoveEntry> learnable;
     for (const QList<MoveEntry> *list :
-         {&detail.levelMoves, &detail.machineMoves, &detail.tutorMoves, &detail.eggMoves})
+         {&detail.levelMoves, &detail.inheritedMoves, &detail.machineMoves, &detail.tutorMoves,
+          &detail.eggMoves})
         for (const MoveEntry &move : *list)
             learnable.insert(move.moveId, move);
     QList<int> others; // 이 게임에서 배울 수 없는 기술(게임을 바꿨다) — 이름만이라도 보여 준다
@@ -218,7 +219,8 @@ void SquadSession::clearAll()
 QList<SquadSession::LearnableMove> SquadSession::learnableMoves(int slot) const
 {
     const PokemonDetail &detail = m_details[std::size_t(slot)];
-    // 순서: 레벨업(레벨 순) → 기술머신(번호 순) → 가르침 → 알. 같은 기술은 한 줄로 합친다
+    // 순서: 레벨업(레벨 순) → 진화 전 단계의 레벨업 → 기술머신(번호 순) → 가르침 → 알.
+    // 같은 기술은 한 줄로 합친다
     QList<LearnableMove> rows;
     QHash<int, qsizetype> rowOf;
     auto row = [&](const MoveEntry &move) -> LearnableMove & {
@@ -231,10 +233,12 @@ QList<SquadSession::LearnableMove> SquadSession::learnableMoves(int slot) const
         rows.append(added);
         return rows.last();
     };
-    for (const MoveEntry &move : detail.levelMoves) {
-        LearnableMove &r = row(move);
-        if (r.level < 0)
-            r.level = move.level; // 여러 레벨이면 가장 이른 것
+    for (const QList<MoveEntry> *list : {&detail.levelMoves, &detail.inheritedMoves}) {
+        for (const MoveEntry &move : *list) {
+            LearnableMove &r = row(move);
+            if (r.level < 0)
+                r.level = move.level; // 여러 레벨이면 가장 이른 것
+        }
     }
     for (const MoveEntry &move : detail.machineMoves)
         row(move).machine

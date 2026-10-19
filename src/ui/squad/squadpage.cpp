@@ -1534,7 +1534,10 @@ void SquadPage::pickMove(int slot, int index)
     for (qsizetype i = 0; i < rows.size(); ++i) {
         const SquadSession::LearnableMove &row = rows.at(i);
         QStringList parts;
-        if (row.level >= 0) // 레벨업 = 스스로 배운다("자력")
+        if (row.level >= 0 && row.move.fromPokemonId > 0) // 진화 전 단계가 배워 둔 기술
+            parts.append(
+                    tr("자력(%1 %2레벨)").arg(row.move.fromName.text(language)).arg(row.level));
+        else if (row.level >= 0) // 레벨업 = 스스로 배운다("자력")
             parts.append(tr("자력(%1레벨)").arg(row.level));
         if (!row.machine.isEmpty())
             parts.append(row.machine);

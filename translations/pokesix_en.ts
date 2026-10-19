@@ -1583,6 +1583,10 @@ abilities &amp; natures (gen 3+) and held items (gen 2+)</translation>
         <source>PokeSix 스쿼드 · 게임 세이브 (*.pks *.json *.sav *.dsv);;PokeSix 스쿼드 (*.pks *.json);;게임 세이브 (*.sav *.dsv)</source>
         <translation>PokeSix squad · game save (*.pks *.json *.sav *.dsv);;PokeSix squad (*.pks *.json);;Game save (*.sav *.dsv)</translation>
     </message>
+    <message>
+        <source>자력(%1 %2레벨)</source>
+        <translation>%1 Lv %2</translation>
+    </message>
 </context>
 <context>
     <name>com::yamada::studio::SquadSession</name>

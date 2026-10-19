@@ -1583,6 +1583,10 @@
         <source>PokeSix 스쿼드 · 게임 세이브 (*.pks *.json *.sav *.dsv);;PokeSix 스쿼드 (*.pks *.json);;게임 세이브 (*.sav *.dsv)</source>
         <translation>PokeSixスクワッド · ゲームのセーブ (*.pks *.json *.sav *.dsv);;PokeSixスクワッド (*.pks *.json);;ゲームのセーブ (*.sav *.dsv)</translation>
     </message>
+    <message>
+        <source>자력(%1 %2레벨)</source>
+        <translation>%1がLv %2で覚える</translation>
+    </message>
 </context>
 <context>
     <name>com::yamada::studio::SquadSession</name>
