@@ -141,6 +141,8 @@ qt_add_library(pokesix_ui STATIC
     shell/themeswitch.cpp
     shell/mainwindow.h
     shell/mainwindow.cpp
+    editor/editorpage.h
+    editor/editorpage.cpp
 )
 
 add_library(PokeSix::ui ALIAS pokesix_ui)

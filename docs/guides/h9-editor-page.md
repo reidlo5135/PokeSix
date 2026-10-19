@@ -76,7 +76,7 @@ publish만 하고, 스쿼드 노드가 그걸 subscribe하는지는 모른다. �
 | 이름 찾기 | 포켓몬 `Repository::pokemonDetail(id, gen, versionGroup).name`, 기술 `Repository::moves(ids, gen)`, 성격 `Repository::natures()`, 물건 `Repository::itemsForGeneration(gen)` |
 | 게임 → 버전 묶음 | `Repository::resolveVersion` · `gamesForGeneration` + `versionGroupOf`(`repository.h`) |
 | 포켓몬 아이콘 | `SpriteCache(SpriteCache::Kind::PokemonIcon)` — `path(key)`가 비면 `request(key)`, `ready` 시그널 뒤 다시 그리기 (`src/data/sprites/spritecache.h` 맨 위 주석) |
-| 창 모양(먹선 · 그림자 · 머리 띠) | `PanelFrame`(`src/ui/widgets/panelframe.h`), 버튼 `ShadowButton` |
+| 창 모양(먹선 · 그림자 · 머리 띠) | `PanelFrame`(`src/ui/widgets/panelframe.h`), 버튼 `ShadowButton`(`src/ui/widgets/shadowbutton.h` — Qt가 아니라 이 저장소의 위젯, include 필요) · 보통 버튼 `QPushButton`(app.qss가 꾸민다) |
 | 타입 칩 | `typechip::paint`(`src/ui/widgets/typechip.h`) |
 | 능력치 레이더 | `StatRadar`(`src/ui/dex/statradar.h`) — `setTrainedStats`로 파랑 겹치기 |
 

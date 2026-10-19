@@ -203,3 +203,11 @@ QPushButton#squadLinkButton {
 QPushButton#squadLinkButton:hover { color: @red; }
 QLabel#squadEmpty { font-family: "Do Hyeon"; font-size: 20px; color: @text.3; }
 QListView#squadPickerList { border: 2px solid @ink; border-radius: 6px; background: @white; outline: none; }
+/* 에디터 페이지 */
+QLabel#editorDropHint{
+  border: 3px dashed @blue;
+  border-radius: 12px;
+  padding: 48px;
+  color: @text.2;
+  font-family:"Do Hyeon"; font-size: 24px;
+}

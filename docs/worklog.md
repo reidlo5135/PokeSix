@@ -11,6 +11,8 @@ Claude는 작업 덩어리가 끝날 때마다 이 문서의 "지금 상태"와 
 
 - **`v0.5.1`(2026-10-19, PATCH) 준비 완료 — 사용자 push 대기**: E2b(진화 전 단계 기술 상속 + 1세대 중복 버전 숨김). 사용자 결정: 에디터와 별개의 수정이라 먼저 낸다.
   `git push origin main --follow-tags` 후 Actions `release` 4잡 초록 · 본문 확인
+- **H9 이어서 할 곳(2026-10-19 WIP 커밋)**: 미션 1 완료(탭 6개 · 플로피 아이콘은 Claude) · 미션 2 진행 중 — 빈 상태 점선 안내(QSS `editorDropHint`) · 끌어다 놓기 · [세이브 열기] → `chooseSave()` → `openFile(path)`까지. **빌드가 `editorpage.h:44`에서 멈춤**: `m_loaded`(`std::optional<squadfile::Portable>`)를 더했는데 헤더에 `"data/store/squadfile.h"` · `<optional>` include가 아직 없다. 다음: 불러온 상태 페이지 `[1]`(`m_fileInfo` 라벨) → `openFile` 끝에서 `m_loaded` 담기 · 글자 · `setCurrentIndex(1)`. 미션 5 일부(스쿼드 `importFile` · `kAccepted`에서 .sav 제거)도 먼저 함 — 남은 것: 스쿼드 대화상자 필터 · `DropOverlay` 문구 · 안 쓰는 include
+- 작업 트리에 **VS Code 저장 포맷으로 주석 정렬만 바뀐 헤더 5개**(`repository.h` · `csvimporter.h` · `dataupdater.h` · `firstrunpanel.h` · `panelpainter.h`)가 있다 — 커밋하지 않았다(열린 일 9: clang-format 버전 차이. VS Code가 apt 18.1.3이 아닌 다른 clang-format을 쓰는 듯)
 - **진행 중: H9 에디터 페이지**(브랜치 `feat/h9-editor-page`, 가이드 [h9-editor-page.md](guides/h9-editor-page.md), [ADR 0021](decisions/0021-editor-page-for-saves.md)). 가이드 방식 바꿈(사용자 요청 2026-10-19): 빈칸 채우기가 아니라 **미션 5개(빈 탭 → 받기 → 파티 카드 → 스쿼드로 보내기 → 스쿼드에서 .sav 빼기)** 마다 만들 것 · 지킬 조건 · 참고 코드 · 완료 조건만, 설계는 사용자. 미션 4의 SquadPage 함수 나누기는 원하면 Claude
 - **`v0.5.0`(2026-10-13, MINOR) 공개됨**: F3a 테마 스위치(라이트 · 다크 · 시스템). 다크의 연한 칸 몇 곳은 F3b 전이라 어색함 — 릴리스 노트에 적었다
 - **`v0.4.1`(2026-10-13, PATCH) 공개됨**: 일괄 비우기 후 게임을 바꿨다 오면 옛 스쿼드가 돌아오던 버그(사용자 발견). 원인: `SquadStore::setSquad`가 없는 키의
