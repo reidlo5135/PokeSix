@@ -1,34 +1,33 @@
 #include "ui/editor/editorpage.h"
 
-#include "ui/widgets/shadowbutton.h"
-#include "ui/theme/cursors.h"
 #include "data/repository/repository.h"
 #include "data/state/appstate.h"
-#include "data/store/squadfile.h"
 #include "data/store/saveimport.h"
+#include "data/store/squadfile.h"
+#include "ui/theme/cursors.h"
+#include "ui/widgets/shadowbutton.h"
 
-#include <optional>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QMargins>
-#include <QLabel>
-#include <QPainter>
-#include <QFile>
-#include <QFileDialog>
-#include <QStandardPaths>
-#include <QUrl>
 #include <QDragEnterEvent>
 #include <QDropEvent>
-#include <QDragLeaveEvent>
-#include <QMimeData>
-#include <QTimer>
+#include <QFileDialog>
+#include <QFileInfo>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QMargins>
 #include <QMessageBox>
+#include <QMimeData>
+#include <QStandardPaths>
+#include <QTimer>
+#include <QUrl>
+#include <QVBoxLayout>
+
+#include <optional>
 
 namespace {
 using namespace com::yamada::studio;
 
-    constexpr QMargins kPageMargins {20, 16, 20, 12};
-}
+constexpr QMargins kPageMargins {20, 16, 20, 12};
+} // namespace
 
 namespace com::yamada::studio {
 EditorPage::EditorPage(Repository *repo, AppState *state, QWidget *parent)
@@ -39,13 +38,14 @@ EditorPage::EditorPage(Repository *repo, AppState *state, QWidget *parent)
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(kPageMargins);
     layout->setSpacing(14);
-    layout->addWidget(buildTopbar());   
+    layout->addWidget(buildTopbar());
     layout->addWidget(buildBody());
 
     setAcceptDrops(true);
 }
 
-QWidget *EditorPage::buildTopbar() {
+QWidget *EditorPage::buildTopbar()
+{
     QWidget *bar = new QWidget;
     m_topBar = bar;
     QHBoxLayout *layout = new QHBoxLayout(bar);
@@ -67,7 +67,8 @@ QWidget *EditorPage::buildTopbar() {
     return bar;
 }
 
-QStackedWidget *EditorPage::buildBody() {
+QStackedWidget *EditorPage::buildBody()
+{
     QStackedWidget *body = new QStackedWidget;
     m_body = body;
 
@@ -77,18 +78,20 @@ QStackedWidget *EditorPage::buildBody() {
     hint->setObjectName(QStringLiteral("editorDropHint"));
     hint->setAlignment(Qt::AlignCenter);
 
-    emptyLayout->addStretch();
     emptyLayout->addWidget(hint);
-    emptyLayout->addStretch();
+
+    m_fileInfo = new QLabel;
 
     body->addWidget(empty);
+    body->addWidget(m_fileInfo);
 
     return body;
 }
 
-void EditorPage::dragEnterEvent(QDragEnterEvent *event) {
+void EditorPage::dragEnterEvent(QDragEnterEvent *event)
+{
     QWidget::dragEnterEvent(event);
-    
+
     const QList<QUrl> urls = event->mimeData()->urls();
     if (urls.size() != 1 || !urls.constFirst().isLocalFile())
         return;
@@ -100,7 +103,8 @@ void EditorPage::dragEnterEvent(QDragEnterEvent *event) {
     }
 }
 
-void EditorPage::dropEvent(QDropEvent *event) {
+void EditorPage::dropEvent(QDropEvent *event)
+{
     QWidget::dropEvent(event);
     if (!event->mimeData()->hasUrls())
         return;
@@ -109,21 +113,18 @@ void EditorPage::dropEvent(QDropEvent *event) {
     QTimer::singleShot(0, this, [this, path] { openFile(path); });
 }
 
-void EditorPage::dragLeaveEvent(QDragLeaveEvent *event) {
-    QWidget::dragLeaveEvent(event);
-}
-
-void EditorPage::chooseSave() {
+void EditorPage::chooseSave()
+{
     const QString dir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-    const QString path = QFileDialog::getOpenFileName(
-            this, tr("세이브 불러오기"), dir,
-            tr("게임 세이브 (*.sav *.dsv)"));
+    const QString path = QFileDialog::getOpenFileName(this, tr("세이브 불러오기"), dir,
+                                                      tr("게임 세이브 (*.sav *.dsv)"));
     if (path.isEmpty())
         return;
     openFile(path);
 }
 
-void EditorPage::openFile(const QString &path) {
+void EditorPage::openFile(const QString &path)
+{
     QString error;
     const std::optional<squadfile::Portable> loaded = saveimport::load(path, *m_repository, &error);
 
@@ -132,26 +133,19 @@ void EditorPage::openFile(const QString &path) {
         return;
     }
 
-    const QString version = m_repository->resolveVersion(loaded->generation, loaded->game);
-    if (version.isEmpty()) {
-        QMessageBox::warning(this, tr("세이브 불러오기"),
-                             tr("%1세대는 아직 준비되지 않았어요").arg(loaded->generation));
-        return;
-    }
-
     m_loaded = *loaded;
-    
+
     QString gameName = loaded->game;
     for (const GameInfo &game : m_repository->gamesForGeneration(loaded->generation)) {
         const qsizetype i = game.versions.indexOf(loaded->game);
         if (i >= 0)
             gameName = game.versionNames.at(i).text(m_state->language());
     }
-    m_fileInfo->setText(QStringLiteral("%1\n%2 · %3세대 · %4마리")
-                            .arg(QFileInfo(path).fileName())
-                            .arg(gameName)
-                            .arg(loaded->generation)
-                            .arg(loaded->squad.filled()));
+    m_fileInfo->setText(tr("%1\n%2 · %3세대 · %4마리")
+                                .arg(QFileInfo(path).fileName())
+                                .arg(gameName)
+                                .arg(loaded->generation)
+                                .arg(loaded->squad.filled()));
 
     m_body->setCurrentIndex(1);
 }
