@@ -7,7 +7,6 @@
 #include "data/sprites/spritecache.h"
 #include "data/state/appstate.h"
 #include "data/state/squadsession.h"
-#include "data/store/saveimport.h"
 #include "data/store/squadfile.h"
 #include "data/store/squadstore.h"
 #include "ui/dex/dexdetailpage.h"
@@ -1271,8 +1270,7 @@ void SquadPage::importSquad()
     // 초기 내보내기가 .json이었다 — 그 파일들도 계속 읽는다
     const QString path = QFileDialog::getOpenFileName(
             this, tr("스쿼드 불러오기"), dir,
-            tr("PokeSix 스쿼드 · 게임 세이브 (*.pks *.json *.sav *.dsv);;PokeSix 스쿼드 (*.pks "
-               "*.json);;게임 세이브 (*.sav *.dsv)"));
+            tr("PokeSix 스쿼드 파일(*.pks *.json)"));
     if (path.isEmpty())
         return;
     importFile(path);

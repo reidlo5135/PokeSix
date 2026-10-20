@@ -52,6 +52,10 @@
         <source>타운맵</source>
         <translation>タウンマップ</translation>
     </message>
+    <message>
+        <source>에디터</source>
+        <translation>エディター</translation>
+    </message>
 </context>
 <context>
     <name>com::yamada::studio::CardBarrel</name>
@@ -293,7 +297,40 @@
     </message>
     <message>
         <source>스쿼드 파일(.pks) · 게임 세이브(.sav · .dsv)</source>
-        <translation>スクワッドファイル(.pks) · ゲームのセーブ(.sav · .dsv)</translation>
+        <translation type="vanished">スクワッドファイル(.pks) · ゲームのセーブ(.sav · .dsv)</translation>
+    </message>
+    <message>
+        <source>스쿼드 파일(.pks)</source>
+        <translation>スクワッドファイル(.pks)</translation>
+    </message>
+</context>
+<context>
+    <name>com::yamada::studio::EditorPage</name>
+    <message>
+        <source>에디터</source>
+        <translation>エディター</translation>
+    </message>
+    <message>
+        <source>세이브 열기</source>
+        <translation>セーブを開く</translation>
+    </message>
+    <message>
+        <source>세이브 파일을 여기에 끌어다 놓아요</source>
+        <translation>セーブファイルをここにドロップしてください</translation>
+    </message>
+    <message>
+        <source>세이브 불러오기</source>
+        <translation>セーブの読み込み</translation>
+    </message>
+    <message>
+        <source>게임 세이브 (*.sav *.dsv)</source>
+        <translation>ゲームのセーブ (*.sav *.dsv)</translation>
+    </message>
+    <message>
+        <source>%1
+%2 · %3세대 · %4마리</source>
+        <translation>%1
+%2 · 第%3世代 · %4匹</translation>
     </message>
 </context>
 <context>
@@ -880,6 +917,13 @@
     <message>
         <source>성격 없음</source>
         <translation>せいかくなし</translation>
+    </message>
+</context>
+<context>
+    <name>com::yamada::studio::PartyCard</name>
+    <message>
+        <source>Lv %1</source>
+        <translation>Lv %1</translation>
     </message>
 </context>
 <context>
@@ -1577,15 +1621,19 @@
     </message>
     <message>
         <source>✓ 세이브에서 파티를 불러왔어요</source>
-        <translation>✓ セーブから手持ちを読み込みました</translation>
+        <translation type="vanished">✓ セーブから手持ちを読み込みました</translation>
     </message>
     <message>
         <source>PokeSix 스쿼드 · 게임 세이브 (*.pks *.json *.sav *.dsv);;PokeSix 스쿼드 (*.pks *.json);;게임 세이브 (*.sav *.dsv)</source>
-        <translation>PokeSixスクワッド · ゲームのセーブ (*.pks *.json *.sav *.dsv);;PokeSixスクワッド (*.pks *.json);;ゲームのセーブ (*.sav *.dsv)</translation>
+        <translation type="vanished">PokeSixスクワッド · ゲームのセーブ (*.pks *.json *.sav *.dsv);;PokeSixスクワッド (*.pks *.json);;ゲームのセーブ (*.sav *.dsv)</translation>
     </message>
     <message>
         <source>자력(%1 %2레벨)</source>
         <translation>%1がLv %2で覚える</translation>
+    </message>
+    <message>
+        <source>PokeSix 스쿼드 파일(*.pks *.json)</source>
+        <translation>PokeSixスクワッドファイル (*.pks *.json)</translation>
     </message>
 </context>
 <context>
