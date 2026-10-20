@@ -165,6 +165,17 @@ m_loaded                                  std::optional<squadfile::Portable>  (E
 1. 값 묶음 구조체 `PartyCardView` — 카드가 그릴 글자 · 숫자만 담는다. 카드는 여전히 Repository를 모른다
 2. 채우기 함수 `fillCards()` — `openFile`에서 루프를 떼어 낸다. `m_loaded`(멤버)만 보고 6장을 채운다
 
+**함수마다 맡는 일 (A0 끝)**
+
+| 함수 | 맡는 일 | 언제 | 하지 않는 일 |
+|---|---|---|---|
+| `openFile(path)` | **파일 → 데이터**: 읽기 · 실패 경고 · `m_loaded`와 `m_fileName` 저장 · `fillInfo()` · `fillCards()` · `setCurrentIndex(1)` | 매번(세이브 열 때) | 화면 글자를 직접 쓰지 않는다 |
+| `fillInfo()` | **정보 줄**: 파일 이름 · 게임 이름 · 세대 · 마리 수 → `m_fileInfo` | 매번(세이브 열 때 · 언어 바뀔 때) | 파일을 읽지 않는다 |
+| `fillCards()` | **카드 6장**: `m_loaded` → `PartyCardView` → `setMember` | 매번(세이브 열 때 · 아이콘 도착 때 · 언어 바뀔 때) | 파일을 읽지 않는다 |
+
+`path`는 `openFile`에만 있으므로 파일 이름은 멤버 `QString m_fileName;`에 기억해 둔다. 정보 줄이 필요 없다고
+정하면 `m_fileInfo`와 `fillInfo`를 통째로 지워도 된다(화면 설계는 직접 정한다).
+
 **언제 무엇이 실행되나 (H10a 끝 기준)**
 
 ```
@@ -173,12 +184,13 @@ m_loaded                                  std::optional<squadfile::Portable>  (E
 앱 켜짐        EditorPage 생성자 ─ buildTopbar · buildBody(카드 6장 new)   [한 번]
                                 └ connect(아이콘 캐시 ready → fillCards)      [한 번 · A1]
 
-세이브 열기    openFile(path) ─ load → m_loaded에 저장 → m_fileInfo 글자
+세이브 열기    openFile(path) ─ load → m_loaded · m_fileName에 저장
+                              ├ fillInfo()                                   [매번: 세이브 열 때]
                               └ fillCards()                                  [매번: 세이브 열 때]
 
 아이콘 도착    SpriteCache::ready ─▶ fillCards()                              [매번: 아이콘 도착 때 · A1]
 
-언어 바뀜      AppState::languageChanged ─▶ fillCards()                       [매번: 언어 바뀔 때 · 선택]
+언어 바뀜      AppState::languageChanged ─▶ fillInfo() · fillCards()          [매번: 언어 바뀔 때 · 선택]
 ```
 
 **할 일 표**
