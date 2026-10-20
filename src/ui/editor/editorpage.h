@@ -13,6 +13,7 @@ class Repository;
 class AppState;
 class ShadowButton;
 class PartyCard;
+class SpriteCache;
 
 class EditorPage : public QWidget
 {
@@ -33,6 +34,7 @@ private:
 
     void chooseSave();
     void openFile(const QString &path);
+    void fillCards();
 
     Repository *m_repository = nullptr;
     AppState *m_state = nullptr;
@@ -45,6 +47,8 @@ private:
 
     std::optional<squadfile::Portable> m_loaded;
     QLabel *m_fileInfo = nullptr;
+    QString m_fileName;
     QList<PartyCard *> m_cards;
+    SpriteCache *m_pokemonIcons = nullptr;
 };
 } // namespace com::yamada::studio

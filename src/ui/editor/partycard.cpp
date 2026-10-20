@@ -1,6 +1,7 @@
 #include "ui/editor/partycard.h"
 
 #include <QGridLayout>
+#include <QHBoxLayout>
 #include <QLabel>
 #include <QString>
 #include <QVBoxLayout>
@@ -13,35 +14,38 @@ PartyCard::PartyCard(QWidget *parent)
     setObjectName(QStringLiteral("editorCard"));
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(14, 12, 14, 12);
-
-    QGridLayout *movesLayout = new QGridLayout;
-    movesLayout->setColumnStretch(2, 1);
-
+    QHBoxLayout *head = new QHBoxLayout; // 괄호를 비운다 — 아래 layout->addLayout(head)로 들어간다
+    m_icon = new QLabel;
+    m_icon->setFixedSize(68, 56); // 아이콘이 오기 전에도 머리 줄 높이가 같게
     m_name = new QLabel;
     m_level = new QLabel;
-
-    layout->addWidget(m_name);
-    layout->addWidget(m_level);
+    m_icon->setObjectName(QStringLiteral("editorCardIcon"));
+    m_name->setObjectName(QStringLiteral("editorCardName"));
+    m_level->setObjectName(QStringLiteral("editorCardLevel"));
+    head->addWidget(m_icon);
+    head->addWidget(m_name);
+    head->addStretch();
+    head->addWidget(m_level);
+    layout->addLayout(head);
+    QGridLayout *movesLayout = new QGridLayout;
+    movesLayout->setColumnStretch(2, 1);
     layout->addLayout(movesLayout);
-
     for (int i = 0; i < 4; ++i) {
         QLabel *move;
         move = new QLabel;
         m_moves.append(move);
         movesLayout->addWidget(move, i / 2, i % 2);
     }
-
-    m_name->setObjectName(QStringLiteral("editorCardName"));
-    m_level->setObjectName(QStringLiteral("editorCardLevel"));
 }
 
-void PartyCard::setMember(const QString &name, int level, const QStringList &moves)
+void PartyCard::setMember(const PartyCardView &view)
 {
-    m_name->setText(name);
-    m_level->setText(tr("Lv %1").arg(level));
+    m_name->setText(view.name);
+    m_level->setText(tr("Lv %1").arg(view.level));
     for (int i = 0; i < 4; ++i) {
-        m_moves[i]->setText(i < moves.size() ? moves[i] : QString());
+        m_moves[i]->setText(i < view.moves.size() ? view.moves[i] : QString());
     }
+    m_icon->setPixmap(view.icon);
 }
 
 void PartyCard::setEmpty()
@@ -51,5 +55,6 @@ void PartyCard::setEmpty()
     for (int i = 0; i < 4; ++i) {
         m_moves[i]->setText(QString());
     }
+    m_icon->clear();
 }
 } // namespace com::yamada::studio

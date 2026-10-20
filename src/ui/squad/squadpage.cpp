@@ -1268,9 +1268,8 @@ void SquadPage::importSquad()
 {
     const QString dir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     // 초기 내보내기가 .json이었다 — 그 파일들도 계속 읽는다
-    const QString path = QFileDialog::getOpenFileName(
-            this, tr("스쿼드 불러오기"), dir,
-            tr("PokeSix 스쿼드 파일(*.pks *.json)"));
+    const QString path = QFileDialog::getOpenFileName(this, tr("스쿼드 불러오기"), dir,
+                                                      tr("PokeSix 스쿼드 파일(*.pks *.json)"));
     if (path.isEmpty())
         return;
     importFile(path);

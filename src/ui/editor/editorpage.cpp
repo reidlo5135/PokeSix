@@ -1,6 +1,7 @@
 #include "ui/editor/editorpage.h"
 
 #include "data/repository/repository.h"
+#include "data/sprites/spritecache.h"
 #include "data/state/appstate.h"
 #include "data/store/saveimport.h"
 #include "data/store/squad.h"
@@ -19,6 +20,7 @@
 #include <QMargins>
 #include <QMessageBox>
 #include <QMimeData>
+#include <QPixmap>
 #include <QStandardPaths>
 #include <QTimer>
 #include <QUrl>
@@ -42,7 +44,11 @@ EditorPage::EditorPage(Repository *repository, AppState *state, QWidget *parent)
     layout->setContentsMargins(kPageMargins);
     layout->setSpacing(14);
     layout->addWidget(buildTopbar());
+
+    m_pokemonIcons = new SpriteCache(SpriteCache::Kind::PokemonIcon, this);
     layout->addWidget(buildBody());
+
+    connect(m_pokemonIcons, &SpriteCache::ready, this, &EditorPage::fillCards);
 
     setAcceptDrops(true);
 }
@@ -152,44 +158,61 @@ void EditorPage::openFile(const QString &path)
     }
 
     m_loaded = *loaded;
+    m_fileName = QFileInfo(path).fileName();
+    fillCards();
+    m_body->setCurrentIndex(1);
+}
 
-    QString gameName = loaded->game;
-    const QList<GameInfo> games = m_repository->gamesForGeneration(loaded->generation);
-    const QString group = versionGroupOf(games, loaded->game);
+void EditorPage::fillCards()
+{
+    if (!m_loaded) {
+        return;
+    }
+
+    QString gameName = m_loaded->game;
+    const QList<GameInfo> games = m_repository->gamesForGeneration(m_loaded->generation);
+    const QString group = versionGroupOf(games, m_loaded->game);
 
     for (const GameInfo &game : games) {
-        const qsizetype i = game.versions.indexOf(loaded->game);
+        const qsizetype i = game.versions.indexOf(m_loaded->game);
         if (i >= 0)
             gameName = game.versionNames.at(i).text(m_state->language());
     }
     m_fileInfo->setText(tr("%1\n%2 · %3세대 · %4마리")
-                                .arg(QFileInfo(path).fileName())
+                                .arg(m_fileName)
                                 .arg(gameName)
-                                .arg(loaded->generation)
-                                .arg(loaded->squad.filled()));
+                                .arg(m_loaded->generation)
+                                .arg(m_loaded->squad.filled()));
 
     for (int i = 0; i < 6; ++i) {
-        const SquadMember &member = loaded->squad.members[i];
+        PartyCardView view;
+
+        const SquadMember &member = m_loaded->squad.members[i];
         if (member.isEmpty()) {
             m_cards[i]->setEmpty();
             continue;
         }
-        const QString name
-                = m_repository->pokemonDetail(member.pokemonId, loaded->generation, group)
-                          .name.text(m_state->language());
+        view.name = m_repository->pokemonDetail(member.pokemonId, m_loaded->generation, group)
+                            .name.text(m_state->language());
         QStringList moves;
         for (const int moveId : member.moves) {
             QList<int> ids;
             ids.append(moveId);
-            const QList<MoveEntry> moveEntryMoves = m_repository->moves(ids, loaded->generation);
+            const QList<MoveEntry> moveEntryMoves = m_repository->moves(ids, m_loaded->generation);
             for (int k = 0; k < moveEntryMoves.size(); ++k) {
                 moves.append(moveEntryMoves[k].name.text(m_state->language()));
             }
         }
-        m_cards[i]->setMember(name, member.level, moves);
+        view.level = member.level;
+        view.moves = moves;
+        const QString key = QString::number(member.pokemonId);
+        const QString iconFilePath = m_pokemonIcons->path(key);
+        if (iconFilePath.isEmpty())
+            m_pokemonIcons->request(key);
+        else
+            view.icon = QPixmap(iconFilePath);
+
+        m_cards[i]->setMember(view);
     }
-
-    m_body->setCurrentIndex(1);
 }
-
 } // namespace com::yamada::studio
