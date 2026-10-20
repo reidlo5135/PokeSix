@@ -178,9 +178,9 @@ void EditorPage::openFile(const QString &path)
                 = m_repository->pokemonDetail(member.pokemonId, loaded->generation, group)
                           .name.text(m_state->language());
         QStringList moves;
-        for (int j = 0; j < member.moves.size(); ++j) {
+        for (const int moveId : member.moves) {
             QList<int> ids;
-            ids.append(member.moves[j]);
+            ids.append(moveId);
             const QList<MoveEntry> moveEntryMoves = m_repository->moves(ids, loaded->generation);
             for (int k = 0; k < moveEntryMoves.size(); ++k) {
                 moves.append(moveEntryMoves[k].name.text(m_state->language()));

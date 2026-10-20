@@ -15,6 +15,8 @@ PartyCard::PartyCard(QWidget *parent)
     layout->setContentsMargins(14, 12, 14, 12);
 
     QGridLayout *movesLayout = new QGridLayout;
+    movesLayout->setColumnStretch(2, 1);
+
     m_name = new QLabel;
     m_level = new QLabel;
 
@@ -26,7 +28,6 @@ PartyCard::PartyCard(QWidget *parent)
         QLabel *move;
         move = new QLabel;
         m_moves.append(move);
-        movesLayout->setColumnStretch(2, 1);
         movesLayout->addWidget(move, i / 2, i % 2);
     }
 
