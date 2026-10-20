@@ -177,7 +177,16 @@ void EditorPage::openFile(const QString &path)
         const QString name
                 = m_repository->pokemonDetail(member.pokemonId, loaded->generation, group)
                           .name.text(m_state->language());
-        m_cards[i]->setMember(name, member.level);
+        QStringList moves;
+        for (int j = 0; j < member.moves.size(); ++j) {
+            QList<int> ids;
+            ids.append(member.moves[j]);
+            const QList<MoveEntry> moveEntryMoves = m_repository->moves(ids, loaded->generation);
+            for (int k = 0; k < moveEntryMoves.size(); ++k) {
+                moves.append(moveEntryMoves[k].name.text(m_state->language()));
+            }
+        }
+        m_cards[i]->setMember(name, member.level, moves);
     }
 
     m_body->setCurrentIndex(1);
