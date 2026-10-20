@@ -52,6 +52,10 @@
         <source>타운맵</source>
         <translation>Town Map</translation>
     </message>
+    <message>
+        <source>에디터</source>
+        <translation>Editor</translation>
+    </message>
 </context>
 <context>
     <name>com::yamada::studio::CardBarrel</name>
@@ -293,7 +297,40 @@ to see a summary here</translation>
     </message>
     <message>
         <source>스쿼드 파일(.pks) · 게임 세이브(.sav · .dsv)</source>
-        <translation>Squad file (.pks) · game save (.sav · .dsv)</translation>
+        <translation type="vanished">Squad file (.pks) · game save (.sav · .dsv)</translation>
+    </message>
+    <message>
+        <source>스쿼드 파일(.pks)</source>
+        <translation>Squad file (.pks)</translation>
+    </message>
+</context>
+<context>
+    <name>com::yamada::studio::EditorPage</name>
+    <message>
+        <source>에디터</source>
+        <translation>Editor</translation>
+    </message>
+    <message>
+        <source>세이브 열기</source>
+        <translation>Open save</translation>
+    </message>
+    <message>
+        <source>세이브 파일을 여기에 끌어다 놓아요</source>
+        <translation>Drop a save file here</translation>
+    </message>
+    <message>
+        <source>세이브 불러오기</source>
+        <translation>Load save</translation>
+    </message>
+    <message>
+        <source>게임 세이브 (*.sav *.dsv)</source>
+        <translation>Game save (*.sav *.dsv)</translation>
+    </message>
+    <message>
+        <source>%1
+%2 · %3세대 · %4마리</source>
+        <translation>%1
+%2 · Gen %3 · %4 Pokémon</translation>
     </message>
 </context>
 <context>
@@ -880,6 +917,13 @@ to see its details here</translation>
     <message>
         <source>성격 없음</source>
         <translation>No nature</translation>
+    </message>
+</context>
+<context>
+    <name>com::yamada::studio::PartyCard</name>
+    <message>
+        <source>Lv %1</source>
+        <translation>Lv %1</translation>
     </message>
 </context>
 <context>
@@ -1577,15 +1621,19 @@ abilities &amp; natures (gen 3+) and held items (gen 2+)</translation>
     </message>
     <message>
         <source>✓ 세이브에서 파티를 불러왔어요</source>
-        <translation>✓ Party imported from the save</translation>
+        <translation type="vanished">✓ Party imported from the save</translation>
     </message>
     <message>
         <source>PokeSix 스쿼드 · 게임 세이브 (*.pks *.json *.sav *.dsv);;PokeSix 스쿼드 (*.pks *.json);;게임 세이브 (*.sav *.dsv)</source>
-        <translation>PokeSix squad · game save (*.pks *.json *.sav *.dsv);;PokeSix squad (*.pks *.json);;Game save (*.sav *.dsv)</translation>
+        <translation type="vanished">PokeSix squad · game save (*.pks *.json *.sav *.dsv);;PokeSix squad (*.pks *.json);;Game save (*.sav *.dsv)</translation>
     </message>
     <message>
         <source>자력(%1 %2레벨)</source>
         <translation>%1 Lv %2</translation>
+    </message>
+    <message>
+        <source>PokeSix 스쿼드 파일(*.pks *.json)</source>
+        <translation>PokeSix squad file (*.pks *.json)</translation>
     </message>
 </context>
 <context>

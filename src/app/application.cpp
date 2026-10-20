@@ -31,7 +31,8 @@ struct ScreenName
 };
 constexpr ScreenName kScreens[] = {
         {"intro", std::nullopt}, {"dex", Page::Dex},     {"items", Page::Items},
-        {"map", Page::Map},      {"squad", Page::Squad}, {"settings", Page::Settings},
+        {"map", Page::Map},      {"squad", Page::Squad}, {"editor", Page::Editor},
+        {"settings", Page::Settings},
 };
 
 // 인트로의 세대 카드 부채꼴이 펼쳐지는 등장 애니메이션(CardBarrel kEnterMs 760)이 끝난 뒤 찍는다
@@ -154,7 +155,7 @@ bool Application::parseArguments()
                   return shot.screen == QLatin1String(s.name);
               });
     if (found == std::end(kScreens)) {
-        usageError(QStringLiteral("unknown screen '%1' (intro, dex, items, map, squad, settings)")
+        usageError(QStringLiteral("unknown screen '%1' (intro, dex, items, map, squad, editor, settings)")
                            .arg(shot.screen));
         return false;
     }

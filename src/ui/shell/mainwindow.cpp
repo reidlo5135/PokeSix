@@ -4,6 +4,7 @@
 #include "data/state/appstate.h"
 #include "data/update/dataupdater.h"
 #include "ui/dex/dexpage.h"
+#include "ui/editor/editorpage.h"
 #include "ui/home/homepage.h"
 #include "ui/items/itemspage.h"
 #include "ui/logging/logging.h"
@@ -71,10 +72,13 @@ MainWindow::MainWindow(Repository *repository, AppState *state, DataUpdater *dat
     // 지우거나 이름을 바꾸지 못한다(Linux는 된다 — 그래서 Linux에서는 안 보이던 문제).
     connect(dataUpdater, &DataUpdater::aboutToReplaceDatabase, this,
             [this] { m_repository->close(); });
+    EditorPage *editor = new EditorPage(m_repository, m_state); // [4] 에디터
+    m_pages->addWidget(editor);
+
     QLabel *placeholder = new QLabel(tr("%1 — 준비 중이에요").arg(tr("설정")));
     placeholder->setObjectName(QStringLiteral("pagePlaceholder"));
     placeholder->setAlignment(Qt::AlignCenter);
-    m_pages->addWidget(placeholder); // [4] 설정
+    m_pages->addWidget(placeholder); // [5] 설정
 
     layout->addWidget(m_appBar);
     layout->addWidget(m_pages);
@@ -119,8 +123,9 @@ MainWindow::MainWindow(Repository *repository, AppState *state, DataUpdater *dat
 
     // 본 화면의 단축키. shell에 달고 WidgetWithChildrenShortcut으로 두면 본 화면이 보일 때만
     // 동작한다 (인트로에서는 1–4 키가 메뉴에 있고, 잠긴 메뉴를 단축키로 우회하지 못한다).
-    const Page pages[] = {Page::Dex, Page::Items, Page::Map, Page::Squad, Page::Settings};
-    for (int i = 0; i < 5; ++i) {
+    const Page pages[]
+            = {Page::Dex, Page::Items, Page::Map, Page::Squad, Page::Editor, Page::Settings};
+    for (int i = 0; i < 6; ++i) {
         QShortcut *shortcut = new QShortcut(QKeySequence(Qt::CTRL | (Qt::Key_1 + i)), shell);
         shortcut->setContext(Qt::WidgetWithChildrenShortcut);
         const Page page = pages[i];

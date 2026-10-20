@@ -8,6 +8,7 @@ enum class Page {
     Items,
     Map, // 타운맵 백과(T1)
     Squad,
+    Editor,
     Settings,
 };
 } // namespace com::yamada::studio

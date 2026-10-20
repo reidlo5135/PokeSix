@@ -54,7 +54,7 @@ signals:
 protected:
     void showEvent(QShowEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
-    // 파일 끌어다 놓기(H2): .pks · .json · .sav · .dsv를 페이지에 놓으면 불러온다
+    // 파일 끌어다 놓기(H2): .pks · .json를 페이지에 놓으면 불러온다
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
     void dragLeaveEvent(QDragLeaveEvent *event) override; // H2-CP8: 끌던 파일이 창 밖으로 나감
@@ -131,8 +131,8 @@ private:
     QList<std::pair<QToolButton *, const char *>>
             m_toolIcons; // 도구 버튼과 그 아이콘(svg, %1 = 색)
     void refreshToolIcons();
-    QToolButton *m_redoButton = nullptr;    // 다시 실행 ↷
-    QToolButton *m_clearButton = nullptr;   // 일괄 비우기 ⟳
+    QToolButton *m_redoButton = nullptr;  // 다시 실행 ↷
+    QToolButton *m_clearButton = nullptr; // 일괄 비우기 ⟳
     QLabel *m_saveStatus = nullptr;
     QWidget *m_topBar = nullptr; // 오른쪽 끝을 분석 창과 맞추려고 스크롤바 폭만큼 들여 쓴다
 

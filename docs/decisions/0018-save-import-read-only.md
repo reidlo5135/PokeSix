@@ -1,6 +1,6 @@
 # 0018 — 세이브(.sav)는 읽기 전용으로, 스쿼드 "불러오기"에서 받는다
 
-- 상태: 채택 (2026-10-08)
+- 상태: 채택 (2026-10-08) — **결정 1(새 화면 없음)은 [ADR 0021](0021-editor-page-for-saves.md)로 대체**(2026-10-19)
 - 관련: [overlay-design.md](../overlay-design.md)(검토 문서 — 이 ADR이 1단계를 확정한다) · [ADR 0006](0006-semver-and-trunk-based-branches.md) · 로드맵 Phase H
 
 ## 배경

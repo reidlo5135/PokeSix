@@ -134,6 +134,19 @@
 - 그림자는 전부 블러 없는 "오프셋 사각형". `QGraphicsDropShadowEffect`는 쓰지 않는다.
 - QSS로 표현할 수 없는 것(창 그림자, 타입 칩, 히트맵, 종족값 바, 앱 막대 탭)은 `paintEvent`에서 `QPainter`로 그린다.
 
+### QSS 객체 이름 (`setObjectName`)
+
+`app.qss`가 `타입#이름`으로 모양을 입힌다(CSS의 id 선택자). 이름은 camelCase로:
+
+- **한 화면에만 있는 모양**: `<화면 접두어><역할>` — `squadToolButton`, `dexTable`, `mapRegionChip`, `editorDropHint`.
+  접두어: `dex` · `item` · `map` · `squad` · `editor` · `intro` · `firstRun` · `shuttle`
+- **여러 화면이 같이 쓰는 모양**: 접두어 없이 — `pageTitle`(페이지 제목, 도현 28), `pagePlaceholder`, `filterCaption`.
+  새 화면은 같은 역할이면 새 이름을 만들지 말고 공용 이름을 쓴다
+- 역할 단어는 끝에: `Title` · `Label` · `Button` · `Table` · `Scroll` · `Pill` · `Chip` · `Count` · `Note` · `Empty` · `Hint`
+- 선택자의 **타입까지 맞아야** 적용된다: `QLineEdit#x`는 같은 이름의 `QLabel`에 안 먹는다
+- `paintEvent`로 그리는 위젯(`ShadowButton` 등)은 QSS를 읽지 않으니 이름표가 필요 없다
+- 남은 빚: `dexSectionLabel`은 도감 · 스쿼드 · 타운맵 · 셔틀 창이 같이 쓰는 공용 모양이다(이름만 옛것). 바꿀 때는 `sectionLabel`로
+
 ## 11. Git · 버전
 
 전체 규칙은 [versioning-and-git.md](versioning-and-git.md)에 있다. 요약:
