@@ -7,6 +7,7 @@
 #   scripts/linux/build.sh --no-test          # skip tests
 #   scripts/linux/build.sh --tidy             # build with clang-tidy enabled
 #   scripts/linux/build.sh --format           # check clang-format before building (fails on violations)
+#   scripts/linux/build.sh -j 8               # parallel build jobs (also -j8, --jobs 8; default: CMake's)
 #   scripts/linux/build.sh release --install ~/.local
 #
 # Build directory: build/linux-<debug|release>  (same as CMakePresets.json)
@@ -14,7 +15,7 @@ set -euo pipefail
 # shellcheck source=env.sh
 source "$(dirname "${BASH_SOURCE[0]}")/env.sh"
 
-usage() { sed -n '2,12p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; }
+usage() { sed -n '2,13p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; }
 
 config=debug
 clean=0
@@ -22,6 +23,7 @@ run_tests=1
 tidy=OFF
 check_format=0
 install_prefix=""
+jobs=""
 
 while (($#)); do
     case "$1" in
@@ -33,11 +35,17 @@ while (($#)); do
         --install)
             (($# >= 2)) || die "--install needs an install path"
             install_prefix="$2"; shift ;;
+        -j|--jobs)
+            (($# >= 2)) || die "$1 needs a number of jobs"
+            jobs="$2"; shift ;;
+        -j*)           jobs="${1#-j}" ;;
         -h|--help)     usage; exit 0 ;;
         *) usage; die "unknown argument: $1" ;;
     esac
     shift
 done
+
+[[ -z "$jobs" || "$jobs" =~ ^[1-9][0-9]*$ ]] || die "jobs must be a positive number: $jobs"
 
 preset="$(preset_for "$config")"
 build_dir="$POKESIX_ROOT/build/$preset"
@@ -64,7 +72,7 @@ step "configure"
 cmake --preset "$preset" -DPOKESIX_ENABLE_CLANG_TIDY="$tidy"
 
 step "build"
-cmake --build --preset "$preset"
+cmake --build --preset "$preset" ${jobs:+--parallel "$jobs"}
 
 if ((run_tests)); then
     step "test"
