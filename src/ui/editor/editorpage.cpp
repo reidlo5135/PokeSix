@@ -3,7 +3,9 @@
 #include "data/repository/repository.h"
 #include "data/state/appstate.h"
 #include "data/store/saveimport.h"
+#include "data/store/squad.h"
 #include "data/store/squadfile.h"
+#include "ui/editor/partycard.h"
 #include "ui/theme/cursors.h"
 #include "ui/widgets/shadowbutton.h"
 
@@ -11,6 +13,7 @@
 #include <QDropEvent>
 #include <QFileDialog>
 #include <QFileInfo>
+#include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMargins>
@@ -30,9 +33,9 @@ constexpr QMargins kPageMargins {20, 16, 20, 12};
 } // namespace
 
 namespace com::yamada::studio {
-EditorPage::EditorPage(Repository *repo, AppState *state, QWidget *parent)
+EditorPage::EditorPage(Repository *repository, AppState *state, QWidget *parent)
     : QWidget(parent)
-    , m_repository(repo)
+    , m_repository(repository)
     , m_state(state)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -81,9 +84,24 @@ QStackedWidget *EditorPage::buildBody()
     emptyLayout->addWidget(hint);
 
     m_fileInfo = new QLabel;
+    QWidget *loaded = new QWidget;
+    QVBoxLayout *loadedLayout = new QVBoxLayout(loaded);
+
+    QWidget *card = new QWidget;
+    QGridLayout *cardLayout = new QGridLayout(card);
+
+    for (int i = 0; i < 6; ++i) {
+        PartyCard *pcard = new PartyCard;
+        cardLayout->addWidget(pcard, i / 2, i % 2);
+        m_cards.append(pcard);
+    }
+
+    loadedLayout->addWidget(m_fileInfo);
+    loadedLayout->addWidget(card);
+    loadedLayout->addStretch();
 
     body->addWidget(empty);
-    body->addWidget(m_fileInfo);
+    body->addWidget(loaded);
 
     return body;
 }
@@ -136,7 +154,10 @@ void EditorPage::openFile(const QString &path)
     m_loaded = *loaded;
 
     QString gameName = loaded->game;
-    for (const GameInfo &game : m_repository->gamesForGeneration(loaded->generation)) {
+    const QList<GameInfo> games = m_repository->gamesForGeneration(loaded->generation);
+    const QString group = versionGroupOf(games, loaded->game);
+
+    for (const GameInfo &game : games) {
         const qsizetype i = game.versions.indexOf(loaded->game);
         if (i >= 0)
             gameName = game.versionNames.at(i).text(m_state->language());
@@ -146,6 +167,18 @@ void EditorPage::openFile(const QString &path)
                                 .arg(gameName)
                                 .arg(loaded->generation)
                                 .arg(loaded->squad.filled()));
+
+    for (int i = 0; i < 6; ++i) {
+        const SquadMember &member = loaded->squad.members[i];
+        if (member.isEmpty()) {
+            m_cards[i]->setEmpty();
+            continue;
+        }
+        const QString name
+                = m_repository->pokemonDetail(member.pokemonId, loaded->generation, group)
+                          .name.text(m_state->language());
+        m_cards[i]->setMember(name, member.level);
+    }
 
     m_body->setCurrentIndex(1);
 }

@@ -2,15 +2,17 @@
 
 #include "data/store/squadfile.h"
 
-#include <optional>
 #include <QLabel>
 #include <QStackedWidget>
 #include <QWidget>
+
+#include <optional>
 
 namespace com::yamada::studio {
 class Repository;
 class AppState;
 class ShadowButton;
+class PartyCard;
 
 class EditorPage : public QWidget
 {
@@ -43,5 +45,6 @@ private:
 
     std::optional<squadfile::Portable> m_loaded;
     QLabel *m_fileInfo = nullptr;
+    QList<PartyCard *> m_cards;
 };
 } // namespace com::yamada::studio

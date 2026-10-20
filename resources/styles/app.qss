@@ -211,3 +211,11 @@ QLabel#editorDropHint{
   color: @text.2;
   font-family:"Do Hyeon"; font-size: 24px;
 }
+QFrame#editorCard{
+  border: 2px solid @ink;
+  border-radius: 8px;
+  background: @white;
+}
+QLabel#editorCardName{
+  font-family:"Do Hyeon"; font-size: 18px;
+}

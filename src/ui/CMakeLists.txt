@@ -143,6 +143,8 @@ qt_add_library(pokesix_ui STATIC
     shell/mainwindow.cpp
     editor/editorpage.h
     editor/editorpage.cpp
+    editor/partycard.h
+    editor/partycard.cpp
 )
 
 add_library(PokeSix::ui ALIAS pokesix_ui)
