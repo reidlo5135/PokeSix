@@ -728,6 +728,12 @@ std::optional<SaveDocument> open(const QString &path, Repository &repository,
 
 ### 미션 B2 — `savedocument::open` 본문
 
+> **2026-10-21: B2 · B3 · B4는 Claude가 구현했다(사용자 요청).** 아래 표가 핵심을 빠뜨렸다 —
+> 옛 `load`의 루프는 `Portable::squad.members`(**처음부터 6칸인 배열**, `squad.h`의 `Squad`)에 `[i]`로 써 넣었지만,
+> `SaveDocument::members`는 **처음엔 0칸인 목록**이고 `SaveMember::squad`는 **한 마리**(`SquadMember`)다.
+> 그래서 루프 모양 자체가 "한 마리마다 `SaveMember`를 만들어 `append`"로 바뀐다. 결과 코드: `savedocument.cpp`의
+> `open` · `toSquadMember` · `chooseVersion`, `saveimport.cpp`의 `load`, `tests/data/savedocument_test.cpp`.
+
 **목적**: 세이브를 읽는 코드를 `saveimport::load`에서 이쪽으로 **옮긴다**. 옮기면서 "버리던 것"을 버리지 않게 고친다.
 
 **어떻게**: [saveimport.cpp](../../src/data/store/saveimport.cpp)의 `load` 본문 ①–④를 복사해 와서 아래 표대로 고친다.

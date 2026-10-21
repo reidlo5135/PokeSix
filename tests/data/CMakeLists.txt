@@ -9,6 +9,7 @@ add_executable(pokesix_data_tests
     squadstore_test.cpp
     squadfile_test.cpp
     saveimport_test.cpp   # H2
+    savedocument_test.cpp
 )
 pokesix_target_defaults(pokesix_data_tests)
 
