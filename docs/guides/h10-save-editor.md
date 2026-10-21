@@ -42,8 +42,10 @@ H9에서는 "카드를 openFile에서"처럼 **만들기와 채우기를 섞어*
 ```cpp
 existing();                 // (그대로)   이미 있는 줄 — 위치를 알려 주려고 보인다
 added();                    // ← 새로     새로 쓰는 줄
-if (moveId /* ? */ 0)       // /* ? */   직접 채울 칸 — 빈칸에는 연산자 · 인자 자리 같은 "모양"을 남긴다
+view.nature = nature.name.text(/* ? */);   // /* ? */   직접 채울 칸 — 무엇이 들어가는지 주석에 말로 적는다
 ```
+
+빈칸을 남길 때는 **무엇과 무엇을 비교하는지 · 그 값이 무슨 뜻인지**를 말로 먼저 적는다. 연산자 모양만 남기지 않는다.
 
 **같은 이름이 두 곳에서 다른 것을 가리키면 ⚠로 표시한다.** 예) ⚠ `openFile`의 지역 변수 `loaded`(세이브 데이터) ≠
 `buildBody`의 `loaded`(화면 상자). 이번 가이드는 화면 상자 쪽을 **`loadedPage`** 로 부른다 — 코드도 그렇게 바꿔 두면 좋다.
@@ -511,10 +513,14 @@ struct PartyMoveView                  // ← 새로  PartyCardView 위
 
 **H9의 "기술마다 `moves()` 4번" 정리도 여기서 한다**: 0이 아닌 id를 먼저 모으고 **한 번** 부른다.
 
+`member.moves`는 기술 칸 4개의 **기술 id**다. 빈 칸은 0이다 — 예) `{337, 225, 0, 0}` = 기술 2개.
+아래 루프는 4칸을 하나씩 `moveId`에 꺼내서, **0이 아닌 칸(진짜 기술)만** `ids`에 모은다 → `{337, 225}`.
+그다음 `moves()`를 한 번만 불러 이름 · 타입을 받는다.
+
 ```cpp
 QList<int> ids;                                              // ← 새로
-for (const int moveId : member.moves)
-    if (moveId /* ? */ 0)                                    // 빈 칸(0)은 빼기 — 연산자를 채우기
+for (const int moveId : member.moves)                        // 지금 보는 칸의 기술 id: 337 → 225 → 0 → 0
+    if (moveId != 0)                                         // 빈 칸(0)이 아니면
         ids.append(moveId);
 for (const MoveEntry &move : m_repository->moves(ids, generation))
     view.moves.append({move.name.text(language), move.type});
