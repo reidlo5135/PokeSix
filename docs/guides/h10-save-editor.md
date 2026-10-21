@@ -878,9 +878,176 @@ m_loaded->members[i].raw.evs   (같은 길)
 
 ---
 
+### 파일 입출력 정리 (사용자 결정 2026-10-21)
+
+형식마다 모듈 하나, 확장자는 한 곳에서. `saveimport`는 역할이 끝나서 지운다.
+
+```
+지금                                              B8 끝
+data/store/                                       data/store/
+├ squadfile     .pks · .json 읽기/쓰기            ├ squadfile     .pks · .json 읽기/쓰기     (그대로)
+├ savefile      .sav · .dsv 열기                  ├ savefile      .sav · .dsv 열기(+ H10c 쓰기)
+├ saveimport    세이브 → Portable · 도우미 둘     ├ filekinds     확장자 → 종류 · 대화상자 필터  ← B7 새로
+│               (isSaveFile · versionOfOriginGame)└ (saveimport 없음)                          ← B8 삭제
+└ (확장자 목록이 다섯 군데에 흩어짐)
+```
+
+| 지금 확장자를 아는 곳 | B7 뒤 |
+|---|---|
+| `SquadPage::dragEnterEvent`의 `kAccepted = {"pks", "json"}` | `kindOf(path) == FileKind::Squad` |
+| `SquadPage::importSquad`의 `tr("PokeSix 스쿼드 파일(*.pks *.json)")` | `dialogFilter(FileKind::Squad)` |
+| `EditorPage::dragEnterEvent`의 `kAccepted = {"sav", "dsv"}` | `kindOf(path) == FileKind::GameSave` |
+| `EditorPage::chooseSave`의 `tr("게임 세이브 (*.sav *.dsv)")` | `dialogFilter(FileKind::GameSave)` |
+| `saveimport::isSaveFile` | 지운다(B8) — `kindOf`가 대신한다 |
+
+(내보내기 대화상자 `tr("PokeSix 스쿼드 (*.pks)")`는 "저장할 형식 하나"라 그대로 둔다.)
+
+---
+
+### 미션 B7 — `filekinds`: 확장자를 아는 유일한 곳
+
+**목적**: 확장자 목록이 다섯 군데에 따로 적혀 있어서, 형식이 하나 늘면(3DS 세이브 `.bin` 등) 다섯 군데를 다 고쳐야 한다. 한 곳으로 모은다.
+
+**기능**: 화면 변화 없음. 끌어다 놓기 · 열기 대화상자가 전과 똑같이 동작한다.
+
+**새 파일 `src/data/store/filekinds.h`**
+
+```cpp
+#pragma once
+
+#include <QString>
+
+namespace com::yamada::studio {
+// 앱이 다루는 파일의 종류. 확장자 → 종류는 이 파일만 안다
+enum class FileKind {
+    Squad,    // PokeSix 스쿼드: .pks(지금) · .json(초기 내보내기)
+    GameSave, // 게임 세이브: .sav(melonDS · 실기 덤프) · .dsv(DeSmuME)
+    Unknown,
+};
+
+// 경로의 확장자로 종류를 고른다. 대소문자 무시("PT.SAV"도 GameSave)
+FileKind kindOf(const QString &path);
+// 열기 대화상자의 필터 한 줄 — tr("PokeSix 스쿼드 (*.pks *.json)") 같은 것
+QString dialogFilter(FileKind kind);
+} // namespace com::yamada::studio
+```
+
+**`filekinds.cpp` 모양** — 지금 `saveimport::isSaveFile`의 본문(확장자 소문자로 비교)을 넓힌 것이다.
+
+```cpp
+FileKind kindOf(const QString &path)
+{
+    const QString suffix = QFileInfo(path).suffix().toLower();
+    if (suffix == QLatin1String("pks") || suffix == QLatin1String("json"))
+        return FileKind::Squad;
+    if (suffix == QLatin1String("sav") || suffix == QLatin1String("dsv"))
+        return FileKind::GameSave;
+    return FileKind::Unknown;
+}
+```
+
+`dialogFilter`는 `switch (kind)`로 두 문구를 돌려준다. data 레이어에는 `QObject::tr`가 없으니 `savefile.cpp`의
+`tr()` 도우미처럼 `QCoreApplication::translate("com::yamada::studio::filekinds", text)`를 쓴다. 문구는 **지금 쓰는 것을
+그대로** 옮긴다 — 그래야 이미 채운 번역 대신 새 번역이 필요해질 때만 Claude가 채운다.
+
+**바뀌는 곳 — 전 / 후**
+
+```cpp
+// SquadPage::dragEnterEvent — 전
+const QString suffix = QFileInfo(urls.constFirst().toLocalFile()).suffix().toLower();
+static const QStringList kAccepted = {QStringLiteral("pks"), QStringLiteral("json")};
+if (kAccepted.contains(suffix)) {
+
+// 후
+if (kindOf(urls.constFirst().toLocalFile()) == FileKind::Squad) {
+```
+
+```cpp
+// SquadPage::importSquad — 전
+… getOpenFileName(this, tr("스쿼드 불러오기"), dir, tr("PokeSix 스쿼드 파일(*.pks *.json)"));
+// 후
+… getOpenFileName(this, tr("스쿼드 불러오기"), dir, dialogFilter(FileKind::Squad));
+```
+
+에디터의 `dragEnterEvent` · `chooseSave`도 같은 모양으로 `FileKind::GameSave`.
+
+| # | 무엇을 | 어디서 | 언제 |
+|---|---|---|---|
+| ① | `filekinds.h/.cpp` + `src/data/CMakeLists.txt` 두 줄 | data/store | — |
+| ② | 위 전/후 네 곳 + include `"data/store/filekinds.h"` | `squadpage.cpp` · `editorpage.cpp` | 매번(끌어 올 때 · 대화상자 열 때) |
+| ③ | 테스트 `tests/data/filekinds_test.cpp` — `saveimport_test`의 `RecognisesSaveFilesByExtension`를 옮겨 와 `kindOf`로 바꾸고, `.pks` · `.JSON` · 확장자 없음도 확인 | tests/data | — |
+
+```cpp
+// 테스트 — 전 (saveimport_test.cpp)
+EXPECT_TRUE(saveimport::isSaveFile(QStringLiteral("PLATINUM.SAV")));
+EXPECT_FALSE(saveimport::isSaveFile(QStringLiteral("squad.pks")));
+// 후 (filekinds_test.cpp)
+EXPECT_EQ(kindOf(QStringLiteral("PLATINUM.SAV")), FileKind::GameSave);
+EXPECT_EQ(kindOf(QStringLiteral("squad.pks")), FileKind::Squad);
+EXPECT_EQ(kindOf(QStringLiteral("save")), FileKind::Unknown);
+```
+
+**✅ 완료 조건**: 스쿼드에 .pks, 에디터에 .sav를 끌어 놓으면 전처럼 열리고, 반대로 끌면 금지 커서. 두 열기 대화상자의 필터 글자가 전과 같다. 테스트 통과.
+
+---
+
+### 미션 B8 — `saveimport` 지우기
+
+**목적**: B5 뒤에는 `saveimport::load`를 부르는 곳이 테스트뿐이고, `isSaveFile`은 B7이 대신한다. 남은 `versionOfOriginGame`만 `savefile`로 옮기고 파일을 지운다.
+
+**옮기는 것 — 전 / 후**
+
+```cpp
+// 전: saveimport.h                         // 후: savefile.h (savefile 네임스페이스 안, open 위)
+namespace …::saveimport {                   namespace …::savefile {
+QString versionOfOriginGame(int originGame); QString versionOfOriginGame(int originGame);
+                                             std::optional<SaveFile> open(…);
+```
+
+- 본문(번호 → 버전 표)은 `saveimport.cpp`에서 `savefile.cpp`로 그대로 옮긴다
+- `savefile.cpp`의 `chooseVersion` 안 `saveimport::versionOfOriginGame(...)` → `versionOfOriginGame(...)`(같은 네임스페이스라 앞을 뗀다), `#include "data/store/saveimport.h"` 지우기
+- `savefile.cpp`의 `tr()` 도우미 문맥 `"com::yamada::studio::saveimport"`는 **그대로 둔다**(이미 채운 en/ja 번역의 열쇠다 — 바꾸면 번역이 빠진다)
+
+**테스트 옮기기** — `saveimport_test.cpp`의 테스트를 `savefile_test.cpp`로. 결과를 `Portable` 대신 `SaveFile`에서 읽게 바꾼다.
+
+```cpp
+// 전 (saveimport_test.cpp)
+const auto loaded = saveimport::load(writeSave(bytes, …), repository, &error);
+ASSERT_TRUE(loaded.has_value()) << qPrintable(error);
+const SquadMember &first = loaded->squad.members[0];
+EXPECT_EQ(loaded->squad.filled(), 2);
+
+// 후 (savefile_test.cpp)
+const auto saveFile = savefile::open(writeSave(bytes, …), repository, &error);
+ASSERT_TRUE(saveFile.has_value()) << qPrintable(error);
+const SquadMember &first = saveFile->members[0].squad;      // 6자리 배열[i] → 목록[i].squad
+EXPECT_EQ(saveFile->members.size(), 2);                     // filled() 대신 목록 크기
+```
+
+| `saveimport_test`의 테스트 | 할 일 |
+|---|---|
+| `RecognisesSaveFilesByExtension` | B7에서 `filekinds_test`로 옮김 |
+| `NamesTheOriginGame` · `NamesTheFifthGenerationOriginGames` | `saveimport::` → `savefile::` |
+| `TurnsAPartyIntoASquad` · `CarriesTheLevelAndStatsInDexOrder` · `PicksTheVersionMostOfThePartyCameFrom` · `FallsBackToTheFirstVersionOfTheGame` · `RejectsWhatIsNotASave` · `TurnsABlackWhitePartyIntoASquad` · `PicksBlack2OrWhite2ByOrigin` | 위 전/후 모양으로 `SaveFileTest`에. 이름의 `Squad`는 그대로 둬도 된다 |
+| `LeavesEggsOutOfTheSquad` | 지운다 — `KeepsTheEggSlot`이 같은 것을 더 자세히 본다 |
+
+마지막으로 `saveimport.h/.cpp` · `saveimport_test.cpp`를 지우고 두 CMakeLists에서 줄을 뺀다.
+
+**흔한 실수**
+
+| 증상 | 원인 |
+|---|---|
+| 빌드 에러 `saveimport.h: No such file` | 아직 include하는 곳이 남았다 — `grep -rn saveimport src tests` |
+| 테스트 수가 줄었다 | 옮기다 빠뜨렸다 — 옮기기 전 `ctest -N -R SaveImport`의 수를 적어 두고 비교 |
+
+**✅ 완료 조건**: `grep -rn saveimport src tests`가 빈 결과(번역 문맥 문자열 하나 빼고). 테스트 통과, 지운 `LeavesEggsOutOfTheSquad` 하나만큼만 줄고 B7의 새 테스트만큼 는다.
+
+---
+
 ### H10b 완료 조건
 
-- [ ] 테스트 186개 통과(기존 183 + B4의 3)
+- [ ] 테스트 모두 통과(`saveimport` 테스트는 `savefile` · `filekinds`로 옮겨 감)
+- [ ] `saveimport` 파일이 없고, 확장자 목록이 `filekinds` 한 곳에만 있다
 - [ ] 에디터 화면이 H10a와 같다(세 세이브)
 - [ ] (B6을 했다면) 개체값 · 노력치가 게임 안 "능력 판정" / 노력치 확인 수단과 맞다
 - [ ] 새 `tr()` 문구가 있으면 말해 주기 → 번역은 Claude
