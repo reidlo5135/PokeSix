@@ -3,13 +3,10 @@
 #include "data/repository/repository.h"
 #include "data/sprites/spritecache.h"
 #include "data/state/appstate.h"
-#include "data/store/saveimport.h"
 #include "data/store/squad.h"
-#include "data/store/squadfile.h"
 #include "ui/editor/partycard.h"
 #include "ui/items/itemrowdelegate.h"
 #include "ui/widgets/shadowbutton.h"
-#include "ui/widgets/typechipwidget.h"
 
 #include <QDir>
 #include <QDragEnterEvent>
@@ -240,6 +237,8 @@ void EditorPage::fillCards()
         else
             view.icon = QPixmap(pokemonIconPath);
         view.stats = member.stats;
+        view.ivs = dexOrder(m_loaded->members[i].raw.ivs);
+        view.evs = dexOrder(m_loaded->members[i].raw.evs);
         m_cards[i]->setMember(view);
     }
 }

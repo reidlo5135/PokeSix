@@ -33,6 +33,8 @@ struct PartyCardView
     std::array<int, 6> stats {};
     int natureUp = -1;
     int natureDown = -1;
+    std::array<int, 6> ivs {};
+    std::array<int, 6> evs {};
 };
 
 class PartyCard : public QFrame
@@ -55,5 +57,7 @@ private:
     QList<TypeChipWidget *> m_moveTypes;
     QList<QLabel *> m_moves;
     QList<QLabel *> m_stats;
+    QList<QLabel *> m_ivs;
+    QList<QLabel *> m_evs;
 };
 } // namespace com::yamada::studio

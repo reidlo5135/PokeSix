@@ -70,6 +70,17 @@ PartyCard::PartyCard(QWidget *parent)
         statsRow->addWidget(stat);
     }
     layout->addLayout(statsRow);
+    QHBoxLayout *vsRow = new QHBoxLayout;
+    for (int i = 0; i < 6; ++i) {
+        QLabel *ivs = new QLabel;
+        QLabel *evs = new QLabel;
+
+        m_ivs.append(ivs);
+        m_evs.append(evs);
+        vsRow->addWidget(ivs);
+        vsRow->addWidget(evs);
+    }
+    layout->addLayout(vsRow);
 }
 
 void PartyCard::setMember(const PartyCardView &view)
@@ -99,6 +110,10 @@ void PartyCard::setMember(const PartyCardView &view)
         m_stats[i]->style()->unpolish(m_stats[i]);
         m_stats[i]->style()->polish(m_stats[i]);
     }
+    for (int i = 0; i < 6; ++i) {
+        m_ivs[i]->setText(tr("%1 %2").arg(statNames[i]).arg(view.ivs[i]));
+        m_evs[i]->setText(tr("%1 %2").arg(statNames[i]).arg(view.evs[i]));
+    }
 }
 
 void PartyCard::setEmpty(bool egg)
@@ -123,6 +138,10 @@ void PartyCard::setEmpty(bool egg)
     m_item->setText(QString());
     for (int i = 0; i < m_stats.size(); ++i) {
         m_stats[i]->setText(QString());
+    }
+    for (int i = 0; i < 6; ++i) {
+        m_ivs[i]->setText(QString());
+        m_evs[i]->setText(QString());
     }
 }
 } // namespace com::yamada::studio
