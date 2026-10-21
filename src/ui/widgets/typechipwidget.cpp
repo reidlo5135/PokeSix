@@ -32,7 +32,7 @@ QSize TypeChipWidget::sizeHint() const
 
 void TypeChipWidget::paintEvent(QPaintEvent *event)
 {
-    (void)event;
+    Q_UNUSED(event);
     if (!m_type)
         return;
     QPainter painter(this);

@@ -6,6 +6,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QString>
+#include <QStyle>
 #include <QVBoxLayout>
 #include <QWidget>
 
@@ -51,13 +52,24 @@ PartyCard::PartyCard(QWidget *parent)
     layout->addLayout(infoRow);
     QGridLayout *movesLayout = new QGridLayout;
     movesLayout->setColumnStretch(2, 1);
-    layout->addLayout(movesLayout);
     for (int i = 0; i < 4; ++i) {
-        QLabel *move;
-        move = new QLabel;
+        QHBoxLayout *cell = new QHBoxLayout;
+        TypeChipWidget *chip = new TypeChipWidget;
+        QLabel *move = new QLabel;
+        cell->addWidget(chip);
+        cell->addWidget(move);
+        movesLayout->addLayout(cell, i / 2, i % 2);
+        m_moveTypes.append(chip);
         m_moves.append(move);
-        movesLayout->addWidget(move, i / 2, i % 2);
     }
+    layout->addLayout(movesLayout);
+    QHBoxLayout *statsRow = new QHBoxLayout;
+    for (int i = 0; i < 6; ++i) {
+        QLabel *stat = new QLabel;
+        m_stats.append(stat);
+        statsRow->addWidget(stat);
+    }
+    layout->addLayout(statsRow);
 }
 
 void PartyCard::setMember(const PartyCardView &view)
@@ -65,17 +77,28 @@ void PartyCard::setMember(const PartyCardView &view)
     m_name->setText(view.name);
     m_level->setText(tr("Lv %1").arg(view.level));
     for (int i = 0; i < 4; ++i) {
-        m_moves[i]->setText(i < view.moves.size() ? view.moves[i] : QString());
+        const bool has = i < view.moves.size();
+        m_moves[i]->setText(has ? view.moves[i].name : QString());
+        m_moveTypes[i]->setType(has ? view.moves[i].type : QString(), view.language);
     }
     m_icon->setPixmap(view.icon);
-    for (int j = 0; j < m_types.size(); ++j) {
-        QString identifier = (j < view.types.size()) ? view.types[j] : QString();
-        m_types[j]->setType(identifier, view.language);
+    for (int i = 0; i < m_types.size(); ++i) {
+        QString identifier = (i < view.types.size()) ? view.types[i] : QString();
+        m_types[i]->setType(identifier, view.language);
     }
     m_ability->setText(tr("특성 %1").arg(view.ability));
     m_nature->setText(tr("성격 %1").arg(view.nature));
     m_itemIcon->setPixmap(view.itemIcon);
     m_item->setText(view.item.isEmpty() ? tr("--- 지닌 물건 없음") : view.item);
+    const QStringList statNames
+            = {tr("HP"), tr("공격"), tr("방어"), tr("특공"), tr("특방"), tr("스피드")};
+    for (int i = 0; i < m_stats.size(); ++i) {
+        m_stats[i]->setText(tr("%1 %2").arg(statNames[i]).arg(view.stats[i]));
+        const char *mark = i == view.natureUp ? "up" : i == view.natureDown ? "down" : "";
+        m_stats[i]->setProperty("nature", QString::fromLatin1(mark));
+        m_stats[i]->style()->unpolish(m_stats[i]);
+        m_stats[i]->style()->polish(m_stats[i]);
+    }
 }
 
 void PartyCard::setEmpty()
@@ -84,6 +107,7 @@ void PartyCard::setEmpty()
     m_level->setText(QString());
     for (int i = 0; i < 4; ++i) {
         m_moves[i]->setText(QString());
+        m_moveTypes[i]->setType(QString(), Language::Korean);
     }
     m_icon->clear();
     for (TypeChipWidget *chip : m_types) {
@@ -93,5 +117,8 @@ void PartyCard::setEmpty()
     m_nature->setText(QString());
     m_itemIcon->clear();
     m_item->setText(QString());
+    for (int i = 0; i < m_stats.size(); ++i) {
+        m_stats[i]->setText(QString());
+    }
 }
 } // namespace com::yamada::studio

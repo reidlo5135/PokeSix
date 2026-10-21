@@ -925,6 +925,46 @@ to see its details here</translation>
         <source>Lv %1</source>
         <translation>Lv %1</translation>
     </message>
+    <message>
+        <source>특성 %1</source>
+        <translation>Ability %1</translation>
+    </message>
+    <message>
+        <source>성격 %1</source>
+        <translation>Nature %1</translation>
+    </message>
+    <message>
+        <source>--- 지닌 물건 없음</source>
+        <translation>--- No held item</translation>
+    </message>
+    <message>
+        <source>HP</source>
+        <translation>HP</translation>
+    </message>
+    <message>
+        <source>공격</source>
+        <translation>Atk</translation>
+    </message>
+    <message>
+        <source>방어</source>
+        <translation>Def</translation>
+    </message>
+    <message>
+        <source>특공</source>
+        <translation>SpA</translation>
+    </message>
+    <message>
+        <source>특방</source>
+        <translation>SpD</translation>
+    </message>
+    <message>
+        <source>스피드</source>
+        <translation>Spe</translation>
+    </message>
+    <message>
+        <source>%1 %2</source>
+        <translation>%1 %2</translation>
+    </message>
 </context>
 <context>
     <name>com::yamada::studio::ProblemList</name>

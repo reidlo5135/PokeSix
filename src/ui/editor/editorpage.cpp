@@ -23,6 +23,7 @@
 #include <QMessageBox>
 #include <QMimeData>
 #include <QPixmap>
+#include <QScrollArea>
 #include <QSettings>
 #include <QStandardPaths>
 #include <QTimer>
@@ -85,7 +86,12 @@ QStackedWidget *EditorPage::buildBody()
     hint->setAlignment(Qt::AlignCenter);
     emptyLayout->addWidget(hint);
     m_fileInfo = new QLabel;
+    QScrollArea *scroll = new QScrollArea;
+    scroll->setObjectName(QStringLiteral("editorScroll"));
+    scroll->setWidgetResizable(true);
+    scroll->setFrameShape(QFrame::NoFrame);
     QWidget *loaded = new QWidget;
+    loaded->setObjectName(QStringLiteral("editorContent"));
     QVBoxLayout *loadedLayout = new QVBoxLayout(loaded);
     QWidget *card = new QWidget;
     QGridLayout *cardLayout = new QGridLayout(card);
@@ -97,8 +103,9 @@ QStackedWidget *EditorPage::buildBody()
     loadedLayout->addWidget(m_fileInfo);
     loadedLayout->addWidget(card);
     loadedLayout->addStretch();
+    scroll->setWidget(loaded);
     body->addWidget(empty);
-    body->addWidget(loaded);
+    body->addWidget(scroll);
     return body;
 }
 
@@ -159,21 +166,23 @@ void EditorPage::fillCards()
         return;
     }
     QString gameName = m_loaded->game;
-    const QList<GameInfo> games = m_repository->gamesForGeneration(m_loaded->generation);
+    const int generation = m_loaded->generation;
+    const QList<GameInfo> games = m_repository->gamesForGeneration(generation);
     const QString group = versionGroupOf(games, m_loaded->game);
+    const Language language = m_state->language();
 
     for (const GameInfo &game : games) {
         const qsizetype i = game.versions.indexOf(m_loaded->game);
         if (i >= 0)
-            gameName = game.versionNames.at(i).text(m_state->language());
+            gameName = game.versionNames.at(i).text(language);
     }
     m_fileInfo->setText(tr("%1\n%2 · %3세대 · %4마리")
                                 .arg(m_fileName)
                                 .arg(gameName)
-                                .arg(m_loaded->generation)
+                                .arg(generation)
                                 .arg(m_loaded->squad.filled()));
     const QList<Nature> natures = m_repository->natures();
-    const QList<ItemRow> items = m_repository->itemsForGeneration(m_loaded->generation, group);
+    const QList<ItemRow> items = m_repository->itemsForGeneration(generation, group);
 
     for (int i = 0; i < 6; ++i) {
         PartyCardView view;
@@ -183,34 +192,38 @@ void EditorPage::fillCards()
             continue;
         }
         const PokemonDetail detail
-                = m_repository->pokemonDetail(member.pokemonId, m_loaded->generation, group);
-        view.name = detail.name.text(m_state->language());
+                = m_repository->pokemonDetail(member.pokemonId, generation, group);
+        view.name = detail.name.text(language);
         QStringList moves;
+        QList<int> ids;
         for (const int moveId : member.moves) {
-            QList<int> ids;
-            ids.append(moveId);
-            const QList<MoveEntry> moveEntryMoves = m_repository->moves(ids, m_loaded->generation);
-            for (int k = 0; k < moveEntryMoves.size(); ++k) {
-                moves.append(moveEntryMoves[k].name.text(m_state->language()));
-            }
+            if (moveId != 0)
+                ids.append(moveId);
+        }
+        for (const MoveEntry &move : m_repository->moves(ids, generation)) {
+            view.moves.append({move.name.text(language), move.type});
         }
         view.level = member.level;
-        view.moves = moves;
         view.types = detail.types;
-        view.language = m_state->language();
+        view.language = language;
         for (const AbilityEntry &ability : detail.abilities) {
             if (ability.abilityId == member.abilityId)
-                view.ability = ability.name.text(m_state->language());
+                view.ability = ability.name.text(language);
         }
         for (const Nature &nature : natures) {
-            if (nature.id == member.natureId)
-                view.nature = nature.name.text(m_state->language());
+            if (nature.id == member.natureId) {
+                view.nature = nature.name.text(language);
+                if (!nature.isNeutral()) {
+                    view.natureUp = nature.increasedStat - 1;
+                    view.natureDown = nature.decreasedStat - 1;
+                }
+            }
         }
         for (const ItemRow &item : items) {
             if (item.id == member.itemId) {
-                view.item = item.name.text(m_state->language());
-                const QString itemIconKey = ItemRowDelegate::iconKey(
-                        item.identifier, item.machineType, m_loaded->generation);
+                view.item = item.name.text(language);
+                const QString itemIconKey
+                        = ItemRowDelegate::iconKey(item.identifier, item.machineType, generation);
                 const QString itemIconPath = m_itemIcons->path(itemIconKey);
                 if (itemIconPath.isEmpty())
                     m_itemIcons->request(itemIconKey);
@@ -224,6 +237,7 @@ void EditorPage::fillCards()
             m_pokemonIcons->request(pokemonIdKey);
         else
             view.icon = QPixmap(pokemonIconPath);
+        view.stats = member.stats;
         m_cards[i]->setMember(view);
     }
 }

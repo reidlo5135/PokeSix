@@ -925,6 +925,46 @@
         <source>Lv %1</source>
         <translation>Lv %1</translation>
     </message>
+    <message>
+        <source>특성 %1</source>
+        <translation>とくせい %1</translation>
+    </message>
+    <message>
+        <source>성격 %1</source>
+        <translation>せいかく %1</translation>
+    </message>
+    <message>
+        <source>--- 지닌 물건 없음</source>
+        <translation>--- もちものなし</translation>
+    </message>
+    <message>
+        <source>HP</source>
+        <translation>HP</translation>
+    </message>
+    <message>
+        <source>공격</source>
+        <translation>こうげき</translation>
+    </message>
+    <message>
+        <source>방어</source>
+        <translation>ぼうぎょ</translation>
+    </message>
+    <message>
+        <source>특공</source>
+        <translation>とくこう</translation>
+    </message>
+    <message>
+        <source>특방</source>
+        <translation>とくぼう</translation>
+    </message>
+    <message>
+        <source>스피드</source>
+        <translation>すばやさ</translation>
+    </message>
+    <message>
+        <source>%1 %2</source>
+        <translation>%1 %2</translation>
+    </message>
 </context>
 <context>
     <name>com::yamada::studio::ProblemList</name>
