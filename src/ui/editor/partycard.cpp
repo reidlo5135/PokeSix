@@ -1,5 +1,7 @@
 #include "ui/editor/partycard.h"
 
+#include "ui/widgets/typechipwidget.h"
+
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -27,6 +29,14 @@ PartyCard::PartyCard(QWidget *parent)
     head->addStretch();
     head->addWidget(m_level);
     layout->addLayout(head);
+    QHBoxLayout *typesRow = new QHBoxLayout;
+    for (int i = 0; i < 2; ++i) {
+        TypeChipWidget *chip = new TypeChipWidget;
+        typesRow->addWidget(chip);
+        m_types.append(chip);
+    }
+    typesRow->addStretch();
+    layout->addLayout(typesRow);
     QGridLayout *movesLayout = new QGridLayout;
     movesLayout->setColumnStretch(2, 1);
     layout->addLayout(movesLayout);
@@ -46,6 +56,10 @@ void PartyCard::setMember(const PartyCardView &view)
         m_moves[i]->setText(i < view.moves.size() ? view.moves[i] : QString());
     }
     m_icon->setPixmap(view.icon);
+    for (int j = 0; j < m_types.size(); ++j) {
+        QString identifier = (j < view.types.size()) ? view.types[j] : QString();
+        m_types[j]->setType(identifier, view.language);
+    }
 }
 
 void PartyCard::setEmpty()
@@ -56,5 +70,8 @@ void PartyCard::setEmpty()
         m_moves[i]->setText(QString());
     }
     m_icon->clear();
+    for (TypeChipWidget *chip : m_types) {
+        chip->setType(QString(), Language::Korean);
+    }
 }
 } // namespace com::yamada::studio
