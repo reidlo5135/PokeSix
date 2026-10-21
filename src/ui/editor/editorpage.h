@@ -1,5 +1,6 @@
 #pragma once
 
+#include "data/store/savefile.h"
 #include "data/store/squadfile.h"
 
 #include <QLabel>
@@ -42,7 +43,7 @@ private:
     QLabel *m_title = nullptr;
     ShadowButton *m_saveOpenButton = nullptr;
     QStackedWidget *m_body = nullptr;
-    std::optional<squadfile::Portable> m_loaded;
+    std::optional<SaveFile> m_loaded;
     QLabel *m_fileInfo = nullptr;
     QString m_fileName;
     QList<PartyCard *> m_cards;

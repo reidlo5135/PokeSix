@@ -101,9 +101,13 @@ void PartyCard::setMember(const PartyCardView &view)
     }
 }
 
-void PartyCard::setEmpty()
+void PartyCard::setEmpty(bool egg)
 {
-    m_name->setText(QString());
+    if (egg)
+        m_name->setText(tr("알"));
+    else
+        m_name->setText(QString());
+
     m_level->setText(QString());
     for (int i = 0; i < 4; ++i) {
         m_moves[i]->setText(QString());

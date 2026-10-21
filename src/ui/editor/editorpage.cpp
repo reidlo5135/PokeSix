@@ -149,7 +149,7 @@ void EditorPage::chooseSave()
 void EditorPage::openFile(const QString &path)
 {
     QString error;
-    const std::optional<squadfile::Portable> loaded = saveimport::load(path, *m_repository, &error);
+    const std::optional<SaveFile> loaded = savefile::open(path, *m_repository, &error);
     if (!loaded) {
         QMessageBox::warning(this, tr("세이브 불러오기"), error);
         return;
@@ -180,17 +180,19 @@ void EditorPage::fillCards()
                                 .arg(m_fileName)
                                 .arg(gameName)
                                 .arg(generation)
-                                .arg(m_loaded->squad.filled()));
+                                .arg(m_loaded->members.size()));
     const QList<Nature> natures = m_repository->natures();
     const QList<ItemRow> items = m_repository->itemsForGeneration(generation, group);
 
     for (int i = 0; i < 6; ++i) {
         PartyCardView view;
-        const SquadMember &member = m_loaded->squad.members[i];
-        if (member.isEmpty()) {
-            m_cards[i]->setEmpty();
+        const bool isInParty = i < m_loaded->members.size();
+        if (!isInParty || m_loaded->members[i].squad.isEmpty()) {
+            const bool egg = isInParty && m_loaded->members[i].raw.egg;
+            m_cards[i]->setEmpty(egg);
             continue;
         }
+        const SquadMember &member = m_loaded->members[i].squad;
         const PokemonDetail detail
                 = m_repository->pokemonDetail(member.pokemonId, generation, group);
         view.name = detail.name.text(language);

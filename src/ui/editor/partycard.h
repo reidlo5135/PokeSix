@@ -41,7 +41,7 @@ class PartyCard : public QFrame
 public:
     explicit PartyCard(QWidget *parent = nullptr);
     void setMember(const PartyCardView &view);
-    void setEmpty();
+    void setEmpty(bool egg);
 
 private:
     QLabel *m_name = nullptr;
