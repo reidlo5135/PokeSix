@@ -21,7 +21,7 @@ namespace {
 QString tr(const char *text)
 {
     // 번역 문맥은 옮기기 전(saveimport)과 같게 둔다 — 이미 채운 en/ja가 그대로 쓰인다
-    return QCoreApplication::translate("com::yamada::studio::saveimport", text);
+    return QCoreApplication::translate("com::yamada::studio::savefile", text);
 }
 
 // 게임 묶음("heartgold-soulsilver")의 버전들({"heartgold", "soulsilver"}) — DB의 게임 표에서

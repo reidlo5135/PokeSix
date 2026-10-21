@@ -44,6 +44,8 @@ qt_add_library(pokesix_data STATIC
     store/saveimport.cpp
     store/savefile.h
     store/savefile.cpp
+    store/filekinds.h
+    store/filekinds.cpp
     analysis/squadinput.h
     analysis/squadinput.cpp
     sprites/spritecache.h
