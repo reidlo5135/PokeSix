@@ -1,6 +1,6 @@
 #include "data/store/saveimport.h"
 
-#include "data/store/savedocument.h"
+#include "data/store/savefile.h"
 
 #include <QFileInfo>
 #include <QHash>
@@ -25,20 +25,20 @@ QString versionOfOriginGame(int originGame)
 
 std::optional<squadfile::Portable> load(const QString &path, Repository &repository, QString *error)
 {
-    // 읽기 · 해석은 savedocument::open이 한다(H10b). 여기서는 그 결과를 스쿼드 모양으로 줄이기만
+    // 읽기 · 해석은 savefile::open이 한다(H10b). 여기서는 그 결과를 스쿼드 모양으로 줄이기만
     // 한다
-    const std::optional<SaveDocument> document = savedocument::open(path, repository, error);
-    if (!document)
+    const std::optional<SaveFile> saveFile = savefile::open(path, repository, error);
+    if (!saveFile)
         return std::nullopt; // error는 open이 채웠다
 
     // 이름은 비워 둔다 — 스쿼드 화면이 기본 이름("소울실버 스쿼드")을 보인다
     squadfile::Portable portable;
-    portable.generation = document->generation;
-    portable.game = document->game;
+    portable.generation = saveFile->generation;
+    portable.game = saveFile->game;
     // 자리 순서를 그대로(세이브의 i번째 → 스쿼드의 i번째). 알은 squad가 비어 있어 빈 자리가 된다
     for (qsizetype i = 0;
-         i < document->members.size() && i < qsizetype(portable.squad.members.size()); ++i)
-        portable.squad.members[std::size_t(i)] = document->members[i].squad;
+         i < saveFile->members.size() && i < qsizetype(portable.squad.members.size()); ++i)
+        portable.squad.members[std::size_t(i)] = saveFile->members[i].squad;
     return portable;
 }
 } // namespace com::yamada::studio::saveimport

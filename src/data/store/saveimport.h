@@ -8,10 +8,10 @@
 
 // 게임 세이브(.sav · .dsv) → 스쿼드 (H2, ADR 0018). 가이드: docs/guides/h2-squad-sav-import.md
 //
-// 세이브를 읽고 해석하는 일은 savedocument::open이 한다(H10b — 원본 바이트 · 원본 값까지 든
-// SaveDocument). load는 그 결과를 스쿼드 파일과 **같은 모양**(squadfile::Portable)으로 줄인다:
+// 세이브를 읽고 해석하는 일은 savefile::open이 한다(H10b — 원본 바이트 · 원본 값까지 든
+// SaveFile). load는 그 결과를 스쿼드 파일과 **같은 모양**(squadfile::Portable)으로 줄인다:
 //
-//   파일 ─▶ savedocument::open ─▶ SaveDocument ─▶ load: members[i].squad만 골라 ─▶ Portable
+//   파일 ─▶ savefile::open ─▶ SaveFile ─▶ load: members[i].squad만 골라 ─▶ Portable
 //
 // 줄이면서 스쿼드에 칸이 없는 값(PID · 개체값 · 노력치 · 알)은 버린다.
 namespace com::yamada::studio {

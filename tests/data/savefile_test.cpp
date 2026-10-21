@@ -1,8 +1,8 @@
-// H10b — 세이브 → SaveDocument. ctest -R SaveDocument
+// H10b — 세이브 → SaveFile. ctest -R SaveFile
 // saveimport_test(Portable만 본다)가 확인하지 않는 것 — 원본 바이트 · 게임 원본 값 · 알 자리 — 을
 // 본다. 합성 세이브(tests/core/syntheticsave.h)를 임시 파일로 쓰고 픽스처 DB로 연다.
 #include "data/repository/repository.h"
-#include "data/store/savedocument.h"
+#include "data/store/savefile.h"
 #include "data/update/csvimporter.h"
 #include "syntheticsave.h"
 
@@ -16,7 +16,7 @@ using synth::MemberSpec;
 using synth::SlotSpec;
 
 namespace {
-class SaveDocumentTest : public ::testing::Test
+class SaveFileTest : public ::testing::Test
 {
 protected:
     static void SetUpTestSuite()
@@ -57,26 +57,26 @@ protected:
 };
 } // namespace
 
-TEST_F(SaveDocumentTest, KeepsTheWholeFile) // H10b-B4
+TEST_F(SaveFileTest, KeepsTheWholeFile) // H10b-B4
 {
     const auto bytes
             = synth::buildSave(synth::seriesOf("platinum"), SlotSpec {.party = {member(445)}});
     Repository repository(s_dbPath);
     QString error;
-    const auto document
-            = savedocument::open(writeSave(bytes, QStringLiteral("pt.sav")), repository, &error);
-    ASSERT_TRUE(document.has_value()) << error.toStdString();
-    ASSERT_EQ(std::size_t(document->bytes.size()), bytes.size());
+    const auto saveFile
+            = savefile::open(writeSave(bytes, QStringLiteral("pt.sav")), repository, &error);
+    ASSERT_TRUE(saveFile.has_value()) << error.toStdString();
+    ASSERT_EQ(std::size_t(saveFile->bytes.size()), bytes.size());
     EXPECT_TRUE(std::equal(bytes.begin(), bytes.end(),
-                           reinterpret_cast<const std::uint8_t *>(document->bytes.constData())));
-    EXPECT_EQ(document->generation, 4);
-    EXPECT_EQ(document->versionGroup, QStringLiteral("platinum"));
-    EXPECT_EQ(document->game, QStringLiteral("platinum"));
+                           reinterpret_cast<const std::uint8_t *>(saveFile->bytes.constData())));
+    EXPECT_EQ(saveFile->generation, 4);
+    EXPECT_EQ(saveFile->versionGroup, QStringLiteral("platinum"));
+    EXPECT_EQ(saveFile->game, QStringLiteral("platinum"));
     // 플라티나의 파티는 일반 블록 + 0xA0, 고른 슬롯은 0 → 파일 위치 0xA0
-    EXPECT_EQ(document->partyOffset, std::size_t(0xA0));
+    EXPECT_EQ(saveFile->partyOffset, std::size_t(0xA0));
 }
 
-TEST_F(SaveDocumentTest, KeepsTheGameValues) // H10b-B4
+TEST_F(SaveFileTest, KeepsTheGameValues) // H10b-B4
 {
     MemberSpec spec = member(445);
     spec.pid = 0xCAFEBABE;
@@ -84,11 +84,10 @@ TEST_F(SaveDocumentTest, KeepsTheGameValues) // H10b-B4
     spec.evs = {252, 0, 0, 6, 0, 0}; // 게임 순서: HP · 공격 · 방어 · 스피드 · 특공 · 특방
     const auto bytes = synth::buildSave(synth::seriesOf("platinum"), SlotSpec {.party = {spec}});
     Repository repository(s_dbPath);
-    const auto document
-            = savedocument::open(writeSave(bytes, QStringLiteral("raw.sav")), repository);
-    ASSERT_TRUE(document.has_value());
-    ASSERT_EQ(document->members.size(), 1);
-    const SaveMember &first = document->members[0];
+    const auto saveFile = savefile::open(writeSave(bytes, QStringLiteral("raw.sav")), repository);
+    ASSERT_TRUE(saveFile.has_value());
+    ASSERT_EQ(saveFile->members.size(), 1);
+    const SaveMember &first = saveFile->members[0];
     EXPECT_EQ(first.raw.pid, 0xCAFEBABEu);
     EXPECT_EQ(first.raw.ivs[0], 31);
     EXPECT_EQ(first.raw.ivs[1], 0);
@@ -97,25 +96,24 @@ TEST_F(SaveDocumentTest, KeepsTheGameValues) // H10b-B4
     EXPECT_EQ(first.squad.pokemonId, 445); // 앱 id로 바꾼 쪽도 같이 든다
 }
 
-TEST_F(SaveDocumentTest, KeepsTheEggSlot) // H10b-B4
+TEST_F(SaveFileTest, KeepsTheEggSlot) // H10b-B4
 {
     MemberSpec egg = member(35);
     egg.iv32 = 1u << 30; // 개체값 묶음의 비트 30 = 알
     const auto bytes
             = synth::buildSave(synth::seriesOf("platinum"), SlotSpec {.party = {member(445), egg}});
     Repository repository(s_dbPath);
-    const auto document
-            = savedocument::open(writeSave(bytes, QStringLiteral("egg.sav")), repository);
-    ASSERT_TRUE(document.has_value());
-    ASSERT_EQ(document->members.size(), 2); // 알도 자리를 지킨다(쓰기 때 위치가 맞아야 한다)
-    EXPECT_FALSE(document->members[0].raw.egg);
-    EXPECT_EQ(document->members[0].squad.pokemonId, 445);
-    EXPECT_TRUE(document->members[1].raw.egg);
-    EXPECT_EQ(document->members[1].raw.species, 35);   // 원본 값은 알이어도 남는다
-    EXPECT_TRUE(document->members[1].squad.isEmpty()); // 카드에는 빈 자리
+    const auto saveFile = savefile::open(writeSave(bytes, QStringLiteral("egg.sav")), repository);
+    ASSERT_TRUE(saveFile.has_value());
+    ASSERT_EQ(saveFile->members.size(), 2); // 알도 자리를 지킨다(쓰기 때 위치가 맞아야 한다)
+    EXPECT_FALSE(saveFile->members[0].raw.egg);
+    EXPECT_EQ(saveFile->members[0].squad.pokemonId, 445);
+    EXPECT_TRUE(saveFile->members[1].raw.egg);
+    EXPECT_EQ(saveFile->members[1].raw.species, 35);   // 원본 값은 알이어도 남는다
+    EXPECT_TRUE(saveFile->members[1].squad.isEmpty()); // 카드에는 빈 자리
 }
 
-TEST(SaveDocument, PutsStatsInDexOrder) // H10b-B2
+TEST(SaveFile, PutsStatsInDexOrder) // H10b-B2
 {
     // 게임: HP · 공격 · 방어 · 스피드 · 특공 · 특방 → 앱: … 방어 · 특공 · 특방 · 스피드
     EXPECT_EQ(dexOrder({1, 2, 3, 4, 5, 6}), (std::array<int, 6> {1, 2, 3, 5, 6, 4}));

@@ -12,7 +12,7 @@
 
 // 세이브 파일 하나를 연 결과 (H10b, ADR 0022). 가이드: docs/guides/h10-save-editor.md
 //
-//   파일 ─▶ save::readParty(core) ─▶ SaveDocument
+//   파일 ─▶ save::readParty(core) ─▶ SaveFile
 //            ├ bytes · 세대 · 게임 · 묶음 · 파티 위치   ← 쓰기(H10c)가 원본 사본을 고칠 때 쓴다
 //            └ members[i] ─ squad(앱 id) + raw(게임 원본 값)
 //
@@ -27,7 +27,7 @@ struct SaveMember
     save::ReadMember raw; // 게임이 저장한 원래 값(PID · 개체값 · 노력치 · 게임 번호 · 알)
 };
 
-struct SaveDocument
+struct SaveFile
 {
     QString path; // 연 파일
     QByteArray bytes; // 파일 바이트 전부(원본 파일은 건드리지 않고 이 사본을 고친다)
@@ -42,8 +42,7 @@ struct SaveDocument
 std::array<int, 6> dexOrder(const std::array<int, 6> &gameOrder);
 } // namespace com::yamada::studio
 
-namespace com::yamada::studio::savedocument {
+namespace com::yamada::studio::savefile {
 // 실패하면 std::nullopt — error에 사람이 읽을 한 줄(파일을 못 연다 · 세이브가 아니다)
-std::optional<SaveDocument> open(const QString &path, Repository &repository,
-                                 QString *error = nullptr);
-} // namespace com::yamada::studio::savedocument
+std::optional<SaveFile> open(const QString &path, Repository &repository, QString *error = nullptr);
+} // namespace com::yamada::studio::savefile

@@ -1,4 +1,4 @@
-#include "data/store/savedocument.h"
+#include "data/store/savefile.h"
 
 #include "data/logging/logging.h"
 #include "data/repository/repository.h"
@@ -16,7 +16,7 @@ std::array<int, 6> dexOrder(const std::array<int, 6> &gameOrder)
 }
 } // namespace com::yamada::studio
 
-namespace com::yamada::studio::savedocument {
+namespace com::yamada::studio::savefile {
 namespace {
 QString tr(const char *text)
 {
@@ -75,7 +75,7 @@ SquadMember toSquadMember(const save::ReadMember &member, int generation, Reposi
 }
 } // namespace
 
-std::optional<SaveDocument> open(const QString &path, Repository &repository, QString *error)
+std::optional<SaveFile> open(const QString &path, Repository &repository, QString *error)
 {
     // ① 파일 → 바이트. 바이트는 문서에 그대로 둔다(쓰기 때 이 사본을 고친다)
     QFile file(path);
@@ -84,29 +84,29 @@ std::optional<SaveDocument> open(const QString &path, Repository &repository, QS
             *error = tr("파일을 열 수 없어요: %1").arg(file.errorString());
         return std::nullopt;
     }
-    SaveDocument document;
-    document.path = path;
-    document.bytes = file.readAll();
+    SaveFile saveFile;
+    saveFile.path = path;
+    saveFile.bytes = file.readAll();
 
     // ② 바이트 → 파티: QByteArray를 core가 아는 save::Bytes(std::span)로 — 레이어 경계의 변환.
-    // bytes는 document.bytes를 빌려 보는 창이라, 아래에서 document.bytes를 바꾸지 않는다
-    const save::Bytes bytes(reinterpret_cast<const std::uint8_t *>(document.bytes.constData()),
-                            std::size_t(document.bytes.size()));
+    // bytes는 saveFile.bytes를 빌려 보는 창이라, 아래에서 saveFile.bytes를 바꾸지 않는다
+    const save::Bytes bytes(reinterpret_cast<const std::uint8_t *>(saveFile.bytes.constData()),
+                            std::size_t(saveFile.bytes.size()));
     const std::optional<save::ReadParty> party = save::readParty(bytes);
     if (!party) {
         if (error)
             *error = tr("4세대(DP · Pt · HGSS) · 5세대(BW · B2W2) 세이브가 아니에요");
         return std::nullopt;
     }
-    document.generation = party->generation;
-    document.versionGroup
+    saveFile.generation = party->generation;
+    saveFile.versionGroup
             = QString::fromUtf8(party->versionGroup.data(), qsizetype(party->versionGroup.size()));
-    document.partyOffset = party->partyOffset;
+    saveFile.partyOffset = party->partyOffset;
 
     // ③ 버전 고르기
     const QStringList versions
-            = versionsOfGroup(repository, document.versionGroup, document.generation);
-    document.game = chooseVersion(versions, party->members);
+            = versionsOfGroup(repository, saveFile.versionGroup, saveFile.generation);
+    saveFile.game = chooseVersion(versions, party->members);
 
     // ④ 멤버마다 SaveMember 하나: 원본 값(raw)은 늘 두고, 알이 아니면 앱 id로 바꾼 값(squad)도.
     // 알도 자리를 지킨다 — 세이브의 i번째 = 문서의 i번째(쓰기 때 위치를 이 순서로 찾는다)
@@ -114,13 +114,13 @@ std::optional<SaveDocument> open(const QString &path, Repository &repository, QS
         SaveMember saveMember;
         saveMember.raw = member;
         if (!member.egg) // 알은 싸우지 않는다 — squad는 빈 자리로 남는다
-            saveMember.squad = toSquadMember(member, document.generation, repository);
-        document.members.append(saveMember);
+            saveMember.squad = toSquadMember(member, saveFile.generation, repository);
+        saveFile.members.append(saveMember);
     }
 
     qCInfo(lcData).noquote() << QStringLiteral("save open: %1 · %2 members")
-                                        .arg(document.game)
-                                        .arg(document.members.size());
-    return document;
+                                        .arg(saveFile.game)
+                                        .arg(saveFile.members.size());
+    return saveFile;
 }
-} // namespace com::yamada::studio::savedocument
+} // namespace com::yamada::studio::savefile

@@ -611,7 +611,7 @@ m_body (QStackedWidget)
 
 ---
 
-## H10b — 세이브 문서 (`SaveDocument`)
+## H10b — 세이브 문서 (`SaveFile`)
 
 > 커밋 footer `Refs: H10b`. **화면은 거의 바뀌지 않는 단계다.** 바뀌는 것은 에디터가 들고 있는 데이터의 모양이다.
 
@@ -622,7 +622,7 @@ m_body (QStackedWidget)
 버린 것들이 필요하다.
 
 ```
-세이브 파일 ─ saveimport::load ─▶ Portable (지금)              SaveDocument (H10b 끝)
+세이브 파일 ─ saveimport::load ─▶ Portable (지금)              SaveFile (H10b 끝)
                                   ├ generation                  ├ generation · game
                                   ├ game                        ├ versionGroup        ← 쓰기 때 시리즈 표를 찾는 열쇠
                                   └ squad.members[6]            ├ partyOffset         ← 파티가 파일의 어디 있나
@@ -640,29 +640,29 @@ m_body (QStackedWidget)
 
 | 함수 | 맡는 일 | 언제 | 하지 않는 일 |
 |---|---|---|---|
-| `savedocument::open(path, repository, &error)` | **파일 → SaveDocument**: 읽기 · `readParty` · 버전 고르기 · 멤버마다 앱 id로 바꾸기 + 원본 값 보관 | 매번(세이브 열 때) | 화면을 모른다(data 레이어) |
-| `saveimport::load(path, repository, &error)` | **SaveDocument → Portable**: `open`을 부르고 결과를 스쿼드 모양으로 줄인다 | 테스트 · (나중에) 스쿼드로 옮길 때 | 파일을 직접 읽지 않는다 — `open`에 맡긴다 |
-| `EditorPage::openFile(path)` | `savedocument::open` 결과를 `m_loaded`에 담고 채우기 함수들을 부른다 | 매번(세이브 열 때) | 세이브 해석을 하지 않는다 |
+| `savefile::open(path, repository, &error)` | **파일 → SaveFile**: 읽기 · `readParty` · 버전 고르기 · 멤버마다 앱 id로 바꾸기 + 원본 값 보관 | 매번(세이브 열 때) | 화면을 모른다(data 레이어) |
+| `saveimport::load(path, repository, &error)` | **SaveFile → Portable**: `open`을 부르고 결과를 스쿼드 모양으로 줄인다 | 테스트 · (나중에) 스쿼드로 옮길 때 | 파일을 직접 읽지 않는다 — `open`에 맡긴다 |
+| `EditorPage::openFile(path)` | `savefile::open` 결과를 `m_loaded`에 담고 채우기 함수들을 부른다 | 매번(세이브 열 때) | 세이브 해석을 하지 않는다 |
 | `EditorPage::fillCards()` | `m_loaded->members[i].squad`로 카드를 채운다(H10a와 같은 일) | 매번 | 파일을 읽지 않는다 |
 
 ### 새 파일 · 옮겨지는 코드
 
 ```
 src/data/store/
-├ savedocument.h    ← 새로  SaveMember · SaveDocument · savedocument::open · dexOrder
-├ savedocument.cpp  ← 새로  open 본문 = saveimport::load의 ①–④를 옮겨 와서 "버리지 않게" 고친 것
+├ savefile.h    ← 새로  SaveMember · SaveFile · savefile::open · dexOrder
+├ savefile.cpp  ← 새로  open 본문 = saveimport::load의 ①–④를 옮겨 와서 "버리지 않게" 고친 것
 ├ saveimport.h      (그대로 — load 선언 · isSaveFile · versionOfOriginGame)
 └ saveimport.cpp    load 본문이 짧아진다: open → Portable로 줄이기
 tests/data/
-└ savedocument_test.cpp  ← 새로  B4
+└ savefile_test.cpp  ← 새로  B4
 ```
 
-`src/data/CMakeLists.txt`의 `store/saveimport.cpp` 아래에 `store/savedocument.h` · `store/savedocument.cpp` 두 줄,
-`tests/data/CMakeLists.txt`에 `savedocument_test.cpp` 한 줄.
+`src/data/CMakeLists.txt`의 `store/saveimport.cpp` 아래에 `store/savefile.h` · `store/savefile.cpp` 두 줄,
+`tests/data/CMakeLists.txt`에 `savefile_test.cpp` 한 줄.
 
 ---
 
-### 미션 B1 — 구조체 선언 (`savedocument.h`)
+### 미션 B1 — 구조체 선언 (`savefile.h`)
 
 **목적**: "세이브 한 개를 연 결과"를 담는 상자를 정한다. 아직 채우는 코드는 없다.
 
@@ -692,7 +692,7 @@ struct SaveMember
 };
 
 // 세이브 파일 하나를 연 결과
-struct SaveDocument
+struct SaveFile
 {
     QString path;             // 연 파일
     QByteArray bytes;         // 파일 바이트 전부. 원본 파일은 건드리지 않고, 고칠 때는 이 사본을 고쳐 새 파일로 쓴다
@@ -707,32 +707,32 @@ struct SaveDocument
 std::array<int, 6> dexOrder(const std::array<int, 6> &gameOrder);
 } // namespace com::yamada::studio
 
-namespace com::yamada::studio::savedocument {
+namespace com::yamada::studio::savefile {
 // 실패하면 std::nullopt — error에 사람이 읽을 한 줄
-std::optional<SaveDocument> open(const QString &path, Repository &repository,
+std::optional<SaveFile> open(const QString &path, Repository &repository,
                                  QString *error = nullptr);
-} // namespace com::yamada::studio::savedocument
+} // namespace com::yamada::studio::savefile
 ```
 
 | # | 무엇을 | 어디서 | 언제 |
 |---|---|---|---|
-| ① | 위 헤더 | `src/data/store/savedocument.h` | — |
+| ① | 위 헤더 | `src/data/store/savefile.h` | — |
 | ② | CMake 두 줄 | `src/data/CMakeLists.txt` | — |
 
 **⚠ 같은 이름 주의**: `SaveMember::squad`(멤버 **한 마리**의 `SquadMember`) ≠ `Portable::squad`(**여섯 자리**를 담은 `Squad`).
 이름이 같지만 모양이 다르다.
 
-**✅ 완료 조건**: 빈 `savedocument.cpp`(include 한 줄)로 빌드가 된다.
+**✅ 완료 조건**: 빈 `savefile.cpp`(include 한 줄)로 빌드가 된다.
 
 ---
 
-### 미션 B2 — `savedocument::open` 본문
+### 미션 B2 — `savefile::open` 본문
 
 > **2026-10-21: B2 · B3 · B4는 Claude가 구현했다(사용자 요청).** 아래 표가 핵심을 빠뜨렸다 —
 > 옛 `load`의 루프는 `Portable::squad.members`(**처음부터 6칸인 배열**, `squad.h`의 `Squad`)에 `[i]`로 써 넣었지만,
-> `SaveDocument::members`는 **처음엔 0칸인 목록**이고 `SaveMember::squad`는 **한 마리**(`SquadMember`)다.
-> 그래서 루프 모양 자체가 "한 마리마다 `SaveMember`를 만들어 `append`"로 바뀐다. 결과 코드: `savedocument.cpp`의
-> `open` · `toSquadMember` · `chooseVersion`, `saveimport.cpp`의 `load`, `tests/data/savedocument_test.cpp`.
+> `SaveFile::members`는 **처음엔 0칸인 목록**이고 `SaveMember::squad`는 **한 마리**(`SquadMember`)다.
+> 그래서 루프 모양 자체가 "한 마리마다 `SaveMember`를 만들어 `append`"로 바뀐다. 결과 코드: `savefile.cpp`의
+> `open` · `toSquadMember` · `chooseVersion`, `saveimport.cpp`의 `load`, `tests/data/savefile_test.cpp`.
 
 **목적**: 세이브를 읽는 코드를 `saveimport::load`에서 이쪽으로 **옮긴다**. 옮기면서 "버리던 것"을 버리지 않게 고친다.
 
@@ -741,18 +741,18 @@ std::optional<SaveDocument> open(const QString &path, Repository &repository,
 
 | `load`의 단계 | `open`에서 바꿀 것 |
 |---|---|
-| ① 파일 → 바이트 | 그대로. 단 `file.readAll()`을 **`document.bytes`에 담는다**(지역 변수 `raw` 대신) |
-| ② 바이트 → 파티 | `save::Bytes`를 `document.bytes`로 만든다. `document.partyOffset = party->partyOffset;` · `document.versionGroup = …`(이미 만드는 `versionGroup` 그대로) |
-| ③ 버전 고르기 | 그대로. 결과를 `document.game`에 |
-| ④ 멤버 → SquadMember | 알을 `continue`로 **건너뛰지 않는다** — 알도 `SaveMember`를 하나 만들어 `raw`만 채우고 `squad`는 비워 둔다. 알이 아니면 지금 코드 그대로 `squad`를 채운다. 어느 쪽이든 `raw = member;`를 넣고 `document.members.append(...)` |
+| ① 파일 → 바이트 | 그대로. 단 `file.readAll()`을 **`saveFile.bytes`에 담는다**(지역 변수 `raw` 대신) |
+| ② 바이트 → 파티 | `save::Bytes`를 `saveFile.bytes`로 만든다. `saveFile.partyOffset = party->partyOffset;` · `saveFile.versionGroup = …`(이미 만드는 `versionGroup` 그대로) |
+| ③ 버전 고르기 | 그대로. 결과를 `saveFile.game`에 |
+| ④ 멤버 → SquadMember | 알을 `continue`로 **건너뛰지 않는다** — 알도 `SaveMember`를 하나 만들어 `raw`만 채우고 `squad`는 비워 둔다. 알이 아니면 지금 코드 그대로 `squad`를 채운다. 어느 쪽이든 `raw = member;`를 넣고 `saveFile.members.append(...)` |
 | (능력치 순서) | `out.stats = {stats[0], stats[1], …}` 한 줄을 `dexOrder(member.stats)`로. `dexOrder` 본문은 이 순서 그대로 |
 
 `isSaveFile` · `versionOfOriginGame` · `versionsOfGroup`(익명 namespace)은 `open`도 쓴다:
-앞의 둘은 `#include "data/store/saveimport.h"`로 부르고, `versionsOfGroup`은 `savedocument.cpp`로 **옮긴다**(B3 뒤에는
+앞의 둘은 `#include "data/store/saveimport.h"`로 부르고, `versionsOfGroup`은 `savefile.cpp`로 **옮긴다**(B3 뒤에는
 `load`가 쓰지 않는다).
 
 **⚠ 수명 주의 (②)**: `save::Bytes`는 바이트를 **빌려 보는 창**(`std::span`)이라 원본이 살아 있어야 한다. 지금은
-`document.bytes`가 함수 끝까지 살아 있으니 괜찮다. 창을 만든 뒤 `document.bytes`에 다른 값을 넣으면 창이 엉뚱한 곳을 본다 —
+`saveFile.bytes`가 함수 끝까지 살아 있으니 괜찮다. 창을 만든 뒤 `saveFile.bytes`에 다른 값을 넣으면 창이 엉뚱한 곳을 본다 —
 `bytes`를 다 채운 **뒤에** 창을 만든다.
 
 **✅ 완료 조건**: 빌드가 된다(아직 아무도 `open`을 부르지 않는다 — B3 · B4에서 부른다).
@@ -768,12 +768,12 @@ std::optional<SaveDocument> open(const QString &path, Repository &repository,
 ```cpp
 std::optional<squadfile::Portable> load(const QString &path, Repository &repository, QString *error)
 {
-    const std::optional<SaveDocument> document = savedocument::open(path, repository, error);
-    if (!document)
+    const std::optional<SaveFile> saveFile = savefile::open(path, repository, error);
+    if (!saveFile)
         return std::nullopt;               // error는 open이 이미 채웠다
     squadfile::Portable portable;
-    portable.generation = document->generation;
-    portable.game = document->game;
+    portable.generation = saveFile->generation;
+    portable.game = saveFile->game;
     // members[i].squad → portable.squad.members[i]   (i는 0부터 members.size()와 6 중 작은 쪽까지)
     return portable;
 }
@@ -794,33 +794,33 @@ std::optional<squadfile::Portable> load(const QString &path, Repository &reposit
 |---|---|
 | `LeavesEggsOutOfTheSquad` 실패 | 알의 `squad`를 채웠다 — 알은 `raw`만 |
 | `CarriesTheLevelAndStatsInDexOrder` 실패 | `dexOrder` 순서가 틀렸다(스피드가 게임 순서 넷째 → 앱 순서 여섯째) |
-| 링크 에러 `undefined reference to savedocument::open` | B1 ②의 CMake 줄이 빠졌다 |
+| 링크 에러 `undefined reference to savefile::open` | B1 ②의 CMake 줄이 빠졌다 |
 
 **✅ 완료 조건**: 테스트 183개 그대로 통과.
 
 ---
 
-### 미션 B4 — `SaveDocument`만의 테스트 3개
+### 미션 B4 — `SaveFile`만의 테스트 3개
 
 **목적**: B3의 테스트는 `Portable`만 본다. **새로 들고 있게 된 것**(원본 바이트 · 원본 값 · 알 자리)은 아무도 확인하지 않으니 직접 확인한다.
 
-**새 파일**: `tests/data/savedocument_test.cpp`. 픽스처는 [saveimport_test.cpp](../../tests/data/saveimport_test.cpp)의
-`SaveImportTest` 클래스(임시 폴더 · 픽스처 DB · `writeSave` · `member`)를 **복사해 이름만 `SaveDocumentTest`로** 바꿔 쓴다
+**새 파일**: `tests/data/savefile_test.cpp`. 픽스처는 [saveimport_test.cpp](../../tests/data/saveimport_test.cpp)의
+`SaveImportTest` 클래스(임시 폴더 · 픽스처 DB · `writeSave` · `member`)를 **복사해 이름만 `SaveFileTest`로** 바꿔 쓴다
 (공용으로 빼는 건 H11 거리).
 
 | 테스트 이름 | 만들 세이브 | 확인할 것 |
 |---|---|---|
-| `KeepsTheWholeFile` | Pt 세이브(`synth::buildSave`) 하나 | `document->bytes.size()`가 파일 크기(`synth`가 만든 벡터 크기)와 같다 · 첫 바이트 몇 개가 같다 |
+| `KeepsTheWholeFile` | Pt 세이브(`synth::buildSave`) 하나 | `saveFile->bytes.size()`가 파일 크기(`synth`가 만든 벡터 크기)와 같다 · 첫 바이트 몇 개가 같다 |
 | `KeepsTheGameValues` | 개체값 · PID를 정한 멤버 하나(`MemberSpec::pid`, `iv32`) | `members[0].raw.pid`가 정한 PID · `raw.ivs[0]`(HP)가 정한 값 |
 | `KeepsTheEggSlot` | 멤버 둘, 둘째가 알 — `egg.iv32 = 1u << 30;`(알 표시는 개체값 묶음의 비트 30, `LeavesEggsOutOfTheSquad`와 같다) | `members.size() == 2` · `members[1].raw.egg`가 참 · `members[1].squad.isEmpty()`가 참 |
 
 `iv32`는 개체값 6개를 5비트씩 묶은 u32다(비트 0–4 = HP). HP 개체값 31만 넣으려면 `spec.iv32 = 31;`.
 
-**✅ 완료 조건**: `ctest --preset linux-debug -R SaveDocument` 3개 통과 · 전체 186개 통과.
+**✅ 완료 조건**: `ctest --preset linux-debug -R SaveFile` 3개 통과 · 전체 186개 통과.
 
 ---
 
-### 미션 B5 — 에디터가 `SaveDocument`를 쓰게
+### 미션 B5 — 에디터가 `SaveFile`를 쓰게
 
 **목적**: 에디터의 데이터를 바꾼다. H10c부터 이 문서를 고치고 쓰게 된다.
 
@@ -828,8 +828,8 @@ std::optional<squadfile::Portable> load(const QString &path, Repository &reposit
 
 | # | 무엇을 | 어디서 | 언제 |
 |---|---|---|---|
-| ① | `std::optional<squadfile::Portable> m_loaded` → `std::optional<SaveDocument> m_loaded` · include를 `savedocument.h`로 | `editorpage.h` | — |
-| ② | `saveimport::load(...)` → `savedocument::open(...)` | `openFile` | 매번(세이브 열 때) |
+| ① | `std::optional<squadfile::Portable> m_loaded` → `std::optional<SaveFile> m_loaded` · include를 `savefile.h`로 | `editorpage.h` | — |
+| ② | `saveimport::load(...)` → `savefile::open(...)` | `openFile` | 매번(세이브 열 때) |
 | ③ | 멤버 꺼내는 줄 바꾸기(아래) | `fillCards` | 매번 |
 | ④ | 정보 줄의 마리 수: `m_loaded->squad.filled()` → 직접 세기(알이 아닌 멤버 수) | `fillCards` | 매번 |
 
