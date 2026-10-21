@@ -7,6 +7,7 @@
 #include "data/store/squad.h"
 #include "data/store/squadfile.h"
 #include "ui/editor/partycard.h"
+#include "ui/items/itemrowdelegate.h"
 #include "ui/widgets/shadowbutton.h"
 #include "ui/widgets/typechipwidget.h"
 
@@ -46,9 +47,11 @@ EditorPage::EditorPage(Repository *repository, AppState *state, QWidget *parent)
     layout->setContentsMargins(kPageMargins);
     layout->setSpacing(14);
     layout->addWidget(buildTopbar());
-    m_pokemonIcons = new SpriteCache(SpriteCache::Kind::PokemonIcon, this);
     layout->addWidget(buildBody());
+    m_pokemonIcons = new SpriteCache(SpriteCache::Kind::PokemonIcon, this);
+    m_itemIcons = new SpriteCache(SpriteCache::Kind::Item, this);
     connect(m_pokemonIcons, &SpriteCache::ready, this, &EditorPage::fillCards);
+    connect(m_itemIcons, &SpriteCache::ready, this, &EditorPage::fillCards);
     setAcceptDrops(true);
 }
 
@@ -169,6 +172,8 @@ void EditorPage::fillCards()
                                 .arg(gameName)
                                 .arg(m_loaded->generation)
                                 .arg(m_loaded->squad.filled()));
+    const QList<Nature> natures = m_repository->natures();
+    const QList<ItemRow> items = m_repository->itemsForGeneration(m_loaded->generation, group);
 
     for (int i = 0; i < 6; ++i) {
         PartyCardView view;
@@ -177,7 +182,7 @@ void EditorPage::fillCards()
             m_cards[i]->setEmpty();
             continue;
         }
-        PokemonDetail detail
+        const PokemonDetail detail
                 = m_repository->pokemonDetail(member.pokemonId, m_loaded->generation, group);
         view.name = detail.name.text(m_state->language());
         QStringList moves;
@@ -193,12 +198,32 @@ void EditorPage::fillCards()
         view.moves = moves;
         view.types = detail.types;
         view.language = m_state->language();
-        const QString key = QString::number(member.pokemonId);
-        const QString iconFilePath = m_pokemonIcons->path(key);
-        if (iconFilePath.isEmpty())
-            m_pokemonIcons->request(key);
+        for (const AbilityEntry &ability : detail.abilities) {
+            if (ability.abilityId == member.abilityId)
+                view.ability = ability.name.text(m_state->language());
+        }
+        for (const Nature &nature : natures) {
+            if (nature.id == member.natureId)
+                view.nature = nature.name.text(m_state->language());
+        }
+        for (const ItemRow &item : items) {
+            if (item.id == member.itemId) {
+                view.item = item.name.text(m_state->language());
+                const QString itemIconKey = ItemRowDelegate::iconKey(
+                        item.identifier, item.machineType, m_loaded->generation);
+                const QString itemIconPath = m_itemIcons->path(itemIconKey);
+                if (itemIconPath.isEmpty())
+                    m_itemIcons->request(itemIconKey);
+                else
+                    view.itemIcon = QPixmap(itemIconPath);
+            }
+        }
+        const QString pokemonIdKey = QString::number(member.pokemonId);
+        const QString pokemonIconPath = m_pokemonIcons->path(pokemonIdKey);
+        if (pokemonIconPath.isEmpty())
+            m_pokemonIcons->request(pokemonIdKey);
         else
-            view.icon = QPixmap(iconFilePath);
+            view.icon = QPixmap(pokemonIconPath);
         m_cards[i]->setMember(view);
     }
 }

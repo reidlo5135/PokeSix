@@ -38,17 +38,15 @@ private:
 
     Repository *m_repository = nullptr;
     AppState *m_state = nullptr;
-
     QWidget *m_topBar = nullptr;
     QLabel *m_title = nullptr;
     ShadowButton *m_saveOpenButton = nullptr;
-
     QStackedWidget *m_body = nullptr;
-
     std::optional<squadfile::Portable> m_loaded;
     QLabel *m_fileInfo = nullptr;
     QString m_fileName;
     QList<PartyCard *> m_cards;
     SpriteCache *m_pokemonIcons = nullptr;
+    SpriteCache *m_itemIcons = nullptr;
 };
 } // namespace com::yamada::studio

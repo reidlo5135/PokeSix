@@ -37,6 +37,18 @@ PartyCard::PartyCard(QWidget *parent)
     }
     typesRow->addStretch();
     layout->addLayout(typesRow);
+    QHBoxLayout *infoRow = new QHBoxLayout;
+    m_ability = new QLabel;
+    m_nature = new QLabel;
+    m_itemIcon = new QLabel;
+    m_itemIcon->setFixedSize(30, 30);
+    m_item = new QLabel;
+    infoRow->addWidget(m_ability);
+    infoRow->addWidget(m_nature);
+    infoRow->addWidget(m_itemIcon);
+    infoRow->addWidget(m_item);
+    infoRow->addStretch();
+    layout->addLayout(infoRow);
     QGridLayout *movesLayout = new QGridLayout;
     movesLayout->setColumnStretch(2, 1);
     layout->addLayout(movesLayout);
@@ -60,6 +72,10 @@ void PartyCard::setMember(const PartyCardView &view)
         QString identifier = (j < view.types.size()) ? view.types[j] : QString();
         m_types[j]->setType(identifier, view.language);
     }
+    m_ability->setText(tr("특성 %1").arg(view.ability));
+    m_nature->setText(tr("성격 %1").arg(view.nature));
+    m_itemIcon->setPixmap(view.itemIcon);
+    m_item->setText(view.item.isEmpty() ? tr("--- 지닌 물건 없음") : view.item);
 }
 
 void PartyCard::setEmpty()
@@ -73,5 +89,9 @@ void PartyCard::setEmpty()
     for (TypeChipWidget *chip : m_types) {
         chip->setType(QString(), Language::Korean);
     }
+    m_ability->setText(QString());
+    m_nature->setText(QString());
+    m_itemIcon->clear();
+    m_item->setText(QString());
 }
 } // namespace com::yamada::studio

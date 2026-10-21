@@ -19,6 +19,10 @@ struct PartyCardView
     QPixmap icon;
     QStringList types;
     Language language = Language::Korean;
+    QString ability;
+    QString nature;
+    QString item;
+    QPixmap itemIcon;
 };
 
 class PartyCard : public QFrame
@@ -35,5 +39,9 @@ private:
     QList<QLabel *> m_moves;
     QLabel *m_icon = nullptr;
     QList<TypeChipWidget *> m_types;
+    QLabel *m_ability = nullptr;
+    QLabel *m_nature = nullptr;
+    QLabel *m_itemIcon = nullptr;
+    QLabel *m_item = nullptr;
 };
 } // namespace com::yamada::studio
