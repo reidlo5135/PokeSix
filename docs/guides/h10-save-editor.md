@@ -1222,18 +1222,33 @@ footer.storedCrc   = readU16(save, end - 0x02);            // end = blockStart +
 writeU16(save, end - 0x02, crc16Ccitt(save.subspan(blockStart, check.generalSize - check.footerSize)));
 ```
 
-```cpp
-// partyBlockValid (지금) — 두 곳과 비교
-crc == readU16(save, check.partyCrcAt) && crc == readU16(save, mirror)
+**"체크섬 모음 블록"** = 5세대 세이브 끝부분에 다른 블록들의 CRC 사본을 모아 둔 작은 블록(`ChecksumTable`). 이 블록에도
+**자기 자신의 CRC**가 따로 붙어 있다.
 
-// refreshPartyBlock (새로) — 순서가 중요하다
-// ① crc = crc16Ccitt(파티 블록)
-// ② writeU16(save, check.partyCrcAt, crc)          블록 뒤
-// ③ writeU16(save, mirror, crc)                    모음표 안의 사본 — 이걸로 모음표 내용이 바뀐다
-// ④ 모음표 CRC = crc16Ccitt(모음표) → table + tableLength + 0x0E에 쓴다   ← 반드시 ③ 뒤
+```
+0x18E00  ┌ 파티 블록 (partyBlockSize) ──────────────┐
+0x19336  └ 파티 블록 CRC              ← ② 여기에 쓴다 ┘
+table    ┌ 체크섬 모음 블록 (tableLength) ─────────┐   table = checksumTableStart(check)
++0x34    │  파티 블록 CRC 사본        ← ③ 여기에도 쓴다 (= mirror)
+         └──────────────────────────────────────────┘
+table + tableLength + 0x0E   모음 블록 자신의 CRC   ← ④ 여기에 쓴다
 ```
 
-④가 ③보다 먼저면 모음표 CRC가 **바뀌기 전** 내용으로 계산돼서, 게임이 모음표를 깨졌다고 본다(`checksumTableValid`가 false).
+```cpp
+void refreshPartyBlock(MutableBytes save, const ChecksumTable &check)
+{
+    // 범위 확인: partyBlockValid처럼 파일 밖이면 return
+    const std::size_t table = checksumTableStart(check);
+    const std::uint16_t crc = crc16Ccitt(save.subspan(check.partyBlock, check.partyBlockSize)); // ① 파티 블록 CRC
+    writeU16(save, check.partyCrcAt, crc);                                                     // ② 블록 뒤
+    writeU16(save, table + check.partyCrcMirror, crc);                                         // ③ 모음 블록 안 사본
+    // ④ 모음 블록 전체의 CRC를 계산해 그 블록 자신의 CRC 칸에 쓴다 — checksumTableValid가 확인하는 것과 같은 범위
+    writeU16(save, table + check.tableLength + 0x0E, crc16Ccitt(save.subspan(table, check.tableLength)));
+}
+```
+
+③은 모음 블록 **안**에 쓰므로 모음 블록의 내용을 바꾼다. 그래서 ④는 반드시 ③ **뒤**다 — 먼저 하면 바뀌기 전 내용으로
+계산한 CRC가 남아 게임이 모음 블록을 깨졌다고 본다(`checksumTableValid`가 false).
 `tests/core/syntheticsave.h`의 `buildTableSave` 끝부분이 같은 순서로 쓰여 있다 — 참고하되 복사하지는 않는다(정답지).
 
 ---
