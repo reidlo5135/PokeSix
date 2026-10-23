@@ -8,8 +8,9 @@ enum class FileKind {
     GameSave,
     Unknown,
 };
-
-FileKind kindOf(const QString &path);
-
-QString dialogFilter(FileKind kind);
 }
+
+namespace com::yamada::studio::filekinds {
+FileKind kindOf(const QString &path);
+QString dialogFilter(FileKind kind);
+} // namespace com::yamada::studio::filekinds

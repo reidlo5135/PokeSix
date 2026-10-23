@@ -1,18 +1,18 @@
 #include "data/store/filekinds.h"
 
-#include <QFile>
-#include <QFileInfo>
 #include <QCoreApplication>
+#include <QFileInfo>
 
 namespace com::yamada::studio {
-namespace
-{
+namespace {
 QString tr(const char *text)
 {
     return QCoreApplication::translate("com::yamada::studio::filekinds", text);
 }
-}
+} // namespace
+} // namespace com::yamada::studio
 
+namespace com::yamada::studio::filekinds {
 FileKind kindOf(const QString &path)
 {
     const QString suffix = QFileInfo(path).suffix().toLower();
@@ -33,9 +33,11 @@ QString dialogFilter(FileKind kind)
     case FileKind::GameSave:
         return tr("게임 세이브 파일(*.sav *.dsv)");
         break;
-    default:
-        return tr("지원하지 않는 형식의 파일");
+    case FileKind::Unknown:
+        return QString();
         break;
+    default:
+        return QString();
     }
 }
-}
+} // namespace com::yamada::studio::filekinds

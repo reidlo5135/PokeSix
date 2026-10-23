@@ -59,15 +59,6 @@ protected:
 };
 } // namespace
 
-TEST(SaveImport, RecognisesSaveFilesByExtension) // H2-CP4-1
-{
-    EXPECT_TRUE(saveimport::isSaveFile(QStringLiteral("/a/포켓몬스터 소울실버(K).sav")));
-    EXPECT_TRUE(saveimport::isSaveFile(QStringLiteral("PLATINUM.SAV")));
-    EXPECT_TRUE(saveimport::isSaveFile(QStringLiteral("pt.dsv")));
-    EXPECT_FALSE(saveimport::isSaveFile(QStringLiteral("squad.pks")));
-    EXPECT_FALSE(saveimport::isSaveFile(QStringLiteral("save")));
-}
-
 TEST(SaveImport, NamesTheOriginGame) // H2-CP4-2
 {
     EXPECT_EQ(saveimport::versionOfOriginGame(7), QStringLiteral("heartgold"));

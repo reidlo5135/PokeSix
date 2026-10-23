@@ -3,6 +3,7 @@
 #include "data/repository/repository.h"
 #include "data/sprites/spritecache.h"
 #include "data/state/appstate.h"
+#include "data/store/filekinds.h"
 #include "data/store/squad.h"
 #include "ui/editor/partycard.h"
 #include "ui/items/itemrowdelegate.h"
@@ -113,8 +114,7 @@ void EditorPage::dragEnterEvent(QDragEnterEvent *event)
     if (urls.size() != 1 || !urls.constFirst().isLocalFile())
         return;
     const QString suffix = QFileInfo(urls.constFirst().toLocalFile()).suffix().toLower();
-    static const QStringList kAccepted = {QStringLiteral("sav"), QStringLiteral("dsv")};
-    if (kAccepted.contains(suffix)) {
+    if (filekinds::kindOf(urls.constFirst().toLocalFile()) == FileKind::GameSave) {
         event->acceptProposedAction();
     }
 }
@@ -135,7 +135,7 @@ void EditorPage::chooseSave()
     QString settingsKey = "editor/lastDir";
     QString defaultDir = settings.value(settingsKey, QDir::homePath()).toString();
     const QString path = QFileDialog::getOpenFileName(this, tr("세이브 불러오기"), defaultDir,
-                                                      tr("게임 세이브 (*.sav *.dsv)"));
+                                                      filekinds::dialogFilter(FileKind::GameSave));
     if (path.isEmpty())
         return;
     QString dirPath = QFileInfo(path).absolutePath();
