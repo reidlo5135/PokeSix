@@ -55,7 +55,7 @@ view.nature = nature.name.text(/* ? */);   // /* ? */   직접 채울 칸 — �
 ## 전체 지도 (H10a → H10f)
 
 단계마다 **눈에 보이는 결과**가 하나씩 생긴다. 앞 단계가 완료 조건을 통과해야 다음으로 간다.
-**상세(미션)는 그 단계를 시작할 때 이 문서에 덧붙인다** — 지금은 H10a · H10b만 상세가 있다(CLAUDE.md: 단계 가이드는 시작할 때).
+**상세(미션)는 그 단계를 시작할 때 이 문서에 덧붙인다** — 지금은 H10a · H10b · H10c만 상세가 있다(CLAUDE.md: 단계 가이드는 시작할 때).
 
 | 단계 | 목적 | 다 하면 보이는 것 | 손대는 레이어 | 배우는 것 |
 |---|---|---|---|---|
@@ -1051,3 +1051,391 @@ EXPECT_EQ(saveFile->members.size(), 2);                     // filled() 대신 �
 - [ ] 에디터 화면이 H10a와 같다(세 세이브)
 - [ ] (B6을 했다면) 개체값 · 노력치가 게임 안 "능력 판정" / 노력치 확인 수단과 맞다
 - [ ] 새 `tr()` 문구가 있으면 말해 주기 → 번역은 Claude
+
+---
+
+## H10c — 쓰기 엔진 (core)
+
+> 커밋 footer `Refs: H10c`. **화면 변화 없음.** 결과는 테스트로만 확인한다 — "읽기 → 고치기 → 쓰기 → 다시 읽기"가 맞는가.
+> core라 Qt를 쓰지 않는다(`QByteArray` ✗ → `std::span`). H1에서 파서를 짠 것과 같은 레이어다.
+
+### 목적 · 기능
+
+- **목적**: 세이브의 포켓몬 한 마리를 고친 값으로 **바이트에 다시 써 넣는다**. 게임이 그 세이브를 "깨졌다"고 거부하지 않게,
+  읽을 때 확인했던 체크섬 세 겹(포켓몬 체크섬 · 블록 CRC · 5세대는 모음표 CRC까지)을 전부 다시 맞춘다
+- **기능(H10c 끝)**: `writeMember(save, series, 몇 번째, 평문)` 한 번이면 그 자리가 바뀌고 CRC가 맞는 세이브 바이트가 된다.
+  파일로 쓰는 건 H10d(data)의 일이다
+
+### 읽기 ↔ 쓰기: 같은 단계를 거꾸로
+
+| 층 | 읽기 (이미 있음 — H1 · H6) | 쓰기 (H10c에서 새로) | 미션 |
+|---|---|---|---|
+| 바이트 | `readU16` · `readU32` | `writeU16` · `writeU32` | C1 |
+| 포켓몬 한 마리 | `decodePkm`: 복호화 → `unshuffle` → 체크섬 계산 | `encodePkm`: 체크섬 쓰기 → `shuffle` → 암호화 | C2 |
+| 칸(필드) | `parseMember`: 0x28 기술 · 0x0A 물건 … 읽기 | `setMoves` · `setHeldItem`: 같은 위치에 쓰기 | C3 |
+| 블록 CRC | `readFooter` · `partyBlockValid` · `checksumTableValid`: 맞는지 **확인** | `refreshFooter` · `refreshPartyBlock`: 다시 **계산해 써 넣기** | C4 |
+| 파티 | `PartyNdsReader::readSeries`: 기준 위치 → i번째 자리 → decode | `writeMember`: 기준 위치 → i번째 자리 → encode → CRC 갱신 | C5 |
+
+**순서가 왜 거꾸로인가 — `decodePkm`과 `encodePkm`을 나란히**
+
+```
+decodePkm (지금 pkmcodec.cpp)                    encodePkm (새로)
+① 236바이트 복사                                 ① 평문 236바이트 복사
+② pid · 체크섬(0x06) 읽기                        ② 체크섬을 다시 계산해 0x06에 쓴다   ← 고친 값이 반영되게
+③ 블록 128바이트 복호화(시드 = 체크섬)          ③ 블록 128바이트 섞기 — shuffle(pid)  ← decode ④의 반대
+④ 블록 풀기 — unshuffle(pid)                     ④ 블록 128바이트 암호화(시드 = 체크섬) ← decode ③의 반대
+⑤ 배틀 스탯 복호화(시드 = pid)                   ⑤ 배틀 스탯 암호화(시드 = pid)
+⑥ 체크섬 계산해 맞는지                           ⑥ 크기만큼(236 · 220) 돌려준다
+```
+
+읽기는 "**풀고 나서** 순서를 되돌린다", 쓰기는 "**순서를 섞고 나서** 잠근다". 양말을 신고 신발을 신었으면, 벗을 때는 신발부터다.
+암호화(`cryptArray`)는 XOR이라 같은 함수가 잠그기와 풀기를 다 한다 — 새로 짤 필요가 없다.
+
+### 테스트용 합성 세이브는 그대로 둔다
+
+`tests/core/syntheticsave.h`에도 `putU16` · `encodePkm`이 있다. **이걸 core 것으로 바꾸지 않는다** —
+테스트의 정답지가 검사받는 코드와 같으면, 둘이 같이 틀려도 테스트가 통과한다. 합성 세이브는 **독립된 정답지**로 남기고,
+C2 테스트가 "core `encodePkm` == `synth::encodePkm`"을 비교한다(ADR 0022 결정 2의 "테스트도 core의 것을 쓴다"는 이렇게 고친다).
+
+### 새 파일 · 바뀌는 파일
+
+```
+src/core/save/
+├ savebytes.h/.cpp        + MutableBytes · writeU16 · writeU32                 (C1)
+├ pkmcodec.h/.cpp         + shuffle · encodePkm                                (C2)
+├ pkmfields.h/.cpp        ← 새로: setMoves · setHeldItem                       (C3)
+├ saveblock.h/.cpp        + refreshFooter · refreshPartyBlock                  (C4)
+├ partyndsreader.h/.cpp   + PartyNdsReader::baseOf (findBase를 밖에서 부를 입구) · findSeries   (C5)
+└ partywriter.h/.cpp      ← 새로: writeMember                                  (C5)
+tests/core/
+└ partywriter_test.cpp    ← 새로 (C1–C5 테스트를 한 파일에 — 아래 코드 그대로 써도 된다)
+```
+
+`src/core/CMakeLists.txt`에 새 파일 4줄, `tests/core/CMakeLists.txt`에 1줄.
+
+---
+
+### 미션 C1 — 바이트 쓰기 (`savebytes`)
+
+**목적**: 읽기의 `readU16`처럼, 리틀 엔디언으로 **쓰는** 함수. 지금 `Bytes`는 `std::span<const std::uint8_t>`(읽기 전용 창)이라 쓸 수 없다 — 쓸 수 있는 창이 따로 필요하다.
+
+```cpp
+// savebytes.h — 전                                 // 후 (추가)
+using Bytes = std::span<const std::uint8_t>;        using Bytes = std::span<const std::uint8_t>;  // 읽기 창
+                                                    using MutableBytes = std::span<std::uint8_t>; // 쓰기 창
+std::uint16_t readU16(Bytes data, std::size_t);     std::uint16_t readU16(Bytes data, std::size_t);
+std::uint32_t readU32(Bytes data, std::size_t);     std::uint32_t readU32(Bytes data, std::size_t);
+                                                    // offset에 리틀 엔디언으로. 범위를 넘으면 아무것도 안 한다
+                                                    void writeU16(MutableBytes data, std::size_t offset, std::uint16_t value);
+                                                    void writeU32(MutableBytes data, std::size_t offset, std::uint32_t value);
+```
+
+본문은 `readU16`의 거꾸로다: `data[offset] = 낮은 바이트(value & 0xFF)`, `data[offset + 1] = 높은 바이트(value >> 8)`.
+`writeU32`는 `writeU16` 두 번(낮은 16비트 먼저). 범위 확인(`offset + 2 > data.size()`면 return)은 `readU16`과 같다.
+
+`MutableBytes`는 `Bytes`로 저절로 바뀐다(쓸 수 있는 창 → 읽기만 하는 창은 안전하니까). 그래서 쓰기 함수 안에서 `readU16(data, …)`을 그대로 부를 수 있다. 반대는 안 된다.
+
+---
+
+### 미션 C2 — 포켓몬 한 마리 잠그기 (`shuffle` · `encodePkm`)
+
+```cpp
+// pkmcodec.h 추가
+// A · B · C · D 순서 128바이트 → 섞인 128바이트. unshuffle의 반대
+std::array<std::uint8_t, kBlocksSize> shuffle(Bytes blocks, int shuffleIndex);
+
+// 평문(블록 A · B · C · D 순서) → 세이브에 들어가는 모양. 0x06 체크섬은 여기서 다시 계산해 쓴다.
+// size: 236(PK4) · 220(PK5) — 결과의 앞 size바이트만 의미가 있다
+Pkm encodePkm(const Pkm &plain, std::size_t size);
+```
+
+**`shuffle` — `unshuffle`과 나란히**: 표 `kBlockPosition[s][i]` = "논리 블록 i가 섞인 데이터의 **몇 번째 자리**에 있나".
+
+```cpp
+// unshuffle (지금): 섞인 자리 pos에서 → 논리 블록 i로
+pos = kBlockPosition[shuffleIndex][i];
+copy_n(shuffled.begin() + pos * kBlockSize, kBlockSize, blocks.begin() + i * kBlockSize);
+
+// shuffle (새로): 논리 블록 i에서 → 섞인 자리 pos로      ← 복사 방향만 반대
+pos = kBlockPosition[shuffleIndex][i];
+copy_n(blocks.begin() + i * kBlockSize, kBlockSize, shuffled.begin() + pos * kBlockSize);
+```
+
+**`encodePkm`** — 위 "decode ↔ encode" 그림의 오른쪽 ①–⑥ 순서 그대로. 쓰는 함수는 전부 이미 있다:
+`pkmChecksum` · `writeU16`(C1) · `shuffleIndex` · `shuffle` · `cryptArray`. 영역은 decode와 같다 —
+블록 = `subspan(kHeaderSize, kBlocksSize)`, 배틀 스탯 = `subspan(kStoredSize, size - kStoredSize)`.
+
+**흔한 실수**
+
+| 증상 | 원인 |
+|---|---|
+| 왕복 테스트에서 블록이 엉뚱하게 섞임 | 암호화를 **먼저** 하고 섞었다 — 섞기 → 암호화 순서 |
+| 고친 값을 넣었는데 `ok()`가 false | ②를 빼먹었다 — 체크섬을 옛 값 그대로 시드로 썼다 |
+| PK5(220)만 틀림 | 배틀 스탯 길이를 `kPartyPkmSize - kStoredSize`(100)로 고정했다 — `size - kStoredSize`(84) |
+
+---
+
+### 미션 C3 — 칸에 쓰기 (`pkmfields`)
+
+**목적**: `parseMember`가 읽는 칸 중 H10d가 고칠 두 가지(기술 · 물건)를 **평문 PKM에 써 넣는** 함수. 위치는 읽을 때와 같다(`docs/data/gen4/pk4.md`).
+
+```cpp
+// pkmfields.h (새로)
+#include "core/save/pkmcodec.h"
+namespace com::yamada::studio::save {
+// 기술 4칸(0x28 u16 × 4) · 남은 PP(0x30 u8 × 4) · PP 업(0x34 u8 × 4)을 쓴다. PP 업은 0으로.
+// 0 = 빈 칸(그 칸의 PP도 0). 체크섬은 encodePkm이 다시 계산한다
+void setMoves(Pkm &plain, const std::array<int, 4> &moves, const std::array<int, 4> &pp);
+// 지닌 물건(0x0A u16) — 게임 내부 번호. 0 = 없음
+void setHeldItem(Pkm &plain, int gameItem);
+}
+```
+
+| `parseMember`가 읽는 줄 (지금) | `setMoves` · `setHeldItem`이 쓰는 줄 (새로) |
+|---|---|
+| `member.moves[k] = readU16(data, 0x28 + 2 * k);` | `writeU16(plain, 0x28 + 2 * k, moves[k]);` |
+| (PP는 안 읽음) | `plain[0x30 + k] = pp[k];` · `plain[0x34 + k] = 0;` |
+| `member.heldItem = readU16(data, 0x0A);` | `writeU16(plain, 0x0A, gameItem);` |
+
+`Pkm`은 `std::array`라 `writeU16(plain, …)`에 그대로 넘길 수 있다(`MutableBytes`로 저절로 바뀐다).
+
+---
+
+### 미션 C4 — 블록 CRC 다시 쓰기 (`saveblock`)
+
+```cpp
+// saveblock.h 추가 — 확인 함수 옆에 짝으로
+// 4세대: blockStart의 일반 블록 footer CRC(끝 − 2)를 지금 데이터로 다시 계산해 쓴다. 카운터는 건드리지 않는다
+void refreshFooter(MutableBytes save, std::size_t blockStart, const FooterSlots &check);
+// 5세대: 파티 블록 CRC를 두 곳(블록 뒤 · 모음표 사본)에 쓰고, 그다음 모음표 자신의 CRC를 쓴다
+void refreshPartyBlock(MutableBytes save, const ChecksumTable &check);
+```
+
+**확인 함수와 나란히** — 계산하는 범위는 확인할 때와 **똑같고**, "비교" 대신 "써 넣기"다.
+
+```cpp
+// readFooter (지금) — 확인
+footer.computedCrc = crc16Ccitt(save.subspan(blockStart, check.generalSize - check.footerSize));
+footer.storedCrc   = readU16(save, end - 0x02);            // end = blockStart + generalSize
+
+// refreshFooter (새로) — 써 넣기
+writeU16(save, end - 0x02, crc16Ccitt(save.subspan(blockStart, check.generalSize - check.footerSize)));
+```
+
+```cpp
+// partyBlockValid (지금) — 두 곳과 비교
+crc == readU16(save, check.partyCrcAt) && crc == readU16(save, mirror)
+
+// refreshPartyBlock (새로) — 순서가 중요하다
+// ① crc = crc16Ccitt(파티 블록)
+// ② writeU16(save, check.partyCrcAt, crc)          블록 뒤
+// ③ writeU16(save, mirror, crc)                    모음표 안의 사본 — 이걸로 모음표 내용이 바뀐다
+// ④ 모음표 CRC = crc16Ccitt(모음표) → table + tableLength + 0x0E에 쓴다   ← 반드시 ③ 뒤
+```
+
+④가 ③보다 먼저면 모음표 CRC가 **바뀌기 전** 내용으로 계산돼서, 게임이 모음표를 깨졌다고 본다(`checksumTableValid`가 false).
+`tests/core/syntheticsave.h`의 `buildTableSave` 끝부분이 같은 순서로 쓰여 있다 — 참고하되 복사하지는 않는다(정답지).
+
+---
+
+### 미션 C5 — 파티 자리에 쓰기 (`writeMember`)
+
+**목적**: C1–C4를 엮는다. 읽기의 `readSeries`가 "기준 위치 → i번째 자리 → decode"였으니, 쓰기는 "기준 위치 → i번째 자리 → encode → CRC".
+
+**① `PartyNdsReader`에 입구 두 개** (`partyndsreader.h`) — 지금 `findBase`는 `private`이라 밖에서 기준 위치를 못 얻는다.
+
+```cpp
+public:
+    // 그 시리즈의 체크섬이 맞으면 파티 위치의 기준(4세대 = 지금 슬롯의 일반 블록 시작 · 5세대 = 0)
+    static std::optional<std::size_t> baseOf(Bytes save, const NdsSeries &series);
+// 클래스 밖, kNdsSeries 아래
+// version_group 이름으로 표의 행을 찾는다("platinum"). 없으면 nullptr — data의 SaveFile::versionGroup이 열쇠
+const NdsSeries *findSeries(std::string_view versionGroup);
+```
+
+`baseOf` 본문은 `readSeries` 안의 `std::visit(… findBase …)` 한 줄을 **옮긴 것**이다 — 옮긴 뒤 `readSeries`도 `baseOf`를 부르게 바꾼다(같은 코드 두 벌 금지).
+
+**② `partywriter.h` (새로)**
+
+```cpp
+#include "core/save/partyndsreader.h"
+namespace com::yamada::studio::save {
+// save의 파티 index번째(0부터) 자리를 plain(평문)으로 바꿔 쓰고, 그 시리즈의 블록 CRC를 다시 맞춘다.
+// 그 시리즈의 세이브가 아니거나 · index가 파티 수 밖이면 아무것도 안 쓰고 false
+bool writeMember(MutableBytes save, const NdsSeries &series, int index, const Pkm &plain);
+}
+```
+
+**본문 순서 — `readSeries`와 나란히**
+
+```
+readSeries (지금)                                   writeMember (새로)
+base = findBase(...)  ─ 없으면 nullopt              base = PartyNdsReader::baseOf(save, series) ─ 없으면 false
+count = save[base + partyCountOffset]               count = 같다 ─ index < 0 · index >= count면 false
+at = base + partyOffset + i × partySize             at = 같다
+decodePkm(save.subspan(at, partySize))              encoded = encodePkm(plain, partySize)
+                                                    copy_n(encoded.begin(), partySize, save.begin() + at)
+                                                    CRC: std::visit — FooterSlots면 refreshFooter(save, base, check)
+                                                                       ChecksumTable면 refreshPartyBlock(save, check)
+```
+
+마지막 CRC 줄은 `findBase`처럼 **검증 방식마다 함수 하나 + `std::visit`** 이다. 람다 안에서 두 함수의 인자 모양이 달라서
+(`refreshFooter`는 `base`가 더 필요하다), 오버로드 두 개를 익명 네임스페이스에 만들어 맞춰 주면 `visit` 한 줄로 끝난다:
+
+```cpp
+namespace {
+void refresh(MutableBytes save, std::size_t base, const FooterSlots &check)   { refreshFooter(save, base, check); }
+void refresh(MutableBytes save, std::size_t,      const ChecksumTable &check) { refreshPartyBlock(save, check); }
+}
+// writeMember 안
+std::visit([&](const auto &check) { refresh(save, *base, check); }, series.check);
+```
+
+---
+
+### 미션 C6 — 왕복 테스트 (`tests/core/partywriter_test.cpp`)
+
+이 미션의 테스트가 H10c의 완료 조건이다. 아래를 그대로 써도 되고, 이름 · 값을 바꿔도 된다.
+
+```cpp
+// H10c — 세이브 쓰기. ctest -R PartyWriter
+#include "core/save/partywriter.h"
+#include "core/save/pkmfields.h"
+#include "syntheticsave.h"
+
+#include <gtest/gtest.h>
+
+using namespace com::yamada::studio::save;
+
+TEST(PartyWriter, WritesLittleEndian) // C1
+{
+    std::array<std::uint8_t, 6> data {};
+    writeU16(data, 0, 0x1234);
+    writeU32(data, 2, 0xCAFEBABE);
+    EXPECT_EQ(data[0], 0x34);
+    EXPECT_EQ(data[1], 0x12);
+    EXPECT_EQ(readU32(data, 2), 0xCAFEBABEu);
+    writeU16(data, 5, 0xFFFF); // 범위 밖 — 아무것도 안 한다
+    EXPECT_EQ(data[5], 0xCA);
+}
+
+TEST(PartyWriter, ShuffleUndoesUnshuffleForEveryOrder) // C2
+{
+    std::array<std::uint8_t, kBlocksSize> blocks {};
+    for (std::size_t i = 0; i < blocks.size(); ++i)
+        blocks[i] = std::uint8_t(i);
+    for (int s = 0; s < 24; ++s)
+        EXPECT_EQ(unshuffle(shuffle(blocks, s), s), blocks) << "shuffle " << s;
+}
+
+TEST(PartyWriter, EncodesLikeTheIndependentEncoder) // C2 — 정답지(syntheticsave)와 비교
+{
+    for (std::uint32_t pid : {0x12345678u, 0x00000000u, 0xFFFFFFFFu, 0x0003E000u}) {
+        synth::MemberSpec spec;
+        spec.pid = pid;
+        const Pkm plain = synth::plainPkm(spec);
+        EXPECT_EQ(encodePkm(plain, kPk4.partySize), synth::encodePkm(plain)) << std::hex << pid;
+    }
+}
+
+TEST(PartyWriter, RoundTripsAPk5) // C2 — 220바이트
+{
+    const Pkm plain = synth::plainPkm({});
+    const Pkm encoded = encodePkm(plain, kPk5.partySize);
+    const DecodedPkm decoded = decodePkm(Bytes(encoded).first(kPk5.partySize));
+    ASSERT_TRUE(decoded.ok());
+    EXPECT_TRUE(std::equal(plain.begin(), plain.begin() + kPk5.partySize, decoded.data.begin()));
+}
+
+TEST(PartyWriter, RefreshesAFooterAfterAnEdit) // C4
+{
+    const NdsSeries &pt = synth::seriesOf("platinum");
+    auto save = synth::buildSave(pt, synth::SlotSpec {.party = {{}}});
+    save[0x10] ^= 0xFF; // 데이터를 바꾸면 CRC가 틀린다
+    ASSERT_FALSE(readFooter(save, 0, synth::footerSlotsOf(pt)).crcOk());
+    refreshFooter(save, 0, synth::footerSlotsOf(pt));
+    EXPECT_TRUE(readFooter(save, 0, synth::footerSlotsOf(pt)).crcOk());
+}
+
+TEST(PartyWriter, RefreshesThePartyBlockAndTheTable) // C4
+{
+    const NdsSeries &bw = synth::seriesOf("black-white");
+    auto save = synth::buildTableSave(bw, {.party = {{}}});
+    const ChecksumTable &check = synth::checksumTableOf(bw);
+    save[bw.partyOffset + 0x20] ^= 0xFF;
+    ASSERT_FALSE(partyBlockValid(save, check));
+    refreshPartyBlock(save, check);
+    EXPECT_TRUE(partyBlockValid(save, check));
+    EXPECT_TRUE(checksumTableValid(save, check)); // 사본이 바뀐 뒤의 모음표 CRC까지
+}
+
+// C5 — 진짜 편집 왕복: 4세대
+TEST(PartyWriter, ChangesOneMemberOfAPlatinumSave)
+{
+    const NdsSeries &pt = synth::seriesOf("platinum");
+    synth::MemberSpec second;
+    second.species = 35;
+    auto save = synth::buildSave(pt, synth::SlotSpec {.party = {{}, second}},
+                                 synth::SlotSpec {.major = 0, .party = {{}}}); // 슬롯 1 = 옛 저장
+    const std::vector<std::uint8_t> before = save;
+
+    const auto party = readParty(save);
+    ASSERT_TRUE(party.has_value());
+    const std::size_t at = party->partyOffset + kPk4.partySize; // 둘째 자리
+    Pkm plain = decodePkm(Bytes(save).subspan(at, kPk4.partySize)).data;
+    setMoves(plain, {33, 45, 0, 0}, {35, 40, 0, 0});
+    setHeldItem(plain, 234);
+
+    ASSERT_TRUE(writeMember(save, pt, 1, plain));
+
+    const auto after = readParty(save); // 체크섬이 다 맞아야 다시 읽힌다
+    ASSERT_TRUE(after.has_value());
+    EXPECT_EQ(after->members[1].moves, (std::array<int, 4> {33, 45, 0, 0}));
+    EXPECT_EQ(after->members[1].heldItem, 234);
+    EXPECT_TRUE(after->members[1].checksumOk);
+    EXPECT_EQ(after->members[0].moves, party->members[0].moves); // 다른 자리는 그대로
+    // 옛 저장 슬롯(0x40000~)은 한 바이트도 안 바뀐다
+    EXPECT_TRUE(std::equal(before.begin() + kSlotSize, before.end(), save.begin() + kSlotSize));
+}
+
+// C5 — 5세대
+TEST(PartyWriter, ChangesOneMemberOfABlackWhiteSave)
+{
+    const NdsSeries &bw = synth::seriesOf("black-white");
+    auto save = synth::buildTableSave(bw, {.party = {{}}});
+    const auto party = readParty(save);
+    ASSERT_TRUE(party.has_value());
+    Pkm plain = decodePkm(Bytes(save).subspan(party->partyOffset, kPk5.partySize)).data;
+    setMoves(plain, {89, 0, 0, 0}, {10, 0, 0, 0});
+
+    ASSERT_TRUE(writeMember(save, bw, 0, plain));
+
+    const auto after = readParty(save);
+    ASSERT_TRUE(after.has_value());
+    EXPECT_EQ(after->members[0].moves, (std::array<int, 4> {89, 0, 0, 0}));
+}
+
+TEST(PartyWriter, RefusesWhatItCannotWrite) // C5
+{
+    const NdsSeries &pt = synth::seriesOf("platinum");
+    auto save = synth::buildSave(pt, synth::SlotSpec {.party = {{}}});
+    const Pkm plain = synth::plainPkm({});
+    EXPECT_FALSE(writeMember(save, pt, 1, plain)); // 파티는 1마리 — 2번째 자리는 없다
+    EXPECT_FALSE(writeMember(save, synth::seriesOf("black-white"), 0, plain)); // 다른 시리즈
+    EXPECT_EQ(findSeries("platinum"), &pt);
+    EXPECT_EQ(findSeries("x-y"), nullptr);
+}
+```
+
+**흔한 실수**
+
+| 증상 | 원인 |
+|---|---|
+| `ChangesOneMemberOfAPlatinumSave`에서 `after`가 없음(nullopt) | footer CRC를 안 고쳤거나, 고친 슬롯이 아니라 다른 슬롯을 고쳤다(`base`가 아니라 0을 넘김) |
+| 5세대만 `after`가 없음 | `refreshPartyBlock`의 ④를 ③보다 먼저 했다 |
+| 옛 슬롯 비교가 실패 | `refreshFooter`를 두 슬롯 다 불렀다 — 지금 슬롯 하나만 |
+
+### H10c 완료 조건
+
+- [ ] `ctest --preset linux-debug -R PartyWriter` 전부 통과, 전체 테스트 통과
+- [ ] (선택) 본인 세이브의 **사본**으로 확인: 디버그 CLI(`pokesix-read-sav`)나 테스트에서 한 마리 기술을 바꿔 새 파일로 쓰고, 에뮬레이터에서 열어 바뀐 기술 — 원본은 절대 덮어쓰지 않는다(ADR 0022). 화면에서 하는 건 H10d다

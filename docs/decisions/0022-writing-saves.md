@@ -24,8 +24,8 @@ H9에서 에디터는 세이브의 파티를 읽어 보여 주기만 했다. 사
    고친 칸 → 포켓몬 체크섬 → 블록 섞기 → 암호화 → 블록 CRC. 블록 CRC는 검증 방식마다 함수 하나다
    (4세대 `FooterSlots`: 지금 슬롯의 footer CRC · 5세대 `ChecksumTable`: 파티 CRC 두 곳 → 모음 블록 CRC).
    [ADR 0019](0019-save-readers-per-platform.md)의 `findBase`처럼 `std::visit`으로 고른다.
-   지금 `tests/core/syntheticsave.h`에만 있는 역연산(`putU16` · `encodePkm` · CRC 쓰기)을 core로 옮기고,
-   테스트도 core의 것을 쓴다
+   역연산(`writeU16` · `encodePkm` · CRC 쓰기)을 core에 새로 짠다. `tests/core/syntheticsave.h`의 같은 역연산은
+   **독립된 정답지로 남긴다**(2026-10-23 수정 — 정답지가 검사받는 코드와 같으면 둘이 같이 틀려도 테스트가 통과한다)
 3. **4세대는 지금 슬롯(`activeGeneralBlock`)만 고친다.** 저장 카운터는 올리지 않는다. 게임은 CRC가 맞고 카운터가
    큰 슬롯을 읽으므로, 카운터를 그대로 두면 고친 슬롯을 계속 읽는다. 다른 슬롯(한 번 전의 저장)은 손대지 않는다
 4. **파일로 쓰기 전에 다시 읽어 확인한다.** 만든 바이트를 `readParty`로 다시 읽어 ① 체크섬이 모두 맞고 ② 고친 값이
