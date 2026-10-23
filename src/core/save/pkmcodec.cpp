@@ -20,6 +20,20 @@ int shuffleIndex(std::uint32_t pid)
     return static_cast<int>(pid);
 }
 
+std::array<std::uint8_t, kBlocksSize> shuffle(Bytes blocks, int shuffleIndex)
+{
+    std::array<std::uint8_t, kBlocksSize> shuffled {};
+    if (blocks.size() != kBlocksSize || shuffleIndex < 0 || shuffleIndex >= 24)
+        return shuffled;
+    uint8_t pos;
+    for (int i = 0; i < 4; ++i) {
+        pos = kBlockPosition[shuffleIndex][i];
+        std::copy_n(blocks.begin() + i * kBlockSize, kBlockSize,
+                    shuffled.begin() + pos * kBlockSize);
+    }
+    return shuffled;
+}
+
 std::array<std::uint8_t, kBlocksSize> unshuffle(Bytes shuffled, int shuffleIndex)
 {
     std::array<std::uint8_t, kBlocksSize> blocks {};
@@ -42,6 +56,20 @@ std::uint16_t pkmChecksum(const Pkm &decrypted)
         sum += readU16(decrypted, offset);
     }
     return sum;
+}
+
+Pkm encodePkm(const Pkm &plain, std::size_t size)
+{
+    Pkm out = plain;
+    writeU16(out, 0x06, pkmChecksum(out));
+    const std::uint32_t pid = readU32(out, 0x00);
+    const std::uint16_t checksum = readU16(out, 0x06);
+    std::array<std::uint8_t, kBlocksSize> shuffled
+            = shuffle(std::span(out).subspan(kHeaderSize, kBlocksSize), shuffleIndex(pid));
+    std::copy(shuffled.begin(), shuffled.end(), out.begin() + kHeaderSize);
+    cryptArray(std::span(out).subspan(kHeaderSize, kBlocksSize), checksum);
+    cryptArray(std::span(out).subspan(kStoredSize, size - kStoredSize), pid);
+    return out;
 }
 
 DecodedPkm decodePkm(Bytes encrypted)

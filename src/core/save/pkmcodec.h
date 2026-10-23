@@ -43,6 +43,8 @@ void cryptArray(std::span<std::uint8_t> data, std::uint32_t seed);
 // 섞인 순서 번호 0–23: ((pid >> 13) & 0x1F) % 24
 int shuffleIndex(std::uint32_t pid);
 
+std::array<std::uint8_t, kBlocksSize> shuffle(Bytes blocks, int shuffleIndex);
+
 // 섞인 128바이트(블록 4개) → A · B · C · D 순서로 되돌린 128바이트
 std::array<std::uint8_t, kBlocksSize> unshuffle(Bytes shuffled, int shuffleIndex);
 
@@ -60,6 +62,7 @@ struct DecodedPkm
     bool ok() const { return decoded && storedChecksum == computedChecksum; }
 };
 
+Pkm encodePkm(const Pkm &plain, std::size_t size);
 // encrypted: 세이브에서 자른 한 마리 — kPk4.partySize(236) 또는 kPk5.partySize(220) (H6).
 // 220바이트면 data의 뒤 16바이트는 0으로 남는다. 다른 크기면 빈 DecodedPkm
 DecodedPkm decodePkm(Bytes encrypted);

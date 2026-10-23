@@ -19,6 +19,22 @@ std::uint32_t readU32(Bytes data, std::size_t offset)
     return static_cast<std::uint32_t>(lo | (static_cast<std::uint32_t>(hi) << 16));
 }
 
+void writeU16(MutableBytes data, std::size_t offset, std::uint16_t value)
+{
+    if (offset + 2 > data.size())
+        return;
+    data[offset] = static_cast<std::uint8_t>(value & 0xFF);
+    data[offset + 1] = static_cast<std::uint8_t>(value >> 8);
+}
+
+void writeU32(MutableBytes data, std::size_t offset, std::uint32_t value)
+{
+    if (offset + 4 > data.size())
+        return;
+    writeU16(data, offset, value & 0xFFFF);
+    writeU16(data, offset + 2, value >> 16);
+}
+
 std::uint16_t crc16Ccitt(Bytes data)
 {
     std::uint16_t crc = 0xFFFF;

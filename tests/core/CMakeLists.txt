@@ -12,6 +12,7 @@ add_executable(pokesix_core_tests
     realsave_test.cpp
     # H6 — 기기별 리더
     partyndsreader_test.cpp
+    partywriter_test.cpp
 )
 pokesix_target_defaults(pokesix_core_tests)
 
