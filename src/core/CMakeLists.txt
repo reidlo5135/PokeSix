@@ -26,6 +26,10 @@ add_library(pokesix_core STATIC
     # H6 — 기기별 리더(PartyReader의 자식). NDS = 4 · 5세대
     save/partyndsreader.h
     save/partyndsreader.cpp
+    save/pkmfields.h
+    save/pkmfields.cpp
+    save/partywriter.h
+    save/partywriter.cpp
 )
 add_library(PokeSix::core ALIAS pokesix_core)
 

@@ -20,8 +20,7 @@ std::optional<ReadParty> PartyNdsReader::readSeries(Bytes save, const NdsSeries 
     if (save.size() < kSaveSize)
         return std::nullopt;
     // 행에 든 검증 방식(FooterSlots · ChecksumTable)에 맞는 findBase 오버로드가 불린다
-    const std::optional<std::size_t> base
-            = std::visit([&](const auto &check) { return findBase(save, check); }, series.check);
+    const std::optional<std::size_t> base = baseOf(save, series);
 
     if (!base)
         return std::nullopt;
@@ -42,6 +41,11 @@ std::optional<ReadParty> PartyNdsReader::readSeries(Bytes save, const NdsSeries 
     return party;
 }
 
+std::optional<std::size_t> PartyNdsReader::baseOf(Bytes save, const NdsSeries &series)
+{
+    return std::visit([&](const auto &check) { return findBase(save, check); }, series.check);
+}
+
 std::optional<std::size_t> PartyNdsReader::findBase(Bytes save, const FooterSlots &check)
 {
     return activeGeneralBlock(save, check);
@@ -53,5 +57,13 @@ std::optional<std::size_t> PartyNdsReader::findBase(Bytes save, const ChecksumTa
         return 0;
 
     return std::nullopt;
+}
+
+const NdsSeries *findSeries(std::string_view versionGroup)
+{
+    for (const NdsSeries &series : kNdsSeries)
+        if (series.versionGroup == versionGroup)
+            return &series;
+    return nullptr;
 }
 } // namespace com::yamada::studio::save
