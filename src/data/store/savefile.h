@@ -16,7 +16,6 @@
 //            ├ bytes · 세대 · 게임 · 묶음 · 파티 위치   ← 쓰기(H10c)가 원본 사본을 고칠 때 쓴다
 //            └ members[i] ─ squad(앱 id) + raw(게임 원본 값)
 //
-// 스쿼드 모양(Portable)이 필요하면 saveimport::load가 이 문서를 줄인다.
 namespace com::yamada::studio {
 class Repository;
 
@@ -43,6 +42,7 @@ std::array<int, 6> dexOrder(const std::array<int, 6> &gameOrder);
 } // namespace com::yamada::studio
 
 namespace com::yamada::studio::savefile {
+QString versionOfOriginGame(int originGame);
 // 실패하면 std::nullopt — error에 사람이 읽을 한 줄(파일을 못 연다 · 세이브가 아니다)
 std::optional<SaveFile> open(const QString &path, Repository &repository, QString *error = nullptr);
 } // namespace com::yamada::studio::savefile

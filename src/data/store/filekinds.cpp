@@ -36,8 +36,6 @@ QString dialogFilter(FileKind kind)
     case FileKind::Unknown:
         return QString();
         break;
-    default:
-        return QString();
     }
 }
 } // namespace com::yamada::studio::filekinds

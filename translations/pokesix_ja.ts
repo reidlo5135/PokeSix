@@ -324,7 +324,7 @@
     </message>
     <message>
         <source>게임 세이브 (*.sav *.dsv)</source>
-        <translation>ゲームのセーブ (*.sav *.dsv)</translation>
+        <translation type="vanished">ゲームのセーブ (*.sav *.dsv)</translation>
     </message>
     <message>
         <source>%1
@@ -964,6 +964,10 @@
     <message>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
+    </message>
+    <message>
+        <source>알</source>
+        <translation>タマゴ</translation>
     </message>
 </context>
 <context>
@@ -1673,7 +1677,7 @@
     </message>
     <message>
         <source>PokeSix 스쿼드 파일(*.pks *.json)</source>
-        <translation>PokeSixスクワッドファイル (*.pks *.json)</translation>
+        <translation type="vanished">PokeSixスクワッドファイル (*.pks *.json)</translation>
     </message>
 </context>
 <context>
@@ -1799,6 +1803,17 @@
     </message>
 </context>
 <context>
+    <name>com::yamada::studio::filekinds</name>
+    <message>
+        <source>PokeSix 스쿼드 파일(*.pks *.json)</source>
+        <translation>PokeSixスクワッドファイル (*.pks *.json)</translation>
+    </message>
+    <message>
+        <source>게임 세이브 파일(*.sav *.dsv)</source>
+        <translation>ゲームのセーブファイル (*.sav *.dsv)</translation>
+    </message>
+</context>
+<context>
     <name>com::yamada::studio::guidebook</name>
     <message>
         <source>필드</source>
@@ -1890,10 +1905,21 @@
     </message>
 </context>
 <context>
-    <name>com::yamada::studio::saveimport</name>
+    <name>com::yamada::studio::savefile</name>
     <message>
         <source>파일을 열 수 없어요: %1</source>
         <translation>ファイルを開けませんでした: %1</translation>
+    </message>
+    <message>
+        <source>4세대(DP · Pt · HGSS) · 5세대(BW · B2W2) 세이브가 아니에요</source>
+        <translation>第4世代(DP · Pt · HGSS) · 第5世代(BW · B2W2)のセーブではありません</translation>
+    </message>
+</context>
+<context>
+    <name>com::yamada::studio::saveimport</name>
+    <message>
+        <source>파일을 열 수 없어요: %1</source>
+        <translation type="vanished">ファイルを開けませんでした: %1</translation>
     </message>
     <message>
         <source>4세대(DP · Pt · HGSS) 세이브가 아니에요</source>
@@ -1901,7 +1927,7 @@
     </message>
     <message>
         <source>4세대(DP · Pt · HGSS) · 5세대(BW · B2W2) 세이브가 아니에요</source>
-        <translation>第4世代(DP · Pt · HGSS) · 第5世代(BW · B2W2)のセーブではありません</translation>
+        <translation type="vanished">第4世代(DP · Pt · HGSS) · 第5世代(BW · B2W2)のセーブではありません</translation>
     </message>
 </context>
 <context>

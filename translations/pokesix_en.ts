@@ -324,7 +324,7 @@ to see a summary here</translation>
     </message>
     <message>
         <source>게임 세이브 (*.sav *.dsv)</source>
-        <translation>Game save (*.sav *.dsv)</translation>
+        <translation type="vanished">Game save (*.sav *.dsv)</translation>
     </message>
     <message>
         <source>%1
@@ -964,6 +964,10 @@ to see its details here</translation>
     <message>
         <source>%1 %2</source>
         <translation>%1 %2</translation>
+    </message>
+    <message>
+        <source>알</source>
+        <translation>Egg</translation>
     </message>
 </context>
 <context>
@@ -1673,7 +1677,7 @@ abilities &amp; natures (gen 3+) and held items (gen 2+)</translation>
     </message>
     <message>
         <source>PokeSix 스쿼드 파일(*.pks *.json)</source>
-        <translation>PokeSix squad file (*.pks *.json)</translation>
+        <translation type="vanished">PokeSix squad file (*.pks *.json)</translation>
     </message>
 </context>
 <context>
@@ -1799,6 +1803,17 @@ that game&apos;s wild encounters</translation>
     </message>
 </context>
 <context>
+    <name>com::yamada::studio::filekinds</name>
+    <message>
+        <source>PokeSix 스쿼드 파일(*.pks *.json)</source>
+        <translation>PokeSix squad file (*.pks *.json)</translation>
+    </message>
+    <message>
+        <source>게임 세이브 파일(*.sav *.dsv)</source>
+        <translation>Game save file (*.sav *.dsv)</translation>
+    </message>
+</context>
+<context>
     <name>com::yamada::studio::guidebook</name>
     <message>
         <source>필드</source>
@@ -1890,10 +1905,21 @@ that game&apos;s wild encounters</translation>
     </message>
 </context>
 <context>
-    <name>com::yamada::studio::saveimport</name>
+    <name>com::yamada::studio::savefile</name>
     <message>
         <source>파일을 열 수 없어요: %1</source>
         <translation>Could not open the file: %1</translation>
+    </message>
+    <message>
+        <source>4세대(DP · Pt · HGSS) · 5세대(BW · B2W2) 세이브가 아니에요</source>
+        <translation>Not a 4th-generation (DP · Pt · HGSS) or 5th-generation (BW · B2W2) save</translation>
+    </message>
+</context>
+<context>
+    <name>com::yamada::studio::saveimport</name>
+    <message>
+        <source>파일을 열 수 없어요: %1</source>
+        <translation type="vanished">Could not open the file: %1</translation>
     </message>
     <message>
         <source>4세대(DP · Pt · HGSS) 세이브가 아니에요</source>
@@ -1901,7 +1927,7 @@ that game&apos;s wild encounters</translation>
     </message>
     <message>
         <source>4세대(DP · Pt · HGSS) · 5세대(BW · B2W2) 세이브가 아니에요</source>
-        <translation>Not a 4th-generation (DP · Pt · HGSS) or 5th-generation (BW · B2W2) save</translation>
+        <translation type="vanished">Not a 4th-generation (DP · Pt · HGSS) or 5th-generation (BW · B2W2) save</translation>
     </message>
 </context>
 <context>

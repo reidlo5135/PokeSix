@@ -2,7 +2,6 @@
 
 #include "data/logging/logging.h"
 #include "data/repository/repository.h"
-#include "data/store/saveimport.h"
 
 #include <QCoreApplication>
 #include <QFile>
@@ -20,7 +19,6 @@ namespace com::yamada::studio::savefile {
 namespace {
 QString tr(const char *text)
 {
-    // 번역 문맥은 옮기기 전(saveimport)과 같게 둔다 — 이미 채운 en/ja가 그대로 쓰인다
     return QCoreApplication::translate("com::yamada::studio::savefile", text);
 }
 
@@ -40,7 +38,7 @@ QString chooseVersion(const QStringList &versions, const std::vector<save::ReadM
 {
     QHash<QString, int> votes; // 버전 → 그 버전 출신 멤버 수
     for (const save::ReadMember &member : members) {
-        const QString version = saveimport::versionOfOriginGame(member.originGame);
+        const QString version = savefile::versionOfOriginGame(member.originGame);
         if (versions.contains(version))
             ++votes[version];
     }
@@ -74,6 +72,17 @@ SquadMember toSquadMember(const save::ReadMember &member, int generation, Reposi
     return out;
 }
 } // namespace
+
+QString versionOfOriginGame(int originGame)
+{
+    static const QHash<int, QString> versions
+            = {{7, QStringLiteral("heartgold")}, {8, QStringLiteral("soulsilver")},
+               {10, QStringLiteral("diamond")},  {11, QStringLiteral("pearl")},
+               {12, QStringLiteral("platinum")}, {20, QStringLiteral("white")},
+               {21, QStringLiteral("black")},    {22, QStringLiteral("white-2")},
+               {23, QStringLiteral("black-2")}};
+    return versions.value(originGame);
+}
 
 std::optional<SaveFile> open(const QString &path, Repository &repository, QString *error)
 {
