@@ -44,7 +44,7 @@ Claude Code가 이 리포에서 세션을 시작할 때마다 읽는 파일이�
 ## 2. 프로젝트 요약
 
 - **PokeSix**: 포켓몬 세대별 정주행 보조 도구 (도감 → 파티 분석 → 아이템 → 세이브 뷰어/에디터)
-- **멀티 플랫폼 React 재작성**: TypeScript · React · Vite(웹) · Electron(데스크톱) · Capacitor(Android/iOS) · Vitest
+- **멀티 플랫폼 React 재작성**: TypeScript · React · Vite(웹) · Electron(데스크톱 — **메인 플랫폼**) · Capacitor(Android/iOS) · Vitest
 - 참고 구성: `~/ws/src/robot-engineering-studio/res_app` (같은 스택의 동작하는 예)
 - **Qt 6 / C++20 이전 구현**: git 태그 `qt6-final`, 작업 사본 `~/ws/src/PokeSix-qt6`.
   동작 사양이 궁금하면 그쪽 `docs/`(roadmap · ADR · 가이드)를 본다 — 세이브 파서 · 데이터 모델의 정답지다
@@ -52,12 +52,12 @@ Claude Code가 이 리포에서 세션을 시작할 때마다 읽는 파일이�
 
 ## 3. 디자인
 
-- 기준은 [design/](design/README.md) 핸드오프의 **팔레트와 글꼴**(제목 Do Hyeon · 본문 NanumGothic ·
-  숫자 NanumGothicCoding · 워드마크 Silkscreen — 글꼴 이름은 R3 토큰 단계에서 최종 확정)
+- 기준은 [design/](design/README.md) 핸드오프의 **팔레트와 글꼴**(제목 **Do Hyeon** — 사용자 확정 · 본문 NanumGothic ·
+  숫자 NanumGothicCoding · 워드마크 Silkscreen)
 - **컴포넌트 · 페이지 레이아웃은 사용자가 재설계한다** — 핸드오프 화면을 그대로 복제하지 않는다.
   Qt판에서 불만이던 부분을 바꾸는 것이 재작성 목적의 하나다
 - design/ 폴더는 원본 스냅샷이다. 수정하지 않는다
-- 색 · 크기 하드코딩 금지: CSS 변수(디자인 토큰)로만 (R3에서 만든다)
+- 색 · 크기 하드코딩 금지: CSS 변수(디자인 토큰)로만 (R4에서 만든다)
 
 ## 4. 규칙 (어기면 지적할 것)
 
