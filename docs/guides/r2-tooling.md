@@ -28,28 +28,48 @@ VS Code `editor.formatOnSave` · `editor.codeActionsOnSave`의 `source.fixAll.es
 
 ---
 
-## 문제 T2 — 첫 테스트: 도감 번호 표기
+## 문제 T2 — 도감 번호 표기
 
-**만들 것**: 도감 화면 곳곳에 쓸 표기 함수와 그 테스트.
+**배경 (어디에 쓰이나)**: 앞으로 만들 도감 화면의 각 줄 왼쪽에 도감 번호가 붙는다. 자릿수가 들쭉날쭉하면
+세로줄이 안 맞으므로 **세 자리로 맞춰** 보여 준다. 이번 문제는 그 글자를 만드는 **함수와 테스트만** — 화면은 아직 없다.
 
 ```
-formatDexNumber(1)    → "No.001"
-formatDexNumber(25)   → "No.025"
-formatDexNumber(493)  → "No.493"
-formatDexNumber(1025) → "No.1025"
+┌─────────────────────────┐
+│ No.001  이상해씨         │
+│ No.025  피카츄           │
+│ No.493  아르세우스       │
+│ No.1025 복숭악동         │   ← 네 자리는 자르지 않고 그대로
+└─────────────────────────┘
 ```
+
+**구현할 것**
+
+```ts
+// src/shared/dex.ts
+export function formatDexNumber(id: number): string
+```
+
+- 입력: 도감 번호 — 1 이상의 정수(1–1025)
+- 출력: `"No."` + 번호. 세 자리보다 짧으면 **앞을 0으로 채워 세 자리**, 세 자리 이상이면 그대로
+
+| 입력 | 출력 |
+|---|---|
+| `1` | `"No.001"` |
+| `25` | `"No.025"` |
+| `493` | `"No.493"` |
+| `1025` | `"No.1025"` |
+
+**제출물**: `src/shared/dex.ts`(함수) · `src/shared/dex.test.ts`(위 표 네 경우를 확인하는 Vitest 테스트)
 
 **통과 조건**
-- [ ] 위 네 경우를 확인하는 테스트가 있고 통과한다
-- [ ] `npm test`(저장할 때마다 다시 도는 모드) · `npm run test:run`(한 번 돌고 끝) 둘 다 있다
-- [ ] VS Code **Testing 패널**에 테스트가 보이고 ▶로 돌고, 🐞로 돌리면 함수 안 중단점에서 멈춘다
-- [ ] `npm run test:ui`가 브라우저에 결과 화면을 띄운다
+- [ ] `npm run test:run`에서 네 경우가 모두 통과
+- [ ] `package.json`에 스크립트 셋: `test`(저장할 때마다 다시 도는 감시 모드) · `test:run`(한 번 돌고 끝) · `test:ui`(브라우저 결과 화면)
+- [ ] VS Code **Testing 패널**(플라스크 아이콘)에 테스트가 보이고 ▶로 돈다
+- [ ] 함수 본문에 중단점을 찍고 Testing 패널의 🐞(Debug Test)로 돌리면 그 줄에서 멈춘다
 
-**제약**
-- 함수는 화면 코드와 분리된 파일에(`src/shared/` 같은 곳). 테스트 파일은 대상 옆에 `*.test.ts`
-- 0 · 음수는 이번엔 안 다룬다(호출하는 쪽이 1 이상만 넘긴다고 가정)
+**제약**: 0 이하는 다루지 않는다(부르는 쪽이 1 이상만 넘긴다). 테스트 파일은 대상 옆에 `*.test.ts`
 
-**힌트**: [Vitest — Getting Started](https://vitest.dev/guide/) · `describe` / `it` / `expect().toBe()` · `String.prototype.padStart`
+**힌트**: `String.prototype.padStart` · `describe` / `it` / `expect(값).toBe(기대값)` ([Vitest 시작하기](https://vitest.dev/guide/))
 
 ---
 
