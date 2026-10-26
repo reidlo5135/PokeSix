@@ -1,7 +1,11 @@
 {
-    // 이 리포를 열면 VS Code가 설치를 권한다(docs/build.md §6)
+    // 이 리포를 열면 VS Code가 설치를 권한다 (docs/guides/r2-tooling.md)
     "recommendations": [
-        "ms-vscode.cmake-tools",
-        "ms-vscode.cpptools"
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "vitest.explorer",
+        "yoavbls.pretty-ts-errors",
+        "usernamehw.errorlens",
+        "vunguyentuan.vscode-css-variables"
     ]
 }
