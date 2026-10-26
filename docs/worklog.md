@@ -9,10 +9,10 @@ Qt 시절 기록은 태그 `qt6-final`의 `docs/worklog.md`에 있다.
   - Qt 최종본: 동결 커밋 `24f9228` → main merge `dc24085` → **태그 `qt6-final`**(push 됨). 작업 사본 `~/ws/src/PokeSix-qt6`(build 제외 전체, 자체 .git 포함)
   - 작업 폴더에는 `.github` · `.vscode` · `design` · `CLAUDE.md` · `LICENSE`만 남기고 비움. 새로 쓴 것: README · .gitignore · CLAUDE.md(React판) · roadmap · 이 문서 · R1 가이드
 - **R1 완료**(`2ed57c9`): Vite 8 · React 19 · TS 6(strict 기본 켜짐 — 확인함) · ESLint 10. Vite가 README · .gitignore를 덮어써서 README는 되돌리고 .gitignore는 합침. dev 서버는 5174(5173은 다른 프로젝트가 점유)
-- **진행 중: R2**([가이드](guides/r2-tooling.md)) — 사용자가 VS Code 확장 6개(ESLint · Prettier · Vitest · Pretty TS Errors · Error Lens · CSS Variables)와 `vitest` · `@vitest/ui`를 먼저 설치함. `.vscode/extensions.json`은 Claude가 웹용으로 교체. 남은 것: T1 Prettier · T2 settings.json · T3 첫 테스트(`formatDexNumber`) · T4 크롬 launch.json
+- **R2 완료**: Prettier(사용자 규칙: 2칸 · 큰따옴표 · 세미콜론 없음, `.prettierignore`로 design · docs · .github · *.md 제외) · ESLint + eslint-config-prettier · 저장 시 포맷(사용자 전역 autoSave=afterDelay가 formatOnSave를 막아서 리포 설정은 onFocusChange) · Vitest(`formatDexNumber` 첫 테스트) · 크롬 디버그(launch.json 개인, dev 서버 5174 고정 strictPort) · `npm run check` = typecheck → lint → format:check → test:run. React 메모: 사용자가 App 안에 컴포넌트 정의 · 상태 배열 push를 해 봤다가 "그릴 때 계산"으로 고침(You Might Not Need an Effect)
+- **다음: R3 디자인 토큰** — 시작 때 가이드. 가이드 형식: 배경 · 구현할 것(시그니처 · 파일) · 예시 · 제출물 · 통과 조건(사용자 요청, 코딩 테스트식)
 - 환경: node v24.19.0 · npm 11.17.0 설치돼 있음(Linux). Windows 머신은 아직 미확인
 - 메모:
   - `.github/workflows/release.yml`은 Qt CI(태그 `v*` 트리거) — React 첫 태그 전에 교체
-  - `.vscode/settings.json`은 아직 C++/CMake 내용 — R2에서 정리
   - 폰트: 사용자가 "Jua"라 불렀지만 실제 토큰은 **Do Hyeon**(제목) · NanumGothic · NanumGothicCoding · Silkscreen — R3에서 이름 확정
   - 데이터: 웹은 PokéAPI 직접 호출로 시작(Qt판의 CSV→SQLite와 다름). 세이브 파서는 RS에서 TS로 포팅 — 정답지는 qt6-final의 `src/core/save/` · 합성 세이브

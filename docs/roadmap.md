@@ -8,7 +8,7 @@ Qt 6 구현(v0.1.0–v0.5.1)의 로드맵은 태그 `qt6-final`의 `docs/roadmap
 |---|---|---|---|---|
 | ✅ | **R0** | 전환(Claude): Qt 동결(`qt6-final` 태그 · `~/ws/src/PokeSix-qt6` 사본) → 작업 폴더 비우고 React 뼈대 문서 | — | main에 Qt가 보존되고 폴더가 새 출발 상태 |
 | ✅ | **R1** ([가이드](guides/r1-vite-scaffold.md)) | Vite로 React+TS 스캐폴드, dev 서버 · HMR · 생성 파일 이해 | npm · Vite · 진입점(index.html → main.tsx) · JSX 첫걸음 | `npm run dev`로 화면이 뜨고, App.tsx를 고치면 즉시 반영, `npm run build` 성공 |
-| 🟨 | **R2** ([가이드](guides/r2-tooling.md)) | 도구 정리: Prettier · ESLint · Vitest · 크롬 디버깅, npm 스크립트, VS Code 연동 | 린트/포맷/테스트 러너 | `npm test` 통과, 저장 시 포맷 |
+| ✅ | **R2** ([가이드](guides/r2-tooling.md)) | 도구 정리: Prettier · ESLint · Vitest · 크롬 디버깅, npm 스크립트, VS Code 연동 | 린트/포맷/테스트 러너 | `npm test` 통과, 저장 시 포맷 |
 | ⬜ | **R3** | 디자인 토큰: design/ 팔레트 · 글꼴을 CSS 변수로(라이트 · 다크), 글꼴 로딩 | CSS 변수 · @font-face · 다크 모드 | 토큰 데모 페이지가 두 테마에서 맞게 보임 |
 | ⬜ | **R4** | 앱 셸: 라우터 + 앱바(탭) 레이아웃 — 레이아웃은 사용자가 새로 설계 | react-router · 컴포넌트 분해 · flex/grid | 탭으로 빈 페이지들 사이를 이동 |
 | ⬜ | **R5** | PokéAPI 클라이언트: 직접 REQ/RESP 처리(fetch) · 타입 · 캐시 → 도감 리스트 렌더링 | fetch · Promise/async · 상태와 리스트 렌더링 | 고른 세대의 도감이 실데이터로 뜸 |
