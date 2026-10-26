@@ -1,56 +1,12 @@
-# ── Build output ──────────────────────────────────────────────
-/build/
-/out/
-/install/
+# 의존성 · 빌드 산출물
+node_modules/
+dist/
+dist-electron/
+release/
+coverage/
 
-# 머신별 개인 프리셋 (Qt 경로 등). 공용 프리셋은 CMakePresets.json
-CMakeUserPresets.json
-
-# clangd / compile database
-.cache/
-compile_commands.json
-
-# ── IDE ───────────────────────────────────────────────────────
-# Qt Creator
-*.user
-*.user.*
-.qtcreator/
-# VS Code: 공유 설정 두 개만 커밋한다(IntelliSense · CMake 프리셋, 권장 확장). 나머지(launch.json 등)는 개인 것
-.vscode/*
-!.vscode/settings.json
-!.vscode/extensions.json
-# CLion
+# 로컬 전용
+*.local
+.vscode/launch.json
 .idea/
-cmake-build-*/
-# Visual Studio
-.vs/
-
-# ── Runtime data ─────────────────────────────────────────────
-# SQLite 캐시는 런타임에 QStandardPaths::AppDataLocation 에 생성된다.
-# 실수로 리포 안에서 만들어진 경우를 대비한 방어선.
-*.sqlite
-*.sqlite3
-*.db
-*.db-journal
-*.db-wal
-*.db-shm
-
-# ── Game assets ──────────────────────────────────────────────
-# 스프라이트·게임 아트는 리포에 커밋하지 않는다 (README "Assets policy").
-# 런타임에 받아 캐시 디렉터리에 저장한다.
-/resources/sprites/
-*.sprite.png
-
-# ── OS ───────────────────────────────────────────────────────
 .DS_Store
-Thumbs.db
-
-# aqtinstall 이 실행 위치에 남기는 로그
-aqtinstall.log
-
-# 게임 세이브 · ROM — 개인 데이터이자 게임 데이터. 절대 커밋하지 않는다(CLAUDE.md §7, H1 가이드)
-*.sav
-*.dsv
-*.nds
-
-Testing/

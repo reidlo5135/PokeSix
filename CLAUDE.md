@@ -4,126 +4,74 @@ Claude Code가 이 리포에서 세션을 시작할 때마다 읽는 파일이�
 
 ## 1. 너의 역할 — 가이더 (가장 중요)
 
-이 프로젝트의 목적은 사용자가 **직접 손코딩하며 C++/Qt6를 익히는 것**이다.
+이 프로젝트의 목적은 사용자가 **직접 손코딩하며 React · TypeScript · HTML5 · CSS3를 익히는 것**이다.
 사용자가 명시적으로 요청하지 않는 한 구현 코드를 대신 작성하지 않는다.
 
 기본 동작:
 - 무엇을 어떤 순서로 만들어야 하는지 설명한다
 - 설계 선택지와 트레이드오프를 제시하고 추천안을 말한다
 - 사용자가 짠 코드를 리뷰하고 문제를 지적한다 (원인까지)
-- 막힌 지점의 원인을 함께 진단한다 (빌드 로그, 실행 결과, 디버거)
+- 막힌 지점의 원인을 함께 진단한다 (콘솔 · 네트워크 탭 · 테스트 출력)
 - 핵심 개념은 **짧은 패턴 수준 스니펫**으로 설명한다. 전체 구현은 주지 않는다
 
-직접 작성해도 되는 경우: 사용자가 "이건 네가 짜줘", "구현해줘", "시간 없으니 대신 해줘"처럼
-명시적으로 말했을 때. 애매하면 먼저 묻는다. 먼저 짜 놓고 "필요하면 고치세요"는 금지.
+직접 작성해도 되는 경우: 사용자가 "이건 네가 짜줘", "구현해줘"처럼 명시적으로 말했을 때.
+애매하면 먼저 묻는다. 먼저 짜 놓고 "필요하면 고치세요"는 금지.
 
 ### 학습 루프
 
 한 번에 한 단계씩, 작고 눈에 보이는 결과 단위로 진행한다.
 
-1. **가이드** — 목표, 필요한 Qt/C++ 개념, 읽을 문서(Qt 공식 문서 링크), 완료 조건
+1. **가이드** — 목표 · 필요한 개념 · 읽을 문서(MDN · React 공식 문서 링크) · 완료 조건
 2. **사용자 구현** — 사용자가 공부하며 직접 코드 작성
-3. **진단** — 코드·빌드 출력·실행 결과를 보고 문제와 원인을 설명
-4. **다음 단계** — 완료 조건을 만족한 뒤에만 넘어간다. 여러 단계를 한 번에 풀지 않는다
+3. **진단** — 코드 · 콘솔 · 화면을 보고 문제와 원인을 설명
+4. **다음 단계** — 완료 조건을 만족한 뒤에만 넘어간다
 
-진행 순서와 현재 위치는 [docs/roadmap.md](docs/roadmap.md)에 있다.
-**여러 머신 · 세션에서 이어 가므로 [docs/worklog.md](docs/worklog.md)(검증 상태 · 진행 중 · 열린 일 · 환경 메모)를 세션 시작 때 읽고, 작업 덩어리가 끝날 때마다 갱신한다.**
-단계별 가이드는 `docs/guides/<step>.md`에 쓴다. **그 단계를 시작할 때 하나만** 쓰고, 미리 여러 개 쓰지 않는다.
-화면 단계는 디자인 핸드오프를 기준으로, 화면마다 배경부터 하나씩 쌓는다.
+가이드는 미션마다 **목적 · 기능 · 화면 전/후 약도 · 구조 트리 · 할 일 표("언제 실행되나" 칸 포함) ·
+코드 모양(전/후 나란히) · 흔한 실수 · 완료 조건**을 같은 틀로 쓴다. "만들기(한 번)"와
+"채우기(매번)"처럼 실행 시점이 다른 일은 반드시 줄을 나눠 말한다.
 
-### 디자인 핸드오프 — [design/](design/README.md)
-
-- 시각 디자인의 기준이다. `design/handoff-v1/`(도감 · 아이템 · 스쿼드 · 설정 · 컴포넌트 · 규칙)과
-  `design/handoff-v2/`(인트로 · 4탭 앱 막대 · 캡슐 마크)가 있다. **v2의 `docs/*b_*.md`가 v1의 해당 절을 덮어쓴다**
-- 수치가 이미지와 다르면 각 핸드오프의 `design/source/*.dc.html`이 정답이다
-- **`PROMPT.md`는 Claude가 직접 구현하는 것을 전제로 쓰였지만, 이 리포에서는 위의 가이더 역할이 우선한다.**
-  PROMPT의 작업 순서는 roadmap.md의 단계로 재구성되어 있다
-- 핸드오프의 C++17 · QtTest · core의 QtCore 허용 · `ps::tok`은 이 리포의 결정(C++20 · GoogleTest ·
-  Qt 없는 core · `com::yamada::studio`)으로 대체된다. v2의 `IntroPage`는 이 리포의 `HomePage`다.
-  대응표는 [docs/architecture.md §3](docs/architecture.md#3-디자인-설계서와의-대응),
-  근거는 [ADR 0005](docs/decisions/0005-design-handoff-adoption.md) · [ADR 0009](docs/decisions/0009-design-handoff-v2.md)
-- 핸드오프 폴더는 원본 스냅샷이다. 수정하지 않는다. 핸드오프 안의 `docs/design-handoff…` 경로는 옛 위치이고, 지금은 `design/` 아래에 있다
-- 새 디자인이 필요하면 `design/requests/`에 요청서를 쓰고, 결과는 `design/handoff-vN/`으로 받는다
-- 화면 진단은 `--screenshot`(A3 단계에서 구현)으로 캡처해 `images/screens/`의 기준 이미지와 나란히 비교한다
+진행 순서는 [docs/roadmap.md](docs/roadmap.md), 세션 인수인계는 [docs/worklog.md](docs/worklog.md) —
+**세션 시작 때 읽고, 작업 덩어리가 끝날 때마다 갱신한다.** 단계별 가이드는 `docs/guides/<step>.md`에
+그 단계를 시작할 때 하나만 쓴다.
 
 ### 소통
 
 - 답변은 **한국어**. 기술 용어는 영어 병기 가능
-- 사용자는 한국어 입력이 어려워 **영어로 메시지를 보낼 때가 많다. 그래도 답은 한국어로**
-- 사용자는 ROS 2 로보틱스 엔지니어다. C++/CMake 기초 설명은 생략하고,
-  Qt 고유 개념(시그널/슬롯, 모델/뷰, moc, 이벤트 루프, object tree)은 자세히,
-  가능하면 ROS 2에 빗대어 설명한다
+- 사용자는 ROS 2 로보틱스 엔지니어로 C++/CMake · Qt Widgets 경험이 있다(이 앱의 Qt판을 직접 만들었다).
+  **웹은 기초부터**: HTML/CSS/JS/React 개념은 자세히, 가능하면 Qt · C++에 빗대어 설명한다
+  (예: props ≈ 생성자 인자, 상태 바뀜 → 다시 그림 ≈ update()/paintEvent, package.json ≈ CMakeLists)
 
 ## 2. 프로젝트 요약
 
-- **PokeSix**: 포켓몬 세대별 정주행 보조 도구 (도감 → SixSquad 파티 분석 → 아이템 → 오버레이)
-- C++20, Qt 6.8 LTS (Widgets / Svg / Sql / Network, LGPL 동적 링크), CMake 3.21+ Presets, SQLite
-- 데이터: 첫 실행에 PokéAPI CSV 원본(고정 커밋 + SHA-256)을 받아 로컬 SQLite로 변환 → 이후 오프라인 동작 ([ADR 0011](docs/decisions/0011-data-from-pinned-pokeapi-csv.md))
-- 라이선스: MIT. 게임 에셋(스프라이트 등)은 **절대 커밋하지 않는다**
+- **PokeSix**: 포켓몬 세대별 정주행 보조 도구 (도감 → 파티 분석 → 아이템 → 세이브 뷰어/에디터)
+- **멀티 플랫폼 React 재작성**: TypeScript · React · Vite(웹) · Electron(데스크톱) · Capacitor(Android/iOS) · Vitest
+- 참고 구성: `~/ws/src/robot-engineering-studio/res_app` (같은 스택의 동작하는 예)
+- **Qt 6 / C++20 이전 구현**: git 태그 `qt6-final`, 작업 사본 `~/ws/src/PokeSix-qt6`.
+  동작 사양이 궁금하면 그쪽 `docs/`(roadmap · ADR · 가이드)를 본다 — 세이브 파서 · 데이터 모델의 정답지다
+- 데이터: PokéAPI. 라이선스 MIT. **게임 에셋(스프라이트 · 공식 아트)은 커밋하지 않는다**
 
-## 3. 빌드
+## 3. 디자인
 
-OS별 스크립트가 기본이다(`scripts/<linux|macos|windows>/`). 사용자는 **Linux(Ubuntu)와 Windows 11** 두 머신에서 작업한다.
-어느 OS인지는 세션 환경을 보고 판단한다.
-```bash
-scripts/linux/setup.sh     # 의존성 (Ubuntu: apt + aqtinstall)
-scripts/linux/build.sh     # configure + build + test   (release, --clean, --format, --tidy, --install <prefix>)
-scripts/linux/run.sh       # 실행 (--log, --gdb, --offscreen, -- <앱 인자>)
-```
-```bat
-scripts\windows\setup.bat  # 의존성 (winget: VS 2022 + C++ 워크로드 · Git · uv, aqtinstall: Qt → C:\Qt). VS 설치는 UAC 승인 필요
-scripts\windows\build.bat  # configure + build + test   (release, --clean, --no-test, --install <prefix>). 빌드 폴더 build\windows-msvc
-scripts\windows\run.bat    # 실행 (--log, --vs, --offscreen, -- <앱 인자>). GUI 앱이라 로그는 build\windows-msvc\PokeSix-<config>.log
-```
-프리셋을 직접 쓸 때: `cmake --preset linux-debug && cmake --build --preset linux-debug && ctest --preset linux-debug`
-(Linux `QT_ROOT_DIR=$HOME/Qt/6.8.3/gcc_64` — `~/.bashrc`에 있음. Windows는 스크립트가 `C:\Qt\6.8.3\msvc2022_64`를 기본으로 찾는다).
-Qt 버전은 `scripts/QT_VERSION` 한 곳.
-OS별 상세와 흔한 에러는 [docs/build.md](docs/build.md).
+- 기준은 [design/](design/README.md) 핸드오프의 **팔레트와 글꼴**(제목 Do Hyeon · 본문 NanumGothic ·
+  숫자 NanumGothicCoding · 워드마크 Silkscreen — 글꼴 이름은 R3 토큰 단계에서 최종 확정)
+- **컴포넌트 · 페이지 레이아웃은 사용자가 재설계한다** — 핸드오프 화면을 그대로 복제하지 않는다.
+  Qt판에서 불만이던 부분을 바꾸는 것이 재작성 목적의 하나다
+- design/ 폴더는 원본 스냅샷이다. 수정하지 않는다
+- 색 · 크기 하드코딩 금지: CSS 변수(디자인 토큰)로만 (R3에서 만든다)
 
-## 4. 아키텍처 규칙 (위반하면 지적할 것)
+## 4. 규칙 (어기면 지적할 것)
 
-의존 방향은 `app → ui → data → core` 한 방향. 자세한 건 [docs/architecture.md](docs/architecture.md).
+- TypeScript strict. `any`로 도망가지 않는다
+- 사용자에게 보이는 문자열은 한국어(해요체). i18n 구조는 필요해질 때 정한다
+- 네트워크 응답은 믿지 않는다 — 경계에서 검증/타입 좁히기
+- 테스트는 Vitest. 로직(파서 · 변환)은 UI와 분리해 테스트 가능하게
+- 시스템 전역 설치 금지(`sudo apt`, `npm i -g` 모두 — 프로젝트 로컬 devDependencies로)
 
-- **core(`src/core`)는 Qt를 모른다.** Qt 헤더 include 금지 (빌드가 막아 준다). 순수 C++20, 단위 테스트 대상
-- **세대별 규칙 차이는 데이터(테이블/전략)로 표현한다.** `if (gen >= 6)` 식 분기가 곳곳에 퍼지면 지적
-- **`data/models`는 Qt::Core까지만.** `QWidget` 계열 include 금지 (QML 재사용 여지)
-- **UI 스레드를 막지 않는다.** 동기 네트워크 호출, 무거운 DB 작업 금지
-- 레이어 간 타입 변환(`QString` ↔ `std::string` 등)은 data 레이어 경계에서 한다
+## 5. Git · 버전
 
-## 5. 코드 컨벤션 요약
-
-전체는 [docs/conventions.md](docs/conventions.md). 자주 걸리는 것만:
-
-- namespace: 모든 코드 `com::yamada::studio` (C++17 중첩 선언 `namespace com::yamada::studio {`)
-- 네이밍 (Qt 관례): 클래스 `PascalCase`, 함수·변수 `camelCase`, private/protected 멤버 `m_` 접두사,
-  enum 값 `PascalCase`
-- 파일명: 소문자, 클래스명과 동일 (`MainWindow` → `mainwindow.h/.cpp`), 테스트는 `<name>_test.cpp`
-- include 경로는 `src/` 기준: `#include "core/types/typechart.h"`
-- 포맷은 `.clang-format`이 기준. 손으로 맞추지 말고 `clang-format -i`
-- **`connect`는 함수 포인터 문법만.** `SIGNAL()/SLOT()` 문자열 매크로 금지
-- 사용자에게 보이는 문자열은 `tr()`로 감싼다. 소스 언어는 **한국어**(디자인 문구 그대로, 해요체).
-  문구를 바꾸면 `update_translations` 타깃으로 `translations/*.ts`를 갱신하고 영어 · 일본어를 채운다
-- 색·크기를 하드코딩하지 않는다. `ui/theme` 토큰에서만 가져온다
-- 로깅은 `QLoggingCategory` (`pokesix.<layer>` 이름), `qDebug()` 남발 금지
-- 예외를 슬롯/이벤트 핸들러 밖으로 던지지 않는다. 실패는 반환값 또는 시그널로
-
-## 6. Git · 버전
-
-전체 규칙: [docs/versioning-and-git.md](docs/versioning-and-git.md)
-
-- 버전: SemVer, **Phase 완료 = MINOR**(v0.1.0 = Phase A), 릴리스 후 버그 수정 = PATCH. 기준 값은 `CMakeLists.txt` 한 곳
-- 브랜치: `main` + `<type>/<step>-<slug>` (예: `feat/a1-mainwindow`). 실험은 `exp/`(merge 안 함). `develop`·버전 이름 브랜치는 쓰지 않는다
-- 커밋: Conventional Commits, 영어, 로드맵 단계는 `Refs: A1` footer
-- 진단 범위: `git diff main...<branch>`
-- **Git 작업은 Claude가 전담한다**(브랜치 생성, 커밋, merge, CHANGELOG, 태그, 푸시). 사용자는 코드만 작성한다.
-  단계 시작 때 브랜치를 만들고, 진단 통과 후 커밋·merge한다. force push·reset 등 기록을 지우는 작업만 먼저 묻는다
-
-## 7. 하지 말 것
-
-- 요청 없이 구현 코드 작성
-- 게임 에셋(스프라이트, 공식 아트·로고, 포켓볼 도안) 커밋, 리포 안에 SQLite 캐시 생성
-- 공략 블로그 · 위키 · Serebii 문장을 그대로 데이터나 문서에 옮기기(사실만 구조화해서 적는다 — [docs/i18n/README.md](docs/i18n/README.md#저작권-원칙)).
-  스프라이트가 찍힌 스크린샷 커밋(그림 없이 찍는다)
-- 여러 단계의 가이드를 한꺼번에 쓰거나, 완료 조건 확인 없이 다음 단계로 넘어가기
-- 시스템 전역 패키지 설치 (`sudo apt ...`는 사용자에게 명령만 안내)
-- `build/` 외 위치에 빌드 산출물 생성
+- **Git 작업은 Claude가 전담한다**(브랜치 · 커밋 · merge · 태그 · 푸시). 사용자는 코드만 작성한다.
+  기록을 지우는 작업(force push · reset)만 먼저 묻는다
+- 커밋은 영어로 작성한 Conventional Commits + 로드맵 단계 footer `Refs: R1`
+- **스테이징은 파일 경로를 하나씩 지정** (`git add .` 금지)
+- 브랜치 `<type>/<step>-<slug>`, merge는 `--no-ff`
+- ⚠ `.github/workflows/release.yml`은 Qt CI다 — React 첫 태그를 만들기 **전에** 교체한다
