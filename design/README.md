@@ -7,7 +7,7 @@ Claude Design에서 받은 시각 디자인 패키지와, 우리가 보낸 디�
 |---|---|---|
 | [handoff-v1/](handoff-v1/PROMPT.md) | 첫 핸드오프: 기초 · 컴포넌트 · 도감 · 아이템 · 스쿼드 · 설정, 세대 규칙과 테스트 값, 토큰 · QSS | 유효. 단, 홈(SCR-01) · 마크(§6) · 앱 막대 탭은 v2가 대체 |
 | [handoff-v2/](handoff-v2/PROMPT.md) | 요청 0001의 결과: 인트로(타이틀) 화면, 4탭 앱 막대, 캡슐 마크 · 전 플랫폼 아이콘 | 유효. `docs/*b_*.md`가 v1의 해당 절을 덮어쓴다 |
-| [requests/](requests/) | 우리가 Claude Design에 보낸 요청서 | 0001 → handoff-v2 |
+| [requests/](requests/) | 우리가 Claude Design에 보낸 요청서 | 0001 → handoff-v2 · 0002(웹 재작성: 다크 완성 · 홈 재설계) → handoff-v3 예정 |
 
 ## 읽는 법
 
