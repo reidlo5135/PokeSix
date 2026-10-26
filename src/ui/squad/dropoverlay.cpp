@@ -45,7 +45,6 @@ void DropOverlay::paintEvent(QPaintEvent *event)
 
     painter.setPen(QColor(tok::palette().text2));
     painter.setFont(theme::font(theme::kFamilyBody, 14));
-    painter.drawText(bottom, Qt::AlignHCenter | Qt::AlignTop,
-                     tr("스쿼드 파일(.pks)"));
+    painter.drawText(bottom, Qt::AlignHCenter | Qt::AlignTop, tr("스쿼드 파일(.pks)"));
 }
 } // namespace com::yamada::studio

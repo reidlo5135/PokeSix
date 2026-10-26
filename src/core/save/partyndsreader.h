@@ -57,10 +57,13 @@ public:
     // 시리즈 하나로 읽기: ① 판별(findBase) → ② 파티 수 · 포켓몬. 그 시리즈가 아니면 nullopt.
     // 시리즈를 정해 놓고 확인하는 테스트 · readsav가 직접 부른다
     static std::optional<ReadParty> readSeries(Bytes save, const NdsSeries &series);
+    static std::optional<std::size_t> baseOf(Bytes save, const NdsSeries &series);
 
 private:
     // 그 검증 방식으로 맞으면 파티 위치의 기준(base), 아니면 nullopt — 검증 방식마다 하나
     static std::optional<std::size_t> findBase(Bytes save, const FooterSlots &check);
     static std::optional<std::size_t> findBase(Bytes save, const ChecksumTable &check);
 };
+
+const NdsSeries *findSeries(std::string_view versionGroup);
 } // namespace com::yamada::studio::save

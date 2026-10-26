@@ -1,5 +1,6 @@
 #pragma once
 
+#include "data/store/savefile.h"
 #include "data/store/squadfile.h"
 
 #include <QLabel>
@@ -13,6 +14,7 @@ class Repository;
 class AppState;
 class ShadowButton;
 class PartyCard;
+class SpriteCache;
 
 class EditorPage : public QWidget
 {
@@ -33,18 +35,19 @@ private:
 
     void chooseSave();
     void openFile(const QString &path);
+    void fillCards();
 
     Repository *m_repository = nullptr;
     AppState *m_state = nullptr;
-
     QWidget *m_topBar = nullptr;
     QLabel *m_title = nullptr;
     ShadowButton *m_saveOpenButton = nullptr;
-
     QStackedWidget *m_body = nullptr;
-
-    std::optional<squadfile::Portable> m_loaded;
+    std::optional<SaveFile> m_loaded;
     QLabel *m_fileInfo = nullptr;
+    QString m_fileName;
     QList<PartyCard *> m_cards;
+    SpriteCache *m_pokemonIcons = nullptr;
+    SpriteCache *m_itemIcons = nullptr;
 };
 } // namespace com::yamada::studio

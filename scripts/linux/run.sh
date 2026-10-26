@@ -4,6 +4,7 @@
 #   scripts/linux/run.sh                      # run the debug build
 #   scripts/linux/run.sh release
 #   scripts/linux/run.sh --rebuild            # always build before running (tests skipped)
+#   scripts/linux/run.sh --rebuild -j 8       # build with 8 parallel jobs (also -j8, --jobs 8)
 #   scripts/linux/run.sh --log                # enable pokesix.* debug logs
 #   scripts/linux/run.sh --gdb                # run under gdb
 #   scripts/linux/run.sh --offscreen          # run without a window (CI, SSH, screenshots)
@@ -12,17 +13,22 @@ set -euo pipefail
 # shellcheck source=env.sh
 source "$(dirname "${BASH_SOURCE[0]}")/env.sh"
 
-usage() { sed -n '2,10p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; }
+usage() { sed -n '2,11p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; }
 
 config=debug
 rebuild=0
 debugger=0
+jobs=()
 app_args=()
 
 while (($#)); do
     case "$1" in
         debug|release) config="$1" ;;
         --rebuild)     rebuild=1 ;;
+        -j|--jobs)
+            (($# >= 2)) || die "$1 needs a number of jobs"
+            jobs=(--jobs "$2"); shift ;;
+        -j*)           jobs=(--jobs "${1#-j}") ;;
         --log)         export QT_LOGGING_RULES="${QT_LOGGING_RULES:+$QT_LOGGING_RULES;}pokesix.*.debug=true" ;;
         --gdb)         debugger=1 ;;
         --offscreen)   export QT_QPA_PLATFORM=offscreen ;;
@@ -37,7 +43,7 @@ preset="$(preset_for "$config")"
 binary="$(app_binary "$preset")"
 
 if ((rebuild)) || [[ ! -x "$binary" ]]; then
-    "$POKESIX_ROOT/scripts/linux/build.sh" "$config" --no-test
+    "$POKESIX_ROOT/scripts/linux/build.sh" "$config" --no-test "${jobs[@]}"
 fi
 [[ -x "$binary" ]] || die "executable not found: $binary"
 

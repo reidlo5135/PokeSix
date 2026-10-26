@@ -204,6 +204,7 @@ QPushButton#squadLinkButton:hover { color: @red; }
 QLabel#squadEmpty { font-family: "Do Hyeon"; font-size: 20px; color: @text.3; }
 QListView#squadPickerList { border: 2px solid @ink; border-radius: 6px; background: @white; outline: none; }
 /* 에디터 페이지 */
+QScrollArea#editorScroll, QScrollArea#editorScroll > QWidget, QWidget#editorContent { background: transparent; border: none; }
 QLabel#editorDropHint{
   border: 3px dashed @blue;
   border-radius: 12px;
@@ -219,3 +220,5 @@ QFrame#editorCard{
 QLabel#editorCardName{
   font-family:"Do Hyeon"; font-size: 18px;
 }
+QLabel[nature="up"]   { color: @red; }
+QLabel[nature="down"] { color: @blue; }

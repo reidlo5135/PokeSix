@@ -54,10 +54,7 @@ struct BlockFooter
 };
 
 BlockFooter readFooter(Bytes save, std::size_t blockStart, const FooterSlots &check);
-
-// 지금 쓰는 일반 블록의 시작(0 또는 kSlotSize). CRC가 맞는 슬롯 중 (major, minor)가 큰 쪽.
-// 둘 다 CRC가 틀리면 nullopt — 이 시리즈가 아니거나 세이브가 깨졌다
-std::optional<std::size_t> activeGeneralBlock(Bytes save, const FooterSlots &check);
+void refreshFooter(MutableBytes save, std::size_t blockStart, const FooterSlots &check);
 
 // ── ChecksumTable (5세대식) ─────────────────────────────────
 //
@@ -78,6 +75,12 @@ struct ChecksumTable
     std::size_t partyCrcAt = 0;     // 파티 블록 CRC가 저장된 곳(파일 기준)
     std::size_t partyCrcMirror = 0; // 모음 블록 안의 사본 위치(모음 블록 기준)
 };
+
+void refreshPartyBlock(MutableBytes save, const ChecksumTable &check);
+
+// 지금 쓰는 일반 블록의 시작(0 또는 kSlotSize). CRC가 맞는 슬롯 중 (major, minor)가 큰 쪽.
+// 둘 다 CRC가 틀리면 nullopt — 이 시리즈가 아니거나 세이브가 깨졌다
+std::optional<std::size_t> activeGeneralBlock(Bytes save, const FooterSlots &check);
 
 // 체크섬 모음 블록의 시작 = mainSize − 0x100
 std::size_t checksumTableStart(const ChecksumTable &check);

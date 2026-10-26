@@ -14,9 +14,9 @@ namespace com::yamada::studio {
 // 지금 테마의 색을 읽는다(ADR 0020). 역할은 &tok::Palette::white처럼 쓴다.
 struct PanelStyle
 {
-    int outline = 2;         // 바깥 먹선 두께
-    int radius = 8;          // 바깥 모서리 반경
-    int shadow = 4;          // 바로 아래로 떨어지는 먹색 그림자(블러 없음)
+    int outline = 2; // 바깥 먹선 두께
+    int radius = 8;  // 바깥 모서리 반경
+    int shadow = 4;  // 바로 아래로 떨어지는 먹색 그림자(블러 없음)
     tok::Color fill = &tok::Palette::white; // 창 바탕
     tok::Color ink = &tok::Palette::ink;    // 먹선 · 그림자 색
 

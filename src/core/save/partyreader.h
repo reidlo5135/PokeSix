@@ -84,6 +84,6 @@ public:
 // 시도할 기기 리더들(기기 순서). 지금은 NDS 하나
 std::span<const PartyReader *const> partyReaders();
 
-// 기기 · 세대를 모르는 세이브에서 파티를 읽는다 — 앱(saveimport)이 쓰는 입구
+// 기기 · 세대를 모르는 세이브에서 파티를 읽는다 — 앱(data의 savefile::open)이 쓰는 입구
 std::optional<ReadParty> readParty(Bytes save);
 } // namespace com::yamada::studio::save

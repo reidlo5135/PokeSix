@@ -87,7 +87,7 @@ struct MoveEntry
     int ailment = 0; // move_meta_ailments.id: 1 마비 · 2 잠듦 · 3 얼음 · 4 화상 · 5 독 · 6 혼란 …
     int healing = 0;                        // HP 회복 %(음수 = 소모)
     QList<std::pair<int, int>> statChanges; // (stat id 2–8, 단계 ±n)
-    LocalizedText effect; // 그 세대의 게임 설명문(언어마다 가까운 세대 것)
+    LocalizedText effect;   // 그 세대의 게임 설명문(언어마다 가까운 세대 것)
     int fromPokemonId = 0;  // 0 = 제 기술, >0 = 이 단계가 배운 기술
     LocalizedText fromName; // 언어 전환을 따라가게 id가 아니라 이름 묶음
 };
@@ -184,7 +184,7 @@ struct PokemonDetail
     QList<EncounterEntry> encounters; // 그 세대 모든 버전(DP · Pt · HGSS)
     QList<MoveEntry> levelMoves;      // 레벨 순(같은 레벨은 게임이 익히는 순서)
     QList<MoveEntry> inheritedMoves; // 진화 전 단계의 자력기(레벨 순). 제 자력표에 있는 기술은 제외
-    QList<MoveEntry> machineMoves;    // 기술머신 번호 순, 비전머신은 뒤에
+    QList<MoveEntry> machineMoves; // 기술머신 번호 순, 비전머신은 뒤에
     QList<MoveEntry> tutorMoves; // 기술 가르침(이름은 fillMoves가 채운다. 순서 = move id)
     QList<MoveEntry> eggMoves; // 알 기술(PokéAPI는 사슬의 뿌리에만 적는다 — 뿌리 것도 합쳐 둔다)
     QList<EvolutionStep> evolution; // 그 세대에 있는 종만. 진화하지 않는 포켓몬은 비어 있다

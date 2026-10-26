@@ -7,6 +7,7 @@
 #include "data/sprites/spritecache.h"
 #include "data/state/appstate.h"
 #include "data/state/squadsession.h"
+#include "data/store/filekinds.h"
 #include "data/store/squadfile.h"
 #include "data/store/squadstore.h"
 #include "ui/dex/dexdetailpage.h"
@@ -1236,10 +1237,7 @@ void SquadPage::dragEnterEvent(QDragEnterEvent *event)
     const QList<QUrl> urls = event->mimeData()->urls();
     if (urls.size() != 1 || !urls.constFirst().isLocalFile())
         return;
-    const QString suffix = QFileInfo(urls.constFirst().toLocalFile()).suffix().toLower();
-    static const QStringList kAccepted = {QStringLiteral("pks"), QStringLiteral("json")};
-
-    if (kAccepted.contains(suffix)) {
+    if (filekinds::kindOf(urls.constFirst().toLocalFile()) == FileKind::Squad) {
         event->acceptProposedAction();
         m_dropOverlay->raise();
         m_dropOverlay->show();
@@ -1268,9 +1266,8 @@ void SquadPage::importSquad()
 {
     const QString dir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     // 초기 내보내기가 .json이었다 — 그 파일들도 계속 읽는다
-    const QString path = QFileDialog::getOpenFileName(
-            this, tr("스쿼드 불러오기"), dir,
-            tr("PokeSix 스쿼드 파일(*.pks *.json)"));
+    const QString path = QFileDialog::getOpenFileName(this, tr("스쿼드 불러오기"), dir,
+                                                      filekinds::dialogFilter(FileKind::Squad));
     if (path.isEmpty())
         return;
     importFile(path);

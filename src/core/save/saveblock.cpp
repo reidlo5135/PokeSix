@@ -22,6 +22,23 @@ BlockFooter readFooter(Bytes save, std::size_t blockStart, const FooterSlots &ch
     return footer;
 }
 
+void refreshFooter(MutableBytes save, std::size_t blockStart, const FooterSlots &check)
+{
+    std::size_t end = blockStart + check.generalSize;
+    writeU16(save, end - 0x02,
+             crc16Ccitt(save.subspan(blockStart, check.generalSize - check.footerSize)));
+}
+
+void refreshPartyBlock(MutableBytes save, const ChecksumTable &check)
+{
+    const std::size_t table = checksumTableStart(check);
+    const std::uint16_t crc = crc16Ccitt(save.subspan(check.partyBlock, check.partyBlockSize));
+    writeU16(save, check.partyCrcAt, crc);
+    writeU16(save, table + check.partyCrcMirror, crc);
+    writeU16(save, table + check.tableLength + 0x0E,
+             crc16Ccitt(save.subspan(table, check.tableLength)));
+}
+
 std::optional<std::size_t> activeGeneralBlock(Bytes save, const FooterSlots &check)
 {
     const BlockFooter slot0Footer = readFooter(save, 0, check);

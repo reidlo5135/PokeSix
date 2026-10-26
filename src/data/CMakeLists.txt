@@ -40,8 +40,10 @@ qt_add_library(pokesix_data STATIC
     store/squadstore.cpp
     store/squadfile.h
     store/squadfile.cpp
-    store/saveimport.h      # H2 — 게임 세이브 → 스쿼드
-    store/saveimport.cpp
+    store/savefile.h
+    store/savefile.cpp
+    store/filekinds.h
+    store/filekinds.cpp
     analysis/squadinput.h
     analysis/squadinput.cpp
     sprites/spritecache.h

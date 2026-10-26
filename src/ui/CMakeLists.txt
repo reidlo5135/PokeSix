@@ -42,6 +42,8 @@ qt_add_library(pokesix_ui STATIC
     widgets/dropdownbutton.cpp
     widgets/typechip.h
     widgets/typechip.cpp
+    widgets/typechipwidget.h
+    widgets/typechipwidget.cpp
     items/itemspage.h
     items/itemspage.cpp
     items/categorybutton.h
