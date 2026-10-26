@@ -10,6 +10,7 @@
     "typecheck": "tsc -b --noEmit && tsc -p platforms/electron --noEmit",
     "lint": "eslint .",
     "preview": "vite preview",
+    "tokens": "node scripts/build-tokens.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check": "npm run typecheck && npm run lint && npm run format:check && npm run test:run",

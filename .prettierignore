@@ -4,3 +4,4 @@ package-lock.json
 design/
 docs/
 *.md
+src/styles/tokens.css
