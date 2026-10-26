@@ -6,9 +6,11 @@
 
 | 무엇 | 어디 | 읽는 법 |
 |---|---|---|
-| **팔레트 · 크기 · 간격 · 글꼴 (기계용)** | [`design/handoff-v2/design/tokens.json`](../../design/handoff-v2/design/tokens.json) | **이게 원본이다.** v1 json에 v2 추가분(캡슐 · 인트로 · 메뉴 색, 인트로 크기)을 더한 것 — 기존 값 변경은 없다. `color.light`(53색) · `color.darkOverrides`(다크에서 바뀌는 11색) · `type`(타입 18색) · `font` · `size` · `space` · `breakpoint` · `mark`(마크 기하 — CSS에는 안 씀) |
+| **팔레트 · 크기 · 간격 · 글꼴 (기계용)** | [`design/handoff-v3/design/tokens.json`](../../design/handoff-v3/design/tokens.json) | **이게 원본이다**(v1 + v2 + v3 — 다크 완성판). `color.light`(53) · `color.darkOverrides`(**57 — 다크 완성**) · `color.lightStates` · `color.darkStates`(호버 · 선택 · 눌림 · 포커스 · 탭 상태 12씩) · `type`(18) · `font` · `size` · `space` · `breakpoint` · `mark`(마크 기하 — CSS 아님) · `web`(메모 — CSS 아님) |
 | 같은 내용의 설명 (사람용) | [`01_DESIGN_SHEET.md`](../../design/handoff-v1/docs/01_DESIGN_SHEET.md) §1–4 | 토큰마다 **어디에 쓰는 색인지**가 적혀 있다 — 이름만 보고 모르겠으면 여기 |
 | v2에서 더해진 토큰의 설명 | [`01b_DESIGN_SHEET_V2.md`](../../design/handoff-v2/docs/01b_DESIGN_SHEET_V2.md) §1 | 캡슐 마크 색 · 인트로 색(`intro.*` · `menu.pressed`)을 어디에 쓰나. `capsule.gloss`는 json에 `#FFFFFF`로만 있고 표에는 "60%" — 투명도는 쓰는 쪽에서 |
+| **다크 결정 · 대비 (v3)** | [`01b_DARK_TOKENS.md`](../../design/handoff-v3/docs/01b_DARK_TOKENS.md) · [`01c_DARK_CONTRAST.md`](../../design/handoff-v3/docs/01c_DARK_CONTRAST.md) | 다크 값마다 이유 · 원칙 4개(특히 **면으로 쓸 때와 글자로 쓸 때 값이 다르다** — `red` vs `red.asText`) · 대비표 |
+| 다크 기준 이미지 | [`61_dark_foundations.png`](../../design/handoff-v3/images/screens/61_dark_foundations.png) · `62_components_dark.png` | K4 다크 비교용 |
 | 눈으로 볼 기준 | [`images/screens/00_foundations.png`](../../design/handoff-v1/images/screens/00_foundations.png) · `02_components.png` | 색 견본 · 글꼴 견본 · 컴포넌트 모양 |
 | 글꼴 파일 | `~/ws/src/PokeSix-qt6/resources/fonts/` | Qt판이 쓰던 TTF 8개 + `OFL-*.txt` 4개(라이선스 — **같이 넣어야 배포 가능**) |
 
@@ -35,7 +37,7 @@
 **배경**: 토큰을 CSS로 손으로 옮기면 디자인이 바뀔 때마다 두 곳을 맞춰야 한다. `tokens.json`을 원본으로 두고 **CSS 파일을 만들어 내는 스크립트**를 짠다.
 
 **구현할 것**
-- `scripts/build-tokens.ts`(또는 `.mjs`) — `design/handoff-v2/design/tokens.json`을 읽어 `src/styles/tokens.css`를 쓴다
+- `scripts/build-tokens.ts`(또는 `.mjs`) — `design/handoff-v3/design/tokens.json`을 읽어 `src/styles/tokens.css`를 쓴다
 - 스크립트 `npm run tokens`
 - 변환 함수는 따로 떼어 **테스트**한다(`scripts/tokens.ts` + `tokens.test.ts` 같은 식)
 
@@ -49,11 +51,12 @@
 | `type[].key = "fire"`, `fill` · `text` | `--type-fire` · `--type-fire-text` |
 | `size["appBar"]` = 60 | `--size-app-bar: 60px` (camelCase → kebab-case, 숫자엔 px) |
 | `space` = [4, 8, 12 …] | `--space-1: 4px` · `--space-2: 8px` … |
+| `color.lightStates["selectedRow"]` / `darkStates` | `--state-selected-row` (라이트는 `:root`, 다크는 `[data-theme="dark"]`) |
 
 **만들어질 파일 모양**
 
 ```css
-/* 자동 생성 — 직접 고치지 말 것. 원본: design/handoff-v2/design/tokens.json (npm run tokens) */
+/* 자동 생성 — 직접 고치지 말 것. 원본: design/handoff-v3/design/tokens.json (npm run tokens) */
 :root {
   --color-red: #D8322B;
   --color-red-deep: #B8241D;
@@ -61,7 +64,7 @@
 }
 [data-theme="dark"] {
   --color-paper: #1B1B21;
-  …(darkOverrides 11개만)
+  …(darkOverrides 57개)
 }
 ```
 
@@ -70,7 +73,8 @@
 - [ ] 변환 함수 테스트: `"red.deep"` → `"--color-red-deep"`, `"appBar"` → `"--size-app-bar"` 등 규칙마다 한 줄 이상
 - [ ] 같은 json으로 두 번 돌리면 결과 파일이 **한 글자도 안 바뀐다**(git diff 없음)
 - [ ] v2의 추가 토큰(`intro.stripe` · `menu.pressed` · `capsule.*` · `introMenuWidth` …)도 들어 있다
-- [ ] `mark` 블록(마크 기하)은 CSS로 내보내지 않는다 — 스크립트가 **모르는 블록은 건너뛴다**
+- [ ] `mark` · `web` 블록은 CSS로 내보내지 않는다 — 스크립트가 **모르는 블록은 건너뛴다**
+- [ ] **다크에만 있는 키 4개**(`raised` · `red.asText` · `danger.asText` · `glyph.ink`)도 라이트에서 값이 있다 — json `color.light`에는 없다. 라이트 값은 `01b_DARK_TOKENS.md` 표에 있다(`raised`는 표에 없으니 근거를 찾아 정한다). 이 값들을 **어디에 둘지**(별도 보충 json · 스크립트 안 표)는 직접 정한다 — `design/` 원본은 고치지 않는다
 
 **제약**: `design/` 안의 파일은 고치지 않는다(원본 스냅샷). 생성된 tokens.css는 커밋한다(빌드 때마다 만들지 않아도 되게)
 
@@ -116,7 +120,7 @@
 - [ ] 다크로 두고 앱을 껐다 켜면 다크로 뜬다 — 그리고 켜지는 순간 **라이트가 번쩍 보였다가 바뀌지 않는다**
 - [ ] 테마 결정 로직(저장값 + 시스템 설정 → 실제 테마)은 순수 함수로 떼어 테스트가 있다
 
-**제약**: 타입 색 · 히트맵 색은 다크에서도 그대로(디자인 규칙). 다크 값이 없는 토큰(`red.tint` 등 33개)은 **이번엔 라이트 값 그대로** 두고, 어색한 곳 목록만 적어 둔다 — 다크 다듬기는 화면이 생긴 뒤에 한다
+**제약**: 다크 값은 v3가 전부 정했다 — 손으로 고치지 않는다(바꾸고 싶으면 디자인 요청). 기본값은 **시스템 따라가기**(v3 디자인 가정 — 다르게 하고 싶으면 정해서 알려 주기)
 
 **힌트**: `matchMedia('(prefers-color-scheme: dark)')` + `change` 이벤트 · `localStorage`.
 "번쩍" 문제는 React가 그려지기 **전에** 속성을 붙여야 풀린다 — `index.html`에서 할 수 있는 일을 생각해 보기
@@ -146,7 +150,7 @@
 ```
 
 **통과 조건**
-- [ ] `00_foundations.png`와 나란히 놓고 봤을 때 색 · 글꼴이 같다
+- [ ] 라이트는 v1 `00_foundations.png`, 다크는 v3 `61_dark_foundations.png`와 나란히 놓고 봤을 때 색 · 글꼴이 같다
 - [ ] 다크로 바꾸면 바탕 · 글자 · 선이 바뀌고 타입 칩은 그대로다
 - [ ] 아래 명령의 결과가 **비어 있다** — 화면 코드에 색 값이 직접 없다
   ```bash
