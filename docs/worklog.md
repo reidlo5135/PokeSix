@@ -10,7 +10,8 @@ Qt 시절 기록은 태그 `qt6-final`의 `docs/worklog.md`에 있다.
   - 작업 폴더에는 `.github` · `.vscode` · `design` · `CLAUDE.md` · `LICENSE`만 남기고 비움. 새로 쓴 것: README · .gitignore · CLAUDE.md(React판) · roadmap · 이 문서 · R1 가이드
 - **R1 완료**(`2ed57c9`): Vite 8 · React 19 · TS 6(strict 기본 켜짐 — 확인함) · ESLint 10. Vite가 README · .gitignore를 덮어써서 README는 되돌리고 .gitignore는 합침. dev 서버는 5174(5173은 다른 프로젝트가 점유)
 - **R2 완료**: Prettier(사용자 규칙: 2칸 · 큰따옴표 · 세미콜론 없음, `.prettierignore`로 design · docs · .github · *.md 제외) · ESLint + eslint-config-prettier · 저장 시 포맷(사용자 전역 autoSave=afterDelay가 formatOnSave를 막아서 리포 설정은 onFocusChange) · Vitest(`formatDexNumber` 첫 테스트) · 크롬 디버그(launch.json 개인, dev 서버 5174 고정 strictPort) · `npm run check` = typecheck → lint → format:check → test:run. React 메모: 사용자가 App 안에 컴포넌트 정의 · 상태 배열 push를 해 봤다가 "그릴 때 계산"으로 고침(You Might Not Need an Effect)
-- **진행 중: R3 데스크톱 셸(Electron)**([가이드](guides/r3-electron.md)) — 사용자 결정: 메인 플랫폼은 데스크톱, 셋업도 직접. 로드맵을 한 칸씩 밀었다(R4 토큰 · R5 셸 · R6 PokéAPI · RM 모바일). **제목 글꼴은 Do Hyeon 확정**(사용자가 Qt판 화면으로 확인)
+- **R3 완료**: Electron 45 · `platforms/electron/`(main.ts · tsconfig · electron-builder.yml) · `platforms/assets/icon.png`(Qt판 캡슐 마크). `electron:dev`(dev 서버 5174를 창에) · `electron:start`(app://pokesix 커스텀 프로토콜로 dist, 없는 경로는 index.html) · `electron:dist`(AppImage · deb). 보안 옵션 3종, 외부 링크는 시스템 브라우저. typecheck가 main.ts까지. 개인 launch.json에 크롬 · Electron 메인 디버그. res_app에서 가져온 CORS 우회(allowAppOriginCors)는 PokéAPI에 불필요해 삭제. **제목 글꼴은 Do Hyeon 확정**
+- **다음: R4 디자인 토큰** — 시작 때 가이드. 사용자가 화면 설계 도구(Figma 등)를 물어봄(2026-10-26)
 - 환경: node v24.19.0 · npm 11.17.0 설치돼 있음(Linux). Windows 머신은 아직 미확인
 - 메모:
   - `.github/workflows/release.yml`은 Qt CI(태그 `v*` 트리거) — React 첫 태그 전에 교체

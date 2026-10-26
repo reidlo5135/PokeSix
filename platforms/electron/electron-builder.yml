@@ -1,0 +1,35 @@
+appId: io.github.reidlo5135.pokesix
+productName: PokeSix
+executableName: pokesix
+copyright: Copyright © 2026 Reidlo5135
+directories:
+  output: release
+  buildResources: platforms/assets
+files:
+  - dist/**
+  - dist-electron/**
+  - package.json
+  - "!node_modules/**"
+artifactName: pokesix-${version}-${os}-${arch}.${ext}
+extraMetadata:
+  main: dist-electron/main.js
+  author:
+    name: reidlo
+    email: reidlo4215@gmail.com
+  homepage: https://github.com/reidlo5135
+  desktopName: pokesix.desktop
+asar: true
+linux:
+  target: [AppImage, deb]
+  category: Development
+  icon: platforms/assets/icon.png
+  syncDesktopName: true
+deb:
+  packageName: pokesix
+win:
+  target: [nsis]
+  icon: platforms/assets/icon.png
+mac:
+  target: [dmg]
+  category: public.app-category.developer-tools
+  icon: platforms/assets/icon.png
