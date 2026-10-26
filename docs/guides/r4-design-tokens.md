@@ -84,27 +84,70 @@
 
 ## 문제 K2 — 글꼴 네 개
 
-**배경**: 사용자 PC에 도현 · 나눔고딕이 깔려 있다는 보장이 없다. 앱이 글꼴을 **직접 들고 다닌다**(오프라인 데스크톱 앱이니 구글 폰트 CDN에 기대지 않는다).
+**배경**: 데스크톱 앱이라 사용자 PC에 도현 · 나눔고딕이 깔려 있다는 보장이 없다. 앱이 글꼴 파일을 **직접 들고 다닌다**
+(구글 폰트 CDN에 기대지 않는다). 화면 코드는 글꼴 이름을 직접 쓰지 않고 **역할 변수**(`--font-body` 등)만 쓴다.
 
-**구현할 것**: 글꼴 파일 · 라이선스를 리포로 가져오고 `@font-face`로 등록, 역할별 글꼴 토큰.
+**재료**: `~/ws/src/PokeSix-qt6/resources/fonts/` — TTF 8개 + `OFL-*.txt` 4개(라이선스 — 배포하려면 같이 넣어야 한다)
 
-| 역할 토큰 | 글꼴 | 쓰는 곳 |
+**구현할 것 — 파일 하나: `src/styles/fonts.css`** (손으로 쓰는 파일. `tokens.css`는 생성기가 덮어쓰므로 거기에 쓰지 않는다)
+
+이 파일에 두 가지를 쓴다.
+
+**① `@font-face` 8블록 — TTF 파일 하나당 한 블록.** 한 블록은 "이 **이름** + 이 **굵기** = 이 **파일**"이라는 등록이다.
+
+```css
+@font-face {
+  font-family: "Do Hyeon";          /* 이 글꼴을 부를 이름 — 같은 글꼴의 굵기들은 같은 이름 */
+  src: url("./fonts/DoHyeon-Regular.ttf") format("truetype");   /* fonts.css 기준 상대 경로 */
+  font-weight: 400;                 /* 이 파일의 굵기 */
+  font-display: swap;               /* 불러오는 방식 — 아래 ⚠ */
+}
+```
+
+| 파일 | `font-family` | `font-weight` |
 |---|---|---|
-| `--font-display` | Do Hyeon 400 | 화면 제목 · 창 머리 · 탭 · 버튼 |
-| `--font-body` | Nanum Gothic 400 · 700 · 800 | 본문 · 표 · 라벨 — **본문은 절대 도현으로 쓰지 않는다** |
-| `--font-mono` | Nanum Gothic Coding 400 · 700 | 번호 · 종족값 · 배율 (숫자 열) |
-| `--font-pixel` | Silkscreen 400(숫자) · 700(워드마크만) | "POKESIX" · GEN 뱃지 · 슬롯 번호 |
+| DoHyeon-Regular | Do Hyeon | 400 |
+| NanumGothic-Regular · Bold · ExtraBold | Nanum Gothic | 400 · 700 · 800 (블록 3개) |
+| NanumGothicCoding-Regular · Bold | Nanum Gothic Coding | 400 · 700 (블록 2개) |
+| Silkscreen-Regular · Bold | Silkscreen | 400 · 700 (블록 2개) |
+
+같은 이름에 굵기만 다른 블록을 여러 개 등록해 두면, 화면에서 `font-weight: 700`만 써도 브라우저가 Bold 파일을 고른다.
+
+**② 역할 변수 4개 — `:root` 안에.** ①에서 등록한 이름 + 대체 글꼴(그 글꼴을 못 불러왔을 때 쓸 것) 목록이다.
+**생성기(K1)는 `tokens.json`의 `font` 묶음을 만들지 않는다 — 이 넷은 여기서 직접 쓴다.**
+
+```css
+:root {
+  --font-display: "Do Hyeon", "Black Han Sans", "Malgun Gothic", sans-serif;
+  --font-body: …;     /* 나머지 셋 — 대체 목록은 design/handoff-v1/assets/fonts/README.md */
+  --font-mono: …;
+  --font-pixel: …;
+}
+```
+
+| 역할 변수 | 글꼴 | 쓰는 곳 |
+|---|---|---|
+| `--font-display` | Do Hyeon | 화면 제목 · 창 머리 · 탭 · 버튼 |
+| `--font-body` | Nanum Gothic | 본문 · 표 · 라벨 — **본문은 절대 도현으로 쓰지 않는다** |
+| `--font-mono` | Nanum Gothic Coding | 번호 · 종족값 · 배율(숫자 열) |
+| `--font-pixel` | Silkscreen | "POKESIX"(700) · GEN 뱃지 · 슬롯 번호(400 — 700은 숫자 4가 뭉개진다) |
+
+**⚠ 같은 이름 함정**: 역할 변수 **`--font-display`**(우리가 지은 이름 — "제목용 글꼴")와 `@font-face` 안의 CSS 속성 **`font-display`**("파일이
+오기 전에 글자를 어떻게 보일까" — 값은 `swap` · `block` 같은 정해진 단어)는 **이름만 같고 아무 관계가 없다.**
+
+**연결**: `main.tsx`에서 `import "./styles/tokens.css"`와 `import "./styles/fonts.css"`를 한 번씩 — 앱 전체에 적용된다.
+
+**제출물**: `src/styles/fonts/`(TTF 8 + OFL 4) · `src/styles/fonts.css` · `main.tsx`의 import 두 줄
 
 **통과 조건**
-- [ ] 오프라인에서도 네 글꼴이 다 보인다 — PC 네트워크는 끄지 않는다. `npm run electron:start` 창의 개발자 도구 → Network → **Offline** + `Ctrl+R`, 또는 글꼴 요청 주소가 전부 `app://pokesix/…`인지(바깥 주소 0개) 확인
-- [ ] 개발자 도구 Network에 `.ttf`(또는 변환한 `.woff2`) 요청이 **실패 없이** 보인다
-- [ ] 글꼴을 못 불러오면 어색하지 않은 대체 글꼴로 떨어진다(대체 목록: 핸드오프 `assets/fonts/README.md`)
-- [ ] `OFL-*.txt` 네 개가 글꼴 옆에 있다
+- [ ] `App.tsx`에 `<h1 style={{ fontFamily: "var(--font-display)" }}>도감 백과</h1>`를 잠깐 넣으면 도현으로 보인다(나머지 셋도 같은 식으로)
+- [ ] 나눔고딕 `font-weight: 400 / 700 / 800`이 서로 다른 굵기로 보인다
+- [ ] 오프라인에서도 보인다 — `npm run electron:start` 창의 개발자 도구 → Network에서 글꼴 요청 주소가 전부 `app://pokesix/…`(바깥 주소 0개). 또는 스로틀링 **Offline** + `Ctrl+R`(PC 네트워크는 끄지 않는다)
+- [ ] 글꼴 이름 문자열(`"Do Hyeon"` · `"Nanum Gothic"` …)이 `fonts.css` **한 파일에만** 나온다:
+  `grep -rn "Do Hyeon\|Nanum Gothic\|Silkscreen" src --include=*.tsx --include=*.css | grep -v src/styles/fonts.css` → 비어 있음
 
-**제약**: 글꼴 이름 문자열(`"Do Hyeon"` 등)은 **토큰 파일 한 곳**에만 나온다
-
-**힌트**: [MDN `@font-face`](https://developer.mozilla.org/ko/docs/Web/CSS/@font-face) — `font-family` · `src: url(…)` · `font-weight` · `font-display: swap`.
-글꼴을 `src/` 아래에 두고 CSS에서 상대 경로로 가리키면 Vite가 빌드에 넣어 준다(`public/`과의 차이를 알아 두기)
+**힌트**: [MDN `@font-face`](https://developer.mozilla.org/ko/docs/Web/CSS/@font-face). 글꼴을 `src/` 아래에 두고 CSS에서 상대 경로로
+가리키면 Vite가 빌드에 넣어 준다(`public/`에 두면 경로를 `/fonts/…`처럼 써야 하고 빌드 때 이름에 해시가 안 붙는다)
 
 ---
 
