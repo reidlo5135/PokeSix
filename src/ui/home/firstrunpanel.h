@@ -64,7 +64,7 @@ private:
     QLabel *m_percentLabel = nullptr;
     QLabel *m_warningIcon = nullptr;
     QLabel *m_failedTitle = nullptr; // "데이터를 받지 못했어요" / "데이터를 바꿔 넣지 못했어요"
-    QLabel *m_failedHint = nullptr;  // 네트워크 안내 / 다른 창 안내
+    QLabel *m_failedHint = nullptr; // 네트워크 안내 / 다른 창 안내
     QLabel *m_errorLabel = nullptr;
 };
 } // namespace com::yamada::studio

@@ -76,7 +76,7 @@ private:
     CsvDownloader *m_downloader = nullptr;
     QThread *m_thread = nullptr;
     ImportWorker *m_worker = nullptr;
-    bool m_busy = false;       // start()부터 finished · failed · cancelled까지
+    bool m_busy = false; // start()부터 finished · failed · cancelled까지
     bool m_cancelling = false; // cancel()을 불렀다 → 다운로더의 실패를 "취소"로 알린다
 };
 } // namespace com::yamada::studio

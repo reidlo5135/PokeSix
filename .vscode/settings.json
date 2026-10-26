@@ -10,5 +10,6 @@
     "C_Cpp.default.cppStandard": "c++20",
 
     // CMake Tools는 리포의 CMakePresets.json을 그대로 쓴다 — 빌드 폴더가 scripts/<os>/와 같다
-    "cmake.useCMakePresets": "always"
+    "cmake.useCMakePresets": "always",
+    "cmake.ctest.neverDebugTestsWithLaunchConfiguration": false
 }
