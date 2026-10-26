@@ -6,9 +6,9 @@
 
 | 무엇 | 어디 | 읽는 법 |
 |---|---|---|
-| **팔레트 · 크기 · 간격 · 글꼴 (기계용)** | [`design/handoff-v1/design/tokens.json`](../../design/handoff-v1/design/tokens.json) | **이게 원본이다.** `color.light`(44색) · `color.darkOverrides`(다크에서 바뀌는 11색) · `type`(타입 18색) · `font` · `size` · `space` · `breakpoint` |
+| **팔레트 · 크기 · 간격 · 글꼴 (기계용)** | [`design/handoff-v2/design/tokens.json`](../../design/handoff-v2/design/tokens.json) | **이게 원본이다.** v1 json에 v2 추가분(캡슐 · 인트로 · 메뉴 색, 인트로 크기)을 더한 것 — 기존 값 변경은 없다. `color.light`(53색) · `color.darkOverrides`(다크에서 바뀌는 11색) · `type`(타입 18색) · `font` · `size` · `space` · `breakpoint` · `mark`(마크 기하 — CSS에는 안 씀) |
 | 같은 내용의 설명 (사람용) | [`01_DESIGN_SHEET.md`](../../design/handoff-v1/docs/01_DESIGN_SHEET.md) §1–4 | 토큰마다 **어디에 쓰는 색인지**가 적혀 있다 — 이름만 보고 모르겠으면 여기 |
-| v2에서 더해진 토큰 | [`01b_DESIGN_SHEET_V2.md`](../../design/handoff-v2/docs/01b_DESIGN_SHEET_V2.md) §1 | 캡슐 마크 색 · 인트로 색(`intro.*` · `menu.pressed`). **json에 없는 것도 있다** — 표에서 옮긴다 |
+| v2에서 더해진 토큰의 설명 | [`01b_DESIGN_SHEET_V2.md`](../../design/handoff-v2/docs/01b_DESIGN_SHEET_V2.md) §1 | 캡슐 마크 색 · 인트로 색(`intro.*` · `menu.pressed`)을 어디에 쓰나. `capsule.gloss`는 json에 `#FFFFFF`로만 있고 표에는 "60%" — 투명도는 쓰는 쪽에서 |
 | 눈으로 볼 기준 | [`images/screens/00_foundations.png`](../../design/handoff-v1/images/screens/00_foundations.png) · `02_components.png` | 색 견본 · 글꼴 견본 · 컴포넌트 모양 |
 | 글꼴 파일 | `~/ws/src/PokeSix-qt6/resources/fonts/` | Qt판이 쓰던 TTF 8개 + `OFL-*.txt` 4개(라이선스 — **같이 넣어야 배포 가능**) |
 
@@ -35,7 +35,7 @@
 **배경**: 토큰을 CSS로 손으로 옮기면 디자인이 바뀔 때마다 두 곳을 맞춰야 한다. `tokens.json`을 원본으로 두고 **CSS 파일을 만들어 내는 스크립트**를 짠다.
 
 **구현할 것**
-- `scripts/build-tokens.ts`(또는 `.mjs`) — `design/handoff-v1/design/tokens.json`을 읽어 `src/styles/tokens.css`를 쓴다
+- `scripts/build-tokens.ts`(또는 `.mjs`) — `design/handoff-v2/design/tokens.json`을 읽어 `src/styles/tokens.css`를 쓴다
 - 스크립트 `npm run tokens`
 - 변환 함수는 따로 떼어 **테스트**한다(`scripts/tokens.ts` + `tokens.test.ts` 같은 식)
 
@@ -53,7 +53,7 @@
 **만들어질 파일 모양**
 
 ```css
-/* 자동 생성 — 직접 고치지 말 것. 원본: design/handoff-v1/design/tokens.json (npm run tokens) */
+/* 자동 생성 — 직접 고치지 말 것. 원본: design/handoff-v2/design/tokens.json (npm run tokens) */
 :root {
   --color-red: #D8322B;
   --color-red-deep: #B8241D;
@@ -69,7 +69,8 @@
 - [ ] `npm run tokens` → `src/styles/tokens.css`가 생기고, 위 표의 이름 규칙대로 **json의 모든 항목**이 들어 있다
 - [ ] 변환 함수 테스트: `"red.deep"` → `"--color-red-deep"`, `"appBar"` → `"--size-app-bar"` 등 규칙마다 한 줄 이상
 - [ ] 같은 json으로 두 번 돌리면 결과 파일이 **한 글자도 안 바뀐다**(git diff 없음)
-- [ ] v2의 추가 토큰(`intro.stripe` · `menu.pressed` · `capsule.*`)도 들어 있다 — json에 없으니 **어디서 어떻게 넣을지**는 직접 정한다(별도 json · 스크립트 안 표 …)
+- [ ] v2의 추가 토큰(`intro.stripe` · `menu.pressed` · `capsule.*` · `introMenuWidth` …)도 들어 있다
+- [ ] `mark` 블록(마크 기하)은 CSS로 내보내지 않는다 — 스크립트가 **모르는 블록은 건너뛴다**
 
 **제약**: `design/` 안의 파일은 고치지 않는다(원본 스냅샷). 생성된 tokens.css는 커밋한다(빌드 때마다 만들지 않아도 되게)
 
