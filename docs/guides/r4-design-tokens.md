@@ -96,7 +96,7 @@
 | `--font-pixel` | Silkscreen 400(숫자) · 700(워드마크만) | "POKESIX" · GEN 뱃지 · 슬롯 번호 |
 
 **통과 조건**
-- [ ] 와이파이를 끈 상태의 `npm run electron:start`에서도 네 글꼴이 다 보인다
+- [ ] 오프라인에서도 네 글꼴이 다 보인다 — PC 네트워크는 끄지 않는다. `npm run electron:start` 창의 개발자 도구 → Network → **Offline** + `Ctrl+R`, 또는 글꼴 요청 주소가 전부 `app://pokesix/…`인지(바깥 주소 0개) 확인
 - [ ] 개발자 도구 Network에 `.ttf`(또는 변환한 `.woff2`) 요청이 **실패 없이** 보인다
 - [ ] 글꼴을 못 불러오면 어색하지 않은 대체 글꼴로 떨어진다(대체 목록: 핸드오프 `assets/fonts/README.md`)
 - [ ] `OFL-*.txt` 네 개가 글꼴 옆에 있다
