@@ -1,0 +1,71 @@
+/*
+ * 앱이 들고 다니는 글꼴 4종 (SIL OFL 1.1 — 라이선스는 fonts/OFL-*.txt).
+ * @font-face 한 블록 = TTF 파일 하나: "이 이름 + 이 굵기 = 이 파일".
+ * 화면 코드는 글꼴 이름을 쓰지 않고 아래 :root의 역할 변수만 쓴다.
+ */
+
+@font-face {
+  font-family: "Do Hyeon";
+  src: url("./fonts/DoHyeon-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nanum Gothic";
+  src: url("./fonts/NanumGothic-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nanum Gothic";
+  src: url("./fonts/NanumGothic-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nanum Gothic";
+  src: url("./fonts/NanumGothic-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nanum Gothic Coding";
+  src: url("./fonts/NanumGothicCoding-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nanum Gothic Coding";
+  src: url("./fonts/NanumGothicCoding-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+}
+
+/* 숫자 · 뱃지는 400 — 700에서는 숫자 4가 뭉개진다. 700은 워드마크 "POKESIX"에만 */
+@font-face {
+  font-family: "Silkscreen";
+  src: url("./fonts/Silkscreen-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Silkscreen";
+  src: url("./fonts/Silkscreen-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+}
+
+/* 역할 변수 — 대체 글꼴 순서는 design/handoff-v1/assets/fonts/README.md */
+:root {
+  --font-display: "Do Hyeon", "Black Han Sans", "Malgun Gothic", sans-serif;
+  --font-body:
+    "Nanum Gothic", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-mono: "Nanum Gothic Coding", "D2Coding", monospace;
+  --font-pixel: "Silkscreen", "Courier New", monospace;
+}

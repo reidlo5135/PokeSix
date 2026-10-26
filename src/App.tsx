@@ -9,6 +9,7 @@ function App() {
   return (
     <>
       <div className="dex">
+        <h1 style={{ fontFamily: "var(--font-display)" }}>도감 백과</h1>
         <ul>
           {labels.map((d, i) => (
             <li key={i}>{d}</li>
