@@ -6,7 +6,7 @@
 ## 목적
 
 빈 폴더에서 **돌아가는 React 앱 한 장**까지. 기능을 만들기 전에, 생성된 파일이 각각
-무슨 역할인지(무엇이 Qt의 무엇에 해당하는지) 몸으로 익히는 단계다.
+무슨 역할인지 몸으로 익히는 단계다.
 
 ## 먼저 읽을 것 (30분)
 
@@ -15,16 +15,6 @@
 | [react.dev — Quick Start](https://react.dev/learn) | 컴포넌트 · JSX가 뭔지 첫 감 |
 | [Vite — 시작하기](https://vitejs.dev/guide/) | 지금 칠 명령이 뭘 만드는지 |
 | [MDN — HTML 기본](https://developer.mozilla.org/ko/docs/Learn/Getting_started_with_the_web/HTML_basics) | index.html을 읽을 수 있게 |
-
-## Qt ↔ 웹 대응표 (이 단계에서 마주칠 것만)
-
-| Qt / C++에서 하던 것 | 여기서는 |
-|---|---|
-| `CMakeLists.txt` (의존성 · 타깃 · 스크립트) | `package.json` — 의존성과 `npm run <스크립트>` |
-| `build/` 안의 외부 라이브러리 | `node_modules/` — `npm install`이 채움, **커밋 안 함**(.gitignore 돼 있음) |
-| `scripts/linux/run.sh` (빌드 후 실행) | `npm run dev` — 저장하면 **빌드 없이 즉시 반영**(HMR) |
-| `main.cpp` → `QApplication` → `MainWindow` | `index.html` → `src/main.tsx` → `<App />` |
-| 릴리스 빌드 | `npm run build` → `dist/` (정적 파일 묶음) |
 
 ## 할 일
 
@@ -52,14 +42,14 @@ Package name: … → pokesix
 ## 생성되는 파일 — 하나씩 열어 보기
 
 ```
-index.html          진짜 진입점. <div id="root">가 Qt의 "빈 MainWindow"
-src/main.tsx        root div를 찾아 <App />을 그려 넣는 곳 ≈ main.cpp
+index.html          진짜 진입점. <div id="root">에 앱이 그려진다
+src/main.tsx        root div를 찾아 <App />을 그려 넣는 곳
 src/App.tsx         첫 컴포넌트 — 당분간 우리의 놀이터
 src/*.css           스타일. R3에서 토큰으로 갈아엎는다
-vite.config.ts      Vite 설정 ≈ CMakePresets
+vite.config.ts      Vite 설정
 tsconfig*.json      TypeScript 컴파일 설정 (strict가 켜져 있는지 확인해 보기)
 package.json        의존성 + scripts (dev · build · preview)
-public/             가공 없이 그대로 서빙되는 파일들 ≈ resources/
+public/             가공 없이 그대로 서빙되는 파일들
 ```
 
 각 파일을 열어 "이 줄이 왜 있지?"를 한 번씩 생각해 보기. 모르는 줄은 붙여 넣고 물어보면 된다.
