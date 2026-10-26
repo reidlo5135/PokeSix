@@ -10,12 +10,15 @@ Qt 6 구현(v0.1.0–v0.5.1)의 로드맵은 태그 `qt6-final`의 `docs/roadmap
 | ✅ | **R1** ([가이드](guides/r1-vite-scaffold.md)) | Vite로 React+TS 스캐폴드, dev 서버 · HMR · 생성 파일 이해 | npm · Vite · 진입점(index.html → main.tsx) · JSX 첫걸음 | `npm run dev`로 화면이 뜨고, App.tsx를 고치면 즉시 반영, `npm run build` 성공 |
 | ✅ | **R2** ([가이드](guides/r2-tooling.md)) | 도구 정리: Prettier · ESLint · Vitest · 크롬 디버깅, npm 스크립트, VS Code 연동 | 린트/포맷/테스트 러너 | `npm test` 통과, 저장 시 포맷 |
 | ✅ | **R3** ([가이드](guides/r3-electron.md)) | **데스크톱 셸(Electron)** — 사용자 결정: 메인 플랫폼은 데스크톱. 개발 창(HMR) · 빌드본 실행(서버 없이) · 외부 링크 · AppImage 설치본 | 메인/렌더러 프로세스 · 보안 옵션 · 커스텀 프로토콜 · electron-builder | dev 창에서 HMR, `electron:start`로 오프라인 실행, AppImage에 캡슐 아이콘 |
-| ⬜ | **R4** | 디자인 토큰: design/ 팔레트 · 글꼴을 CSS 변수로(라이트 · 다크), 글꼴 로딩 — 제목 **Do Hyeon**(사용자 확정) · 본문 NanumGothic · 숫자 NanumGothicCoding · 워드마크 Silkscreen | CSS 변수 · @font-face · 다크 모드 | 토큰 데모 화면이 두 테마에서 맞게 보임 |
-| ⬜ | **R5** | 앱 셸: 라우터 + 앱바(탭) 레이아웃 — 레이아웃은 사용자가 새로 설계 | react-router · 컴포넌트 분해 · flex/grid | 탭으로 빈 페이지들 사이를 이동(데스크톱 창에서 새로고침해도 유지) |
-| ⬜ | **R6** | PokéAPI 클라이언트: 직접 REQ/RESP 처리(fetch) · 타입 · 캐시 → 도감 리스트 렌더링 | fetch · Promise/async · 상태와 리스트 렌더링 | 고른 세대의 도감이 실데이터로 뜸 |
-| ⬜ | R7+ | 도감 상세 · 필터 · 파티(SixSquad) · 아이템 … Qt판 화면을 하나씩, 레이아웃은 새로 | — | 시작할 때 정의 |
-| ⬜ | RS | 세이브 파서 포팅: Qt판 core/save(체크섬 · 복호화 · 쓰기)를 TS로, Vitest 왕복 테스트 + 데스크톱 파일 열기/저장(preload) | ArrayBuffer/DataView · File API · IPC | 합성 세이브 테스트 통과, 실세이브 파티 표시 |
-| ⬜ | RM | 모바일: Capacitor(Android/iOS) 셸 — res_app 구성 참고 | 패키징 · 플랫폼별 차이 | 폰에서 같은 앱 |
+| 🟨 | **R4** ([가이드](guides/r4-design-tokens.md)) | 디자인 토큰: `tokens.json` → CSS 변수 생성기 · 글꼴 4종 번들(제목 **Do Hyeon**) · 라이트/다크/시스템 테마 · 토큰 견본 화면 | 디자인 시스템 층 · CSS 변수 · @font-face · Node 스크립트 · 테마 | 견본 화면이 `00_foundations.png`와 같고, 화면 코드에 색 값이 없다 |
+| ⬜ | **R5** | 앱 셸 + **홈(인트로)**: 라우터 · 앱 막대(탭 · 테마) · 새 홈 — **세대 쇼윈도(카드 부채꼴) 없애고 메뉴 바를 세로로**(사용자 결정 2026-10-26). 세대 고르기를 어디에 둘지 결정 | react-router · 컴포넌트 분해 · flex/grid · 키보드 이동 | 홈에서 메뉴로 각 페이지(빈 자리)에 가고, 데스크톱 창에서 새로고침해도 유지 |
+| ⬜ | **R6** | **도감 백과**: PokéAPI 클라이언트(직접 REQ/RESP · 타입 · 캐시) → 세대별 도감 목록 → 상세 | fetch · async · 응답 검증 · 캐시 · 큰 목록 렌더링 | 고른 세대의 도감이 실데이터로, 상세까지 |
+| ⬜ | **R7** | **아이템 백과**: 분류 · 세대별 아이템 목록 · 설명 · 아이콘 | R6 클라이언트 재사용 · 필터 | 세대를 바꾸면 그 세대 아이템만 |
+| ⬜ | **R8** | **스쿼드**: 6자리 파티 구성 · 기술 · 특성 · 성격 · 물건 · 상성 히트맵 · 분석 · 저장/불러오기(.pks) | 복잡한 상태 · 로컬 저장 · 파생 계산 | 파티를 짜면 히트맵 · 문제 목록이 즉시 바뀐다 |
+| ⬜ | **R9** | **에디터**: 세이브 파서 포팅(Qt판 core/save → TS, 왕복 테스트) · 파일 열기/다른 이름으로 저장(Electron preload) · 파티 카드 · 편집 | ArrayBuffer/DataView · IPC · 바이너리 테스트 | 실세이브 파티 표시 · 고친 세이브가 에뮬레이터에서 열림 |
+| ⬜ | **R10** | **타운맵**: 지방 지도 · 장소별 출현 | 이미지 좌표 · 외부 이미지 캐시(커밋 안 함) | 장소를 누르면 출현 포켓몬 |
+| ⬜ | **R11** | **설정**: 언어 · 데이터(캐시 비우기) · 테마 · 정보 | 설정 저장 · 앱 전역 상태 | 설정이 다음 실행에도 남는다 |
+| ⬜ | RM | 모바일: Capacitor(Android/iOS) 셸 — res_app 구성 참고 | 패키징 · 좁은 화면 | 폰에서 같은 앱 |
 
 - 버전: 재작성 첫 릴리스 번호(v1.0.0-alpha 등)는 데스크톱 설치본이 쓸 만해지면 정한다. **그 전에 `.github/workflows/release.yml`(Qt CI) 교체 필수**
 - 데이터 전략: Qt판은 CSV→SQLite 오프라인이었다. 웹에서는 PokéAPI 직접 호출 + 캐시로 시작하고, 오프라인은 나중에 결정
