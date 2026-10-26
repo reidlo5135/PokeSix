@@ -1,0 +1,6 @@
+# Prettier가 건드리지 않는 곳
+package-lock.json
+.github/
+design/
+docs/
+*.md
