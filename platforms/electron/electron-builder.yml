@@ -27,9 +27,15 @@ linux:
 deb:
   packageName: pokesix
 win:
-  target: [nsis]
+  target: [msi]
   icon: platforms/assets/icon.png
+msi:
+  oneClick: false
+  perMachine: false
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
 mac:
   target: [dmg]
+  identity: null # 서명 안 함(인증서 없음) — 처음 열 때 우클릭 → 열기
   category: public.app-category.developer-tools
   icon: platforms/assets/icon.png
