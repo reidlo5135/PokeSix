@@ -1,7 +1,7 @@
 import path from "node:path"
 import { fileURLToPath, pathToFileURL } from "node:url"
 
-import { app, BrowserWindow, net, protocol, shell } from "electron"
+import { app, BrowserWindow, nativeTheme, net, protocol, shell } from "electron"
 
 const SCHEME = "app"
 const APP_ORIGIN = `${SCHEME}://pokesix`
@@ -20,6 +20,7 @@ protocol.registerSchemesAsPrivileged([
     scheme: SCHEME,
     privileges: {
       standard: true,
+      secure: true, // crypto.subtle(SHA-256 확인) · IndexedDB가 보안 컨텍스트를 요구한다
       supportFetchAPI: true,
       corsEnabled: true,
       stream: true,
@@ -55,10 +56,11 @@ function createWindow(entryUrl: string): BrowserWindow {
   const window = new BrowserWindow({
     width: 1440,
     height: 900,
-    minWidth: 1024,
+    minWidth: 960,
     minHeight: 640,
     title: "PokeSix",
-    backgroundColor: "#F3EFE6",
+    // 첫 그림 전 배경 — 화면 테마는 렌더러가 정한다. 여기서는 OS 테마로 번쩍임만 줄인다(토큰 paper 값)
+    backgroundColor: nativeTheme.shouldUseDarkColors ? "#1B1B21" : "#F3EFE6",
     autoHideMenuBar: true,
     webPreferences: {
       contextIsolation: true,
