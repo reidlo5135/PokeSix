@@ -6,11 +6,15 @@ import initSqlJs, { type Database, type SqlValue } from "sql.js"
 import wasmUrl from "sql.js/dist/sql-wasm-browser.wasm?url"
 
 import { SCHEMA_VERSION } from "../pipeline/schema.ts"
+import { bindDatabase } from "../repository/db.ts"
 import { DB_KEY, readBytes } from "./storage.ts"
 
 export { wasmUrl }
 
 let current: Database | null = null
+
+// 저장소(repository) 질의가 이 DB를 읽는다. DB 객체가 바뀌면 저장소 캐시가 저절로 비워진다
+bindDatabase(() => current)
 
 export type Row = Record<string, SqlValue>
 
