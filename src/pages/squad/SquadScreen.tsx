@@ -107,7 +107,6 @@ type Dialog =
   | { kind: "shuttle" }
 
 type Anchored =
-  | { kind: "slot"; slot: number; anchor: RefObject<HTMLButtonElement | null> }
   | {
       kind: "ability"
       slot: number
@@ -240,7 +239,7 @@ export function SquadScreen() {
       starterLineOf(versionGroup, sp)
     )
   const natures = features.natures ? naturesList() : []
-  const items = features.heldItems ? itemsIn(g) : []
+  const items = features.heldItems ? itemsIn(g, versionGroup) : []
 
   const edit = (change: Parameters<typeof session.edit>[1]) =>
     session.edit(ctx, change)
@@ -364,20 +363,6 @@ export function SquadScreen() {
     edit((s) =>
       setPokemon(s, slot, pokemonId, features.abilities ? firstAbility : 0)
     )
-  }
-
-  const slotMenu = () => [
-    { key: "change", content: t("포켓몬 바꾸기") },
-    { key: "detail", content: t("자세히 보기") },
-    { key: "clear", content: t("슬롯 비우기") },
-  ]
-  const onSlotMenu = (slot: number, key: string) => {
-    if (key === "change") setDialog({ kind: "pokemon", slot })
-    else if (key === "detail") setDialog({ kind: "detail", slot })
-    else if (key === "clear") {
-      edit((s) => clearSlot(s, slot))
-      if (selected === slot) setSelected(-1)
-    }
   }
 
   const hotFor = (slot: number): string => {
@@ -604,7 +589,12 @@ export function SquadScreen() {
                   items.find((i) => i.id === squad.members[slot].itemId) ?? null
                 }
                 onSelect={() => setSelected((s) => (s === slot ? -1 : slot))}
-                onMenu={(anchor) => setAnchored({ kind: "slot", slot, anchor })}
+                onChange={() => setDialog({ kind: "pokemon", slot })}
+                onClear={() => {
+                  edit((s) => clearSlot(s, slot))
+                  if (selected === slot) setSelected(-1)
+                }}
+                onDetail={() => setDialog({ kind: "detail", slot })}
                 onPickMove={(index) => setDialog({ kind: "move", slot, index })}
                 onMemo={(memo) =>
                   session.store(ctx, setMemo(squad, slot, memo))
@@ -643,20 +633,6 @@ export function SquadScreen() {
       </div>
 
       {/* ── 떠 있는 메뉴 ── */}
-      {anchored?.kind === "slot" && (
-        <MenuPopup
-          open
-          anchorRef={anchored.anchor}
-          items={slotMenu()}
-          ariaLabel={t("슬롯 메뉴")}
-          align="end"
-          width={160}
-          density="compact"
-          marks={false}
-          onPick={(key) => onSlotMenu(anchored.slot, key)}
-          onClose={() => setAnchored(null)}
-        />
-      )}
       {anchored?.kind === "more" && (
         <MenuPopup
           open
@@ -732,6 +708,7 @@ export function SquadScreen() {
       {dialog?.kind === "item" && (
         <ItemPicker
           generation={g}
+          versionGroup={versionGroup}
           currentItemId={squad.members[dialog.slot].itemId}
           onPick={(id) => edit((s) => setField(s, dialog.slot, "itemId", id))}
           onClose={() => setDialog(null)}

@@ -272,11 +272,13 @@ export function MovePicker({
 
 export function ItemPicker({
   generation,
+  versionGroup,
   currentItemId,
   onPick,
   onClose,
 }: {
   generation: number
+  versionGroup: string
   currentItemId: number
   onPick: (itemId: number) => void
   onClose: () => void
@@ -284,8 +286,8 @@ export function ItemPicker({
   const t = useT()
   const lang = useNameLanguage()
   const rows = useMemo(
-    () => heldItemCandidates(itemsIn(generation)),
-    [generation]
+    () => heldItemCandidates(itemsIn(generation, versionGroup)),
+    [generation, versionGroup]
   )
   const current = rows.find((r) => r.id === currentItemId) ?? null
   return (

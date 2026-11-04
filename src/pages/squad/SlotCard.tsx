@@ -12,7 +12,7 @@ import {
   PokemonIcon,
   TypeChip,
 } from "../../components/index.ts"
-import { Icon, MoreIcon } from "../../components/Icon.tsx"
+import { Icon } from "../../components/Icon.tsx"
 import { learnBadge } from "../../core/rules/learn.ts"
 import { featuresOf } from "../../core/rules/generationFeatures.ts"
 import { weaknessesOf, type MatchupChart } from "../../core/typechart/index.ts"
@@ -43,7 +43,10 @@ export interface SlotCardProps {
   nature: Nature | null
   item: ItemRow | null
   onSelect: () => void
-  onMenu: (anchor: RefObject<HTMLButtonElement | null>) => void
+  /** 머리 버튼 셋(0.5.1): 바꾸기 · 비우기 · 자세히 */
+  onChange: () => void
+  onClear: () => void
+  onDetail: () => void
   onPickMove: (index: number) => void
   onMemo: (memo: string) => void
   onField: (
@@ -58,7 +61,6 @@ const pad = (slot: number): string => String(slot + 1).padStart(2, "0")
 export function SlotCard(props: SlotCardProps) {
   const t = useT()
   const lang = useNameLanguage()
-  const menuRef = useRef<HTMLButtonElement | null>(null)
   const { slot, resolved, member, compact, selected, hot, warning } = props
   const detail = resolved.detail
   if (!detail) return null
@@ -130,20 +132,50 @@ export function SlotCard(props: SlotCardProps) {
             {hot}
           </span>
         )}
-        {compact &&
-          detail.types.map((type) => (
+        {/* 좁은 배치 · 키가 낮은 카드: 타입을 머리에 작게(본문 타입 줄 대신) */}
+        <span className={styles.headTypes}>
+          {detail.types.map((type) => (
             <TypeChip key={type} type={type} size="xs" />
           ))}
-        <button
-          ref={menuRef}
-          type="button"
-          className={styles.menuButton}
-          aria-label={t("슬롯 메뉴")}
-          aria-haspopup="menu"
-          onClick={() => props.onMenu(menuRef)}
-        >
-          <MoreIcon />
-        </button>
+        </span>
+        <span className={styles.headButtons}>
+          <button
+            type="button"
+            className={styles.headButton}
+            aria-label={t("%1 바꾸기", name)}
+            title={t("포켓몬 바꾸기")}
+            onClick={props.onChange}
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+              <path d="M5 9h14M15.5 5.5 19 9l-3.5 3.5" />
+              <path d="M19 15H5M8.5 11.5 5 15l3.5 3.5" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            className={styles.headButton}
+            aria-label={t("%1 비우기", name)}
+            title={t("슬롯 비우기")}
+            onClick={props.onClear}
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+              <path d="M5 7h14M10 4.5h4" />
+              <rect x="7" y="9" width="10" height="11" rx="1.6" />
+              <path d="M12 12v5" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            className={styles.headButton}
+            aria-label={t("%1 자세히 보기", name)}
+            title={t("자세히 보기")}
+            onClick={props.onDetail}
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+              <path d="M12 5.5v13M5.5 12h13" />
+            </svg>
+          </button>
+        </span>
       </div>
       <div className={styles.cardBody}>
         {!compact && (
@@ -154,6 +186,7 @@ export function SlotCard(props: SlotCardProps) {
               ))}
             </div>
             <MemoInput
+              className={styles.memo}
               value={member.memo}
               onValueChange={props.onMemo}
               placeholder={t("역할 메모 (예: 선봉 · 고속 스위퍼)")}
