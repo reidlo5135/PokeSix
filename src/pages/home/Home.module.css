@@ -4,7 +4,7 @@
   flex-direction: column;
   gap: var(--space-5);
   min-height: 0;
-  padding: 28px 40px 32px;
+  padding: 28px 40px 24px;
   overflow: auto;
 }
 
@@ -47,7 +47,8 @@
 .card {
   display: flex;
   flex-direction: column;
-  height: 290px;
+  /* 창이 낮으면 카드가 줄어 아래 칸(최근 스쿼드)이 바닥까지 남는다 */
+  height: clamp(210px, 33vh, 290px);
   border-radius: var(--radius-8);
   border: 2px solid var(--color-ink);
   background: var(--color-white);
@@ -135,16 +136,22 @@
 }
 
 /* ── 아래 칸 ── */
+/* 아래 칸은 창 바닥까지 채운다 — 최근 스쿼드는 그 안에서 스크롤 */
 .bottom {
   display: grid;
   grid-template-columns: 1fr var(--size-home-side);
   gap: var(--space-5);
-  min-height: 0;
-  align-items: start;
+  flex-grow: 1;
+  min-height: 200px;
+  align-items: stretch;
 }
 
 .recent {
   min-width: 0;
+  min-height: 0;
+}
+.recentBody {
+  overflow-y: auto;
 }
 .seeAll {
   color: var(--color-on-color);
@@ -220,6 +227,7 @@
 .quick {
   display: flex;
   flex-direction: column;
+  align-self: start;
   gap: var(--space-3);
 }
 .quickLink {
