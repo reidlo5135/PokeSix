@@ -1,0 +1,21 @@
+.memo {
+  height: 28px;
+  min-width: 0;
+  padding: 0 8px;
+  border-radius: var(--radius-5);
+  border: 1.5px solid var(--color-line-strong);
+  background: var(--color-paper-alt);
+  color: var(--color-text-2);
+  font-family: var(--font-body);
+  font-size: var(--fs-12);
+}
+.memo[data-strong] {
+  border: 2px solid var(--color-ink);
+  background: var(--color-white);
+  color: var(--color-text-1);
+}
+.memo:focus-visible {
+  border-color: var(--color-blue);
+  outline: var(--size-focus-ring) solid var(--color-blue-focus-ring);
+  outline-offset: 0;
+}

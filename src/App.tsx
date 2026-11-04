@@ -1,23 +1,12 @@
-import "./App.css"
-import { formatDexNumber } from "./shared/dex"
+/**
+ * 앱 뿌리 — 라우터만 단다. 화면 틀은 app/AppShell.tsx.
+ */
+import { useState } from "react"
+import { RouterProvider } from "react-router-dom"
 
-const dexNumbers: number[] = [1, 25, 493, 1025]
+import { createAppRouter } from "./app/router.tsx"
 
-function App() {
-  const labels = dexNumbers.map(formatDexNumber)
-
-  return (
-    <>
-      <div className="dex">
-        <h1 style={{ fontFamily: "var(--font-display)" }}>도감 백과</h1>
-        <ul>
-          {labels.map((d, i) => (
-            <li key={i}>{d}</li>
-          ))}
-        </ul>
-      </div>
-    </>
-  )
+export default function App() {
+  const [router] = useState(createAppRouter)
+  return <RouterProvider router={router} />
 }
-
-export default App

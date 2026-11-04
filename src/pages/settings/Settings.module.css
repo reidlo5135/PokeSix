@@ -1,0 +1,290 @@
+.settings {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: var(--size-settings-nav) minmax(0, 1fr) minmax(0, 1fr);
+  grid-auto-rows: max-content;
+  gap: var(--space-4);
+  align-items: start;
+  min-height: 0;
+  padding: 16px 20px 20px;
+  overflow: auto;
+}
+.nav {
+  position: sticky;
+  top: 0;
+}
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+.panel {
+  scroll-margin-top: 16px;
+}
+.panel:focus {
+  outline: none;
+}
+.headNote {
+  font-family: var(--font-body);
+  font-size: var(--fs-12);
+  color: var(--color-on-color);
+}
+
+/* ── 한 줄 ── */
+.row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-4);
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-line-soft);
+}
+.row:last-child {
+  border-bottom: 0;
+}
+.row[data-stacked] {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+.rowText {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.rowTitle {
+  font-size: var(--fs-14);
+  font-weight: 800;
+  color: var(--color-text-1);
+}
+.rowDesc {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: var(--fs-12);
+  color: var(--color-text-3);
+}
+.rowDesc[data-mono] {
+  font-family: var(--font-mono);
+}
+.note {
+  padding: 12px 16px;
+  font-size: var(--fs-12);
+  line-height: 18px;
+  color: var(--color-text-2);
+  background: var(--color-paper-alt);
+}
+.error {
+  font-family: var(--font-mono);
+  color: var(--color-danger-as-text);
+  overflow-wrap: anywhere;
+}
+
+/* ── 데이터 진행 상자 ── */
+.progressBox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: 12px;
+  border-radius: var(--radius-6);
+  border: 2px solid var(--color-ink);
+  background: var(--color-paper-alt);
+  font-family: var(--font-body);
+}
+.progressHead {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fs-12);
+  font-weight: 700;
+  color: var(--color-text-1);
+}
+.mono {
+  font-family: var(--font-mono);
+}
+.progressNote {
+  font-size: var(--fs-12);
+  color: var(--color-text-3);
+}
+
+/* ── 테마 카드 ── */
+.themeCards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+  padding: 14px 16px;
+}
+.themeCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: 8px;
+  border-radius: var(--radius-8);
+  border: 2px solid var(--color-ink);
+  background: var(--color-white);
+  text-align: left;
+}
+.themeCard:hover {
+  background: var(--state-hover);
+}
+.themeCard[aria-pressed="true"] {
+  outline: var(--size-select-outline) solid var(--color-yellow);
+  outline-offset: 2px;
+}
+.themeCard[aria-pressed="true"]:focus-visible {
+  outline-color: var(--state-focus-ring);
+}
+.themeLabel {
+  font-family: var(--font-display);
+  font-size: var(--fs-17);
+  color: var(--color-text-1);
+}
+.preview {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  height: 64px;
+  border-radius: var(--radius-5);
+  border: 1.5px solid var(--color-preview-light-line);
+  background: var(--color-preview-light-bg);
+  overflow: hidden;
+}
+.previewBar {
+  height: 14px;
+  flex: none;
+  border-bottom: 1.5px solid var(--color-preview-light-line);
+  background: var(--color-preview-light-bar);
+}
+.previewBody {
+  display: flex;
+  gap: var(--space-1);
+  padding: 6px;
+}
+.previewTile,
+.previewTileWide {
+  height: 30px;
+  border-radius: var(--radius-3);
+  border: 1.5px solid var(--color-preview-light-line);
+  background: var(--color-preview-light-tile);
+}
+.previewTile {
+  width: 30px;
+  flex: none;
+}
+.previewTileWide {
+  flex-grow: 1;
+}
+.preview[data-kind="dark"] {
+  border-color: var(--color-preview-dark-line);
+  background: var(--color-preview-dark-bg);
+}
+.preview[data-kind="dark"] .previewBar {
+  border-bottom-color: var(--color-preview-dark-line);
+  background: var(--color-preview-dark-bar);
+}
+.preview[data-kind="dark"] .previewTile {
+  border: 0;
+  background: var(--color-preview-dark-tile-raised);
+}
+.preview[data-kind="dark"] .previewTileWide {
+  border: 0;
+  background: var(--color-preview-dark-tile);
+}
+.previewSplit {
+  display: flex;
+  gap: var(--space-1);
+}
+.previewSplit .previewTile {
+  width: 16px;
+}
+
+/* ── 단축키 ── */
+.keys {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 6px 16px 10px;
+}
+.keyRow {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: var(--space-3);
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-line-soft);
+}
+.keyRow:last-child {
+  border-bottom: 0;
+}
+.keyRow dd {
+  margin: 0;
+  font-size: var(--fs-13);
+  color: var(--color-text-1);
+}
+.kbd {
+  display: inline-block;
+  padding: 1px 6px;
+  border: 1.5px solid var(--color-line-strong);
+  border-radius: var(--radius-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-weight: 700;
+  color: var(--color-text-1);
+  white-space: nowrap;
+}
+
+/* ── 정보 ── */
+.about {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: 14px 16px;
+  font-size: var(--fs-13);
+  color: var(--color-text-1);
+}
+.version {
+  font-family: var(--font-mono);
+  font-size: var(--fs-13);
+  font-weight: 700;
+}
+.licenseList {
+  margin: 0;
+  padding-left: 18px;
+  font-size: var(--fs-12);
+  color: var(--color-text-2);
+}
+.license summary {
+  font-size: var(--fs-12);
+  font-weight: 700;
+  color: var(--color-blue);
+}
+.license pre {
+  max-height: 240px;
+  margin: 6px 0 0;
+  padding: 10px;
+  overflow: auto;
+  border-radius: var(--radius-6);
+  border: 1.5px solid var(--color-line);
+  background: var(--color-paper-alt);
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  white-space: pre-wrap;
+  color: var(--color-text-2);
+}
+
+/* 1099 이하: 한 열 · 분류 목록은 위 가로 줄 */
+@media (max-width: 1099px) {
+  .settings {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .nav {
+    position: static;
+  }
+  .nav [role="list"],
+  .nav > div > div {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+}

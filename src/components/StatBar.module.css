@@ -1,0 +1,87 @@
+.row {
+  display: grid;
+  grid-template-columns: 44px 32px 1fr;
+  gap: 10px;
+  align-items: center;
+}
+.label {
+  font-size: var(--fs-12);
+  font-weight: 700;
+  color: var(--color-text-2);
+  white-space: nowrap;
+}
+.value {
+  font-family: var(--font-mono);
+  font-size: var(--fs-13);
+  font-weight: 700;
+  text-align: right;
+  color: var(--color-text-1);
+}
+.bar {
+  position: relative;
+  height: 12px;
+  border-radius: var(--radius-3);
+  border: 1.5px solid var(--color-ink);
+  background: var(--color-line-soft);
+  overflow: hidden;
+}
+.fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-right: 1.5px solid var(--color-ink);
+}
+.fill[data-fill="low"] {
+  background: var(--color-stat-low);
+}
+.fill[data-fill="mid"] {
+  background: var(--color-stat-mid);
+}
+.fill[data-fill="good"] {
+  background: var(--color-stat-good);
+}
+.fill[data-fill="high"] {
+  background: var(--color-stat-high);
+}
+.total {
+  padding-top: var(--space-2);
+  border-top: 1px dashed var(--color-line-strong);
+}
+.totalValue {
+  font-family: var(--font-mono);
+  font-size: var(--fs-14);
+  font-weight: 700;
+  text-align: right;
+  color: var(--color-red-as-text);
+}
+.caption {
+  font-size: var(--fs-11);
+  color: var(--color-text-3);
+}
+
+.cell {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--color-text-2);
+}
+.cell[data-tone="high"] {
+  color: var(--color-blue-deep);
+  font-weight: 700;
+}
+.cell[data-tone="strong"] {
+  color: var(--color-text-1);
+  font-weight: 700;
+}
+.cell[data-tone="low"] {
+  color: var(--color-danger-as-text);
+}
+.cell[data-tone="total"],
+.cell[data-tone="totalHigh"] {
+  font-size: var(--fs-13);
+  font-weight: 700;
+  color: var(--color-text-1);
+}
+.cell[data-tone="totalHigh"] {
+  color: var(--color-red-as-text);
+}

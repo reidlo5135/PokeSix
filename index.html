@@ -1,10 +1,32 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PokeSix</title>
+    <script>
+      // 그리기 전에 테마를 정한다 — 다크로 켤 때 라이트가 번쩍이지 않게 (규칙은 src/theme/theme.ts와 같다)
+      ;(function () {
+        var root = document.documentElement
+        try {
+          var s =
+            JSON.parse(localStorage.getItem("pokesix.settings") || "{}") || {}
+          var c = s.theme === "light" || s.theme === "dark" ? s.theme : "system"
+          var dark =
+            c === "dark" ||
+            (c === "system" &&
+              matchMedia("(prefers-color-scheme: dark)").matches)
+          root.dataset.theme = dark ? "dark" : "light"
+          root.style.colorScheme = dark ? "dark" : "light"
+          if (s.density === "compact") root.dataset.density = "compact"
+          if (s.uiLanguage === "en" || s.uiLanguage === "ja")
+            root.lang = s.uiLanguage
+        } catch (e) {
+          root.dataset.theme = "light"
+        }
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>
