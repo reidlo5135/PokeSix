@@ -2,7 +2,7 @@
  * 저장소(repository)가 읽는 DB 연결. 앱은 db/database.ts가 bindDatabase(database)로 이어 주고,
  * 테스트는 픽스처로 만든 DB를 직접 넘긴다. DB 객체가 바뀌면(데이터 받기 끝) 캐시를 비운다.
  */
-import type { Database, SqlValue } from "sql.js"
+import type { Database, SqlValue, Statement } from "sql.js"
 
 import { SCHEMA_VERSION } from "../pipeline/schema.ts"
 import type { LocalizedText } from "../text/localizedText.ts"
@@ -16,6 +16,9 @@ let provider: () => Database | null = () => null
 let lastDb: Database | null = null
 let lastUsable = false
 let lastError = ""
+// 같은 SQL은 한 번만 준비해 돌려 쓴다(sql.js prepare가 질의마다 꽤 든다). DB가 바뀌면 버린다 —
+// 옛 DB의 문장은 그 DB를 닫을 때 sql.js가 함께 푼다
+const statements = new Map<string, Statement>()
 
 // 스키마 버전이 맞는 DB만 읽는다(옛 표를 읽어 빈 이름 · 잘못된 분류를 보여 주지 않게)
 function isUsable(db: Database): boolean {
@@ -38,6 +41,7 @@ export function bindDatabase(source: () => Database | null): void {
 /** 캐시를 비우고 다음 질의 때 DB를 다시 확인한다 — DB를 바꿔 끼운 뒤 부른다(Qt close()) */
 export function clearRepositoryCaches(): void {
   clearCaches()
+  statements.clear()
   lastDb = null
   lastUsable = false
 }
@@ -50,6 +54,7 @@ export function currentDatabase(): Database | null {
   const db = provider()
   if (db !== lastDb) {
     clearCaches()
+    statements.clear()
     lastDb = db
     lastUsable = db !== null && isUsable(db)
   }
@@ -65,16 +70,22 @@ export function select(sql: string, params: SqlValue[] = []): Row[] {
   const db = currentDatabase()
   if (!db) return []
   try {
-    const stmt = db.prepare(sql)
+    let stmt = statements.get(sql)
+    if (!stmt) {
+      stmt = db.prepare(sql)
+      statements.set(sql, stmt)
+    }
     try {
       stmt.bind(params)
       const out: Row[] = []
       while (stmt.step()) out.push(stmt.getAsObject())
       return out
     } finally {
-      stmt.free()
+      stmt.reset()
     }
   } catch (error) {
+    statements.get(sql)?.free()
+    statements.delete(sql)
     lastError = error instanceof Error ? error.message : String(error)
     console.warn("repository query failed:", lastError)
     return []

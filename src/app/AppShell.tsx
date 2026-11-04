@@ -3,12 +3,20 @@
  * hidden으로만 숨긴다(Qt QStackedWidget처럼 필터 · 스크롤 · 선택이 그대로 남는다). 홈 · 설정은 다시 그린다.
  * 전역 단축키(Ctrl/⌘ + 1–7, K)와 테마 · 밀도 · 언어 반영도 여기서 한 번.
  */
-import { lazy, Suspense, useEffect, useState, type ComponentType } from "react"
+import {
+  Activity,
+  lazy,
+  startTransition,
+  Suspense,
+  useEffect,
+  useState,
+  type ComponentType,
+} from "react"
 import { Outlet, useLocation, useNavigate } from "react-router-dom"
 
 import { tNow } from "../i18n/index.ts"
 import { isMacPlatform } from "../shared/platform.ts"
-import { initData } from "../state/data.ts"
+import { initData, useDataStatus } from "../state/data.ts"
 import { useDocumentSync } from "../theme/useThemeSync.ts"
 import HomePage from "../pages/home/HomePage.tsx"
 import SettingsPage from "../pages/settings/SettingsPage.tsx"
@@ -50,6 +58,21 @@ export function AppShell() {
     initData()
   }, [])
 
+  // 데이터가 준비되면 쉬는 틈에 나머지 화면을 숨긴 채 미리 그려 둔다(Activity hidden = 낮은 우선순위).
+  // 처음 들어갈 때 기다리지 않고, 숨은 화면은 세대가 바뀌어도 보이는 화면을 막지 않는다
+  const dataStatus = useDataStatus()
+  useEffect(() => {
+    if (dataStatus !== "ready") return
+    const prerender = () =>
+      startTransition(() => setVisited(new Set(KEEP_ALIVE_ORDER)))
+    if (typeof window.requestIdleCallback === "function") {
+      const id = window.requestIdleCallback(prerender, { timeout: 3000 })
+      return () => window.cancelIdleCallback(id)
+    }
+    const id = window.setTimeout(prerender, 500)
+    return () => window.clearTimeout(id)
+  }, [dataStatus])
+
   useEffect(() => {
     document.title = `PokeSix ${tNow("v%1", __APP_VERSION__)}`
   }, [])
@@ -80,16 +103,19 @@ export function AppShell() {
       <div className={styles.body}>
         {active === "home" && <HomePage />}
         {active === "settings" && <SettingsPage />}
-        <Suspense fallback={null}>
-          {KEEP_ALIVE_ORDER.filter((id) => visited.has(id)).map((id) => {
-            const Page = KEEP_ALIVE[id] as ComponentType
-            return (
-              <div key={id} className={styles.page} hidden={id !== active}>
-                <Page />
+        {KEEP_ALIVE_ORDER.filter((id) => visited.has(id)).map((id) => {
+          const Page = KEEP_ALIVE[id] as ComponentType
+          return (
+            <Activity key={id} mode={id === active ? "visible" : "hidden"}>
+              <div className={styles.page}>
+                {/* 화면마다 따로 — 한 화면의 코드를 받는 동안 다른 화면이 비지 않게 */}
+                <Suspense fallback={null}>
+                  <Page />
+                </Suspense>
               </div>
-            )
-          })}
-        </Suspense>
+            </Activity>
+          )
+        })}
         <Outlet />
       </div>
     </div>

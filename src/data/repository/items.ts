@@ -12,6 +12,7 @@ import {
   type ItemRow,
   type SpeciesRow,
 } from "./types.ts"
+import { memo } from "./cache.ts"
 
 interface MachineContent {
   moveId: number
@@ -23,7 +24,7 @@ interface MachineContent {
  * g(또는 고른 게임) 기준. 그 세대에 없는 아이템도 넣는다 — 화면이 흐리게 보일지 뺄지 정한다.
  * versionGroup을 주면 기술머신 내용을 그 게임 것으로, 그 게임 표에 없는 기술머신은 뺀다
  */
-export function itemsForGeneration(
+function readItemsForGeneration(
   generation: number,
   versionGroup = ""
 ): ItemRow[] {
@@ -95,10 +96,18 @@ export function itemsForGeneration(
     ),
     "item_id"
   )
+  // 기술 설명문은 기술머신에 담긴 기술 것만(전부 읽으면 900여 기술 × 세대 × 3개 언어)
+  const machineMoves = [
+    ...new Set([...machineOf.values()].map((m) => m.moveId)),
+  ]
   const moveEffects = effectRowsBy(
-    select(
-      "SELECT move_id, generation, text_ko, text_en, text_ja FROM move_effects ORDER BY generation"
-    ),
+    machineMoves.length === 0
+      ? []
+      : select(
+          `SELECT move_id, generation, text_ko, text_en, text_ja FROM move_effects
+           WHERE move_id IN (${machineMoves.map(() => "?").join(",")}) ORDER BY generation`,
+          machineMoves
+        ),
     "move_id"
   )
   const moveEffectCache = new Map<number, LocalizedText>()
@@ -211,4 +220,10 @@ export function itemIdForGameIndex(
     [generation, gameIndex]
   )
   return row ? num(row.item_id) : 0
+}
+
+export function itemsForGeneration(generation: number, versionGroup = "") {
+  return memo(`items/${generation}/${versionGroup}`, () =>
+    readItemsForGeneration(generation, versionGroup)
+  )
 }

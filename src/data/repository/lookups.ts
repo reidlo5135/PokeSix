@@ -3,6 +3,7 @@
  */
 import { loc, num, select, str } from "./db.ts"
 import type { Nature, TypeChart } from "./types.ts"
+import { memo } from "./cache.ts"
 
 const LAST_BATTLE_TYPE_ID = 18 // stellar(19, 9세대)는 상성 줄이 없는 테라 전용 — 빼 둔다
 
@@ -10,7 +11,7 @@ const LAST_BATTLE_TYPE_ID = 18 // stellar(19, 9세대)는 상성 줄이 없는 �
  * 세대 g의 타입 상성표(단일 타입 배율 — 복합 타입 방어는 호출하는 쪽이 곱한다).
  * 타입은 그 세대에 있는 전투 타입만(id 순)
  */
-export function typeChart(generation: number): TypeChart {
+function readTypeChart(generation: number): TypeChart {
   const g = generation
   const types = select(
     "SELECT identifier FROM types WHERE intro_gen <= ? AND id <= ? ORDER BY id",
@@ -64,4 +65,8 @@ export function evolvesFrom(): Map<number, number> {
       "SELECT id, evolves_from FROM species WHERE evolves_from IS NOT NULL"
     ).map((r) => [num(r.id), num(r.evolves_from)] as const)
   )
+}
+
+export function typeChart(generation: number) {
+  return memo(`chart/${generation}`, () => readTypeChart(generation))
 }

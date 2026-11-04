@@ -11,7 +11,30 @@ export const detailCache = new Map<string, PokemonDetail>()
 export const otherVersionSpeciesCache = new Map<string, Set<number>>()
 export const gameSpeciesCache = new Map<string, Set<number>>()
 
+/** 목록 질의 결과(세대별 종 · 아이템 · 게임 · 도감 · 상성표). 키 = "함수/인자…" */
+const listCache = new Map<string, unknown>()
+
+const isEmptyResult = (v: unknown): boolean =>
+  (Array.isArray(v) && v.length === 0) ||
+  (typeof v === "object" &&
+    v !== null &&
+    "types" in v &&
+    Array.isArray(v.types) &&
+    v.types.length === 0)
+
+/**
+ * 한 번 읽은 목록을 기억해 두고 복사본을 준다. 빈 결과(DB 없음 · 질의 실패)는 기억하지 않는다 —
+ * 데이터를 받은 뒤 다시 읽어야 하니까
+ */
+export function memo<T>(key: string, read: () => T): T {
+  if (listCache.has(key)) return structuredClone(listCache.get(key) as T)
+  const value = read()
+  if (!isEmptyResult(value)) listCache.set(key, value)
+  return structuredClone(value)
+}
+
 export function clearCaches(): void {
+  listCache.clear()
   detailCache.clear()
   otherVersionSpeciesCache.clear()
   gameSpeciesCache.clear()
