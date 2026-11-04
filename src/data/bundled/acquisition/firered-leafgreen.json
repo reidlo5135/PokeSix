@@ -1,0 +1,2496 @@
+{
+  "_comment": [
+    "게임(버전 그룹)별 입수 사전 (ui/dex/guidebook.h가 읽는다). 형식은 docs/i18n/README.md 참고.",
+    "scripts/i18n/check_acquisition.py로 검증해 넣었다. 출처는 _sources.",
+    "pokemon 묶음(2026-11-04): 키 = species.identifier, 값 = 출현 줄. how는 encounter-methods.json 키(starter · fossil · prize · bug-contest · swarm · pokewalker · event · transfer · static …). minLevel · maxLevel = 레벨, versionsFrom = transfer일 때 데려올 버전(빈 배열 = 버전 미지정), replaces = 같은 where · 버전의 PokéAPI 행 중 그 방법(gift)을 숨기고 이 줄로 바꾼다.",
+    "TM/HM의 how 없는 옛 Serebii 줄(2026-11-04): Serebii ItemDex가 NPC에게 받는 줄에만 사람을 적는 모양을 따라 detail에 '관장'·'승리' → reward, 사람 · 조건 → gift, detail 없음 → field로 채웠다(스쿼드 공급 집계용). 연고시티 상호교류광장(데리고 걷는 포켓몬이 줍는 것)은 other."
+  ],
+  "_sources": [
+    "Serebii.net ItemDex (https://www.serebii.net/itemdex/) — 장소는 PokéAPI/게임 텍스트로 한국어화",
+    "Bulbapedia — List of TM and HM locations in Generation I–V · 각 백화점 · 게임코너 · 배틀파크 문서 (https://bulbapedia.bulbagarden.net/, web.archive.org 사본) — TM 입수처 · 가격",
+    "Serebii.net TM/HM 목록 (https://www.serebii.net/) — 교차 확인",
+    "TM 입수처 한국어 표기 대조: https://blog.naver.com/riomedevon/110025922459 (REFER.md)",
+    "Bulbapedia 아이템 문서(Acquisition 표: Dragon Scale · King's Rock · Metal Coat · Up-Grade · Deep Sea Scale/Tooth · Electirizer · Magmarizer · Moon/Thunder/Fire Stone · Razor Claw/Fang, web.archive.org 사본) — 진화 도구 입수처 · 소지 확률",
+    "영어로 남은 place · detail 칸 한국어화(2026-11-04): 공식 한국어 이름(장소 · 인물 · 아이템)은 place-names.json · DB · 나무위키 대조, 공식명이 확인되지 않은 역할 이름은 설명형 번역, 포켓워커 코스명은 한국어판 표기 미확인이라 영어 그대로",
+    "Bulbapedia — Move Tutor (세대별 가르침 장소 · BP/조각/코인 비용, web.archive.org 사본) — NPC 가르침 비용",
+    "포켓몬 입수 보충(pokemon 묶음): PokéAPI gift 행의 경품 · 화석 · 스타팅 덮어쓰기(코인은 Bulbapedia Celadon/Goldenrod Game Corner), PokéAPI에 없는 경로(곤충채집대회 · 포켓워커 · 고정 출현 · 데려오기 · 배포)는 Bulbapedia 포켓몬별 Game locations 표(web.archive.org 사본) 대조"
+  ],
+  "versionGroup": "firered-leafgreen",
+  "items": {
+    "amulet-coin": [
+      {
+        "where": "kanto-route-16",
+        "detail": {
+          "ko": "오박사 조수",
+          "en": "Professor Oak's Aide"
+        }
+      }
+    ],
+    "antidote": [
+      {
+        "where": "viridian-forest"
+      },
+      {
+        "where": "mt-moon"
+      },
+      {
+        "where": "kanto-underground-path",
+        "place": {
+          "ko": "지하통로(5–6번 도로)",
+          "en": "Underground Path 5-6"
+        },
+        "detail": {
+          "ko": "상트앙느호 방문",
+          "en": "Visit SS Anne"
+        }
+      },
+      {
+        "where": "kanto-underground-path",
+        "place": {
+          "ko": "지하통로(7–8번 도로)",
+          "en": "Underground Path 7-8"
+        },
+        "detail": {
+          "ko": "로켓단 창고 클리어",
+          "en": "Complete Rocket Warehouse"
+        }
+      }
+    ],
+    "aspear-berry": [
+      {
+        "where": "kanto-route-23"
+      },
+      {
+        "where": "berry-forest"
+      },
+      {
+        "where": "water-path"
+      }
+    ],
+    "auroraticket": [
+      {
+        "place": {
+          "ko": "엔딩 후 가방에 들어 있음",
+          "en": "In your bag after beating Elite Four"
+        },
+        "detail": {
+          "ko": "Nintendo Switch판",
+          "en": "Nintendo Switch Version"
+        }
+      }
+    ],
+    "awakening": [
+      {
+        "where": "kanto-route-11"
+      },
+      {
+        "where": "kanto-underground-path",
+        "place": {
+          "ko": "지하통로(5–6번 도로)",
+          "en": "Underground Path 5-6"
+        },
+        "detail": {
+          "ko": "상트앙느호 방문",
+          "en": "Visit SS Anne"
+        }
+      },
+      {
+        "where": "kanto-underground-path",
+        "place": {
+          "ko": "지하통로(7–8번 도로)",
+          "en": "Underground Path 7-8"
+        },
+        "detail": {
+          "ko": "로켓단 창고 클리어",
+          "en": "Complete Rocket Warehouse"
+        }
+      },
+      {
+        "where": "pokemon-tower"
+      }
+    ],
+    "bicycle": [
+      {
+        "where": "cerulean-city",
+        "detail": {
+          "ko": "자전거 가게 주인",
+          "en": "Bicycle Seller"
+        }
+      }
+    ],
+    "big-mushroom": [
+      {
+        "where": "mt-moon"
+      },
+      {
+        "where": "pokemon-tower"
+      }
+    ],
+    "big-pearl": [
+      {
+        "where": "seafoam-islands"
+      },
+      {
+        "where": "treasure-beach"
+      },
+      {
+        "where": "resort-gorgeous",
+        "detail": {
+          "ko": "셀피",
+          "en": "Selphy"
+        }
+      },
+      {
+        "place": {
+          "ko": "로켓단 창고",
+          "en": "Rocket Warehouse"
+        }
+      }
+    ],
+    "bike-voucher": [
+      {
+        "place": {
+          "ko": "갈색시티",
+          "en": "Vermillion City"
+        },
+        "detail": {
+          "ko": "애호가클럽 회장",
+          "en": "Head of Pokémon Fan Club"
+        }
+      }
+    ],
+    "black-glasses": [
+      {
+        "place": {
+          "ko": "로켓단아지트",
+          "en": "Rocket Hideout"
+        }
+      }
+    ],
+    "bluk-berry": [
+      {
+        "where": "kanto-route-25"
+      },
+      {
+        "where": "berry-forest"
+      },
+      {
+        "where": "memorial-pillar"
+      }
+    ],
+    "burn-heal": [
+      {
+        "where": "kanto-route-9"
+      },
+      {
+        "where": "kanto-underground-path",
+        "place": {
+          "ko": "지하통로(5–6번 도로)",
+          "en": "Underground Path 5-6"
+        },
+        "detail": {
+          "ko": "상트앙느호 방문",
+          "en": "Visit SS Anne"
+        }
+      },
+      {
+        "where": "kanto-underground-path",
+        "place": {
+          "ko": "지하통로(7–8번 도로)",
+          "en": "Underground Path 7-8"
+        },
+        "detail": {
+          "ko": "로켓단 창고 클리어",
+          "en": "Complete Rocket Warehouse"
+        }
+      }
+    ],
+    "calcium": [
+      {
+        "place": {
+          "ko": "로켓단아지트",
+          "en": "Rocket Hideout"
+        }
+      },
+      {
+        "place": {
+          "ko": "실프주식회사",
+          "en": "Silph Co"
+        }
+      },
+      {
+        "where": "pokemon-mansion"
+      }
+    ],
+    "carbos": [
+      {
+        "place": {
+          "ko": "실프주식회사",
+          "en": "Silph Co"
+        }
+      },
+      {
+        "where": "pokemon-mansion"
+      }
+    ],
+    "card-key": [
+      {
+        "place": {
+          "ko": "실프주식회사",
+          "en": "Silph Co"
+        }
+      }
+    ],
+    "cheri-berry": [
+      {
+        "where": "kanto-route-10"
+      },
+      {
+        "where": "ss-anne"
+      },
+      {
+        "where": "berry-forest"
+      },
+      {
+        "where": "sevault-canyon",
+        "place": {
+          "ko": "칠보 계곡",
+          "en": "Seavault Canyon"
+        }
+      }
+    ],
+    "chesto-berry": [
+      {
+        "where": "kanto-route-9"
+      },
+      {
+        "where": "ss-anne"
+      }
+    ],
+    "cleanse-tag": [
+      {
+        "where": "pokemon-tower"
+      }
+    ],
+    "deep-sea-scale": [
+      {
+        "how": "unobtainable",
+        "detail": {
+          "ko": "이 게임에서는 얻을 수 없어요. 루비 · 사파이어 · 에메랄드에서 통신교환으로 가져와요.",
+          "en": "Not obtainable in this game. Trade it from Ruby, Sapphire or Emerald."
+        }
+      }
+    ],
+    "deep-sea-tooth": [
+      {
+        "how": "unobtainable",
+        "detail": {
+          "ko": "이 게임에서는 얻을 수 없어요. 루비 · 사파이어 · 에메랄드에서 통신교환으로 가져와요.",
+          "en": "Not obtainable in this game. Trade it from Ruby, Sapphire or Emerald."
+        }
+      }
+    ],
+    "dire-hit": [
+      {
+        "where": "mt-ember"
+      }
+    ],
+    "dome-fossil": [
+      {
+        "where": "mt-moon"
+      }
+    ],
+    "dragon-scale": [
+      {
+        "where": "water-path"
+      },
+      {
+        "where": "trainer-tower",
+        "detail": {
+          "ko": "트레이너 타워 더블 모드 클리어",
+          "en": "Defeat Double Mode"
+        }
+      }
+    ],
+    "elixir": [
+      {
+        "where": "kanto-route-25"
+      },
+      {
+        "where": "pokemon-tower"
+      },
+      {
+        "place": {
+          "ko": "실프주식회사",
+          "en": "Silph Co"
+        }
+      },
+      {
+        "place": {
+          "ko": "무인발전소",
+          "en": "Power Plant"
+        }
+      },
+      {
+        "where": "pokemon-mansion"
+      },
+      {
+        "where": "water-path"
+      }
+    ],
+    "escape-rope": [
+      {
+        "where": "kanto-route-11"
+      },
+      {
+        "where": "mt-moon"
+      },
+      {
+        "where": "rock-tunnel"
+      },
+      {
+        "where": "pokemon-tower"
+      },
+      {
+        "place": {
+          "ko": "로켓단아지트",
+          "en": "Rocket Hideout"
+        }
+      },
+      {
+        "place": {
+          "ko": "실프주식회사",
+          "en": "Silph Co"
+        }
+      },
+      {
+        "where": "pokemon-mansion"
+      }
+    ],
+    "ether": [
+      {
+        "where": "kanto-route-2"
+      },
+      {
+        "where": "kanto-route-9"
+      },
+      {
+        "where": "kanto-route-25"
+      },
+      {
+        "where": "mt-moon"
+      },
+      {
+        "where": "kanto-underground-path",
+        "place": {
+          "ko": "지하통로(7–8번 도로)",
+          "en": "Underground Path 7-8"
+        }
+      },
+      {
+        "where": "ss-anne"
+      }
+    ],
+    "fame-checker": [
+      {
+        "where": "cerulean-city",
+        "detail": {
+          "ko": "라이벌 승리",
+          "en": "Defeat Rival"
+        }
+      }
+    ],
+    "fire-stone": [
+      {
+        "where": "mt-ember"
+      }
+    ],
+    "full-heal": [
+      {
+        "place": {
+          "ko": "실프주식회사",
+          "en": "Silph Co"
+        }
+      },
+      {
+        "where": "kanto-victory-road-1"
+      },
+      {
+        "where": "berry-forest"
+      }
+    ],
+    "full-restore": [
+      {
+        "where": "kanto-route-17"
+      },
+      {
+        "where": "kanto-route-23"
+      },
+      {
+        "where": "cerulean-cave"
+      },
+      {
+        "where": "kanto-safari-zone"
+      },
+      {
+        "where": "pokemon-mansion"
+      },
+      {
+        "where": "kanto-victory-road-1"
+      },
+      {
+        "where": "three-island",
+        "detail": {
+          "ko": "폭주족 승리",
+          "en": "Defeat bikers"
+        }
+      },
+      {
+        "where": "icefall-cave"
+      },
+      {
+        "where": "ruin-valley"
+      }
+    ],
+    "gold-teeth": [
+      {
+        "where": "kanto-safari-zone"
+      }
+    ],
+    "great-ball": [
+      {
+        "where": "kanto-route-4"
+      },
+      {
+        "where": "kanto-route-11"
+      },
+      {
+        "where": "ss-anne"
+      },
+      {
+        "where": "pokemon-tower"
+      }
+    ],
+    "helix-fossil": [
+      {
+        "where": "mt-moon"
+      }
+    ],
+    "hm01": [
+      {
+        "how": "gift",
+        "where": "ss-anne",
+        "detail": {
+          "ko": "상트앙느호 선장",
+          "en": "SS Anne's Captain"
+        }
+      }
+    ],
+    "hm02": [
+      {
+        "how": "field",
+        "where": "kanto-route-16"
+      },
+      {
+        "how": "gift",
+        "where": "kanto-route-16",
+        "detail": {
+          "ko": "민가 소녀",
+          "en": "Girl in house"
+        }
+      }
+    ],
+    "hm03": [
+      {
+        "how": "gift",
+        "where": "kanto-safari-zone",
+        "detail": {
+          "ko": "비밀의 집",
+          "en": "Secret House"
+        }
+      }
+    ],
+    "hm04": [
+      {
+        "how": "gift",
+        "where": "fuchsia-city",
+        "detail": {
+          "ko": "원장에게 금틀니를 돌려주면",
+          "en": "Return Gold Teeth to Warden"
+        }
+      }
+    ],
+    "hm05": [
+      {
+        "how": "gift",
+        "where": "kanto-route-2",
+        "detail": {
+          "ko": "오박사 조수",
+          "en": "Professor Oak's Aide"
+        }
+      }
+    ],
+    "hm06": [
+      {
+        "how": "gift",
+        "where": "kindle-road",
+        "detail": {
+          "ko": "온천 할아버지",
+          "en": "Old Man in Ember Spa"
+        }
+      }
+    ],
+    "hm07": [
+      {
+        "how": "field",
+        "where": "icefall-cave"
+      }
+    ],
+    "hm08": [
+      {
+        "how": "unobtainable",
+        "detail": {
+          "ko": "이 게임에서는 얻을 수 없어요",
+          "en": "Not obtainable in this game",
+          "ja": "このゲームでは入手できない"
+        }
+      }
+    ],
+    "hp-up": [
+      {
+        "place": {
+          "ko": "실프주식회사",
+          "en": "Silph Co"
+        }
+      },
+      {
+        "where": "pokemon-mansion"
+      },
+      {
+        "where": "ruin-valley"
+      }
+    ],
+    "hyper-potion": [
+      {
+        "where": "kanto-route-12"
+      },
+      {
+        "where": "ss-anne"
+      },
+      {
+        "place": {
+          "ko": "로켓단아지트",
+          "en": "Rocket Hideout"
+        }
+      },
+      {
+        "place": {
+          "ko": "실프주식회사",
+          "en": "Silph Co"
+        }
+      }
+    ],
+    "iapapa-berry": [
+      {
+        "where": "berry-forest"
+      }
+    ],
+    "ice-heal": [
+      {
+        "where": "kanto-underground-path",
+        "place": {
+          "ko": "지하통로(5–6번 도로)",
+          "en": "Underground Path 5-6"
+        },
+        "detail": {
+          "ko": "상트앙느호 방문",
+          "en": "Visit SS Anne"
+        }
+      },
+      {
+        "where": "kanto-underground-path",
+        "place": {
+          "ko": "지하통로(7–8번 도로)",
+          "en": "Underground Path 7-8"
+        },
+        "detail": {
+          "ko": "로켓단 창고 클리어",
+          "en": "Complete Rocket Warehouse"
+        }
+      },
+      {
+        "where": "seafoam-islands"
+      }
+    ],
+    "iron": [
+      {
+        "where": "kanto-route-12"
+      },
+      {
+        "place": {
+          "ko": "실프주식회사",
+          "en": "Silph Co"
+        }
+      },
+      {
+        "where": "pokemon-mansion"
+      }
+    ],
+    "kings-rock": [
+      {
+        "where": "trainer-tower",
+        "detail": {
+          "ko": "트레이너 타워 믹스 모드 클리어",
+          "en": "Defeat Mixed Mode"
+        }
+      },
+      {
+        "where": "sevault-canyon",
+        "place": {
+          "ko": "칠보 계곡",
+          "en": "Seavault Canyon"
+        }
+      }
+    ],
+    "lava-cookie": [
+      {
+        "place": {
+          "ko": "갈색시티",
+          "en": "Vermillion City"
+        }
+      }
+    ],
+    "lax-incense": [
+      {
+        "where": "lost-cave"
+      }
+    ],
+    "leaf-stone": [
+      {
+        "where": "kanto-safari-zone"
+      }
+    ],
+    "leftovers": [
+      {
+        "where": "kanto-route-12"
+      },
+      {
+        "where": "kanto-route-16"
+      }
+    ],
+    "leppa-berry": [
+      {
+        "where": "kanto-route-8"
+      },
+      {
+        "where": "kanto-route-23"
+      },
+      {
+        "where": "six-island"
+      }
+    ],
+    "lift-key": [
+      {
+        "place": {
+          "ko": "로켓단아지트",
+          "en": "Rocket Hideout"
+        }
+      }
+    ],
+    "lucky-punch": [
+      {
+        "where": "sevault-canyon",
+        "place": {
+          "ko": "칠보 계곡",
+          "en": "Seavault Canyon"
+        }
+      }
+    ],
+    "lum-berry": [
+      {
+        "where": "kanto-route-8"
+      },
+      {
+        "where": "kanto-route-23"
+      }
+    ],
+    "luxury-ball": [
+      {
+        "where": "resort-gorgeous",
+        "detail": {
+          "ko": "셀피",
+          "en": "Selphy"
+        }
+      }
+    ],
+    "macho-brace": [
+      {
+        "where": "viridian-city",
+        "detail": {
+          "ko": "비주기 승리",
+          "en": "Defeat Giovanni"
+        }
+      }
+    ],
+    "master-ball": [
+      {
+        "place": {
+          "ko": "실프주식회사",
+          "en": "Silph Co"
+        },
+        "detail": {
+          "ko": "관장 비주기",
+          "en": "Giovanni"
+        }
+      }
+    ],
+    "max-elixir": [
+      {
+        "where": "kanto-route-17"
+      },
+      {
+        "where": "kanto-route-23"
+      },
+      {
+        "where": "cerulean-cave"
+      },
+      {
+        "place": {
+          "ko": "무인발전소",
+          "en": "Power Plant"
+        }
+      },
+      {
+        "where": "berry-forest"
+      },
+      {
+        "where": "sevault-canyon",
+        "place": {
+          "ko": "칠보 계곡",
+          "en": "Seavault Canyon"
+        }
+      }
+    ],
+    "max-ether": [
+      {
+        "where": "kanto-route-10"
+      },
+      {
+        "where": "kanto-route-23"
+      },
+      {
+        "place": {
+          "ko": "갈색시티",
+          "en": "Vermillion City"
+        }
+      },
+      {
+        "where": "rock-tunnel"
+      },
+      {
+        "place": {
+          "ko": "로켓단아지트",
+          "en": "Rocket Hideout"
+        }
+      },
+      {
+        "where": "berry-forest"
+      }
+    ],
+    "max-potion": [
+      {
+        "place": {
+          "ko": "실프주식회사",
+          "en": "Silph Co"
+        }
+      },
+      {
+        "where": "kanto-safari-zone"
+      },
+      {
+        "place": {
+          "ko": "무인발전소",
+          "en": "Power Plant"
+        }
+      },
+      {
+        "where": "pokemon-mansion"
+      },
+      {
+        "where": "five-island"
+      }
+    ],
+    "max-repel": [
+      {
+        "where": "bond-bridge"
+      }
+    ],
+    "max-revive": [
+      {
+        "where": "kanto-route-17"
+      },
+      {
+        "where": "fuchsia-city"
+      },
+      {
+        "where": "cerulean-cave"
+      },
+      {
+        "place": {
+          "ko": "실프주식회사",
+          "en": "Silph Co"
+        }
+      },
+      {
+        "where": "kanto-safari-zone"
+      },
+      {
+        "where": "kanto-victory-road-1"
+      },
+      {
+        "where": "lost-cave"
+      }
+    ],
+    "metal-coat": [
+      {
+        "where": "memorial-pillar"
+      },
+      {
+        "where": "trainer-tower",
+        "detail": {
+          "ko": "트레이너 타워 녹아웃 모드 클리어",
+          "en": "Defeat Knockout Mode"
+        }
+      }
+    ],
+    "moon-stone": [
+      {
+        "where": "mt-moon"
+      },
+      {
+        "place": {
+          "ko": "로켓단아지트",
+          "en": "Rocket Hideout"
+        }
+      },
+      {
+        "where": "pokemon-mansion"
+      },
+      {
+        "where": "two-island",
+        "detail": {
+          "ko": "마요를 구한 뒤",
+          "en": "After Rescuing Lostelle"
+        }
+      }
+    ],
+    "mysticticket": [
+      {
+        "place": {
+          "ko": "엔딩 후 가방에 들어 있음",
+          "en": "In your bag after beating Elite Four"
+        },
+        "detail": {
+          "ko": "Nintendo Switch판",
+          "en": "Nintendo Switch Version"
+        }
+      }
+    ],
+    "nanab-berry": [
+      {
+        "where": "kanto-route-10"
+      },
+      {
+        "where": "trainer-tower"
+      }
+    ],
+    "nest-ball": [
+      {
+        "place": {
+          "ko": "로켓단아지트",
+          "en": "Rocket Hideout"
+        }
+      },
+      {
+        "place": {
+          "ko": "로켓단 창고",
+          "en": "Rocket Warehouse"
+        }
+      },
+      {
+        "where": "water-path",
+        "detail": {
+          "ko": "헤라크로스 아주머니 · 기록을 깨면",
+          "en": "Heracross lady when you break record"
+        }
+      }
+    ],
+    "net-ball": [
+      {
+        "where": "kanto-route-12",
+        "detail": {
+          "ko": "낚시광의 동생",
+          "en": "Fishing Guru's younger brother"
+        }
+      },
+      {
+        "place": {
+          "ko": "로켓단아지트",
+          "en": "Rocket Hideout"
+        }
+      },
+      {
+        "place": {
+          "ko": "로켓단 창고",
+          "en": "Rocket Warehouse"
+        }
+      }
+    ],
+    "nugget": [
+      {
+        "where": "saffron-city",
+        "detail": {
+          "ko": "흉내내기 가르침 NPC의 컴퓨터 옆",
+          "en": "next to Mimic Tutor's computer"
+        }
+      },
+      {
+        "where": "cerulean-cave"
+      },
+      {
+        "where": "pokemon-tower"
+      },
+      {
+        "place": {
+          "ko": "로켓단아지트",
+          "en": "Rocket Hideout"
+        }
+      },
+      {
+        "place": {
+          "ko": "실프주식회사",
+          "en": "Silph Co"
+        }
+      },
+      {
+        "where": "kanto-safari-zone"
+      },
+      {
+        "where": "seafoam-islands"
+      },
+      {
+        "where": "three-isle-path",
+        "detail": {
+          "ko": "길을 파는 남자",
+          "en": "Man digging path"
+        }
+      },
+      {
+        "where": "three-isle-path"
+      },
+      {
+        "where": "resort-gorgeous",
+        "detail": {
+          "ko": "셀피",
+          "en": "Selphy"
+        }
+      },
+      {
+        "where": "sevault-canyon",
+        "place": {
+          "ko": "칠보 계곡",
+          "en": "Seavault Canyon"
+        }
+      }
+    ],
+    "old-amber": [
+      {
+        "where": "pewter-city",
+        "detail": {
+          "ko": "박물관 과학자",
+          "en": "Museum Scientist"
+        }
+      }
+    ],
+    "oran-berry": [
+      {
+        "where": "kanto-route-3"
+      },
+      {
+        "where": "kanto-route-25"
+      },
+      {
+        "where": "berry-forest"
+      },
+      {
+        "where": "water-path"
+      }
+    ],
+    "paralyze-heal": [
+      {
+        "where": "kanto-route-2"
+      },
+      {
+        "where": "mt-moon"
+      },
+      {
+        "where": "kanto-underground-path",
+        "place": {
+          "ko": "지하통로(5–6번 도로)",
+          "en": "Underground Path 5-6"
+        },
+        "detail": {
+          "ko": "상트앙느호 방문",
+          "en": "Visit SS Anne"
+        }
+      },
+      {
+        "where": "kanto-underground-path",
+        "place": {
+          "ko": "지하통로(7–8번 도로)",
+          "en": "Underground Path 7-8"
+        },
+        "detail": {
+          "ko": "로켓단 창고 클리어",
+          "en": "Complete Rocket Warehouse"
+        }
+      }
+    ],
+    "pearl": [
+      {
+        "where": "rock-tunnel"
+      },
+      {
+        "where": "resort-gorgeous",
+        "detail": {
+          "ko": "셀피",
+          "en": "Selphy"
+        }
+      },
+      {
+        "place": {
+          "ko": "로켓단 창고",
+          "en": "Rocket Warehouse"
+        }
+      },
+      {
+        "where": "trainer-tower"
+      }
+    ],
+    "pecha-berry": [
+      {
+        "where": "kanto-route-24"
+      },
+      {
+        "where": "ss-anne"
+      }
+    ],
+    "persim-berry": [
+      {
+        "where": "kanto-route-4"
+      },
+      {
+        "where": "kanto-route-10"
+      },
+      {
+        "where": "berry-forest"
+      }
+    ],
+    "pinap-berry": [
+      {
+        "where": "kanto-route-14"
+      },
+      {
+        "where": "berry-forest"
+      },
+      {
+        "where": "water-path"
+      }
+    ],
+    "potion": [
+      {
+        "where": "kanto-route-1",
+        "detail": {
+          "ko": "상록시티 프렌들리숍 점원",
+          "en": "Viridian Poké Mart employee"
+        }
+      },
+      {
+        "where": "pallet-town",
+        "detail": {
+          "ko": "주인공 집 PC",
+          "en": "PC in Player's house"
+        }
+      },
+      {
+        "where": "viridian-forest"
+      },
+      {
+        "where": "mt-moon"
+      },
+      {
+        "where": "kanto-underground-path",
+        "place": {
+          "ko": "지하통로(5–6번 도로)",
+          "en": "Underground Path 5-6"
+        },
+        "detail": {
+          "ko": "상트앙느호 방문",
+          "en": "Visit SS Anne"
+        }
+      },
+      {
+        "where": "kanto-underground-path",
+        "place": {
+          "ko": "지하통로(7–8번 도로)",
+          "en": "Underground Path 7-8"
+        },
+        "detail": {
+          "ko": "로켓단 창고 클리어",
+          "en": "Complete Rocket Warehouse"
+        }
+      }
+    ],
+    "powder-jar": [
+      {
+        "where": "cerulean-city",
+        "detail": {
+          "ko": "열매가루 아저씨",
+          "en": "Berry Powder Man"
+        }
+      }
+    ],
+    "pp-max": [
+      {
+        "where": "cape-brink"
+      }
+    ],
+    "pp-up": [
+      {
+        "where": "kanto-route-13"
+      },
+      {
+        "where": "kanto-route-17"
+      },
+      {
+        "where": "celadon-city"
+      },
+      {
+        "where": "cerulean-cave"
+      },
+      {
+        "place": {
+          "ko": "로켓단아지트",
+          "en": "Rocket Hideout"
+        }
+      },
+      {
+        "place": {
+          "ko": "실프주식회사",
+          "en": "Silph Co"
+        }
+      },
+      {
+        "where": "three-island"
+      },
+      {
+        "where": "five-isle-meadow"
+      },
+      {
+        "where": "outcast-island"
+      }
+    ],
+    "protein": [
+      {
+        "place": {
+          "ko": "실프주식회사",
+          "en": "Silph Co"
+        }
+      },
+      {
+        "where": "kanto-safari-zone"
+      },
+      {
+        "where": "pokemon-mansion"
+      }
+    ],
+    "quick-claw": [
+      {
+        "where": "kanto-safari-zone"
+      }
+    ],
+    "rainbow-pass": [
+      {
+        "where": "one-island",
+        "detail": {
+          "ko": "서유석에게 루비를 건넨 뒤",
+          "en": "Celio will give it to you once you've given him the Ruby"
+        }
+      }
+    ],
+    "rare-candy": [
+      {
+        "where": "kanto-route-6"
+      },
+      {
+        "where": "kanto-route-9"
+      },
+      {
+        "where": "kanto-route-12"
+      },
+      {
+        "where": "kanto-route-17"
+      },
+      {
+        "where": "cerulean-city"
+      },
+      {
+        "where": "mt-moon"
+      },
+      {
+        "where": "pokemon-tower"
+      },
+      {
+        "place": {
+          "ko": "로켓단아지트",
+          "en": "Rocket Hideout"
+        }
+      },
+      {
+        "place": {
+          "ko": "실프주식회사",
+          "en": "Silph Co"
+        }
+      },
+      {
+        "where": "pokemon-mansion"
+      },
+      {
+        "where": "kanto-victory-road-1"
+      },
+      {
+        "where": "cape-brink"
+      },
+      {
+        "where": "resort-gorgeous",
+        "detail": {
+          "ko": "셀피",
+          "en": "Selphy"
+        }
+      },
+      {
+        "where": "lost-cave"
+      }
+    ],
+    "rawst-berry": [
+      {
+        "where": "kanto-route-8"
+      },
+      {
+        "where": "canyon-entrance"
+      }
+    ],
+    "razz-berry": [
+      {
+        "where": "kanto-route-4"
+      },
+      {
+        "where": "memorial-pillar"
+      }
+    ],
+    "repel": [
+      {
+        "where": "rock-tunnel"
+      }
+    ],
+    "revive": [
+      {
+        "where": "mt-moon"
+      },
+      {
+        "where": "rock-tunnel"
+      },
+      {
+        "place": {
+          "ko": "실프주식회사",
+          "en": "Silph Co"
+        }
+      },
+      {
+        "where": "seafoam-islands"
+      },
+      {
+        "where": "two-island"
+      }
+    ],
+    "ruby": [
+      {
+        "where": "mt-ember"
+      }
+    ],
+    "sacred-ash": [
+      {
+        "where": "navel-rock"
+      }
+    ],
+    "sapphire": [
+      {
+        "place": {
+          "ko": "로켓단 창고",
+          "en": "Rocket Warehouse"
+        },
+        "detail": {
+          "ko": "보스(과학자) 승리",
+          "en": "Defeat Boss (Scientist Gioden)"
+        }
+      }
+    ],
+    "sea-incense": [
+      {
+        "where": "lost-cave"
+      }
+    ],
+    "secret-key": [
+      {
+        "where": "pokemon-mansion"
+      }
+    ],
+    "silk-scarf": [
+      {
+        "where": "lost-cave",
+        "detail": {
+          "ko": "셀피 승리 후 다시 찾아가면",
+          "en": "Defeat Seplhy and then return"
+        }
+      }
+    ],
+    "silph-scope": [
+      {
+        "place": {
+          "ko": "로켓단아지트",
+          "en": "Rocket Hideout"
+        },
+        "detail": {
+          "ko": "비주기 승리",
+          "en": "Defeat Giovanni"
+        }
+      }
+    ],
+    "sitrus-berry": [
+      {
+        "where": "kanto-route-6"
+      },
+      {
+        "where": "kanto-route-23"
+      },
+      {
+        "where": "memorial-pillar"
+      }
+    ],
+    "soothe-bell": [
+      {
+        "where": "pokemon-tower"
+      }
+    ],
+    "star-piece": [
+      {
+        "where": "mt-moon"
+      },
+      {
+        "where": "treasure-beach"
+      },
+      {
+        "where": "four-island"
+      },
+      {
+        "where": "resort-gorgeous",
+        "detail": {
+          "ko": "셀피",
+          "en": "Selphy"
+        }
+      }
+    ],
+    "stardust": [
+      {
+        "where": "ss-anne"
+      },
+      {
+        "where": "four-island"
+      },
+      {
+        "where": "resort-gorgeous"
+      },
+      {
+        "where": "resort-gorgeous",
+        "detail": {
+          "ko": "셀피",
+          "en": "Selphy"
+        }
+      }
+    ],
+    "sun-stone": [
+      {
+        "where": "ruin-valley"
+      }
+    ],
+    "super-potion": [
+      {
+        "where": "kanto-route-10"
+      },
+      {
+        "where": "ss-anne"
+      },
+      {
+        "place": {
+          "ko": "로켓단아지트",
+          "en": "Rocket Hideout"
+        }
+      }
+    ],
+    "super-rod": [
+      {
+        "where": "kanto-route-12",
+        "detail": {
+          "ko": "낚시광의 동생",
+          "en": "Fishing Guru's younger brother"
+        }
+      }
+    ],
+    "tea": [
+      {
+        "where": "celadon-city",
+        "detail": {
+          "ko": "무지개맨션 할머니",
+          "en": "Old Lady in Celadon Mansion"
+        }
+      }
+    ],
+    "teachy-tv": [
+      {
+        "where": "viridian-city",
+        "detail": {
+          "ko": "할아버지",
+          "en": "Old Man"
+        }
+      }
+    ],
+    "thunder-stone": [
+      {
+        "place": {
+          "ko": "무인발전소",
+          "en": "Power Plant"
+        }
+      }
+    ],
+    "tiny-mushroom": [
+      {
+        "where": "mt-moon"
+      }
+    ],
+    "tm01": [
+      {
+        "how": "field",
+        "place": {
+          "ko": "실프주식회사",
+          "en": "Silph Co"
+        }
+      }
+    ],
+    "tm02": [
+      {
+        "how": "field",
+        "where": "kanto-victory-road-1"
+      }
+    ],
+    "tm03": [
+      {
+        "how": "reward",
+        "where": "cerulean-city",
+        "detail": {
+          "ko": "관장 이슬 승리",
+          "en": "Defeat Misty"
+        }
+      }
+    ],
+    "tm04": [
+      {
+        "how": "reward",
+        "where": "saffron-city",
+        "detail": {
+          "ko": "관장 초련 승리",
+          "en": "Defeat Sabrina"
+        }
+      }
+    ],
+    "tm05": [
+      {
+        "how": "field",
+        "where": "kanto-route-4"
+      }
+    ],
+    "tm06": [
+      {
+        "how": "reward",
+        "where": "fuchsia-city",
+        "detail": {
+          "ko": "관장 독수 승리",
+          "en": "Defeat Koga"
+        }
+      }
+    ],
+    "tm07": [
+      {
+        "how": "field",
+        "where": "kanto-victory-road-1"
+      }
+    ],
+    "tm08": [
+      {
+        "how": "field",
+        "place": {
+          "ko": "실프주식회사",
+          "en": "Silph Co"
+        }
+      }
+    ],
+    "tm09": [
+      {
+        "how": "field",
+        "where": "mt-moon"
+      }
+    ],
+    "tm10": [
+      {
+        "how": "other",
+        "content": {
+          "ko": "특성 픽업",
+          "en": "Pickup",
+          "ja": "ものひろい"
+        },
+        "detail": "무작위"
+      }
+    ],
+    "tm11": [
+      {
+        "how": "field",
+        "where": "kanto-safari-zone"
+      }
+    ],
+    "tm12": [
+      {
+        "how": "field",
+        "place": {
+          "ko": "로켓단아지트",
+          "en": "Rocket Hideout"
+        }
+      }
+    ],
+    "tm13": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 4000,
+            "unit": "coins"
+          }
+        ]
+      }
+    ],
+    "tm14": [
+      {
+        "how": "field",
+        "where": "pokemon-mansion"
+      }
+    ],
+    "tm15": [
+      {
+        "how": "shop",
+        "where": "celadon-city",
+        "place": "무지개시티 백화점 2층",
+        "cost": [
+          {
+            "amount": 7500,
+            "unit": "money"
+          }
+        ]
+      }
+    ],
+    "tm16": [
+      {
+        "how": "gift",
+        "where": "celadon-city",
+        "place": "무지개시티 백화점 옥상",
+        "detail": "목마른 소녀에게 맛있는물을 주면 · 1회"
+      }
+    ],
+    "tm17": [
+      {
+        "how": "field",
+        "place": {
+          "ko": "무인발전소",
+          "en": "Power Plant"
+        }
+      }
+    ],
+    "tm18": [
+      {
+        "how": "field",
+        "where": "kanto-route-15"
+      }
+    ],
+    "tm19": [
+      {
+        "how": "reward",
+        "where": "celadon-city",
+        "detail": {
+          "ko": "관장 민화 승리",
+          "en": "Defeat Erika"
+        }
+      }
+    ],
+    "tm20": [
+      {
+        "how": "gift",
+        "where": "celadon-city",
+        "place": "무지개시티 백화점 옥상",
+        "detail": "목마른 소녀에게 미네랄사이다를 주면 · 1회"
+      }
+    ],
+    "tm21": [
+      {
+        "how": "field",
+        "place": {
+          "ko": "로켓단아지트",
+          "en": "Rocket Hideout"
+        }
+      }
+    ],
+    "tm22": [
+      {
+        "how": "field",
+        "where": "pokemon-mansion"
+      }
+    ],
+    "tm23": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 3500,
+            "unit": "coins"
+          }
+        ]
+      }
+    ],
+    "tm24": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 4000,
+            "unit": "coins"
+          }
+        ]
+      }
+    ],
+    "tm25": [
+      {
+        "how": "field",
+        "place": {
+          "ko": "무인발전소",
+          "en": "Power Plant"
+        }
+      }
+    ],
+    "tm26": [
+      {
+        "how": "reward",
+        "where": "viridian-city",
+        "detail": {
+          "ko": "비주기 승리",
+          "en": "Defeat Giovanni"
+        }
+      }
+    ],
+    "tm27": [
+      {
+        "how": "field",
+        "where": "kanto-route-12"
+      }
+    ],
+    "tm28": [
+      {
+        "how": "reward",
+        "where": "cerulean-city",
+        "detail": {
+          "ko": "로켓단 승리",
+          "en": "Defeat Rocket"
+        }
+      }
+    ],
+    "tm29": [
+      {
+        "how": "gift",
+        "where": "saffron-city",
+        "detail": {
+          "ko": "에스퍼 아저씨",
+          "en": "Mr. Psychic"
+        }
+      }
+    ],
+    "tm30": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 4500,
+            "unit": "coins"
+          }
+        ]
+      }
+    ],
+    "tm31": [
+      {
+        "how": "field",
+        "where": "ss-anne"
+      }
+    ],
+    "tm32": [
+      {
+        "how": "field",
+        "where": "kanto-safari-zone"
+      }
+    ],
+    "tm33": [
+      {
+        "how": "field",
+        "where": "ss-anne"
+      }
+    ],
+    "tm34": [
+      {
+        "how": "reward",
+        "place": {
+          "ko": "갈색시티",
+          "en": "Vermillion City"
+        },
+        "detail": {
+          "ko": "관장 마티스 승리",
+          "en": "Defeat Lt. Surge"
+        }
+      }
+    ],
+    "tm35": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 4000,
+            "unit": "coins"
+          }
+        ]
+      }
+    ],
+    "tm36": [
+      {
+        "how": "field",
+        "place": {
+          "ko": "로켓단 창고",
+          "en": "Rocket Warehouse"
+        }
+      }
+    ],
+    "tm37": [
+      {
+        "how": "field",
+        "where": "kanto-victory-road-1"
+      }
+    ],
+    "tm38": [
+      {
+        "how": "reward",
+        "where": "cinnabar-island",
+        "detail": {
+          "ko": "관장 강연 승리",
+          "en": "Defeat Blaine"
+        }
+      }
+    ],
+    "tm39": [
+      {
+        "how": "reward",
+        "where": "pewter-city",
+        "detail": {
+          "ko": "관장 웅 승리",
+          "en": "Defeat Brock"
+        }
+      }
+    ],
+    "tm40": [
+      {
+        "how": "field",
+        "where": "kanto-route-9"
+      }
+    ],
+    "tm41": [
+      {
+        "how": "field",
+        "place": {
+          "ko": "실프주식회사",
+          "en": "Silph Co"
+        }
+      }
+    ],
+    "tm42": [
+      {
+        "how": "gift",
+        "where": "memorial-pillar",
+        "detail": {
+          "ko": "롱스톤 무덤에 후르츠밀크를 놓으면 트레이너가 줘요",
+          "en": "Put a Lemonade on Onix's grave and the trainer will give it to you"
+        }
+      }
+    ],
+    "tm43": [
+      {
+        "how": "field",
+        "where": "kanto-route-25"
+      }
+    ],
+    "tm44": [
+      {
+        "how": "field",
+        "where": "kanto-route-9"
+      }
+    ],
+    "tm45": [
+      {
+        "how": "field",
+        "where": "kanto-route-24"
+      }
+    ],
+    "tm46": [
+      {
+        "how": "field",
+        "where": "mt-moon"
+      }
+    ],
+    "tm47": [
+      {
+        "how": "field",
+        "where": "kanto-safari-zone"
+      }
+    ],
+    "tm48": [
+      {
+        "how": "field",
+        "where": "kanto-route-12"
+      }
+    ],
+    "tm49": [
+      {
+        "how": "field",
+        "place": {
+          "ko": "로켓단아지트",
+          "en": "Rocket Hideout"
+        }
+      }
+    ],
+    "tm50": [
+      {
+        "how": "field",
+        "where": "kanto-victory-road-1"
+      }
+    ],
+    "town-map": [
+      {
+        "where": "pallet-town",
+        "detail": {
+          "ko": "남나리",
+          "en": "Daisy"
+        }
+      }
+    ],
+    "tri-pass": [
+      {
+        "where": "one-island"
+      }
+    ],
+    "ultra-ball": [
+      {
+        "where": "kanto-route-23"
+      },
+      {
+        "where": "cerulean-cave"
+      },
+      {
+        "place": {
+          "ko": "실프주식회사",
+          "en": "Silph Co"
+        }
+      },
+      {
+        "where": "seafoam-islands"
+      },
+      {
+        "where": "kanto-victory-road-1"
+      },
+      {
+        "where": "treasure-beach"
+      },
+      {
+        "where": "mt-ember"
+      },
+      {
+        "where": "four-island"
+      },
+      {
+        "where": "icefall-cave"
+      },
+      {
+        "where": "green-path"
+      }
+    ],
+    "up-grade": [
+      {
+        "place": {
+          "ko": "로켓단 창고",
+          "en": "Rocket Warehouse"
+        }
+      },
+      {
+        "where": "trainer-tower",
+        "detail": {
+          "ko": "트레이너 타워 싱글 모드 클리어",
+          "en": "Defeat Single Mode"
+        }
+      }
+    ],
+    "water-stone": [
+      {
+        "where": "seafoam-islands"
+      }
+    ],
+    "wepear-berry": [
+      {
+        "where": "kanto-route-7"
+      },
+      {
+        "where": "berry-forest"
+      }
+    ],
+    "x-accuracy": [
+      {
+        "where": "pokemon-tower"
+      }
+    ],
+    "x-attack": [
+      {
+        "where": "ss-anne"
+      }
+    ],
+    "x-defense": [
+      {
+        "where": "kanto-route-11"
+      }
+    ],
+    "x-speed": [
+      {
+        "place": {
+          "ko": "로켓단아지트",
+          "en": "Rocket Hideout"
+        }
+      }
+    ],
+    "zinc": [
+      {
+        "where": "kanto-route-14"
+      },
+      {
+        "place": {
+          "ko": "실프주식회사",
+          "en": "Silph Co"
+        }
+      },
+      {
+        "where": "pokemon-mansion"
+      },
+      {
+        "where": "three-island"
+      }
+    ]
+  },
+  "tutors": {
+    "blast-burn": [
+      {
+        "how": "tutor",
+        "where": "cape-brink",
+        "detail": "최대 친밀도 · 이상해꽃 · 리자몽 · 거북왕 중 한 마리에게 1번씩"
+      }
+    ],
+    "body-slam": [
+      {
+        "how": "tutor",
+        "where": "four-island",
+        "detail": "1회 한정"
+      }
+    ],
+    "counter": [
+      {
+        "how": "tutor",
+        "where": "celadon-city",
+        "place": "무지개시티 백화점 3층",
+        "detail": "1회 한정"
+      }
+    ],
+    "double-edge": [
+      {
+        "how": "tutor",
+        "where": "kanto-victory-road-1",
+        "detail": "1회 한정"
+      }
+    ],
+    "dream-eater": [
+      {
+        "how": "tutor",
+        "where": "viridian-city",
+        "detail": "1회 한정"
+      }
+    ],
+    "explosion": [
+      {
+        "how": "tutor",
+        "where": "mt-ember",
+        "detail": "1회 한정"
+      }
+    ],
+    "frenzy-plant": [
+      {
+        "how": "tutor",
+        "where": "cape-brink",
+        "detail": "최대 친밀도 · 이상해꽃 · 리자몽 · 거북왕 중 한 마리에게 1번씩"
+      }
+    ],
+    "hydro-cannon": [
+      {
+        "how": "tutor",
+        "where": "cape-brink",
+        "detail": "최대 친밀도 · 이상해꽃 · 리자몽 · 거북왕 중 한 마리에게 1번씩"
+      }
+    ],
+    "mega-kick": [
+      {
+        "how": "tutor",
+        "where": "kanto-route-4",
+        "detail": "1회 한정"
+      }
+    ],
+    "mega-punch": [
+      {
+        "how": "tutor",
+        "where": "kanto-route-4",
+        "detail": "1회 한정"
+      }
+    ],
+    "metronome": [
+      {
+        "how": "tutor",
+        "where": "cinnabar-island",
+        "place": "홍련마을 포켓몬 연구소",
+        "detail": "1회 한정"
+      }
+    ],
+    "mimic": [
+      {
+        "how": "tutor",
+        "where": "saffron-city",
+        "detail": "1회 한정"
+      }
+    ],
+    "rock-slide": [
+      {
+        "how": "tutor",
+        "where": "rock-tunnel",
+        "detail": "1회 한정"
+      }
+    ],
+    "seismic-toss": [
+      {
+        "how": "tutor",
+        "where": "pewter-city",
+        "place": "회색시티 과학박물관",
+        "detail": "1회 한정"
+      }
+    ],
+    "soft-boiled": [
+      {
+        "how": "tutor",
+        "where": "celadon-city",
+        "detail": "1회 한정"
+      }
+    ],
+    "substitute": [
+      {
+        "how": "tutor",
+        "where": "fuchsia-city",
+        "detail": "1회 한정"
+      }
+    ],
+    "swords-dance": [
+      {
+        "how": "tutor",
+        "where": "seven-island",
+        "detail": "1회 한정"
+      }
+    ],
+    "thunder-wave": [
+      {
+        "how": "tutor",
+        "where": "saffron-city",
+        "place": "실프주식회사",
+        "detail": "1회 한정"
+      }
+    ]
+  },
+  "pokemon": {
+    "abra": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 180,
+            "unit": "coins"
+          }
+        ],
+        "versions": [
+          "firered"
+        ],
+        "minLevel": 9,
+        "maxLevel": 9,
+        "replaces": "gift"
+      },
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 120,
+            "unit": "coins"
+          }
+        ],
+        "versions": [
+          "leafgreen"
+        ],
+        "minLevel": 7,
+        "maxLevel": 7,
+        "replaces": "gift"
+      }
+    ],
+    "aerodactyl": [
+      {
+        "how": "fossil",
+        "where": "cinnabar-island",
+        "place": {
+          "ko": "홍련마을 포켓몬 연구소",
+          "en": "Cinnabar Lab"
+        },
+        "detail": {
+          "ko": "비밀의호박 복원",
+          "en": "Revived from the Old Amber"
+        },
+        "minLevel": 5,
+        "maxLevel": 5,
+        "replaces": "gift"
+      }
+    ],
+    "bulbasaur": [
+      {
+        "how": "starter",
+        "where": "pallet-town",
+        "minLevel": 5,
+        "maxLevel": 5,
+        "replaces": "gift"
+      }
+    ],
+    "charmander": [
+      {
+        "how": "starter",
+        "where": "pallet-town",
+        "minLevel": 5,
+        "maxLevel": 5,
+        "replaces": "gift"
+      }
+    ],
+    "clefairy": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 500,
+            "unit": "coins"
+          }
+        ],
+        "versions": [
+          "firered"
+        ],
+        "minLevel": 8,
+        "maxLevel": 8,
+        "replaces": "gift"
+      },
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 750,
+            "unit": "coins"
+          }
+        ],
+        "versions": [
+          "leafgreen"
+        ],
+        "minLevel": 12,
+        "maxLevel": 12,
+        "replaces": "gift"
+      }
+    ],
+    "dratini": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 2800,
+            "unit": "coins"
+          }
+        ],
+        "versions": [
+          "firered"
+        ],
+        "minLevel": 18,
+        "maxLevel": 18,
+        "replaces": "gift"
+      },
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 4600,
+            "unit": "coins"
+          }
+        ],
+        "versions": [
+          "leafgreen"
+        ],
+        "minLevel": 24,
+        "maxLevel": 24,
+        "replaces": "gift"
+      }
+    ],
+    "kabuto": [
+      {
+        "how": "fossil",
+        "where": "cinnabar-island",
+        "place": {
+          "ko": "홍련마을 포켓몬 연구소",
+          "en": "Cinnabar Lab"
+        },
+        "detail": {
+          "ko": "껍질화석 복원",
+          "en": "Revived from the Dome Fossil"
+        },
+        "minLevel": 5,
+        "maxLevel": 5,
+        "replaces": "gift"
+      }
+    ],
+    "mew": [
+      {
+        "how": "event",
+        "detail": {
+          "ko": "배포 이벤트",
+          "en": "Distribution event"
+        }
+      }
+    ],
+    "omanyte": [
+      {
+        "how": "fossil",
+        "where": "cinnabar-island",
+        "place": {
+          "ko": "홍련마을 포켓몬 연구소",
+          "en": "Cinnabar Lab"
+        },
+        "detail": {
+          "ko": "조개화석 복원",
+          "en": "Revived from the Helix Fossil"
+        },
+        "minLevel": 5,
+        "maxLevel": 5,
+        "replaces": "gift"
+      }
+    ],
+    "pinsir": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 2500,
+            "unit": "coins"
+          }
+        ],
+        "versions": [
+          "leafgreen"
+        ],
+        "minLevel": 18,
+        "maxLevel": 18,
+        "replaces": "gift"
+      }
+    ],
+    "porygon": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 9999,
+            "unit": "coins"
+          }
+        ],
+        "versions": [
+          "firered"
+        ],
+        "minLevel": 26,
+        "maxLevel": 26,
+        "replaces": "gift"
+      },
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 6500,
+            "unit": "coins"
+          }
+        ],
+        "versions": [
+          "leafgreen"
+        ],
+        "minLevel": 18,
+        "maxLevel": 18,
+        "replaces": "gift"
+      }
+    ],
+    "scyther": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 5500,
+            "unit": "coins"
+          }
+        ],
+        "versions": [
+          "firered"
+        ],
+        "minLevel": 25,
+        "maxLevel": 25,
+        "replaces": "gift"
+      }
+    ],
+    "squirtle": [
+      {
+        "how": "starter",
+        "where": "pallet-town",
+        "minLevel": 5,
+        "maxLevel": 5,
+        "replaces": "gift"
+      }
+    ]
+  }
+}

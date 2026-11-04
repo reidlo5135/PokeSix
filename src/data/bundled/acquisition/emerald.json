@@ -1,0 +1,2501 @@
+{
+  "_comment": [
+    "게임(버전 그룹)별 입수 사전 (ui/dex/guidebook.h가 읽는다). 형식은 docs/i18n/README.md 참고.",
+    "scripts/i18n/check_acquisition.py로 검증해 넣었다. 출처는 _sources.",
+    "pokemon 묶음(2026-11-04): 키 = species.identifier, 값 = 출현 줄. how는 encounter-methods.json 키(starter · fossil · prize · bug-contest · swarm · pokewalker · event · transfer · static …). minLevel · maxLevel = 레벨, versionsFrom = transfer일 때 데려올 버전(빈 배열 = 버전 미지정), replaces = 같은 where · 버전의 PokéAPI 행 중 그 방법(gift)을 숨기고 이 줄로 바꾼다.",
+    "TM/HM의 how 없는 옛 Serebii 줄(2026-11-04): Serebii ItemDex가 NPC에게 받는 줄에만 사람을 적는 모양을 따라 detail에 '관장'·'승리' → reward, 사람 · 조건 → gift, detail 없음 → field로 채웠다(스쿼드 공급 집계용). 연고시티 상호교류광장(데리고 걷는 포켓몬이 줍는 것)은 other."
+  ],
+  "_sources": [
+    "에메랄드 배틀프런티어 BP 교환 튜터(널리 알려진 값)",
+    "Serebii.net ItemDex (https://www.serebii.net/itemdex/) — 장소는 PokéAPI/게임 텍스트로 한국어화",
+    "Bulbapedia — List of TM and HM locations in Generation I–V · 각 백화점 · 게임코너 · 배틀파크 문서 (https://bulbapedia.bulbagarden.net/, web.archive.org 사본) — TM 입수처 · 가격",
+    "Serebii.net TM/HM 목록 (https://www.serebii.net/) — 교차 확인",
+    "TM 입수처 한국어 표기 대조: https://blog.naver.com/riomedevon/110117456020 (REFER.md)",
+    "Bulbapedia 아이템 문서(Acquisition 표: Dragon Scale · King's Rock · Metal Coat · Up-Grade · Deep Sea Scale/Tooth · Electirizer · Magmarizer · Moon/Thunder/Fire Stone · Razor Claw/Fang, web.archive.org 사본) — 진화 도구 입수처 · 소지 확률",
+    "영어로 남은 place · detail 칸 한국어화(2026-11-04): 공식 한국어 이름(장소 · 인물 · 아이템)은 place-names.json · DB · 나무위키 대조, 공식명이 확인되지 않은 역할 이름은 설명형 번역, 포켓워커 코스명은 한국어판 표기 미확인이라 영어 그대로",
+    "Bulbapedia — Move Tutor (세대별 가르침 장소 · BP/조각/코인 비용, web.archive.org 사본) — NPC 가르침 비용",
+    "포켓몬 입수 보충(pokemon 묶음): PokéAPI gift 행의 경품 · 화석 · 스타팅 덮어쓰기(코인은 Bulbapedia Celadon/Goldenrod Game Corner), PokéAPI에 없는 경로(곤충채집대회 · 포켓워커 · 고정 출현 · 데려오기 · 배포)는 Bulbapedia 포켓몬별 Game locations 표(web.archive.org 사본) 대조"
+  ],
+  "versionGroup": "emerald",
+  "items": {
+    "acro-bike": [
+      {
+        "where": "mauville-city"
+      }
+    ],
+    "amulet-coin": [
+      {
+        "where": "littleroot-town"
+      }
+    ],
+    "antidote": [
+      {
+        "where": "hoenn-route-104"
+      }
+    ],
+    "aspear-berry": [
+      {
+        "where": "hoenn-route-120"
+      },
+      {
+        "where": "hoenn-route-121"
+      }
+    ],
+    "basement-key": [
+      {
+        "where": "mauville-city"
+      }
+    ],
+    "belue-berry": [
+      {
+        "where": "hoenn-route-123",
+        "how": "gift",
+        "detail": "나무열매 명인의 아내"
+      }
+    ],
+    "big-pearl": [
+      {
+        "where": "hoenn-route-105"
+      },
+      {
+        "where": "hoenn-route-124"
+      },
+      {
+        "where": "hoenn-route-125"
+      },
+      {
+        "where": "hoenn-route-126"
+      },
+      {
+        "where": "hoenn-route-133"
+      },
+      {
+        "where": "shoal-cave"
+      }
+    ],
+    "black-belt": [
+      {
+        "where": "hoenn-route-115",
+        "detail": {
+          "ko": "태권왕의 포켓몬에게서 도둑질",
+          "en": "Thief from Blackbelt Nob"
+        }
+      }
+    ],
+    "black-glasses": [
+      {
+        "where": "hoenn-route-116"
+      }
+    ],
+    "blue-orb": [
+      {
+        "where": "mt-pyre"
+      }
+    ],
+    "blue-shard": [
+      {
+        "where": "hoenn-route-126"
+      }
+    ],
+    "bluk-berry": [
+      {
+        "where": "hoenn-route-111"
+      },
+      {
+        "where": "hoenn-route-114",
+        "how": "gift",
+        "detail": "매일 한 번"
+      },
+      {
+        "where": "hoenn-route-115"
+      }
+    ],
+    "calcium": [
+      {
+        "where": "hoenn-route-119"
+      },
+      {
+        "where": "hoenn-route-123"
+      },
+      {
+        "where": "hoenn-route-124"
+      }
+    ],
+    "carbos": [
+      {
+        "where": "hoenn-route-114"
+      },
+      {
+        "where": "hoenn-route-121"
+      },
+      {
+        "where": "hoenn-route-124"
+      },
+      {
+        "where": "hoenn-route-127"
+      },
+      {
+        "where": "hoenn-route-134"
+      },
+      {
+        "where": "artisan-cave"
+      }
+    ],
+    "charcoal": [
+      {
+        "where": "lavaridge-town"
+      }
+    ],
+    "cheri-berry": [
+      {
+        "where": "hoenn-route-103"
+      },
+      {
+        "where": "hoenn-route-104"
+      }
+    ],
+    "chesto-berry": [
+      {
+        "where": "hoenn-route-104"
+      },
+      {
+        "where": "hoenn-route-116"
+      },
+      {
+        "where": "hoenn-route-121"
+      }
+    ],
+    "claw-fossil": [
+      {
+        "where": "hoenn-route-111"
+      },
+      {
+        "where": "desert-underpass"
+      },
+      {
+        "where": "mirage-tower"
+      }
+    ],
+    "cleanse-tag": [
+      {
+        "where": "mt-pyre"
+      }
+    ],
+    "coin-case": [
+      {
+        "where": "mauville-city"
+      }
+    ],
+    "contest-pass": [
+      {
+        "where": "verdanturf-town"
+      }
+    ],
+    "cornn-berry": [
+      {
+        "where": "hoenn-route-123",
+        "how": "gift",
+        "detail": "나무열매 명인"
+      }
+    ],
+    "deep-sea-scale": [
+      {
+        "where": "slateport-city",
+        "detail": {
+          "ko": "해양 관장",
+          "en": "Capt Stern"
+        }
+      }
+    ],
+    "deep-sea-tooth": [
+      {
+        "where": "slateport-city",
+        "detail": {
+          "ko": "해양 관장",
+          "en": "Capt Stern"
+        }
+      }
+    ],
+    "devon-goods": [
+      {
+        "where": "rusturf-tunnel"
+      }
+    ],
+    "devon-scope": [
+      {
+        "where": "hoenn-route-120",
+        "detail": {
+          "ko": "성호",
+          "en": "Steven"
+        }
+      }
+    ],
+    "dire-hit": [
+      {
+        "where": "hoenn-route-104"
+      }
+    ],
+    "dive-ball": [
+      {
+        "where": "abandoned-ship"
+      }
+    ],
+    "dragon-fang": [
+      {
+        "where": "meteor-falls",
+        "detail": {
+          "ko": "드래곤사용자의 포켓몬에게서 도둑질",
+          "en": "Thief from Dragon Tamer Nicolas"
+        }
+      },
+      {
+        "where": "meteor-falls"
+      }
+    ],
+    "dragon-scale": [
+      {
+        "how": "held",
+        "place": {
+          "ko": "야생 쏘드라 · 야생 아공이",
+          "en": "Wild Horsea, Wild Bagon"
+        },
+        "detail": "5%"
+      }
+    ],
+    "durin-berry": [
+      {
+        "where": "hoenn-route-123",
+        "how": "gift",
+        "detail": "나무열매 명인의 아내"
+      }
+    ],
+    "elixir": [
+      {
+        "where": "hoenn-route-111"
+      },
+      {
+        "where": "hoenn-route-119"
+      },
+      {
+        "where": "hoenn-route-123"
+      },
+      {
+        "where": "sootopolis-city"
+      }
+    ],
+    "escape-rope": [
+      {
+        "where": "granite-cave"
+      },
+      {
+        "where": "abandoned-ship"
+      },
+      {
+        "where": "new-mauville"
+      }
+    ],
+    "ether": [
+      {
+        "where": "hoenn-route-109"
+      },
+      {
+        "where": "hoenn-route-113"
+      },
+      {
+        "where": "hoenn-route-116"
+      },
+      {
+        "where": "petalburg-city"
+      },
+      {
+        "where": "sootopolis-city"
+      },
+      {
+        "where": "petalburg-woods"
+      }
+    ],
+    "everstone": [
+      {
+        "where": "granite-cave"
+      }
+    ],
+    "fire-stone": [
+      {
+        "where": "hoenn-route-124",
+        "how": "exchange",
+        "cost": [
+          {
+            "amount": 1,
+            "unit": "red-shard"
+          }
+        ]
+      },
+      {
+        "where": "fiery-path"
+      }
+    ],
+    "focus-band": [
+      {
+        "where": "shoal-cave"
+      }
+    ],
+    "full-heal": [
+      {
+        "where": "hoenn-route-110"
+      },
+      {
+        "where": "hoenn-route-119"
+      },
+      {
+        "where": "hoenn-route-120"
+      },
+      {
+        "where": "hoenn-route-121"
+      },
+      {
+        "where": "jagged-pass"
+      },
+      {
+        "where": "hoenn-victory-road"
+      }
+    ],
+    "full-restore": [
+      {
+        "where": "hoenn-safari-zone"
+      },
+      {
+        "where": "hoenn-victory-road"
+      }
+    ],
+    "good-rod": [
+      {
+        "where": "hoenn-route-118",
+        "detail": {
+          "ko": "낚시꾼",
+          "en": "Fisherman"
+        }
+      }
+    ],
+    "great-ball": [
+      {
+        "where": "hoenn-route-109"
+      },
+      {
+        "where": "hoenn-route-110"
+      },
+      {
+        "where": "hoenn-route-115"
+      },
+      {
+        "where": "hoenn-route-117"
+      },
+      {
+        "where": "rustboro-city"
+      },
+      {
+        "where": "petalburg-woods",
+        "detail": {
+          "ko": "남자",
+          "en": "Man"
+        }
+      },
+      {
+        "where": "jagged-pass"
+      }
+    ],
+    "green-shard": [
+      {
+        "where": "hoenn-route-124"
+      }
+    ],
+    "grepa-berry": [
+      {
+        "where": "hoenn-route-123"
+      }
+    ],
+    "harbor-mail": [
+      {
+        "where": "abandoned-ship"
+      }
+    ],
+    "hard-stone": [
+      {
+        "where": "hoenn-route-110",
+        "detail": {
+          "ko": "카라쿠리 저택 3번째",
+          "en": "Trick House 3"
+        }
+      }
+    ],
+    "heal-powder": [
+      {
+        "where": "hoenn-route-115"
+      }
+    ],
+    "heart-scale": [
+      {
+        "where": "hoenn-route-104"
+      },
+      {
+        "where": "hoenn-route-105"
+      },
+      {
+        "where": "hoenn-route-106"
+      },
+      {
+        "where": "hoenn-route-109"
+      },
+      {
+        "where": "hoenn-route-115"
+      },
+      {
+        "where": "hoenn-route-118"
+      },
+      {
+        "where": "hoenn-route-124"
+      },
+      {
+        "where": "hoenn-route-126"
+      },
+      {
+        "where": "hoenn-route-127"
+      },
+      {
+        "where": "hoenn-route-128"
+      },
+      {
+        "where": "lilycove-city"
+      }
+    ],
+    "hm01": [
+      {
+        "how": "field",
+        "where": "rustboro-city"
+      }
+    ],
+    "hm02": [
+      {
+        "how": "gift",
+        "where": "hoenn-route-119",
+        "detail": {
+          "ko": "라이벌",
+          "en": "Rival"
+        }
+      }
+    ],
+    "hm03": [
+      {
+        "how": "gift",
+        "where": "petalburg-city",
+        "detail": {
+          "ko": "민진의 가족",
+          "en": "Wally's Family"
+        }
+      }
+    ],
+    "hm04": [
+      {
+        "how": "field",
+        "where": "rusturf-tunnel"
+      }
+    ],
+    "hm05": [
+      {
+        "how": "gift",
+        "where": "granite-cave",
+        "detail": {
+          "ko": "등산가",
+          "en": "Hiker"
+        }
+      }
+    ],
+    "hm06": [
+      {
+        "how": "field",
+        "where": "mauville-city"
+      }
+    ],
+    "hm07": [
+      {
+        "how": "field",
+        "where": "cave-of-origin"
+      }
+    ],
+    "hm08": [
+      {
+        "how": "gift",
+        "where": "mossdeep-city",
+        "detail": {
+          "ko": "성호",
+          "en": "Steven"
+        }
+      }
+    ],
+    "hondew-berry": [
+      {
+        "where": "hoenn-route-119"
+      }
+    ],
+    "hp-up": [
+      {
+        "where": "hoenn-route-111"
+      },
+      {
+        "where": "hoenn-route-116"
+      },
+      {
+        "where": "hoenn-route-121"
+      },
+      {
+        "where": "hoenn-route-127"
+      }
+    ],
+    "hyper-potion": [
+      {
+        "where": "hoenn-route-118"
+      },
+      {
+        "where": "hoenn-route-119"
+      },
+      {
+        "where": "hoenn-route-120"
+      },
+      {
+        "where": "hoenn-route-123"
+      },
+      {
+        "where": "shoal-cave"
+      }
+    ],
+    "ice-heal": [
+      {
+        "where": "lavaridge-town"
+      },
+      {
+        "where": "shoal-cave"
+      }
+    ],
+    "iron": [
+      {
+        "where": "hoenn-route-105"
+      },
+      {
+        "where": "hoenn-route-115"
+      },
+      {
+        "where": "hoenn-route-118"
+      },
+      {
+        "where": "hoenn-route-126"
+      },
+      {
+        "where": "artisan-cave"
+      }
+    ],
+    "kelpsy-berry": [
+      {
+        "where": "hoenn-route-115"
+      }
+    ],
+    "kings-rock": [
+      {
+        "how": "gift",
+        "where": "mossdeep-city"
+      },
+      {
+        "how": "held",
+        "place": {
+          "ko": "야생 하리뭉",
+          "en": "Wild Hariyama"
+        },
+        "detail": "5%"
+      },
+      {
+        "how": "exchange",
+        "where": "hoenn-battle-frontier",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 64,
+            "unit": "bp"
+          }
+        ]
+      },
+      {
+        "how": "other",
+        "content": {
+          "ko": "특성 픽업",
+          "en": "Pickup",
+          "ja": "ものひろい"
+        },
+        "detail": "Lv 11–30"
+      }
+    ],
+    "lax-incense": [
+      {
+        "where": "mt-pyre"
+      }
+    ],
+    "leaf-stone": [
+      {
+        "where": "hoenn-route-119"
+      },
+      {
+        "where": "hoenn-route-124",
+        "how": "exchange",
+        "cost": [
+          {
+            "amount": 1,
+            "unit": "green-shard"
+          }
+        ]
+      }
+    ],
+    "leftovers": [
+      {
+        "where": "ss-tidal"
+      }
+    ],
+    "leppa-berry": [
+      {
+        "where": "hoenn-route-103"
+      },
+      {
+        "where": "hoenn-route-104"
+      },
+      {
+        "where": "hoenn-route-119"
+      },
+      {
+        "where": "hoenn-route-123"
+      }
+    ],
+    "liechi-berry": [
+      {
+        "where": "mirage-spot-island"
+      }
+    ],
+    "lum-berry": [
+      {
+        "where": "hoenn-route-123",
+        "how": "gift",
+        "detail": "나무열매 명인"
+      }
+    ],
+    "luxury-ball": [
+      {
+        "where": "abandoned-ship"
+      }
+    ],
+    "mach-bike": [
+      {
+        "where": "mauville-city"
+      }
+    ],
+    "macho-brace": [
+      {
+        "where": "hoenn-route-111"
+      }
+    ],
+    "magma-emblem": [
+      {
+        "where": "mt-pyre"
+      }
+    ],
+    "magnet": [
+      {
+        "where": "hoenn-route-110",
+        "detail": {
+          "ko": "카라쿠리 저택 6번째",
+          "en": "Trick House 6"
+        }
+      }
+    ],
+    "magost-berry": [
+      {
+        "where": "hoenn-route-123",
+        "how": "gift",
+        "detail": "나무열매 명인"
+      }
+    ],
+    "master-ball": [
+      {
+        "place": {
+          "ko": "마그마단 · 아쿠아단 아지트",
+          "en": "Magma/Aqua Hideout"
+        }
+      }
+    ],
+    "max-elixir": [
+      {
+        "where": "hoenn-victory-road"
+      }
+    ],
+    "max-ether": [
+      {
+        "where": "hoenn-route-119"
+      },
+      {
+        "where": "rusturf-tunnel"
+      },
+      {
+        "where": "mt-pyre"
+      }
+    ],
+    "max-potion": [
+      {
+        "where": "mt-pyre"
+      }
+    ],
+    "max-repel": [
+      {
+        "where": "hoenn-victory-road"
+      }
+    ],
+    "max-revive": [
+      {
+        "where": "hoenn-route-121"
+      },
+      {
+        "where": "hoenn-route-133"
+      },
+      {
+        "where": "petalburg-city"
+      }
+    ],
+    "mental-herb": [
+      {
+        "where": "fortree-city"
+      }
+    ],
+    "metal-coat": [
+      {
+        "how": "held",
+        "place": {
+          "ko": "야생 코일 · 야생 레어코일",
+          "en": "Wild Magnemite, Wild Magneton"
+        },
+        "detail": "5%"
+      }
+    ],
+    "miracle-seed": [
+      {
+        "where": "petalburg-woods"
+      }
+    ],
+    "moon-stone": [
+      {
+        "where": "meteor-falls"
+      }
+    ],
+    "nanab-berry": [
+      {
+        "where": "hoenn-route-111"
+      },
+      {
+        "where": "hoenn-route-114",
+        "how": "gift",
+        "detail": "매일 한 번"
+      },
+      {
+        "where": "hoenn-route-120"
+      },
+      {
+        "where": "hoenn-route-121"
+      }
+    ],
+    "nest-ball": [
+      {
+        "where": "hoenn-route-120"
+      }
+    ],
+    "nomel-berry": [
+      {
+        "where": "hoenn-route-123",
+        "how": "gift",
+        "detail": "나무열매 명인"
+      }
+    ],
+    "nugget": [
+      {
+        "where": "hoenn-route-113"
+      },
+      {
+        "where": "hoenn-route-120"
+      },
+      {
+        "where": "hoenn-route-121"
+      },
+      {
+        "where": "fallarbor-town",
+        "place": {
+          "ko": "단풍마을",
+          "en": "Fallabor Town"
+        }
+      },
+      {
+        "where": "mirage-tower"
+      }
+    ],
+    "old-rod": [
+      {
+        "where": "dewford-town",
+        "detail": {
+          "ko": "낚시꾼",
+          "en": "Fisherman"
+        }
+      }
+    ],
+    "oran-berry": [
+      {
+        "where": "hoenn-route-102"
+      },
+      {
+        "where": "hoenn-route-104"
+      },
+      {
+        "where": "hoenn-route-111"
+      }
+    ],
+    "pamtre-berry": [
+      {
+        "where": "hoenn-route-123",
+        "how": "gift",
+        "detail": "나무열매 명인의 아내"
+      }
+    ],
+    "paralyze-heal": [
+      {
+        "where": "petalburg-woods"
+      }
+    ],
+    "pearl": [
+      {
+        "where": "hoenn-route-124"
+      },
+      {
+        "where": "hoenn-route-126"
+      },
+      {
+        "where": "hoenn-route-128"
+      }
+    ],
+    "pecha-berry": [
+      {
+        "where": "hoenn-route-102"
+      },
+      {
+        "where": "hoenn-route-112"
+      },
+      {
+        "where": "hoenn-route-120"
+      },
+      {
+        "where": "hoenn-route-123"
+      }
+    ],
+    "persim-berry": [
+      {
+        "where": "hoenn-route-114"
+      },
+      {
+        "where": "hoenn-route-121"
+      },
+      {
+        "where": "hoenn-route-123",
+        "how": "gift",
+        "detail": "나무열매 명인"
+      }
+    ],
+    "pinap-berry": [
+      {
+        "where": "hoenn-route-111"
+      },
+      {
+        "where": "hoenn-route-114",
+        "how": "gift",
+        "detail": "매일 한 번"
+      },
+      {
+        "where": "hoenn-route-116"
+      },
+      {
+        "where": "hoenn-route-120"
+      }
+    ],
+    "poke-ball": [
+      {
+        "where": "hoenn-route-104"
+      },
+      {
+        "where": "hoenn-route-106"
+      },
+      {
+        "where": "hoenn-route-110"
+      },
+      {
+        "where": "hoenn-route-123"
+      },
+      {
+        "where": "hoenn-route-126"
+      },
+      {
+        "where": "lilycove-city"
+      },
+      {
+        "where": "petalburg-woods"
+      },
+      {
+        "where": "rusturf-tunnel"
+      },
+      {
+        "where": "granite-cave"
+      },
+      {
+        "where": "hoenn-victory-road"
+      }
+    ],
+    "pokeblock-case": [
+      {
+        "where": "slateport-city",
+        "detail": {
+          "ko": "콘테스트 회장 소녀",
+          "en": "Contest House Girl"
+        }
+      }
+    ],
+    "pomeg-berry": [
+      {
+        "where": "hoenn-route-119"
+      },
+      {
+        "where": "hoenn-route-123"
+      }
+    ],
+    "potion": [
+      {
+        "where": "hoenn-route-102"
+      },
+      {
+        "where": "hoenn-route-104"
+      },
+      {
+        "where": "hoenn-route-116"
+      },
+      {
+        "where": "oldale-town"
+      },
+      {
+        "where": "petalburg-woods"
+      }
+    ],
+    "powder-jar": [
+      {
+        "where": "slateport-city"
+      }
+    ],
+    "pp-max": [
+      {
+        "where": "hoenn-route-110",
+        "detail": {
+          "ko": "카라쿠리 저택 7번째",
+          "en": "Trick House 7"
+        }
+      }
+    ],
+    "pp-up": [
+      {
+        "where": "hoenn-route-103"
+      },
+      {
+        "where": "hoenn-route-104"
+      },
+      {
+        "where": "hoenn-route-109"
+      },
+      {
+        "where": "hoenn-route-115"
+      },
+      {
+        "where": "hoenn-route-123"
+      },
+      {
+        "where": "lilycove-city"
+      },
+      {
+        "where": "hoenn-safari-zone"
+      },
+      {
+        "where": "hoenn-victory-road"
+      }
+    ],
+    "premier-ball": [
+      {
+        "where": "rustboro-city"
+      }
+    ],
+    "protein": [
+      {
+        "where": "hoenn-route-106"
+      },
+      {
+        "where": "hoenn-route-111"
+      },
+      {
+        "where": "hoenn-route-114"
+      },
+      {
+        "where": "hoenn-route-128"
+      },
+      {
+        "where": "artisan-cave"
+      }
+    ],
+    "qualot-berry": [
+      {
+        "where": "hoenn-route-123"
+      }
+    ],
+    "quick-claw": [
+      {
+        "where": "rustboro-city"
+      }
+    ],
+    "rabuta-berry": [
+      {
+        "where": "hoenn-route-123",
+        "how": "gift",
+        "detail": "나무열매 명인"
+      }
+    ],
+    "rare-candy": [
+      {
+        "where": "hoenn-route-108"
+      },
+      {
+        "where": "hoenn-route-110",
+        "detail": {
+          "ko": "카라쿠리 저택 1번째",
+          "en": "Trick House 1"
+        }
+      },
+      {
+        "where": "hoenn-route-111"
+      },
+      {
+        "where": "hoenn-route-119"
+      },
+      {
+        "where": "hoenn-route-120"
+      },
+      {
+        "where": "hoenn-route-123"
+      },
+      {
+        "where": "hoenn-route-127"
+      },
+      {
+        "where": "hoenn-route-132"
+      },
+      {
+        "where": "hoenn-safari-zone"
+      },
+      {
+        "where": "shoal-cave"
+      },
+      {
+        "where": "mt-pyre"
+      }
+    ],
+    "rawst-berry": [
+      {
+        "where": "hoenn-route-112"
+      },
+      {
+        "where": "hoenn-route-121"
+      },
+      {
+        "where": "hoenn-route-123"
+      }
+    ],
+    "razz-berry": [
+      {
+        "where": "hoenn-route-111"
+      },
+      {
+        "where": "hoenn-route-114",
+        "how": "gift",
+        "detail": "매일 한 번"
+      },
+      {
+        "where": "hoenn-route-120"
+      }
+    ],
+    "red-orb": [
+      {
+        "where": "mt-pyre"
+      }
+    ],
+    "red-shard": [
+      {
+        "where": "hoenn-route-127"
+      }
+    ],
+    "repeat-ball": [
+      {
+        "where": "hoenn-route-116",
+        "detail": {
+          "ko": "데봉 사원",
+          "en": "Devon Employee"
+        }
+      }
+    ],
+    "repel": [
+      {
+        "where": "hoenn-route-116"
+      },
+      {
+        "where": "hoenn-route-117"
+      }
+    ],
+    "revival-herb": [
+      {
+        "where": "hoenn-route-123"
+      }
+    ],
+    "revive": [
+      {
+        "where": "hoenn-route-110"
+      },
+      {
+        "where": "hoenn-route-114"
+      },
+      {
+        "where": "hoenn-route-117"
+      },
+      {
+        "where": "hoenn-route-120"
+      },
+      {
+        "where": "hoenn-route-121"
+      },
+      {
+        "where": "hoenn-route-123"
+      },
+      {
+        "where": "abandoned-ship"
+      }
+    ],
+    "root-fossil": [
+      {
+        "where": "hoenn-route-111"
+      },
+      {
+        "where": "desert-underpass"
+      },
+      {
+        "where": "mirage-tower"
+      }
+    ],
+    "sacred-ash": [
+      {
+        "where": "navel-rock",
+        "place": {
+          "ko": "배꼽 바위",
+          "en": "Navel Rock"
+        }
+      }
+    ],
+    "scanner": [
+      {
+        "where": "abandoned-ship"
+      }
+    ],
+    "sea-incense": [
+      {
+        "where": "shoal-cave",
+        "detail": {
+          "ko": "여울소금 · 여울조개껍질 4개씩과 교환",
+          "en": "Trade for Shoal Salts & Shoal Shells"
+        }
+      },
+      {
+        "where": "mt-pyre"
+      }
+    ],
+    "shoal-salt": [
+      {
+        "where": "shoal-cave"
+      }
+    ],
+    "shoal-shell": [
+      {
+        "where": "shoal-cave"
+      }
+    ],
+    "silk-scarf": [
+      {
+        "where": "dewford-town"
+      }
+    ],
+    "silver-powder": [
+      {
+        "where": "hoenn-route-120",
+        "detail": {
+          "ko": "곤충마니아의 포켓몬에게서 도둑질",
+          "en": "Thief from Bug Maniac Brandon"
+        }
+      }
+    ],
+    "sitrus-berry": [
+      {
+        "where": "hoenn-route-118"
+      },
+      {
+        "where": "hoenn-route-119"
+      },
+      {
+        "where": "hoenn-route-123"
+      },
+      {
+        "where": "hoenn-route-123",
+        "how": "gift",
+        "detail": "나무열매 명인"
+      }
+    ],
+    "smoke-ball": [
+      {
+        "where": "hoenn-route-110",
+        "detail": {
+          "ko": "카라쿠리 저택 4번째",
+          "en": "Trick House 4"
+        }
+      }
+    ],
+    "soft-sand": [
+      {
+        "where": "hoenn-route-109",
+        "detail": {
+          "ko": "반바지 꼬마",
+          "en": "Youngster"
+        }
+      }
+    ],
+    "soot-sack": [
+      {
+        "where": "hoenn-route-113"
+      }
+    ],
+    "soothe-bell": [
+      {
+        "where": "slateport-city"
+      }
+    ],
+    "soul-dew": [
+      {
+        "where": "southern-island",
+        "detail": {
+          "ko": "라티오스 · 라티아스가 지니고 있음",
+          "en": "Attached to Latios/Latias"
+        }
+      }
+    ],
+    "spell-tag": [
+      {
+        "where": "mt-pyre"
+      }
+    ],
+    "spelon-berry": [
+      {
+        "where": "hoenn-route-123",
+        "how": "gift",
+        "detail": "나무열매 명인의 아내"
+      }
+    ],
+    "star-piece": [
+      {
+        "where": "hoenn-route-127"
+      },
+      {
+        "where": "hoenn-route-133"
+      },
+      {
+        "where": "hoenn-route-134"
+      }
+    ],
+    "stardust": [
+      {
+        "where": "hoenn-route-106"
+      },
+      {
+        "where": "hoenn-route-111"
+      },
+      {
+        "where": "hoenn-route-126"
+      }
+    ],
+    "storage-key": [
+      {
+        "where": "abandoned-ship"
+      }
+    ],
+    "sun-stone": [
+      {
+        "where": "mossdeep-city",
+        "detail": {
+          "ko": "이끼 우주센터",
+          "en": "Space Center"
+        }
+      }
+    ],
+    "super-potion": [
+      {
+        "where": "hoenn-route-104"
+      },
+      {
+        "where": "hoenn-route-115"
+      },
+      {
+        "where": "hoenn-route-116"
+      }
+    ],
+    "super-repel": [
+      {
+        "where": "hoenn-route-119"
+      },
+      {
+        "where": "hoenn-route-123"
+      },
+      {
+        "where": "mt-pyre"
+      }
+    ],
+    "super-rod": [
+      {
+        "where": "mossdeep-city",
+        "detail": {
+          "ko": "낚시꾼",
+          "en": "Fisherman"
+        }
+      }
+    ],
+    "tamato-berry": [
+      {
+        "where": "hoenn-route-123",
+        "how": "gift",
+        "detail": "나무열매 명인"
+      }
+    ],
+    "thunder-stone": [
+      {
+        "where": "hoenn-route-124",
+        "how": "exchange",
+        "cost": [
+          {
+            "amount": 1,
+            "unit": "yellow-shard"
+          }
+        ]
+      }
+    ],
+    "timer-ball": [
+      {
+        "where": "hoenn-route-110",
+        "detail": {
+          "ko": "카라쿠리 저택 2번째",
+          "en": "Trick House 2"
+        }
+      }
+    ],
+    "tiny-mushroom": [
+      {
+        "where": "petalburg-woods"
+      }
+    ],
+    "tm01": [
+      {
+        "how": "field",
+        "where": "hoenn-route-115"
+      }
+    ],
+    "tm02": [
+      {
+        "how": "field",
+        "where": "meteor-falls",
+        "detail": "파도타기 · 폭포오르기 필요"
+      }
+    ],
+    "tm03": [
+      {
+        "how": "reward",
+        "where": "sootopolis-city",
+        "detail": {
+          "ko": "관장 윤진(RS) · 아단(E)",
+          "en": "Wallace/Juan"
+        }
+      }
+    ],
+    "tm04": [
+      {
+        "how": "reward",
+        "where": "mossdeep-city",
+        "detail": {
+          "ko": "관장 풍 · 란",
+          "en": "Tate & Liza"
+        }
+      }
+    ],
+    "tm05": [
+      {
+        "how": "field",
+        "where": "hoenn-route-114"
+      }
+    ],
+    "tm06": [
+      {
+        "how": "field",
+        "where": "fiery-path"
+      }
+    ],
+    "tm07": [
+      {
+        "how": "field",
+        "where": "shoal-cave"
+      }
+    ],
+    "tm08": [
+      {
+        "how": "reward",
+        "where": "dewford-town",
+        "detail": {
+          "ko": "관장 철구",
+          "en": "Brawly"
+        }
+      }
+    ],
+    "tm09": [
+      {
+        "how": "gift",
+        "where": "hoenn-route-104",
+        "detail": {
+          "ko": "남자",
+          "en": "Man"
+        }
+      }
+    ],
+    "tm10": [
+      {
+        "how": "field",
+        "where": "fortree-city"
+      }
+    ],
+    "tm11": [
+      {
+        "how": "field",
+        "where": "scorched-slab"
+      }
+    ],
+    "tm12": [
+      {
+        "how": "gift",
+        "where": "hoenn-route-110",
+        "detail": {
+          "ko": "카라쿠리 저택 5번째",
+          "en": "Trick House 5"
+        }
+      }
+    ],
+    "tm13": [
+      {
+        "how": "field",
+        "where": "abandoned-ship"
+      }
+    ],
+    "tm14": [
+      {
+        "how": "shop",
+        "where": "lilycove-city",
+        "place": "해안시티 백화점 4층",
+        "cost": [
+          {
+            "amount": 5500,
+            "unit": "money"
+          }
+        ]
+      }
+    ],
+    "tm15": [
+      {
+        "how": "shop",
+        "where": "lilycove-city",
+        "place": "해안시티 백화점 4층",
+        "cost": [
+          {
+            "amount": 7500,
+            "unit": "money"
+          }
+        ]
+      }
+    ],
+    "tm16": [
+      {
+        "how": "shop",
+        "where": "lilycove-city",
+        "place": "해안시티 백화점 4층",
+        "cost": [
+          {
+            "amount": 3000,
+            "unit": "money"
+          }
+        ]
+      }
+    ],
+    "tm17": [
+      {
+        "how": "shop",
+        "where": "lilycove-city",
+        "place": "해안시티 백화점 4층",
+        "cost": [
+          {
+            "amount": 3000,
+            "unit": "money"
+          }
+        ]
+      }
+    ],
+    "tm18": [
+      {
+        "how": "field",
+        "where": "abandoned-ship"
+      }
+    ],
+    "tm19": [
+      {
+        "how": "field",
+        "where": "hoenn-route-123"
+      }
+    ],
+    "tm20": [
+      {
+        "how": "shop",
+        "where": "lilycove-city",
+        "place": "해안시티 백화점 4층",
+        "cost": [
+          {
+            "amount": 3000,
+            "unit": "money"
+          }
+        ]
+      }
+    ],
+    "tm21": [
+      {
+        "how": "field",
+        "where": "pacifidlog-town"
+      }
+    ],
+    "tm22": [
+      {
+        "how": "field",
+        "where": "hoenn-safari-zone"
+      }
+    ],
+    "tm23": [
+      {
+        "how": "field",
+        "where": "meteor-falls",
+        "detail": "파도타기 · 폭포오르기 필요"
+      }
+    ],
+    "tm24": [
+      {
+        "how": "field",
+        "where": "mauville-city"
+      }
+    ],
+    "tm25": [
+      {
+        "how": "shop",
+        "where": "lilycove-city",
+        "place": "해안시티 백화점 4층",
+        "cost": [
+          {
+            "amount": 5500,
+            "unit": "money"
+          }
+        ]
+      }
+    ],
+    "tm26": [
+      {
+        "how": "field",
+        "where": "seafloor-cavern"
+      }
+    ],
+    "tm27": [
+      {
+        "how": "gift",
+        "where": "fallarbor-town",
+        "place": {
+          "ko": "단풍마을",
+          "en": "Fallabor Town"
+        },
+        "detail": {
+          "ko": "운석을 연구하는 박사",
+          "en": "Prof. Cozmo"
+        }
+      },
+      {
+        "how": "gift",
+        "where": "pacifidlog-town",
+        "detail": {
+          "ko": "신사",
+          "en": "Gentleman"
+        }
+      }
+    ],
+    "tm28": [
+      {
+        "how": "field",
+        "where": "hoenn-route-114"
+      }
+    ],
+    "tm29": [
+      {
+        "how": "field",
+        "where": "hoenn-victory-road"
+      }
+    ],
+    "tm30": [
+      {
+        "how": "field",
+        "where": "mt-pyre"
+      }
+    ],
+    "tm31": [
+      {
+        "how": "field",
+        "where": "sootopolis-city"
+      }
+    ],
+    "tm32": [
+      {
+        "how": "field",
+        "where": "hoenn-route-113"
+      },
+      {
+        "how": "field",
+        "where": "mauville-city"
+      }
+    ],
+    "tm33": [
+      {
+        "how": "shop",
+        "where": "lilycove-city",
+        "place": "해안시티 백화점 4층",
+        "cost": [
+          {
+            "amount": 3000,
+            "unit": "money"
+          }
+        ]
+      }
+    ],
+    "tm34": [
+      {
+        "how": "reward",
+        "where": "mauville-city",
+        "detail": {
+          "ko": "관장 암페어",
+          "en": "Wattson"
+        }
+      }
+    ],
+    "tm35": [
+      {
+        "how": "prize",
+        "where": "mauville-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 4000,
+            "unit": "coins"
+          }
+        ]
+      }
+    ],
+    "tm36": [
+      {
+        "how": "gift",
+        "where": "dewford-town",
+        "place": "무로마을 민가",
+        "detail": "배지 5개 이후"
+      }
+    ],
+    "tm37": [
+      {
+        "how": "field",
+        "where": "hoenn-route-111"
+      }
+    ],
+    "tm38": [
+      {
+        "how": "shop",
+        "where": "lilycove-city",
+        "place": "해안시티 백화점 4층",
+        "cost": [
+          {
+            "amount": 5500,
+            "unit": "money"
+          }
+        ]
+      }
+    ],
+    "tm39": [
+      {
+        "how": "reward",
+        "where": "rustboro-city",
+        "detail": {
+          "ko": "관장 원규",
+          "en": "Roxanne"
+        }
+      }
+    ],
+    "tm40": [
+      {
+        "how": "reward",
+        "where": "fortree-city",
+        "detail": {
+          "ko": "관장 은송",
+          "en": "Winona"
+        }
+      }
+    ],
+    "tm41": [
+      {
+        "how": "gift",
+        "where": "slateport-city",
+        "detail": {
+          "ko": "뱃사람",
+          "en": "Sailor"
+        }
+      }
+    ],
+    "tm42": [
+      {
+        "how": "reward",
+        "where": "petalburg-city",
+        "place": "등화도시 체육관",
+        "detail": "관장 종길 승리"
+      }
+    ],
+    "tm43": [
+      {
+        "how": "field",
+        "where": "hoenn-route-111"
+      }
+    ],
+    "tm44": [
+      {
+        "how": "gift",
+        "where": "lilycove-city",
+        "place": "해안시티 민가"
+      }
+    ],
+    "tm45": [
+      {
+        "how": "gift",
+        "where": "verdanturf-town",
+        "place": "잔디마을 배틀텐트"
+      }
+    ],
+    "tm46": [
+      {
+        "how": "reward",
+        "where": "petalburg-city",
+        "detail": {
+          "ko": "관장 종길",
+          "en": "Norman"
+        }
+      },
+      {
+        "how": "field",
+        "where": "slateport-city"
+      }
+    ],
+    "tm47": [
+      {
+        "how": "gift",
+        "where": "granite-cave",
+        "detail": {
+          "ko": "성호",
+          "en": "Steven"
+        }
+      }
+    ],
+    "tm48": [
+      {
+        "how": "field",
+        "where": "mt-pyre"
+      }
+    ],
+    "tm49": [
+      {
+        "how": "field",
+        "where": "ss-tidal"
+      }
+    ],
+    "tm50": [
+      {
+        "how": "reward",
+        "where": "lavaridge-town",
+        "detail": {
+          "ko": "관장 민지",
+          "en": "Flannery"
+        }
+      }
+    ],
+    "ultra-ball": [
+      {
+        "where": "hoenn-route-119"
+      },
+      {
+        "where": "mt-pyre"
+      }
+    ],
+    "up-grade": [
+      {
+        "how": "unobtainable",
+        "detail": {
+          "ko": "이 게임에서는 얻을 수 없어요. 파이어레드 · 리프그린에서 통신교환으로 가져와요.",
+          "en": "Not obtainable in this game. Trade it from FireRed or LeafGreen."
+        }
+      }
+    ],
+    "wailmer-pail": [
+      {
+        "where": "hoenn-route-104",
+        "detail": {
+          "ko": "꽃가게",
+          "en": "Flower Shop"
+        }
+      }
+    ],
+    "water-stone": [
+      {
+        "where": "hoenn-route-124",
+        "how": "exchange",
+        "cost": [
+          {
+            "amount": 1,
+            "unit": "blue-shard"
+          }
+        ]
+      },
+      {
+        "where": "abandoned-ship"
+      }
+    ],
+    "watmel-berry": [
+      {
+        "where": "hoenn-route-123",
+        "how": "gift",
+        "detail": "나무열매 명인의 아내"
+      }
+    ],
+    "wepear-berry": [
+      {
+        "where": "hoenn-route-111"
+      },
+      {
+        "where": "hoenn-route-114",
+        "how": "gift",
+        "detail": "매일 한 번"
+      },
+      {
+        "where": "hoenn-route-117"
+      },
+      {
+        "where": "hoenn-route-120"
+      }
+    ],
+    "white-herb": [
+      {
+        "where": "hoenn-route-104",
+        "detail": {
+          "ko": "여성",
+          "en": "Woman"
+        }
+      }
+    ],
+    "x-accuracy": [
+      {
+        "where": "hoenn-route-104"
+      }
+    ],
+    "x-defense": [
+      {
+        "where": "rustboro-city"
+      }
+    ],
+    "x-speed": [
+      {
+        "where": "mauville-city"
+      }
+    ],
+    "yellow-shard": [
+      {
+        "where": "hoenn-route-126"
+      }
+    ],
+    "zinc": [
+      {
+        "where": "hoenn-route-119"
+      },
+      {
+        "where": "hoenn-route-120"
+      },
+      {
+        "where": "hoenn-route-121"
+      },
+      {
+        "where": "hoenn-route-127"
+      },
+      {
+        "where": "hoenn-safari-zone"
+      },
+      {
+        "where": "mt-pyre"
+      },
+      {
+        "where": "artisan-cave"
+      }
+    ]
+  },
+  "tutors": {
+    "body-slam": [
+      {
+        "how": "tutor",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 48,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "counter": [
+      {
+        "how": "tutor",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 48,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "defense-curl": [
+      {
+        "how": "tutor",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 16,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "double-edge": [
+      {
+        "how": "tutor",
+        "where": "sootopolis-city",
+        "detail": "1회 한정"
+      }
+    ],
+    "dream-eater": [
+      {
+        "how": "tutor",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 24,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "dynamic-punch": [
+      {
+        "how": "tutor",
+        "where": "mossdeep-city",
+        "detail": "1회 한정"
+      }
+    ],
+    "endure": [
+      {
+        "how": "tutor",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 48,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "explosion": [
+      {
+        "how": "tutor",
+        "where": "pacifidlog-town",
+        "detail": "1회 한정"
+      }
+    ],
+    "fire-punch": [
+      {
+        "how": "tutor",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 48,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "fury-cutter": [
+      {
+        "how": "tutor",
+        "where": "verdanturf-town",
+        "detail": "1회 한정"
+      }
+    ],
+    "ice-punch": [
+      {
+        "how": "tutor",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 48,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "icy-wind": [
+      {
+        "how": "tutor",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 24,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "mega-kick": [
+      {
+        "how": "tutor",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 48,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "mega-punch": [
+      {
+        "how": "tutor",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 24,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "metronome": [
+      {
+        "how": "tutor",
+        "where": "fallarbor-town",
+        "detail": "1회 한정"
+      }
+    ],
+    "mimic": [
+      {
+        "how": "tutor",
+        "where": "lavaridge-town",
+        "detail": "1회 한정"
+      }
+    ],
+    "mud-slap": [
+      {
+        "how": "tutor",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 24,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "psych-up": [
+      {
+        "how": "tutor",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 48,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "rock-slide": [
+      {
+        "how": "tutor",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 48,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "rollout": [
+      {
+        "how": "tutor",
+        "where": "mauville-city",
+        "detail": "1회 한정"
+      }
+    ],
+    "seismic-toss": [
+      {
+        "how": "tutor",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 24,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "sleep-talk": [
+      {
+        "how": "tutor",
+        "where": "fortree-city",
+        "detail": "1회 한정"
+      }
+    ],
+    "snore": [
+      {
+        "how": "tutor",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 24,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "soft-boiled": [
+      {
+        "how": "tutor",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 16,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "substitute": [
+      {
+        "how": "tutor",
+        "where": "lilycove-city",
+        "detail": "1회 한정"
+      }
+    ],
+    "swagger": [
+      {
+        "how": "tutor",
+        "where": "slateport-city",
+        "detail": "1회 한정"
+      }
+    ],
+    "swift": [
+      {
+        "how": "tutor",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 24,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "swords-dance": [
+      {
+        "how": "tutor",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 48,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "thunder-punch": [
+      {
+        "how": "tutor",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 48,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "thunder-wave": [
+      {
+        "how": "tutor",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 48,
+            "unit": "bp"
+          }
+        ]
+      }
+    ]
+  },
+  "pokemon": {
+    "anorith": [
+      {
+        "how": "fossil",
+        "where": "rustboro-city",
+        "place": {
+          "ko": "금탄도시 데봉코퍼레이션",
+          "en": "Devon Corporation"
+        },
+        "detail": {
+          "ko": "발톱화석 복원",
+          "en": "Revived from the Claw Fossil"
+        },
+        "minLevel": 20,
+        "maxLevel": 20,
+        "replaces": "gift"
+      }
+    ],
+    "jirachi": [
+      {
+        "how": "event",
+        "detail": {
+          "ko": "배포 이벤트",
+          "en": "Distribution event"
+        }
+      }
+    ],
+    "lileep": [
+      {
+        "how": "fossil",
+        "where": "rustboro-city",
+        "place": {
+          "ko": "금탄도시 데봉코퍼레이션",
+          "en": "Devon Corporation"
+        },
+        "detail": {
+          "ko": "뿌리화석 복원",
+          "en": "Revived from the Root Fossil"
+        },
+        "minLevel": 20,
+        "maxLevel": 20,
+        "replaces": "gift"
+      }
+    ],
+    "lunatone": [
+      {
+        "how": "transfer",
+        "versionsFrom": [
+          "sapphire"
+        ]
+      }
+    ],
+    "meditite": [
+      {
+        "how": "transfer",
+        "versionsFrom": [
+          "ruby",
+          "sapphire"
+        ]
+      }
+    ],
+    "mudkip": [
+      {
+        "how": "starter",
+        "where": "hoenn-route-101",
+        "minLevel": 5,
+        "maxLevel": 5,
+        "replaces": "gift"
+      }
+    ],
+    "roselia": [
+      {
+        "how": "transfer",
+        "versionsFrom": [
+          "ruby",
+          "sapphire"
+        ]
+      }
+    ],
+    "surskit": [
+      {
+        "how": "swarm",
+        "place": {
+          "ko": "102 · 114 · 117 · 120번 도로",
+          "en": "Routes 102, 114, 117, 120"
+        },
+        "detail": {
+          "ko": "대량발생 · 루비 · 사파이어와 레코드 믹스 후",
+          "en": "Swarm after mixing records with Ruby/Sapphire"
+        }
+      },
+      {
+        "how": "transfer",
+        "versionsFrom": [
+          "ruby",
+          "sapphire"
+        ]
+      }
+    ],
+    "torchic": [
+      {
+        "how": "starter",
+        "where": "hoenn-route-101",
+        "minLevel": 5,
+        "maxLevel": 5,
+        "replaces": "gift"
+      }
+    ],
+    "treecko": [
+      {
+        "how": "starter",
+        "where": "hoenn-route-101",
+        "minLevel": 5,
+        "maxLevel": 5,
+        "replaces": "gift"
+      }
+    ],
+    "zangoose": [
+      {
+        "how": "transfer",
+        "versionsFrom": [
+          "ruby"
+        ]
+      }
+    ]
+  }
+}
