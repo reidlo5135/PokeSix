@@ -1,0 +1,72 @@
+.panel {
+  display: grid;
+  align-self: start;
+  padding: 14px;
+  border-radius: var(--radius-10);
+  border: 3px solid var(--color-ink);
+  background: var(--color-white);
+  box-shadow: var(--shadow-4);
+}
+.panel[data-state="failed"] {
+  border-color: var(--color-alert-line);
+  background: var(--color-red-tint);
+  box-shadow: 0 4px 0 var(--color-alert-line);
+}
+/* 세 상태를 한 칸에 겹쳐 높이를 가장 큰 것에 맞춘다 */
+.page {
+  grid-area: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.page[hidden] {
+  display: flex;
+  visibility: hidden;
+}
+.title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--fs-20);
+  color: var(--color-text-1);
+}
+.title[data-failed] {
+  color: var(--color-red-text);
+}
+.warn {
+  color: var(--color-alert-line);
+}
+.body {
+  font-size: var(--fs-12);
+  color: var(--color-text-2);
+}
+.meta {
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  color: var(--color-text-3);
+  overflow-wrap: anywhere;
+}
+.progressHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.stage {
+  font-size: var(--fs-12);
+  font-weight: 700;
+  color: var(--color-text-1);
+}
+.percent {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-weight: 700;
+  color: var(--color-text-1);
+}
+.note {
+  font-size: var(--fs-12);
+  color: var(--color-text-3);
+}
+.button {
+  align-self: flex-start;
+}

@@ -1,0 +1,112 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  box-sizing: border-box;
+  height: var(--size-chip-m-d);
+  padding: 0 10px;
+  border-radius: var(--radius-5);
+  border: 2px solid var(--color-ink);
+  font-family: var(--font-body);
+  font-size: var(--fs-12);
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+.chip[data-size="slot"] {
+  height: 22px;
+  padding: 0 9px;
+}
+.chip[data-size="sm"] {
+  height: var(--size-chip-s-m);
+  padding: 0 7px;
+  border-radius: var(--radius-4);
+  border-width: 1.5px;
+  font-size: var(--fs-11);
+}
+.chip[data-size="card"] {
+  height: 18px;
+  padding: 0 6px;
+  border-radius: var(--radius-4);
+  border-width: 1.5px;
+  font-size: var(--fs-10);
+}
+.chip[data-size="move"] {
+  height: 18px;
+  padding: 0 4px;
+  border-radius: var(--radius-4);
+  border-width: 1px;
+  font-size: var(--fs-10);
+}
+.chip[data-size="xs"] {
+  width: var(--size-chip-x-s);
+  height: var(--size-chip-x-s);
+  padding: 0;
+  border-radius: var(--radius-4);
+  border-width: 1.5px;
+  font-size: var(--fs-11);
+}
+.chip[data-absent] {
+  background: var(--color-white);
+  border-style: dashed;
+  border-color: var(--color-text-disabled);
+  color: var(--color-text-3);
+  font-weight: 700;
+}
+
+.dual {
+  display: inline-flex;
+  height: 22px;
+  border-radius: var(--radius-5);
+  overflow: hidden;
+  border: 2px solid var(--color-ink);
+  font-size: var(--fs-11);
+  font-weight: 800;
+}
+.part {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 8px;
+}
+.part + .part {
+  border-left: 2px solid var(--color-ink);
+}
+
+.square {
+  display: inline-block;
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-2);
+  border: 1px solid var(--color-ink);
+}
+.square[data-compact] {
+  width: 8px;
+  height: 8px;
+}
+
+.category {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-3);
+  border: 1px solid var(--color-ink);
+  font-size: var(--fs-10);
+  font-weight: 800;
+}
+.category[data-kind="physical"] {
+  background: var(--color-cat-physical);
+  color: var(--color-cat-physical-text);
+}
+.category[data-kind="special"] {
+  background: var(--color-cat-special);
+  color: var(--color-cat-special-text);
+}
+.category[data-kind="status"] {
+  background: var(--color-cat-status);
+  color: var(--color-cat-status-text);
+}

@@ -1,0 +1,117 @@
+.box {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  overflow: hidden;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-4);
+  border: 1.5px solid var(--color-line-strong);
+  background: var(--color-paper-alt);
+}
+.box[data-loaded] {
+  background: transparent;
+  border-color: transparent;
+}
+.box[data-box="slot"] {
+  border-color: var(--color-ink);
+  background: var(--color-white);
+}
+.box[data-box="search"] {
+  width: 34px;
+  height: 28px;
+  border: 0;
+  background: transparent;
+}
+.box[data-box="grid"] {
+  width: 100%;
+  height: 56px;
+}
+.box[data-box="detail"],
+.box[data-box="drawer"] {
+  width: 84px;
+  height: 84px;
+  border-radius: var(--radius-6);
+  border: 2px solid var(--color-ink);
+  background: var(--pattern-sprite);
+}
+.box[data-box="drawer"] {
+  width: 64px;
+  height: 64px;
+}
+.box[data-box="detail"][data-loaded],
+.box[data-box="drawer"][data-loaded] {
+  border-color: var(--color-ink);
+  background: var(--color-white);
+}
+.box[data-box="itemList"] {
+  border-radius: 13px;
+}
+.box[data-box="itemDetail"] {
+  width: 76px;
+  height: 76px;
+  border-radius: 38px;
+  border: 2px solid var(--color-ink);
+  background: var(--pattern-sprite);
+}
+.box[data-box="itemDetail"][data-loaded] {
+  border-color: var(--color-ink);
+  background: var(--color-white);
+}
+.box[data-box="fill"] {
+  width: 100%;
+  height: 100%;
+}
+
+.img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.box:not([data-loaded]) .img {
+  position: absolute;
+  visibility: hidden;
+}
+.img[data-pixelated] {
+  image-rendering: pixelated;
+}
+.box[data-box="detail"] .img,
+.box[data-box="itemDetail"] .img {
+  width: 100%;
+  height: 100%;
+}
+
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: var(--fs-9);
+  color: var(--color-text-3);
+}
+.box[data-box="list"] .placeholder:empty,
+.box[data-box="grid"] .placeholder:empty {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-2);
+  background: var(--color-line);
+}
+.box[data-box="grid"] .placeholder:empty {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-3);
+}
+.box[data-box="itemList"] .placeholder:empty {
+  width: 8px;
+  height: 8px;
+  background: var(--color-line);
+  transform: rotate(45deg);
+}
+.box[data-box="search"] .placeholder:empty {
+  width: 26px;
+  height: 22px;
+  border-radius: var(--radius-4);
+  background: var(--pattern-sprite);
+}

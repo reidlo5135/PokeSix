@@ -1,0 +1,34 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex: none;
+  height: 28px;
+  padding: 0 8px;
+  border-radius: var(--radius-5);
+  border: 2px solid var(--color-ink);
+  background: var(--color-white);
+  color: var(--color-text-1);
+  font-family: var(--font-body);
+  font-size: var(--fs-12);
+  font-weight: 800;
+  white-space: nowrap;
+}
+.button[data-size="30"] {
+  height: 30px;
+}
+.button[data-size="34"] {
+  height: 34px;
+  padding: 0 10px;
+  border-radius: var(--radius-6);
+}
+.button:hover,
+.button[aria-expanded="true"] {
+  background: var(--color-yellow-tint);
+}
+.button:disabled {
+  border-style: dashed;
+  border-color: var(--color-line-strong);
+  color: var(--color-text-disabled);
+  background: transparent;
+}

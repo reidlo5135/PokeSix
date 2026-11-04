@@ -1,0 +1,163 @@
+.bar {
+  display: flex;
+  align-items: center;
+  flex: none;
+  gap: var(--size-app-bar-gap);
+  height: var(--size-app-bar);
+  padding: 0 var(--size-app-bar-pad-x);
+  background: var(--color-red);
+  border-bottom: 3px solid var(--color-ink);
+  position: relative;
+  z-index: 10;
+}
+
+/* ── 마크 ── */
+.mark {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+  padding: 3px 8px 3px 3px;
+  margin: -3px -8px -3px -3px;
+  border-radius: var(--radius-8);
+  text-decoration: none;
+}
+.mark:hover,
+.mark:focus-visible {
+  outline: 2px dashed var(--color-yellow-soft);
+  outline-offset: 2px;
+}
+.markWide,
+.markNarrow {
+  display: flex;
+}
+.markNarrow {
+  display: none;
+}
+.wordmark {
+  font-family: var(--font-pixel);
+  font-size: var(--fs-20);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-on-color);
+  white-space: nowrap;
+}
+.six {
+  color: var(--color-yellow-soft);
+}
+
+/* ── 탭 ── */
+.nav {
+  display: flex;
+  align-self: flex-end;
+  align-items: flex-end;
+  gap: 3px;
+  margin-bottom: -3px;
+}
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: var(--size-tab-inactive);
+  margin-bottom: 3px;
+  padding: 0 var(--size-tab-pad-x);
+  border-radius: var(--radius-8) var(--radius-8) 0 0;
+  background: var(--state-tab-inactive);
+  color: var(--color-on-color);
+  font-family: var(--font-display);
+  font-size: var(--size-tab-font);
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.tab:hover {
+  background: var(--state-tab-hover);
+}
+.tab:active {
+  background: var(--state-tab-pressed);
+}
+.tab:focus-visible {
+  outline: var(--size-focus-ring) solid var(--state-app-bar-focus-ring);
+  outline-offset: -3px;
+}
+.tab[aria-current="page"] {
+  height: var(--size-tab-active);
+  margin-bottom: 0;
+  border: 3px solid var(--color-ink);
+  border-bottom: 0;
+  background: var(--state-tab-active-bg);
+  color: var(--state-tab-active-text);
+}
+.tabIcon {
+  width: var(--size-tab-icon);
+  height: var(--size-tab-icon);
+}
+
+.spacer {
+  flex-grow: 1;
+}
+
+/* ── 테마 버튼 ── */
+.themeButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--size-theme-button);
+  height: var(--size-theme-button);
+  padding: 0;
+  border-radius: var(--radius-6);
+  border: 2px solid var(--color-ink);
+  background: var(--color-white);
+  color: var(--color-text-1);
+  box-shadow: var(--shadow-2);
+}
+.themeButton:hover {
+  background: var(--state-hover);
+}
+.themeButton:active,
+.themeButton[aria-expanded="true"] {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+.themeButton[aria-expanded="true"] {
+  background: var(--color-yellow-tint);
+}
+.themeButton:focus-visible {
+  outline: var(--size-focus-ring) solid var(--state-app-bar-focus-ring);
+  outline-offset: -3px;
+}
+
+/* 1099 이하 (breakpoint.medium − 1): 막대 56 · 마크 30(워드마크 없음) · 탭 35/41 */
+@media (max-width: 1099px) {
+  .bar {
+    height: var(--size-app-bar-compact);
+    padding: 0 var(--size-app-bar-pad-x-compact);
+    gap: var(--size-app-bar-gap-compact);
+  }
+  .markWide,
+  .wordmark {
+    display: none;
+  }
+  .markNarrow {
+    display: flex;
+  }
+  .tab {
+    height: var(--size-tab-inactive-compact);
+    padding: 0 var(--size-tab-pad-x-compact);
+    font-size: var(--size-tab-font-compact);
+  }
+  .tab[aria-current="page"] {
+    height: var(--size-tab-active-compact);
+  }
+  .tab[data-icon-only] {
+    padding: 0 var(--size-tab-pad-x-icon-only);
+  }
+  .tabIcon {
+    width: var(--size-tab-icon-compact);
+    height: var(--size-tab-icon-compact);
+  }
+  .themeButton {
+    height: var(--size-app-bar-control-compact);
+  }
+}

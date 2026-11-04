@@ -1,0 +1,28 @@
+.cursor {
+  display: inline-block;
+  flex: none;
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 9px solid var(--color-glyph-ink);
+}
+.cursor[data-size="sm"] {
+  border-top-width: 5px;
+  border-bottom-width: 5px;
+  border-left-width: 8px;
+}
+.cursor[data-size="xs"] {
+  border-top-width: 4px;
+  border-bottom-width: 4px;
+  border-left-width: 6px;
+}
+.cursor[data-tone="onYellow"] {
+  border-left-color: var(--color-glyph-on-yellow);
+}
+.cursor[data-tone="yellow"] {
+  border-left-color: var(--color-yellow);
+}
+.cursor[data-tone="current"] {
+  border-left-color: currentColor;
+}

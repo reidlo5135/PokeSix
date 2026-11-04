@@ -1,0 +1,83 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: none;
+  height: var(--size-app-bar-control);
+  padding: 0 12px;
+  border-radius: var(--radius-6);
+  border: 2px solid var(--color-ink);
+  background: var(--color-white);
+  color: var(--color-text-1);
+  box-shadow: var(--shadow-2);
+  font-family: var(--font-display);
+  font-size: var(--fs-16);
+  white-space: nowrap;
+}
+.button:hover {
+  background: var(--state-hover);
+}
+.button:active,
+.button[aria-expanded="true"] {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+.button[aria-expanded="true"] {
+  background: var(--color-yellow-tint);
+}
+.button[aria-expanded="true"] .chevron {
+  transform: rotate(180deg);
+}
+.button[data-variant="bar"]:focus-visible {
+  outline: var(--size-focus-ring) solid var(--state-app-bar-focus-ring);
+  outline-offset: -3px;
+}
+.button[data-variant="settings"] {
+  align-self: center;
+}
+.full {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.compact {
+  display: none;
+  font-family: var(--font-pixel);
+  font-size: var(--fs-12);
+  font-weight: 400;
+}
+
+/* 1099 이하 (breakpoint.medium − 1): "GEN n ▾"만 */
+@media (max-width: 1099px) {
+  .button[data-variant="bar"] {
+    height: var(--size-app-bar-control-compact);
+    padding: 0 10px;
+    gap: 6px;
+  }
+  .button[data-variant="bar"] .full {
+    display: none;
+  }
+  .button[data-variant="bar"] .compact {
+    display: inline;
+  }
+  .button[data-variant="bar"] .chevron {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: var(--space-2);
+  align-items: center;
+  width: 100%;
+}
+.rowGen {
+  font-family: var(--font-pixel);
+  font-size: var(--fs-12);
+}
+.rowRegion {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

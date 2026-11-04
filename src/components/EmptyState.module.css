@@ -1,0 +1,40 @@
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 28px 20px;
+  text-align: center;
+}
+.hex {
+  fill: var(--color-white);
+  stroke: var(--color-ink);
+}
+:global([data-theme="dark"]) .hex {
+  fill: var(--color-paper-alt);
+  stroke: var(--color-glyph-ink);
+}
+.spokes {
+  stroke: var(--color-line);
+}
+.core {
+  fill: var(--color-ink);
+}
+:global([data-theme="dark"]) .core {
+  fill: var(--color-glyph-ink);
+}
+.title {
+  font-family: var(--font-display);
+  font-size: var(--fs-21);
+  color: var(--color-text-1);
+}
+.reason {
+  max-width: 420px;
+  font-size: var(--fs-13);
+  line-height: 19px;
+  color: var(--color-text-2);
+}
+.actions {
+  display: flex;
+  gap: var(--space-2);
+}

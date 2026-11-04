@@ -1,0 +1,143 @@
+.inline {
+  display: flex;
+  flex: none;
+  width: var(--size-search-width);
+}
+/* 1100–1359 (breakpoint.medium–wide) */
+@media (max-width: 1359px) {
+  .inline {
+    width: var(--size-search-width-medium);
+  }
+}
+.inline > label {
+  height: var(--size-app-bar-control);
+}
+
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 36px;
+  height: var(--size-app-bar-control-compact);
+  padding: 0;
+  border-radius: var(--radius-6);
+  border: 2px solid var(--color-ink);
+  background: var(--color-white);
+  color: var(--color-text-1);
+  box-shadow: var(--shadow-2);
+}
+.iconButton:hover {
+  background: var(--state-hover);
+}
+.iconButton[aria-expanded="true"] {
+  background: var(--color-yellow-tint);
+  transform: translateY(2px);
+  box-shadow: none;
+}
+.iconButton:focus-visible {
+  outline: var(--size-focus-ring) solid var(--state-app-bar-focus-ring);
+  outline-offset: -3px;
+}
+
+.popup {
+  position: fixed;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px;
+  border-radius: var(--radius-8);
+  border: 2px solid var(--color-ink);
+  background: var(--color-white);
+  box-shadow: var(--shadow-4);
+  overflow: hidden;
+}
+.popField {
+  display: flex;
+  flex: none;
+}
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 0;
+  overflow-y: auto;
+}
+.list:empty {
+  display: none;
+}
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.groupHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 26px;
+  padding: 0 8px;
+  font-family: var(--font-display);
+  font-size: var(--fs-15);
+  color: var(--color-text-2);
+}
+.count {
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  color: var(--color-text-3);
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: var(--size-menu-row);
+  padding: 0 8px;
+  border-radius: var(--radius-5);
+  color: var(--color-text-1);
+}
+.row:not([data-static]) {
+  cursor:
+    url("../../assets/cursors/glove-point.svg") 13 1,
+    pointer;
+}
+.row[aria-selected="true"] {
+  background: var(--state-selected-row);
+}
+.row[data-static] {
+  color: var(--color-text-2);
+}
+.row[data-more] {
+  font-size: var(--fs-12);
+  font-weight: 700;
+  color: var(--color-blue);
+}
+.no {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--color-text-3);
+}
+.name {
+  flex-grow: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fs-13);
+  font-weight: 700;
+}
+.types {
+  display: flex;
+  gap: 3px;
+}
+.power {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--color-text-3);
+}
+.empty {
+  padding: 12px;
+  font-size: var(--fs-13);
+  color: var(--color-text-3);
+}

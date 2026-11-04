@@ -1,0 +1,23 @@
+.mark {
+  flex: none;
+}
+.rim {
+  fill: var(--color-mark-rim);
+  stroke: var(--color-mark-rim);
+}
+.red {
+  fill: var(--color-capsule-red);
+}
+.cream {
+  fill: var(--color-capsule-cream);
+}
+.seam {
+  stroke: var(--color-mark-ink);
+}
+.outline {
+  fill: none;
+  stroke: var(--color-mark-ink);
+}
+.eye {
+  fill: var(--color-mark-ink);
+}

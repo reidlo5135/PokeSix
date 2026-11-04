@@ -1,4 +1,5 @@
-:root {
+:root,
+[data-theme="light"] {
   --color-red: #D8322B;
   --color-red-deep: #B8241D;
   --color-red-tint: #FDE7E4;
@@ -56,6 +57,11 @@
   --color-danger-as-text: #B8241D;
   --color-glyph-ink: #2A2A33;
   --color-raised: #FFFFFF;
+  --color-toggle-knob: #FFFFFF;
+  --color-drawer-shadow: rgba(42, 42, 51, 0.18);
+  --color-button-primary-hover: #E0443C;
+  --color-placeholder: #6B6872;
+  --color-backdrop: rgba(42, 42, 51, 0.4);
   --state-hover: #F3EFE6;
   --state-selected-row: #FFF4CC;
   --state-pressed: #F2C12E;
@@ -68,6 +74,35 @@
   --state-tab-pressed: #9E1F19;
   --state-tab-active-bg: #F3EFE6;
   --state-tab-active-text: #D8322B;
+}
+
+:root {
+  --color-on-color: #FFFFFF;
+  --color-on-yellow: #22222A;
+  --color-glyph-on-yellow: #2A2A33;
+  --color-blue-face: #2C64B0;
+  --color-blue-deep-face: #1D4E8F;
+  --color-green-face: #2A7D38;
+  --color-ink-face: #2A2A33;
+  --color-blue-surface: #2C64B0;
+  --color-blue-deep-surface: #1D4E8F;
+  --color-green-surface: #2A7D38;
+  --color-ink-surface: #2A2A33;
+  --color-alert-line: #D8322B;
+  --color-cat-physical-text: #22222A;
+  --color-cat-special-text: #FFFFFF;
+  --color-cat-status-text: #22222A;
+  --color-mark-ink: #2A2A33;
+  --color-mark-rim: #FFFFFF;
+  --color-preview-light-bg: #F3EFE6;
+  --color-preview-light-line: #2A2A33;
+  --color-preview-light-bar: #D8322B;
+  --color-preview-light-tile: #FFFFFF;
+  --color-preview-dark-bg: #1B1B21;
+  --color-preview-dark-line: #0E0E12;
+  --color-preview-dark-bar: #B8241D;
+  --color-preview-dark-tile-raised: #33333D;
+  --color-preview-dark-tile: #25252D;
   --type-normal: #BDBBA6;
   --type-normal-text: #2A2A33;
   --type-fire: #CC4A22;
@@ -140,12 +175,65 @@
   --size-tab-icon: 15px;
   --size-tab-pad-x-compact: 11px;
   --size-tab-icon-compact: 14px;
+  --size-tab-inactive-compact: 35px;
+  --size-tab-active-compact: 41px;
+  --size-tab-font: 18px;
+  --size-tab-font-compact: 16px;
+  --size-tab-pad-x-icon-only: 10px;
+  --size-app-bar-mark-compact: 30px;
+  --size-app-bar-pad-x: 20px;
+  --size-app-bar-pad-x-compact: 14px;
+  --size-app-bar-gap: 18px;
+  --size-app-bar-gap-compact: 14px;
+  --size-app-bar-control: 36px;
+  --size-app-bar-control-compact: 34px;
+  --size-focus-offset: 2px;
+  --size-drawer-width: 380px;
+  --size-settings-nav: 220px;
+  --size-home-side: 440px;
+  --size-button-l: 38px;
+  --size-button-m: 36px;
+  --size-button-s: 34px;
+  --size-button-xs: 28px;
+  --size-menu-row: 34px;
+  --size-menu-row-small: 30px;
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
   --space-5: 24px;
   --space-6: 32px;
+  --fs-9: 9px;
+  --fs-10: 10px;
+  --fs-11: 11px;
+  --fs-12: 12px;
+  --fs-13: 13px;
+  --fs-14: 14px;
+  --fs-15: 15px;
+  --fs-16: 16px;
+  --fs-17: 17px;
+  --fs-18: 18px;
+  --fs-19: 19px;
+  --fs-20: 20px;
+  --fs-21: 21px;
+  --fs-22: 22px;
+  --fs-24: 24px;
+  --fs-28: 28px;
+  --fs-36: 36px;
+  --fs-38: 38px;
+  --radius-1: 1px;
+  --radius-2: 2px;
+  --radius-3: 3px;
+  --radius-4: 4px;
+  --radius-5: 5px;
+  --radius-6: 6px;
+  --radius-8: 8px;
+  --radius-10: 10px;
+  --opacity-absent: 0.55;
+  --opacity-locked: 0.45;
+  --opacity-capsule-gloss: 0.6;
+  --opacity-version-dimmed: 0.72;
+  --row-h: var(--size-table-row);
 }
 
 [data-theme="dark"] {
@@ -206,6 +294,11 @@
   --color-plate-mac-bottom: #1D4E8F;
   --color-plate-linux-base: #B01F19;
   --color-plate-linux-face: #FFFDF8;
+  --color-toggle-knob: #E9E6EF;
+  --color-drawer-shadow: rgba(0, 0, 0, 0.4);
+  --color-button-primary-hover: #CF3A31;
+  --color-placeholder: #6A6675;
+  --color-backdrop: rgba(0, 0, 0, 0.55);
   --state-hover: #33333D;
   --state-selected-row: #3A3317;
   --state-pressed: #F2C12E;
@@ -218,4 +311,22 @@
   --state-tab-pressed: #6E1510;
   --state-tab-active-bg: #1B1B21;
   --state-tab-active-text: #F07B6F;
+}
+
+:root,
+[data-theme="light"],
+[data-theme="dark"] {
+  --shadow-2: 0 2px 0 var(--color-ink);
+  --shadow-3: 0 3px 0 var(--color-ink);
+  --shadow-4: 0 4px 0 var(--color-ink);
+  --shadow-drawer: -6px 0 0 var(--color-drawer-shadow);
+  --shadow-alert-3: 0 3px 0 var(--color-alert-line);
+  --pattern-empty-slot: repeating-linear-gradient(135deg, var(--color-paper) 0 8px, var(--color-paper-stripe) 8px 16px);
+  --pattern-sprite: repeating-linear-gradient(135deg, var(--color-paper-alt) 0 6px, var(--color-paper-stripe) 6px 12px);
+  --pattern-out-of-gen: repeating-linear-gradient(135deg, var(--color-line-soft) 0 3px, var(--color-white) 3px 6px);
+  --pattern-empty-move: repeating-linear-gradient(135deg, var(--color-white) 0 2px, var(--color-line) 2px 4px);
+}
+
+:root[data-density="compact"] {
+  --row-h: var(--size-table-row-dense);
 }

@@ -1,0 +1,17 @@
+.bar {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 3px;
+  padding: 3px;
+  border-radius: var(--radius-4);
+  border: 2px solid var(--color-ink);
+  background: var(--color-white);
+}
+.cell {
+  height: 10px;
+  border-radius: var(--radius-1);
+  background: var(--color-line-soft);
+}
+.cell[data-on] {
+  background: var(--color-stat-good);
+}

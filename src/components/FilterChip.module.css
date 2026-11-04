@@ -1,0 +1,78 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: var(--size-filter-chip);
+  padding: 0 11px;
+  border-radius: 15px;
+  border: 1.5px solid var(--color-ink);
+  background: var(--color-white);
+  color: var(--color-text-1);
+  font-family: var(--font-body);
+  font-size: var(--fs-12);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.chip:hover {
+  background: var(--state-hover);
+}
+.chip[aria-pressed="true"] {
+  border-width: 2px;
+  background: var(--color-yellow);
+  color: var(--color-on-yellow);
+  font-weight: 800;
+}
+.chip:disabled {
+  border: 1.5px dashed var(--color-line-strong);
+  background: transparent;
+  color: var(--color-text-disabled);
+}
+
+.removable {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: var(--size-filter-chip);
+  padding: 0 4px 0 10px;
+  border-radius: 15px;
+  border: 2px solid var(--color-ink);
+  background: var(--color-yellow);
+  color: var(--color-on-yellow);
+  font-size: var(--fs-12);
+  font-weight: 800;
+}
+.remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+}
+
+.add {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: var(--size-filter-chip);
+  padding: 0 10px;
+  border-radius: 15px;
+  border: 1.5px dashed var(--color-text-disabled);
+  background: transparent;
+  color: var(--color-text-2);
+  font-size: var(--fs-12);
+  font-weight: 700;
+}
+.add[data-shape="box"] {
+  height: 30px;
+  padding: 0 8px;
+  border-radius: var(--radius-5);
+  color: var(--color-text-3);
+}
+.add:hover {
+  background: var(--state-hover);
+}
