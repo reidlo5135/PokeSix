@@ -187,28 +187,30 @@
   flex-direction: column;
   gap: 10px;
 }
+/* 슬롯 3줄이 창 높이에 맞게 나눠 갖는다(스크롤 없음). 키가 낮으면 카드가 알아서 줄인다(아래 @container) */
 .slots {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-auto-rows: minmax(250px, 1fr);
+  grid-template-rows: repeat(3, minmax(0, 1fr));
   gap: 12px;
   min-height: 0;
-  padding: 0 4px 3px 0;
-  overflow-y: auto;
+  padding-bottom: 3px;
 }
 .screen[data-compact] .slots {
   flex: none;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  grid-auto-rows: 166px;
+  grid-template-rows: repeat(2, 166px);
   gap: 10px;
   overflow: visible;
 }
 
 /* ── 채운 카드 ── */
 .card {
+  container-type: size;
   display: flex;
   flex-direction: column;
   min-width: 0;
+  min-height: 0;
   border: 2px solid var(--color-ink);
   border-radius: var(--radius-8);
   background: var(--color-white);
@@ -228,7 +230,7 @@
   align-items: center;
   gap: var(--space-2);
   flex: none;
-  height: 40px;
+  height: 38px;
   padding: 0 4px 0 10px;
   border-bottom: 2px solid var(--color-ink);
   cursor: grab;
@@ -267,17 +269,14 @@
   color: inherit;
   text-align: left;
 }
+/* 아이콘만 — 칸 바탕은 머리 색 그대로 */
 .iconBox {
   display: flex;
   align-items: center;
   justify-content: center;
   flex: none;
-  width: 26px;
-  height: 26px;
-  border: 1.5px solid var(--color-ink);
-  border-radius: var(--radius-4);
-  background: var(--color-white);
-  overflow: hidden;
+  width: 30px;
+  height: 30px;
 }
 .iconBox > * {
   border: 0;
@@ -326,30 +325,70 @@
   font-weight: 800;
   white-space: nowrap;
 }
-.menuButton {
+.headTypes {
+  display: none;
+  gap: 3px;
+  flex: none;
+}
+.card[data-compact] .headTypes {
+  display: flex;
+}
+.headButtons {
+  display: flex;
+  flex: none;
+}
+/* 머리 띠 위 선 아이콘(0.5.1) — 색은 머리 글색, 누르기 전 바탕은 머리 색을 살짝 덮는다 */
+.headButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: none;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   padding: 0;
   border: 0;
   border-radius: var(--radius-5);
-  background: none;
+  background: transparent;
   color: inherit;
+  opacity: 0.85;
+  transition:
+    background-color 120ms ease,
+    opacity 120ms ease;
 }
-.menuButton:hover {
-  background: var(--state-hover);
+.headButton svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.headButton:hover {
+  background: color-mix(in srgb, currentColor 18%, transparent);
+  opacity: 1;
+}
+.headButton:active {
+  background: color-mix(in srgb, currentColor 30%, transparent);
 }
 
 .cardBody {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
   flex-grow: 1;
   min-height: 0;
-  padding: 8px 12px 10px;
+  padding: 7px 11px 8px;
+  overflow: hidden;
+}
+.cardBody .memo {
+  height: 26px;
+}
+/* 키가 낮은 카드(작은 창): 본문 타입 줄을 접고 타입은 머리에 작게 */
+@container (max-height: 230px) {
+  .card:not([data-compact]) .typeLine {
+    display: none;
+  }
+  .card:not([data-compact]) .headTypes {
+    display: flex;
+  }
 }
 .card[data-compact] .cardBody {
   padding: 8px 10px;
@@ -430,7 +469,7 @@
 .moves {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 6px;
+  gap: 5px;
 }
 .card[data-compact] .moves {
   gap: 5px;
@@ -441,7 +480,7 @@
   align-items: center;
   gap: 6px;
   min-width: 0;
-  height: 30px;
+  height: 28px;
   padding: 0 6px 0 8px;
   border-radius: var(--radius-5);
   font-size: var(--fs-12);
@@ -562,6 +601,9 @@
 
 /* ── 빈 카드 ── */
 .emptyCard {
+  container-type: size;
+  min-height: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -576,6 +618,12 @@
 }
 .emptyCard[data-compact] {
   gap: 8px;
+}
+/* 키가 낮은 빈 카드: 육각 문양을 접는다 */
+@container (max-height: 165px) {
+  .emptyCard > svg {
+    display: none;
+  }
 }
 .hexFill {
   fill: var(--color-white);

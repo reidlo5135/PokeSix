@@ -2,7 +2,7 @@
  * 세대의 도감 · 게임 묶음 · 버전, 그리고 게임마다 만나는 종.
  */
 import { supplement } from "../text/namebook.ts"
-import { gameSpeciesCache, otherVersionSpeciesCache } from "./cache.ts"
+import { gameSpeciesCache, otherVersionSpeciesCache, memo } from "./cache.ts"
 import {
   currentDatabase,
   idList,
@@ -20,7 +20,7 @@ import type { DexInfo, GameInfo } from "./types.ts"
  * 세대 g 게임들의 지방 도감(본편, 게임이 나온 순서). 전국도감은 넣지 않는다(UI가 따로 단다).
  * 지방이 없는 도감(전국 · conquest · Champions)은 빠진다
  */
-export function dexesForGeneration(generation: number): DexInfo[] {
+function readDexesForGeneration(generation: number): DexInfo[] {
   const dexes: DexInfo[] = []
   const byId = new Map<number, DexInfo>()
   for (const r of select(
@@ -64,7 +64,7 @@ export function dexesForGeneration(generation: number): DexInfo[] {
  * 그 세대의 본편 게임 묶음(도감이 연결된 것만 — 콜로세움 · XD는 빠진다), 출시 순.
  * 도감 연결만 보므로 9세대에 champions가 들어온다(Qt판 그대로)
  */
-export function gamesForGeneration(generation: number): GameInfo[] {
+function readGamesForGeneration(generation: number): GameInfo[] {
   const games: GameInfo[] = []
   for (const r of select(
     `SELECT vg.identifier AS version_group, v.identifier AS version,
@@ -179,4 +179,12 @@ export function gameSpecies(versionGroup: string): Set<number> {
     species.add(num(r.id))
   gameSpeciesCache.set(versionGroup, species)
   return new Set(species)
+}
+
+export function dexesForGeneration(generation: number) {
+  return memo(`dexes/${generation}`, () => readDexesForGeneration(generation))
+}
+
+export function gamesForGeneration(generation: number) {
+  return memo(`games/${generation}`, () => readGamesForGeneration(generation))
 }

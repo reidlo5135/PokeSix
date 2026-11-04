@@ -215,6 +215,9 @@
   border-bottom: 1px solid var(--color-line-soft);
   background: var(--color-white);
   cursor: pointer;
+  /* 화면 밖 줄은 배치 · 그리기를 건너뛴다(500줄 가까운 목록) */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 34px;
 }
 .row[data-odd] {
   background: var(--color-paper-alt);

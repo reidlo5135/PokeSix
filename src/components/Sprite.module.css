@@ -74,6 +74,10 @@
   position: absolute;
   visibility: hidden;
 }
+/* 투명 테두리를 잘라 보인다(Sprite.tsx measureCrop) */
+.img[data-crop] {
+  object-view-box: var(--crop);
+}
 .img[data-pixelated] {
   image-rendering: pixelated;
 }

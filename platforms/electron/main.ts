@@ -1,7 +1,15 @@
 import path from "node:path"
 import { fileURLToPath, pathToFileURL } from "node:url"
 
-import { app, BrowserWindow, nativeTheme, net, protocol, shell } from "electron"
+import {
+  app,
+  BrowserWindow,
+  nativeTheme,
+  net,
+  protocol,
+  screen,
+  shell,
+} from "electron"
 
 const SCHEME = "app"
 const APP_ORIGIN = `${SCHEME}://pokesix`
@@ -52,10 +60,16 @@ function originOf(url: string): string {
   return `${scheme}//${host}`
 }
 
+// 처음 창 크기: 화면 작업 영역 안에서 1440 × 960까지. 스쿼드 슬롯 3줄 · 홈 아래 칸이 스크롤 없이 들어가는 높이
+const PREFERRED_WIDTH = 1440
+const PREFERRED_HEIGHT = 960
+
 function createWindow(entryUrl: string): BrowserWindow {
+  const area = screen.getPrimaryDisplay().workAreaSize
   const window = new BrowserWindow({
-    width: 1440,
-    height: 900,
+    width: Math.min(PREFERRED_WIDTH, area.width),
+    height: Math.min(PREFERRED_HEIGHT, area.height),
+    center: true,
     minWidth: 960,
     minHeight: 640,
     title: "PokeSix",

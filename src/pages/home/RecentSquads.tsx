@@ -25,6 +25,8 @@ import {
 } from "../../state/squads.ts"
 import { memberTypes, versionName } from "./homeData.ts"
 import styles from "./Home.module.css"
+// 문제 수 세기(registerSquadProblemCounter)는 스쿼드 모듈이 등록한다 — 홈을 먼저 열어도 보이게 미리 불러 둔다
+import "../squad/squadData.ts"
 
 export function RecentSquads() {
   const t = useT()
@@ -34,7 +36,11 @@ export function RecentSquads() {
   const lang = useSettings((s) => s.nameLanguage)
   const historic = useSettings((s) => s.useHistoricTypes)
   const dataVersion = useDataVersion()
-  const recent = useMemo(() => recentSquads(squadEntries(doc)), [doc])
+  // 전부 보인다(최근 것부터) — 많으면 창 안에서 스크롤
+  const recent = useMemo(
+    () => recentSquads(squadEntries(doc), Number.POSITIVE_INFINITY),
+    [doc]
+  )
 
   // 멤버 타입 · 게임 이름 (데이터가 바뀌면 다시)
   const view = useMemo(() => {
@@ -69,6 +75,7 @@ export function RecentSquads() {
     <Panel
       shadow={4}
       className={styles.recent}
+      bodyClassName={styles.recentBody}
       header={{
         title: t("최근 스쿼드"),
         tone: "red",

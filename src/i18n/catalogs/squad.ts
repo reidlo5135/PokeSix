@@ -204,7 +204,9 @@ export default {
     en: "Click to select, drag to reorder",
     ja: "押すと選択、ドラッグで並べ替え",
   },
-  "슬롯 메뉴": { en: "Slot menu", ja: "枠メニュー" },
+  "%1 바꾸기": { en: "Change %1", ja: "%1を入れ替える" },
+  "%1 비우기": { en: "Remove %1", ja: "%1を外す" },
+  "%1 자세히 보기": { en: "%1 details", ja: "%1を詳しく見る" },
   "역할 메모 (예: 선봉 · 고속 스위퍼)": {
     en: "Role note (e.g. lead · fast sweeper)",
     ja: "役割メモ (例: 先発・高速アタッカー)",

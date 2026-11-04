@@ -61,7 +61,7 @@ const details = new Map<string, PokemonDetail | null>()
 const moveCache = new Map<string, MoveEntry | null>()
 const ownClass = new Map<number, number>()
 const charts = new Map<number, TypeChart>()
-const itemLists = new Map<number, ItemRow[]>()
+const itemLists = new Map<string, ItemRow[]>()
 let natureList: Nature[] | null = null
 let evolutionMap: Map<number, number> | null = null
 
@@ -200,12 +200,15 @@ export function naturesList(): Nature[] {
   return (natureList ??= readNatures())
 }
 
-/** 그 세대에 있는 아이템(지닌 물건 후보의 바탕) */
-export function itemsIn(generation: number): ItemRow[] {
-  let list = itemLists.get(generation)
+/** 그 세대에 있는 아이템(지닌 물건 후보의 바탕). 아이템 화면과 같은 질의(같은 캐시)를 쓴다 */
+export function itemsIn(generation: number, versionGroup = ""): ItemRow[] {
+  const key = `${generation}/${versionGroup}`
+  let list = itemLists.get(key)
   if (!list) {
-    list = itemsForGeneration(generation).filter((i) => existsIn(i, generation))
-    if (list.length > 0) itemLists.set(generation, list)
+    list = itemsForGeneration(generation, versionGroup).filter((i) =>
+      existsIn(i, generation)
+    )
+    if (list.length > 0) itemLists.set(key, list)
   }
   return list
 }

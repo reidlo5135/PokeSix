@@ -3,6 +3,7 @@
  */
 import { idList, loc, num, select, str, type Row } from "./db.ts"
 import { emptyStats, type SpeciesRow, type Stats6 } from "./types.ts"
+import { memo } from "./cache.ts"
 
 const SPECIAL_STAT = 9 // 1세대 전용 "특수"
 const ONLY_THESE_LIMIT = 64 // 이 수 이하면 그 포켓몬만 묻는다(넘으면 표 전체를 한 번에)
@@ -78,7 +79,7 @@ export function fillTypesAndStats(
 }
 
 /** 세대 g까지 나온 종 전부 = 전국도감(번호 순, 기본 모습만). 도감 번호 = 종 번호 */
-export function speciesForGeneration(generation: number): SpeciesRow[] {
+function readSpeciesForGeneration(generation: number): SpeciesRow[] {
   const rows = readSpecies(
     select(
       `SELECT s.id AS species_id, p.id AS pokemon_id,
@@ -100,7 +101,7 @@ export function speciesForGeneration(generation: number): SpeciesRow[] {
  * 지방 도감의 종(도감 번호 순). 타입 · 종족값은 g 기준.
  * 그 도감의 게임은 모두 g 이하에 나왔다고 본다(호출자가 그 세대의 도감만 넘긴다)
  */
-export function speciesForDex(
+function readSpeciesForDex(
   pokedexId: number,
   generation: number
 ): SpeciesRow[] {
@@ -120,4 +121,16 @@ export function speciesForDex(
   )
   fillTypesAndStats(rows, generation)
   return rows
+}
+
+export function speciesForGeneration(generation: number) {
+  return memo(`species/${generation}`, () =>
+    readSpeciesForGeneration(generation)
+  )
+}
+
+export function speciesForDex(pokedexId: number, generation: number) {
+  return memo(`dex/${pokedexId}/${generation}`, () =>
+    readSpeciesForDex(pokedexId, generation)
+  )
 }

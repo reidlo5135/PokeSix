@@ -77,9 +77,13 @@ export function SpeciesList({
   const body = useRef<HTMLDivElement | null>(null)
   const index = rows.findIndex((r) => r.pokemonId === selectedId)
 
-  // 고른 줄이 보이게
+  // 고른 줄이 보이게 — 고른 것 · 보기가 바뀔 때만(화면에 다시 들어올 때는 스크롤 위치를 그대로 둔다)
+  const scrolledFor = useRef("")
   useEffect(() => {
     if (selectedId === null) return
+    const key = `${selectedId}/${view}`
+    if (scrolledFor.current === key) return
+    scrolledFor.current = key
     const el = body.current?.querySelector<HTMLElement>(
       `[data-pokemon="${selectedId}"]`
     )
