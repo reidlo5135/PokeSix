@@ -5,6 +5,16 @@ Qt 시절 기록은 태그 `qt6-final`의 `docs/worklog.md`에 있다.
 
 ## 지금 상태 — 2026-11-04
 
+- **0.5.1 수준 완성(Claude, 2026-11-04)** — 모두 main에 merge:
+  - 데이터 계층 · 저장소 · 셸(홈 · 설정 · 테마 · i18n) · 세이브 파서 · 번들 사전 + 빈 데이터 채우기(앞선 merge들)
+  - R6 도감(`feat/r6-dex`) · R7 아이템(`feat/r7-items`) · R8 스쿼드(`feat/r8-squad`) · R10 타운맵(`feat/r10-townmap`) · 라우터 경고 수정
+  - 확인: `npm run check` 통과(381 테스트) · Electron 빌드본으로 도감/아이템/스쿼드/타운맵 화면을 찍어 봄(넓은 · 좁은 배치)
+  - **아직 안 옮긴 것**: 스쿼드 이미지 내보내기(클립보드 · PNG), 설정의 "그림 캐시 비우기", 디자인의 "복제" 버튼(Qt에 없던 기능 — 사용자 결정 필요). 에디터는 0.5.1처럼 빈 화면
+  - 함정: Vitest 캐시(`node_modules/.vitest-cache`)가 `import.meta.glob`의 새 파일을 못 보고 옛 결과를 쓴다 → 사전 파일을 더한 뒤 i18n 테스트가 이상하면 캐시를 지운다. 실패 목록은 앞 4개만 보인다(`…(n)`이 전체 개수)
+  - 중복: 기술 효과 글이 `src/pages/dex/model/moveEffect.ts`와 `src/core/rules/moveEffect.ts` 두 벌(화면을 따로 만들다 생김) — 다음에 하나로
+- **데이터 계층 결정(Claude, 2026-11-04)**: REST(수천 요청)가 아니라 **Qt판과 같은 고정 커밋 CSV 54개 → SQLite(스키마 v12)**. 웹 워커가 받고(크기 · SHA-256 확인, IndexedDB에 이어 받기) sql.js로 가져와 DB 바이트를 IndexedDB에 둔다. 메인 스레드는 sql.js로 읽기 전용. 실제 CSV로 만든 DB가 Qt DB와 **36개 표 전부 줄 단위로 같음** 확인(`950dabc`). Electron `app://`는 `secure: true`(crypto.subtle).
+- **릴리스 CI 교체 완료**(`2aa8934`): Electron 3-OS — AppImage(ubuntu-22.04) · msi(windows-2022) · dmg(macos-14), 서명 없음, notes 잡은 `docs/release-notes/<태그>.md` + SHA-256.
+- 사양 문서(Qt판에서 뽑은 화면 · 데이터 사양 10개 + 빈 데이터 목록)는 세션 scratchpad에 있다 — 필요한 내용은 코드 · 이 문서로 옮긴다.
 - **사용자 요청(2026-11-04)**: "Qt6로 했던 0.5.1 수준까지 전부 완성해 줘 · 도감 빵꾸(빈 데이터) 조사해서 채워 줘" — R4 K3부터 R11까지 Claude가 구현. 진행: ① Qt판 사양 정리 + 데이터 빈 곳 감사(워크플로) → ② 데이터 계층 설계 → ③ 기반(데이터 · 테마 · 앱 셸 · i18n) → ④ 화면들 → ⑤ 검증 · 데이터 채우기
 
 
