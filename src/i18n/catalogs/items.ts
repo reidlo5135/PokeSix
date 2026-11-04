@@ -1,0 +1,102 @@
+/** 아이템 대백과 (SCR-03) · 입수처 글자 */
+import { ctx } from "../keys.ts"
+import type { Catalog } from "../types.ts"
+
+export default {
+  [ctx("분류", "Items")]: { en: "Categories", ja: "分類" },
+  [ctx("상세", "Items")]: { en: "Details", ja: "詳細" },
+  [ctx("이름", "Items")]: { en: "Name", ja: "名前" },
+  [ctx("효과", "Items")]: { en: "Effect", ja: "効果" },
+  "%1 · %2개": { en: "%1 · %2", ja: "%1・%2個" },
+  "기준 게임": { en: "Game", ja: "基準のゲーム" },
+  "아이템 검색": { en: "Search items", ja: "どうぐを検索" },
+  "이름 · 효과 검색": {
+    en: "Search name or effect",
+    ja: "名前・効果で検索",
+  },
+  "아이템 목록": { en: "Item list", ja: "どうぐ一覧" },
+  정렬: { en: "Sort", ja: "並べ替え" },
+  가나다순: { en: "Name", ja: "名前順" },
+  "가격 낮은 순": { en: "Price: low to high", ja: "値段の安い順" },
+  "가격 높은 순": { en: "Price: high to low", ja: "値段の高い順" },
+  "등장 세대순": { en: "Generation introduced", ja: "登場世代順" },
+  "%1세대에 있는 것만": {
+    en: "Only items in Gen %1",
+    ja: "第%1世代にあるものだけ",
+  },
+  "끄면 다른 세대 아이템도 흐리게 함께 보여요.": {
+    en: "Turn off to also show other generations' items, dimmed.",
+    ja: "オフにすると他の世代のどうぐも薄く表示します。",
+  },
+  "%1세대 없음": { en: "Not in Gen %1", ja: "第%1世代になし" },
+  "조건에 맞는 아이템이 없어요": {
+    en: "No items match",
+    ja: "条件に合うどうぐがありません",
+  },
+  "‘%1’에 맞는 이름 · 효과가 없어요": {
+    en: "No name or effect matches ‘%1’",
+    ja: "‘%1’に合う名前・効果がありません",
+  },
+  "선택한 아이템 상세": {
+    en: "Selected item details",
+    ja: "選んだどうぐの詳細",
+  },
+  "상세 닫기 (Esc)": { en: "Close details (Esc)", ja: "詳細を閉じる (Esc)" },
+  "목록에서 아이템을 고르면\n여기에 자세히 보여요": {
+    en: "Pick an item in the list\nto see its details here",
+    ja: "リストでどうぐを選ぶと\nここに詳しく出ます",
+  },
+  "%1세대에 처음 등장": { en: "Introduced in Gen %1", ja: "第%1世代で初登場" },
+  비매품: { en: "Not for sale", ja: "非売品" },
+  "세대별 존재": { en: "By generation", ja: "世代別の存在" },
+  "%1세대에 있어요": { en: "In Gen %1", ja: "第%1世代にあります" },
+  "%1세대에 없어요": { en: "Not in Gen %1", ja: "第%1世代にはありません" },
+  "효과 설명이 없어요": { en: "No effect text", ja: "効果の説明がありません" },
+  "진화 대상": { en: "Evolves", ja: "進化対象" },
+  수컷: { en: "male", ja: "オス" },
+  암컷: { en: "female", ja: "メス" },
+  "지니고 교환": { en: "trade holding it", ja: "持たせて通信交換" },
+  "지니고 레벨업": { en: "level up holding it", ja: "持たせてレベルアップ" },
+  지니고: { en: "holding it", ja: "持たせて" },
+  "%1 한정": { en: "%1 only", ja: "%1限定" },
+  "입수처 · %1세대": { en: "Where to get · Gen %1", ja: "入手場所 · 第%1世代" },
+  "이 게임의 입수 정보가 아직 없어요": {
+    en: "No acquisition data for this game yet",
+    ja: "このゲームの入手情報はまだありません",
+  },
+  "배울 수 있는 포켓몬 · %1마리": {
+    en: "Pokémon that can learn it · %1",
+    ja: "覚えられるポケモン · %1匹",
+  },
+
+  // 입수처 한 줄 (Qt guidebook)
+  "%1 — %2": { en: "%1 — %2", ja: "%1 — %2" },
+  "이 버전에서는 얻을 수 없어요(다른 버전 한정)": {
+    en: "Not obtainable in this version (other version only)",
+    ja: "このバージョンでは手に入りません(他バージョン限定)",
+  },
+  필드: { en: "Field", ja: "フィールド" },
+  "숨겨진 아이템": { en: "Hidden item", ja: "隠しアイテム" },
+  받기: { en: "Gift", ja: "もらう" },
+  상점: { en: "Shop", ja: "ショップ" },
+  교환: { en: "Exchange", ja: "交換" },
+  경품: { en: "Prize", ja: "景品" },
+  보상: { en: "Reward", ja: "報酬" },
+  "야생 포켓몬 소지": {
+    en: "Held by wild Pokémon",
+    ja: "野生ポケモンの持ち物",
+  },
+  "교환(통신)": { en: "Trade", ja: "通信交換" },
+  "NPC 가르침": { en: "Move tutor", ja: "教え技" },
+  "%1원": { en: "₽%1", ja: "%1円" },
+  "%1BP": { en: "%1 BP", ja: "%1BP" },
+  "코인 %1": { en: "%1 coins", ja: "コイン%1枚" },
+  "빨강조각 %1개": { en: "%1 Red Shards", ja: "あかいかけら%1こ" },
+  "파랑조각 %1개": { en: "%1 Blue Shards", ja: "あおいかけら%1こ" },
+  "노랑조각 %1개": { en: "%1 Yellow Shards", ja: "きいろいかけら%1こ" },
+  "초록조각 %1개": { en: "%1 Green Shards", ja: "みどりのかけら%1こ" },
+  "하트비늘 %1개": { en: "%1 Heart Scales", ja: "ハートのウロコ%1こ" },
+  "%1포인트": { en: "%1 Athlete Points", ja: "%1ポイント" },
+  "%1와트": { en: "%1 W", ja: "%1W" },
+  "%1LP": { en: "%1 LP", ja: "%1LP" },
+} satisfies Catalog
