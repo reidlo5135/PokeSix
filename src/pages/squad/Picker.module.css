@@ -1,0 +1,181 @@
+/* 스쿼드 선택 창(포켓몬 · 기술 · 지닌 물건) — 색은 토큰만 */
+
+.top {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  flex: none;
+  padding: 12px 14px 8px;
+}
+.heading {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.columns {
+  flex: none;
+  padding: 0 14px 4px;
+  border-bottom: 2px solid var(--color-ink);
+  font-size: var(--fs-11);
+  font-weight: 800;
+  color: var(--color-text-2);
+}
+.list {
+  flex-grow: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+.row {
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--color-line-soft);
+  cursor: pointer;
+}
+.row[data-active] {
+  background: var(--color-yellow-row-sel);
+}
+.row[data-current="true"] {
+  background: var(--state-selected-row);
+}
+.row[data-tone="warn"] .name {
+  color: var(--color-text-2);
+}
+.empty {
+  margin: 0;
+  padding: var(--space-5);
+  color: var(--color-text-3);
+  font-size: var(--fs-13);
+  text-align: center;
+}
+
+/* 도감 칩 */
+.dexChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.dexChip {
+  height: 26px;
+  padding: 0 10px;
+  border: 1.5px solid var(--color-line-strong);
+  border-radius: 13px;
+  background: var(--color-white);
+  color: var(--color-text-2);
+  font-size: var(--fs-12);
+  font-weight: 800;
+}
+.dexChip:hover {
+  background: var(--state-hover);
+}
+.dexChip[aria-pressed="true"] {
+  border: 2px solid var(--color-ink);
+  background: var(--color-yellow);
+  color: var(--state-pressed-text);
+}
+
+/* 줄 모양 */
+.pokemonRow,
+.moveRow,
+.itemRow {
+  display: grid;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+}
+.pokemonRow {
+  grid-template-columns: 40px 34px minmax(0, 1fr) 150px 44px;
+}
+.moveRow {
+  grid-template-columns: 64px minmax(0, 1fr) 22px 36px 36px 28px 170px;
+}
+.itemRow {
+  grid-template-columns: 26px 150px minmax(0, 1fr);
+}
+.right {
+  text-align: right;
+}
+.number,
+.stat,
+.total {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-weight: 700;
+  text-align: right;
+}
+.number {
+  color: var(--color-text-3);
+  text-align: left;
+}
+.stat {
+  font-weight: 400;
+  color: var(--color-text-2);
+}
+.nameCell {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.name {
+  overflow: hidden;
+  font-size: var(--fs-13);
+  font-weight: 800;
+  color: var(--color-text-1);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.warning {
+  overflow: hidden;
+  font-size: var(--fs-11);
+  font-weight: 700;
+  color: var(--color-red-text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.types {
+  display: flex;
+  gap: 3px;
+}
+.effect {
+  overflow: hidden;
+  font-size: var(--fs-11);
+  color: var(--color-text-2);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.effect [data-tone="text1"] {
+  color: var(--color-text-1);
+}
+.effect [data-tone="text3"] {
+  color: var(--color-text-3);
+}
+.effect [data-tone="up"] {
+  font-weight: 800;
+  color: var(--color-red-as-text);
+}
+.effect [data-tone="down"] {
+  font-weight: 800;
+  color: var(--color-blue-deep);
+}
+.effect [data-tone="heal"] {
+  font-weight: 700;
+  color: var(--color-green);
+}
+.method {
+  overflow: hidden;
+  font-size: var(--fs-11);
+  color: var(--color-text-2);
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.itemEffect {
+  overflow: hidden;
+  font-size: var(--fs-12);
+  color: var(--color-text-2);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
