@@ -34,12 +34,11 @@ describe("앱 셸", () => {
     expect(screen.getByText("전국도감 No.1–1025 · 9세대")).toBeTruthy()
   })
 
-  it("Ctrl+2 → 도감(준비 중), Ctrl+7 → 설정, 모르는 주소 → 홈", async () => {
+  it("Ctrl+2 → 도감, Ctrl+7 → 설정, 모르는 주소 → 홈", async () => {
     const router = renderAt("/")
     await screen.findByRole("heading", { name: "어느 세대를 여행할까요?" })
     await press("Digit2")
     expect(router.state.location.pathname).toBe("/dex")
-    expect(await screen.findByText("이 화면은 준비 중이에요")).toBeTruthy()
     await press("Digit7")
     expect(router.state.location.pathname).toBe("/settings")
     expect(
