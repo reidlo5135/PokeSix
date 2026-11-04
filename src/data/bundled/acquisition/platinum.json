@@ -1,12 +1,18 @@
 {
   "_comment": [
     "게임(버전 그룹)별 입수 사전 (ui/dex/guidebook.h가 읽는다). 형식은 docs/i18n/README.md 참고.",
-    "scripts/i18n/check_acquisition.py로 검증해 넣었다. 출처는 _sources."
+    "scripts/i18n/check_acquisition.py로 검증해 넣었다. 출처는 _sources.",
+    "pokemon 묶음(2026-11-04): 키 = species.identifier, 값 = 출현 줄. how는 encounter-methods.json 키(starter · fossil · prize · bug-contest · swarm · pokewalker · event · transfer · static …). minLevel · maxLevel = 레벨, versionsFrom = transfer일 때 데려올 버전(빈 배열 = 버전 미지정), replaces = 같은 where · 버전의 PokéAPI 행 중 그 방법(gift)을 숨기고 이 줄로 바꾼다.",
+    "TM/HM의 how 없는 옛 Serebii 줄(2026-11-04): Serebii ItemDex가 NPC에게 받는 줄에만 사람을 적는 모양을 따라 detail에 '관장'·'승리' → reward, 사람 · 조건 → gift, detail 없음 → field로 채웠다(스쿼드 공급 집계용). 연고시티 상호교류광장(데리고 걷는 포켓몬이 줍는 것)은 other."
   ],
   "_sources": [
     "네이버 블로그 '미오시티의 작은 도서관' — 포켓몬스터 플라티나: 기술머신/비전머신 입수 방법(2016-08-26 수정). 사실(장소 · 방법 · 비용)만 참고해 구조화 — 원문 문장은 싣지 않음",
     "네이버 블로그 '미오시티의 작은 도서관' — 포켓몬스터 플라티나: NPC 기술[2판](2016-08-21 수정). 사실(장소 · 방법 · 비용)만 참고해 구조화 — 원문 문장은 싣지 않음",
-    "Serebii.net ItemDex (https://www.serebii.net/itemdex/) — 장소는 PokéAPI/게임 텍스트로 한국어화"
+    "Serebii.net ItemDex (https://www.serebii.net/itemdex/) — 장소는 PokéAPI/게임 텍스트로 한국어화",
+    "Bulbapedia 아이템 문서(Acquisition 표: Dragon Scale · King's Rock · Metal Coat · Up-Grade · Deep Sea Scale/Tooth · Electirizer · Magmarizer · Moon/Thunder/Fire Stone · Razor Claw/Fang, web.archive.org 사본) — 진화 도구 입수처 · 소지 확률",
+    "영어로 남은 place · detail 칸 한국어화(2026-11-04): 공식 한국어 이름(장소 · 인물 · 아이템)은 place-names.json · DB · 나무위키 대조, 공식명이 확인되지 않은 역할 이름은 설명형 번역, 포켓워커 코스명은 한국어판 표기 미확인이라 영어 그대로",
+    "포켓몬 입수 보충(pokemon 묶음): PokéAPI gift 행의 경품 · 화석 · 스타팅 덮어쓰기(코인은 Bulbapedia Celadon/Goldenrod Game Corner), PokéAPI에 없는 경로(곤충채집대회 · 포켓워커 · 고정 출현 · 데려오기 · 배포)는 Bulbapedia 포켓몬별 Game locations 표(web.archive.org 사본) 대조",
+    "플라티나 TM 줄 구조화(2026-11-04): 기존 한 줄 글에서 상점 · 게임코너 · BP 교환 · 체육관 보상을 how · where · cost로 나눴다(값은 원문 그대로, Bulbapedia 4세대 TM 표로 대조)"
   ],
   "versionGroup": "platinum",
   "items": {
@@ -198,7 +204,10 @@
       },
       {
         "where": "fuego-ironworks",
-        "detail": "From Mr. Fuego"
+        "detail": {
+          "ko": "골풀무에게서",
+          "en": "From Mr. Fuego"
+        }
       },
       {
         "where": "wayward-cave"
@@ -212,7 +221,11 @@
         "where": "great-marsh"
       },
       {
-        "place": "Eterna Galactic Building"
+        "where": "tg-eterna-bldg",
+        "place": {
+          "ko": "갤럭시단 영원 빌딩",
+          "en": "Eterna Galactic Building"
+        }
       }
     ],
     "bluk-berry": [
@@ -447,6 +460,26 @@
         "where": "mt-coronet"
       }
     ],
+    "deep-sea-scale": [
+      {
+        "how": "held",
+        "place": {
+          "ko": "야생 초라기 · 야생 시라칸",
+          "en": "Wild Chinchou, Wild Relicanth"
+        },
+        "detail": "5%"
+      }
+    ],
+    "deep-sea-tooth": [
+      {
+        "how": "held",
+        "place": {
+          "ko": "야생 샤프니아",
+          "en": "Wild Carvanha"
+        },
+        "detail": "5%"
+      }
+    ],
     "destiny-knot": [
       {
         "where": "sinnoh-route-224"
@@ -480,6 +513,16 @@
         "where": "celestic-town"
       }
     ],
+    "dragon-scale": [
+      {
+        "how": "held",
+        "place": {
+          "ko": "야생 쏘드라 · 야생 시드라 · 야생 미뇽 · 야생 신뇽",
+          "en": "Wild Horsea, Wild Seadra, Wild Dratini, Wild Dragonair"
+        },
+        "detail": "5%"
+      }
+    ],
     "dread-plate": [
       {
         "where": "old-chateau"
@@ -490,7 +533,11 @@
         "where": "sinnoh-route-225"
       },
       {
-        "place": "Veilstone Galactic Building"
+        "where": "galactic-hq",
+        "place": {
+          "ko": "장막시티 갤럭시단 빌딩",
+          "en": "Veilstone Galactic Building"
+        }
       }
     ],
     "dusk-ball": [
@@ -514,7 +561,10 @@
         "where": "wayward-cave"
       },
       {
-        "place": "Galactic Warehouse"
+        "place": {
+          "ko": "갤럭시단 창고",
+          "en": "Galactic Warehouse"
+        }
       }
     ],
     "earth-plate": [
@@ -538,7 +588,11 @@
         "where": "sinnoh-victory-road"
       },
       {
-        "place": "Veilstone Galactic Building",
+        "where": "galactic-hq",
+        "place": {
+          "ko": "장막시티 갤럭시단 빌딩",
+          "en": "Veilstone Galactic Building"
+        },
         "how": "hidden",
         "detail": "다우징머신"
       }
@@ -604,7 +658,10 @@
     "explorer-kit": [
       {
         "where": "eterna-city",
-        "detail": "From Byron's Father"
+        "detail": {
+          "ko": "지하 아저씨에게서",
+          "en": "From Byron's Father"
+        }
       }
     ],
     "fashion-case": [
@@ -648,7 +705,10 @@
     "flame-plate": [
       {
         "where": "oreburgh-mine",
-        "detail": "Show Hiker an Arceus"
+        "detail": {
+          "ko": "등산가에게 아르세우스를 보여 주면",
+          "en": "Show Hiker an Arceus"
+        }
       },
       {
         "where": "stark-mountain"
@@ -743,24 +803,37 @@
         "where": "stark-mountain"
       },
       {
-        "place": "Veilstone Galactic Building"
+        "where": "galactic-hq",
+        "place": {
+          "ko": "장막시티 갤럭시단 빌딩",
+          "en": "Veilstone Galactic Building"
+        }
       }
     ],
     "galactic-key": [
       {
-        "place": "Galactic Warehouse"
+        "place": {
+          "ko": "갤럭시단 창고",
+          "en": "Galactic Warehouse"
+        }
       }
     ],
     "good-rod": [
       {
         "where": "hearthome-city",
-        "detail": "Fishing Guru"
+        "detail": {
+          "ko": "낚시광",
+          "en": "Fishing Guru"
+        }
       }
     ],
     "gracidea": [
       {
         "where": "floaroma-town",
-        "detail": "Show Lady Shaymin"
+        "detail": {
+          "ko": "아가씨에게 쉐이미를 보여 주면",
+          "en": "Show Lady Shaymin"
+        }
       }
     ],
     "great-ball": [
@@ -821,7 +894,10 @@
       },
       {
         "where": "fuego-ironworks",
-        "detail": "From Mr. Fuego"
+        "detail": {
+          "ko": "골풀무에게서",
+          "en": "From Mr. Fuego"
+        }
       },
       {
         "where": "eterna-forest",
@@ -840,7 +916,11 @@
         "where": "great-marsh"
       },
       {
-        "place": "Veilstone Galactic Building"
+        "where": "galactic-hq",
+        "place": {
+          "ko": "장막시티 갤럭시단 빌딩",
+          "en": "Veilstone Galactic Building"
+        }
       }
     ],
     "grepa-berry": [
@@ -943,37 +1023,51 @@
     ],
     "hm01": [
       {
-        "place": "포켓몬상 이벤트 후 갤럭시단 빌딩 앞에서 난천에게 입수[스토리 진행 중 자동 입수]"
+        "how": "gift",
+        "place": "포켓몬상 이벤트 후 갤럭시단 빌딩 앞에서 난천에게 입수",
+        "detail": "스토리 진행 중"
       }
     ],
     "hm02": [
       {
-        "place": "장막시티 체육관 관장 자두에게 승리 후 갤럭시단창고 이벤트 후 핸섬에게 입수[스토리 진행 중 자동 입수]"
+        "how": "gift",
+        "place": "장막시티 체육관 관장 자두에게 승리 후 갤럭시단창고 이벤트 후 핸섬에게 입수",
+        "detail": "스토리 진행 중"
       }
     ],
     "hm03": [
       {
-        "place": "봉신마을 유적에서 갤릭시단 보스 태홍에게 승리한 후 장로에게 입수[스토리 진행 중 자동 입수]"
+        "how": "gift",
+        "place": "봉신마을 유적에서 갤릭시단 보스 태홍에게 승리한 후 장로에게 입수",
+        "detail": "스토리 진행 중"
       }
     ],
     "hm04": [
       {
-        "place": "운하시티 선착장을 통해 갈 수 있는 강철섬 동굴 입구에서 현에게 입수"
+        "how": "gift",
+        "where": "iron-island",
+        "place": "강철섬 동굴 입구",
+        "detail": "현이에게서 받기"
       }
     ],
     "hm05": [
       {
+        "how": "field",
         "place": "신수마을 내 신수유적 최하층"
       }
     ],
     "hm06": [
       {
-        "place": "무쇠게이트에 처음 들어서면 등산객에게서 입수[스토리 진행 중 자동 입수]"
+        "how": "gift",
+        "place": "무쇠게이트에 처음 들어서면 등산객에게서 입수",
+        "detail": "스토리 진행 중"
       }
     ],
     "hm07": [
       {
-        "place": "물가시티 체육관 관장 전진에게 승리한 후 해변에 있는 규리에게 입수[스토리 진행 중 자동 입수]"
+        "how": "gift",
+        "place": "물가시티 체육관 관장 전진에게 승리한 후 해변에 있는 규리에게 입수",
+        "detail": "스토리 진행 중"
       }
     ],
     "hm08": [
@@ -1201,178 +1295,6 @@
         }
       }
     ],
-    "lagreat-ball": [
-      {
-        "where": "sinnoh-route-207",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "sinnoh-route-208"
-      },
-      {
-        "where": "sinnoh-route-209"
-      },
-      {
-        "where": "sinnoh-route-211",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "sinnoh-route-213",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "oreburgh-city"
-      },
-      {
-        "where": "wayward-cave",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "lost-tower",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "solaceon-town",
-        "how": "gift",
-        "detail": "포켓몬 신문사"
-      },
-      {
-        "where": "celestic-town"
-      }
-    ],
-    "lapoke-ball": [
-      {
-        "where": "sinnoh-route-202",
-        "detail": "From Lucas/Dawn"
-      },
-      {
-        "where": "sinnoh-route-205"
-      },
-      {
-        "where": "sinnoh-route-207"
-      },
-      {
-        "where": "oreburgh-mine"
-      },
-      {
-        "where": "solaceon-town",
-        "how": "gift",
-        "detail": "포켓몬 신문사"
-      }
-    ],
-    "laultra-ball": [
-      {
-        "where": "sinnoh-route-210",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "sinnoh-route-212",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "sinnoh-route-215",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "sinnoh-route-216"
-      },
-      {
-        "where": "sinnoh-route-217",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "sinnoh-route-221"
-      },
-      {
-        "where": "sinnoh-route-222",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "place": {
-          "ko": "223번수로",
-          "en": "Route 223"
-        }
-      },
-      {
-        "where": "sinnoh-route-224"
-      },
-      {
-        "where": "sinnoh-route-224",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "sinnoh-route-225",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "sinnoh-route-228",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "place": {
-          "ko": "230번수로",
-          "en": "Route 230"
-        },
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "jubilife-city",
-        "detail": "Get 1 Number in the Lottery"
-      },
-      {
-        "where": "fuego-ironworks",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "mt-coronet"
-      },
-      {
-        "where": "solaceon-town",
-        "how": "gift",
-        "detail": "포켓몬 신문사"
-      },
-      {
-        "where": "valor-lakefront"
-      },
-      {
-        "where": "iron-island"
-      },
-      {
-        "where": "acuity-lakefront"
-      },
-      {
-        "where": "snowpoint-city"
-      },
-      {
-        "where": "sinnoh-victory-road",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "sinnoh-victory-road"
-      },
-      {
-        "where": "stark-mountain"
-      },
-      {
-        "where": "floaroma-meadow"
-      }
-    ],
     "lax-incense": [
       {
         "where": "sinnoh-route-225"
@@ -1458,7 +1380,10 @@
     "macho-brace": [
       {
         "where": "pastoria-city",
-        "detail": "Show a trainer a Male & Female Combee"
+        "detail": {
+          "ko": "트레이너에게 세꿀버리 수컷 · 암컷을 보여 주면",
+          "en": "Show a trainer a Male & Female Combee"
+        }
       }
     ],
     "magmarizer": [
@@ -1497,10 +1422,17 @@
     "master-ball": [
       {
         "where": "jubilife-city",
-        "detail": "Get all the Numbers in the Lottery"
+        "detail": {
+          "ko": "복권 5자리 모두 일치",
+          "en": "Get all the Numbers in the Lottery"
+        }
       },
       {
-        "place": "Veilstone Galactic Building"
+        "where": "galactic-hq",
+        "place": {
+          "ko": "장막시티 갤럭시단 빌딩",
+          "en": "Veilstone Galactic Building"
+        }
       }
     ],
     "max-elixir": [
@@ -1522,7 +1454,11 @@
         "where": "stark-mountain"
       },
       {
-        "place": "Veilstone Galactic Building"
+        "where": "galactic-hq",
+        "place": {
+          "ko": "장막시티 갤럭시단 빌딩",
+          "en": "Veilstone Galactic Building"
+        }
       }
     ],
     "max-ether": [
@@ -1556,7 +1492,11 @@
         "where": "iron-island"
       },
       {
-        "place": "Veilstone Galactic Building"
+        "where": "galactic-hq",
+        "place": {
+          "ko": "장막시티 갤럭시단 빌딩",
+          "en": "Veilstone Galactic Building"
+        }
       }
     ],
     "max-repel": [
@@ -1608,7 +1548,10 @@
       },
       {
         "where": "jubilife-city",
-        "detail": "Get 4 Numbers in the Lottery"
+        "detail": {
+          "ko": "복권 4자리 일치",
+          "en": "Get 4 Numbers in the Lottery"
+        }
       },
       {
         "where": "mt-coronet"
@@ -1627,10 +1570,18 @@
         "detail": "다우징머신"
       },
       {
-        "place": "Veilstone Galactic Building"
+        "where": "galactic-hq",
+        "place": {
+          "ko": "장막시티 갤럭시단 빌딩",
+          "en": "Veilstone Galactic Building"
+        }
       },
       {
-        "place": "Grand Lake Hotel"
+        "where": "grand-lake",
+        "place": {
+          "ko": "호텔 그랜드레이크",
+          "en": "Grand Lake Hotel"
+        }
       },
       {
         "where": "floaroma-meadow",
@@ -1796,7 +1747,10 @@
     "old-rod": [
       {
         "where": "jubilife-city",
-        "detail": "Fishing Guru"
+        "detail": {
+          "ko": "낚시광",
+          "en": "Fishing Guru"
+        }
       }
     ],
     "oran-berry": [
@@ -1828,13 +1782,10 @@
     "parcel": [
       {
         "where": "twinleaf-town",
-        "detail": "After obtaining Pokédex"
-      }
-    ],
-    "parcel--letsgo": [
-      {
-        "where": "twinleaf-town",
-        "detail": "After obtaining Pokédex"
+        "detail": {
+          "ko": "도감을 받은 뒤",
+          "en": "After obtaining Pokédex"
+        }
       }
     ],
     "passho-berry": [
@@ -1957,7 +1908,10 @@
     "poke-ball": [
       {
         "where": "sinnoh-route-202",
-        "detail": "From Lucas/Dawn"
+        "detail": {
+          "ko": "광휘 · 빛나에게서",
+          "en": "From Lucas/Dawn"
+        }
       },
       {
         "where": "sinnoh-route-205"
@@ -1977,7 +1931,10 @@
     "poke-radar": [
       {
         "where": "sandgem-town",
-        "detail": "From Professor Rowan"
+        "detail": {
+          "ko": "마박사에게서",
+          "en": "From Professor Rowan"
+        }
       }
     ],
     "pomeg-berry": [
@@ -2064,7 +2021,10 @@
       },
       {
         "where": "jubilife-city",
-        "detail": "Get 2 Numbers in the Lottery"
+        "detail": {
+          "ko": "복권 2자리 일치",
+          "en": "Get 2 Numbers in the Lottery"
+        }
       },
       {
         "where": "eterna-city",
@@ -2135,7 +2095,11 @@
         "where": "mt-coronet"
       },
       {
-        "place": "Veilstone Galactic Building",
+        "where": "galactic-hq",
+        "place": {
+          "ko": "장막시티 갤럭시단 빌딩",
+          "en": "Veilstone Galactic Building"
+        },
         "how": "hidden",
         "detail": "다우징머신"
       }
@@ -2317,7 +2281,11 @@
         "where": "sinnoh-victory-road"
       },
       {
-        "place": "Veilstone Galactic Building",
+        "where": "galactic-hq",
+        "place": {
+          "ko": "장막시티 갤럭시단 빌딩",
+          "en": "Veilstone Galactic Building"
+        },
         "how": "hidden",
         "detail": "다우징머신"
       }
@@ -2378,7 +2346,10 @@
       },
       {
         "where": "fuego-ironworks",
-        "detail": "From Mr. Fuego"
+        "detail": {
+          "ko": "골풀무에게서",
+          "en": "From Mr. Fuego"
+        }
       },
       {
         "where": "wayward-cave",
@@ -2463,7 +2434,11 @@
         "detail": "다우징머신"
       },
       {
-        "place": "Eterna Galactic Building"
+        "where": "tg-eterna-bldg",
+        "place": {
+          "ko": "갤럭시단 영원 빌딩",
+          "en": "Eterna Galactic Building"
+        }
       }
     ],
     "rindo-berry": [
@@ -2686,26 +2661,24 @@
         "where": "veilstone-city"
       }
     ],
-    "storage-key--galactic-warehouse": [
-      {
-        "where": "veilstone-city"
-      }
-    ],
-    "storage-key--sea-mauville": [
-      {
-        "where": "veilstone-city"
-      }
-    ],
     "suite-key": [
       {
-        "place": "Grand Lake Hotel",
+        "where": "grand-lake",
+        "place": {
+          "ko": "호텔 그랜드레이크",
+          "en": "Grand Lake Hotel"
+        },
         "how": "hidden",
         "detail": "다우징머신"
       }
     ],
     "sun-stone": [
       {
-        "place": "Grand Lake Hotel",
+        "where": "grand-lake",
+        "place": {
+          "ko": "호텔 그랜드레이크",
+          "en": "Grand Lake Hotel"
+        },
         "how": "hidden",
         "detail": "다우징머신"
       }
@@ -2765,7 +2738,10 @@
     "super-rod": [
       {
         "where": "fight-area",
-        "detail": "Fishing Guru"
+        "detail": {
+          "ko": "낚시광",
+          "en": "Fishing Guru"
+        }
       }
     ],
     "tamato-berry": [
@@ -2842,546 +2818,1163 @@
     ],
     "tm01": [
       {
+        "how": "field",
         "place": "무쇠게이트 지하 1층"
       }
     ],
     "tm02": [
       {
+        "how": "field",
+        "where": "mt-coronet",
         "place": "천관산"
       }
     ],
     "tm03": [
       {
+        "how": "field",
+        "where": "ravaged-path",
         "place": "험한 샛길"
       }
     ],
     "tm04": [
       {
-        "place": "배틀프론티어 BP교환소에서 48BP와 교환"
+        "how": "exchange",
+        "where": "battle-frontier",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 48,
+            "unit": "bp"
+          }
+        ]
       }
     ],
     "tm05": [
       {
+        "how": "field",
+        "where": "sinnoh-route-213",
         "place": "213번 도로"
       }
     ],
     "tm06": [
       {
+        "how": "field",
+        "where": "sinnoh-route-212",
         "place": "212번 도로"
       },
       {
-        "place": "배틀프론티어 BP교환소에서 32BP와 교환"
+        "how": "exchange",
+        "where": "battle-frontier",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 32,
+            "unit": "bp"
+          }
+        ]
       }
     ],
     "tm07": [
       {
+        "how": "field",
+        "where": "sinnoh-route-217",
         "place": "217번 도로"
       }
     ],
     "tm08": [
       {
-        "place": "배틀프론티어 BP교환소에서 48BP와 교환"
+        "how": "exchange",
+        "where": "battle-frontier",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 48,
+            "unit": "bp"
+          }
+        ]
       }
     ],
     "tm09": [
       {
+        "how": "field",
+        "where": "sinnoh-route-204",
         "place": "204번 도로"
       }
     ],
     "tm10": [
       {
-        "place": "장막시티 게임코너에서 코인 6000개와 교환"
+        "how": "prize",
+        "where": "veilstone-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 6000,
+            "unit": "coins"
+          }
+        ]
       }
     ],
     "tm11": [
       {
+        "how": "field",
+        "where": "sinnoh-route-212",
         "place": "212번 도로"
       }
     ],
     "tm12": [
       {
+        "how": "field",
+        "where": "sinnoh-route-211",
         "place": "211번 도로"
       }
     ],
     "tm13": [
       {
+        "how": "field",
+        "where": "sinnoh-route-216",
         "place": "216번 도로"
       },
       {
-        "place": "장막시티 게임코너에서 코인 10000개와 교환"
+        "how": "prize",
+        "where": "veilstone-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 10000,
+            "unit": "coins"
+          }
+        ]
       }
     ],
     "tm14": [
       {
+        "how": "field",
+        "where": "lake-acuity",
         "place": "예지호수"
       },
       {
-        "place": "장막시티 백화점에서 5500원에 구입"
+        "how": "shop",
+        "where": "veilstone-city",
+        "place": "장막시티 백화점 3층",
+        "cost": [
+          {
+            "amount": 5500,
+            "unit": "money"
+          }
+        ]
       }
     ],
     "tm15": [
       {
-        "place": "장막시티 백화점에서 7500원에 구입"
+        "how": "shop",
+        "where": "veilstone-city",
+        "place": "장막시티 백화점 3층",
+        "cost": [
+          {
+            "amount": 7500,
+            "unit": "money"
+          }
+        ]
       }
     ],
     "tm16": [
       {
-        "place": "장막시티 백화점에서 2000원에 구입"
+        "how": "shop",
+        "where": "veilstone-city",
+        "place": "장막시티 백화점 3층",
+        "cost": [
+          {
+            "amount": 2000,
+            "unit": "money"
+          }
+        ]
       }
     ],
     "tm17": [
       {
-        "place": "장막시티 백화점에서 2000원에 구입"
+        "how": "shop",
+        "where": "veilstone-city",
+        "place": "장막시티 백화점 3층",
+        "cost": [
+          {
+            "amount": 2000,
+            "unit": "money"
+          }
+        ]
       }
     ],
     "tm18": [
       {
+        "how": "field",
+        "where": "sinnoh-sea-route-223",
         "place": "223번 수로"
       }
     ],
     "tm19": [
       {
+        "how": "field",
+        "where": "sinnoh-route-209",
         "place": "209번 도로"
       }
     ],
     "tm20": [
       {
-        "place": "장막시티 백화점에서 2000원에 구입"
+        "how": "shop",
+        "where": "veilstone-city",
+        "place": "장막시티 백화점 3층",
+        "cost": [
+          {
+            "amount": 2000,
+            "unit": "money"
+          }
+        ]
       }
     ],
     "tm21": [
       {
+        "how": "field",
         "place": "장막시티 갤럭시단 아지트"
       },
       {
-        "place": "장막시티 게임코너에서 코인 8000개와 교환"
+        "how": "prize",
+        "where": "veilstone-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 8000,
+            "unit": "coins"
+          }
+        ]
       }
     ],
     "tm22": [
       {
-        "place": "장막시티 백화점에서 3000원에 구입"
+        "how": "shop",
+        "where": "veilstone-city",
+        "place": "장막시티 백화점 3층",
+        "cost": [
+          {
+            "amount": 3000,
+            "unit": "money"
+          }
+        ]
       }
     ],
     "tm23": [
       {
+        "how": "field",
+        "where": "iron-island",
         "place": "강철섬"
       }
     ],
     "tm24": [
       {
+        "how": "field",
+        "where": "valley-windworks",
         "place": "골짜기발전소(파도타기 필요)"
       },
       {
-        "place": "장막시티 게임코너에서 동전 10000개와 교환"
+        "how": "prize",
+        "where": "veilstone-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 10000,
+            "unit": "coins"
+          }
+        ]
       }
     ],
     "tm25": [
       {
+        "how": "field",
+        "where": "lake-valor",
         "place": "입지호수"
       },
       {
-        "place": "장막시티 백화점에서 5500원에 구입"
+        "how": "shop",
+        "where": "veilstone-city",
+        "place": "장막시티 백화점 3층",
+        "cost": [
+          {
+            "amount": 5500,
+            "unit": "money"
+          }
+        ]
       }
     ],
     "tm26": [
       {
+        "how": "field",
+        "where": "wayward-cave",
         "place": "미혹의동굴(숨겨진 입구쪽 지하 1층)"
       },
       {
-        "place": "배틀프론티어 BP교환소에서 80BP와 교환"
+        "how": "exchange",
+        "where": "battle-frontier",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 80,
+            "unit": "bp"
+          }
+        ]
       }
     ],
     "tm27": [
       {
-        "place": "마박사에게 입수[스토리 진행 중 자동 입수]"
+        "how": "gift",
+        "place": "마박사에게 입수",
+        "detail": "스토리 진행 중"
       },
       {
+        "how": "field",
         "place": "209번 도로 로스트타워"
       },
       {
-        "place": "장막시티 게임코너에서 동전 8000개와 교환"
+        "how": "prize",
+        "where": "veilstone-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 8000,
+            "unit": "coins"
+          }
+        ]
       }
     ],
     "tm28": [
       {
+        "how": "field",
         "place": "214번 도로 유적마니아굴"
       }
     ],
     "tm29": [
       {
+        "how": "field",
+        "where": "sinnoh-route-211",
         "place": "211번 도로(동쪽/봉신마을)"
       },
       {
-        "place": "장막시티 게임코너에서 동전 10000개와 교환"
+        "how": "prize",
+        "where": "veilstone-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 10000,
+            "unit": "coins"
+          }
+        ]
       }
     ],
     "tm30": [
       {
+        "how": "field",
+        "where": "sinnoh-route-210",
         "place": "210번 도로"
       },
       {
-        "place": "배틀프론티어 BP교환소에서 64BP와 교환"
+        "how": "exchange",
+        "where": "battle-frontier",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 64,
+            "unit": "bp"
+          }
+        ]
       }
     ],
     "tm31": [
       {
+        "how": "field",
         "place": "무쇠게이트 지하 1층"
       },
       {
-        "place": "배틀프론티어 BP교환소에서 40BP와 교환"
+        "how": "exchange",
+        "where": "battle-frontier",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 40,
+            "unit": "bp"
+          }
+        ]
       }
     ],
     "tm32": [
       {
+        "how": "field",
+        "where": "wayward-cave",
         "place": "미혹의동굴"
       },
       {
-        "place": "장막시티 게임코너에서 동전 4000개와 교환"
+        "how": "prize",
+        "where": "veilstone-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 4000,
+            "unit": "coins"
+          }
+        ]
       }
     ],
     "tm33": [
       {
-        "place": "장막시티 백화점에서 2000원에 구입"
+        "how": "shop",
+        "where": "veilstone-city",
+        "place": "장막시티 백화점 3층",
+        "cost": [
+          {
+            "amount": 2000,
+            "unit": "money"
+          }
+        ]
       }
     ],
     "tm34": [
       {
+        "how": "field",
+        "where": "sinnoh-route-215",
         "place": "215번 도로"
       }
     ],
     "tm35": [
       {
+        "how": "field",
+        "where": "fuego-ironworks",
         "place": "골풀무제철소"
       },
       {
-        "place": "장막시티 게임코너에서 동전 10000개와 교환"
+        "how": "prize",
+        "where": "veilstone-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 10000,
+            "unit": "coins"
+          }
+        ]
       }
     ],
     "tm36": [
       {
+        "how": "field",
         "place": "장막시티 갤럭시단빌딩"
       },
       {
-        "place": "배틀프론티어 BP교환소에서 80BP와 교환"
+        "how": "exchange",
+        "where": "battle-frontier",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 80,
+            "unit": "bp"
+          }
+        ]
       }
     ],
     "tm37": [
       {
+        "how": "field",
+        "where": "sinnoh-route-228",
         "place": "228번 도로"
       }
     ],
     "tm38": [
       {
+        "how": "field",
+        "where": "lake-verity",
         "place": "진실호수"
       },
       {
-        "place": "장막시티 백화점에서 5500원에 구입"
+        "how": "shop",
+        "where": "veilstone-city",
+        "place": "장막시티 백화점 3층",
+        "cost": [
+          {
+            "amount": 5500,
+            "unit": "money"
+          }
+        ]
       }
     ],
     "tm39": [
       {
+        "how": "field",
+        "where": "ravaged-path",
         "place": "험한 샛길"
       }
     ],
     "tm40": [
       {
+        "how": "field",
+        "where": "sinnoh-route-213",
         "place": "213번 도로"
       },
       {
-        "place": "배틀프론티어 BP교환소에서 40BP와 교환"
+        "how": "exchange",
+        "where": "battle-frontier",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 40,
+            "unit": "bp"
+          }
+        ]
       }
     ],
     "tm41": [
       {
+        "how": "field",
+        "where": "sinnoh-victory-road",
         "place": "챔피언로드"
       }
     ],
     "tm42": [
       {
+        "how": "field",
+        "where": "survival-area",
         "place": "서바이벌에리어"
       }
     ],
     "tm43": [
       {
+        "how": "other",
         "place": "연고시티 상호교류광장"
       }
     ],
     "tm44": [
       {
-        "place": "장막시티 게임코너에서 동전 6000개와 교환"
+        "how": "prize",
+        "where": "veilstone-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 6000,
+            "unit": "coins"
+          }
+        ]
       },
       {
-        "place": "특성 픽업을 가진 Lv 51~70의 포켓몬이 소지"
+        "how": "other",
+        "content": {
+          "ko": "특성 픽업",
+          "en": "Pickup",
+          "ja": "ものひろい"
+        },
+        "detail": "Lv 51–70 · 1%"
       }
     ],
     "tm45": [
       {
+        "how": "other",
         "place": "연고시티 상호교류광장"
       },
       {
-        "place": "배틀프론티어 BP교환소에서 32BP와 교환"
+        "how": "exchange",
+        "where": "battle-frontier",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 32,
+            "unit": "bp"
+          }
+        ]
       }
     ],
     "tm46": [
       {
+        "how": "field",
+        "where": "eterna-city",
         "place": "영원시티"
       }
     ],
     "tm47": [
       {
+        "how": "field",
+        "where": "sinnoh-route-209",
         "place": "209번 도로"
       }
     ],
     "tm48": [
       {
+        "how": "field",
+        "where": "canalave-city",
         "place": "운하시티"
       }
     ],
     "tm49": [
       {
+        "how": "field",
         "place": "장막시티 갤럭시단창고"
       }
     ],
     "tm50": [
       {
+        "how": "field",
+        "where": "stark-mountain",
         "place": "하드마운틴"
       }
     ],
     "tm51": [
       {
+        "how": "field",
+        "where": "sinnoh-route-210",
         "place": "210번도로"
       }
     ],
     "tm52": [
       {
-        "place": "장막시티 백화점에서 5500원에 구입"
+        "how": "shop",
+        "where": "veilstone-city",
+        "place": "장막시티 백화점 3층",
+        "cost": [
+          {
+            "amount": 5500,
+            "unit": "money"
+          }
+        ]
       }
     ],
     "tm53": [
       {
+        "how": "field",
+        "where": "sinnoh-sea-route-226",
         "place": "226번 수로"
       },
       {
-        "place": "배틀프론티어 BP교환소에서 64BP와 교환"
+        "how": "exchange",
+        "where": "battle-frontier",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 64,
+            "unit": "bp"
+          }
+        ]
       }
     ],
     "tm54": [
       {
-        "place": "장막시티 백화점에서 2000원에 구입"
+        "how": "shop",
+        "where": "veilstone-city",
+        "place": "장막시티 백화점 3층",
+        "cost": [
+          {
+            "amount": 2000,
+            "unit": "money"
+          }
+        ]
       }
     ],
     "tm55": [
       {
-        "place": "들판시티 체육관 관장 맥실러에게 승리[스토리 진행 중 자동 입수]"
+        "how": "reward",
+        "where": "pastoria-city",
+        "place": "들판시티 체육관",
+        "detail": "관장 맥실러 승리"
       }
     ],
     "tm56": [
       {
+        "how": "field",
+        "where": "sinnoh-route-222",
         "place": "222번 도로"
       }
     ],
     "tm57": [
       {
-        "place": "물가시티 체육관 관장 전진에게 승리[스토리 진행 중 자동 입수]"
+        "how": "reward",
+        "where": "sunyshore-city",
+        "place": "물가시티 체육관",
+        "detail": "관장 전진 승리"
       }
     ],
     "tm58": [
       {
-        "place": "장막시티 게임코너에서 동전 2000개와 교환"
+        "how": "prize",
+        "where": "veilstone-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 2000,
+            "unit": "coins"
+          }
+        ]
       }
     ],
     "tm59": [
       {
+        "how": "field",
+        "where": "sinnoh-victory-road",
         "place": "챔피언로드"
       },
       {
-        "place": "배틀프론티어 BP교환소에서 80BP와 교환"
+        "how": "exchange",
+        "where": "battle-frontier",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 80,
+            "unit": "bp"
+          }
+        ]
       }
     ],
     "tm60": [
       {
-        "place": "장막시티 체육관 관장 자두에게 승리[스토리 진행 중 자동 입수]"
+        "how": "reward",
+        "where": "veilstone-city",
+        "place": "장막시티 체육관",
+        "detail": "관장 자두 승리"
       }
     ],
     "tm61": [
       {
-        "place": "배틀프론티어 BP교환소에서 32BP와 교환"
+        "how": "exchange",
+        "where": "battle-frontier",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 32,
+            "unit": "bp"
+          }
+        ]
       }
     ],
     "tm62": [
       {
+        "how": "field",
+        "where": "sinnoh-route-212",
         "place": "212번 도로(남쪽/들판시티쪽)"
       }
     ],
     "tm63": [
       {
+        "how": "field",
+        "where": "veilstone-city",
         "place": "장막시티"
       }
     ],
     "tm64": [
       {
-        "place": "장막시티 게임코너"
+        "how": "gift",
+        "where": "veilstone-city",
+        "place": "장막시티 게임코너",
+        "detail": "카운터 직원 · 보너스 라운드 10번 연속 후(한국판은 가끔 무작위로)"
       }
     ],
     "tm65": [
       {
-        "place": "연고시티 체육관 관장 멜리사에게 승리[스토리 진행 중 자동 입수]"
+        "how": "reward",
+        "where": "hearthome-city",
+        "place": "연고시티 체육관",
+        "detail": "관장 멜리사 승리"
       }
     ],
     "tm66": [
       {
+        "how": "field",
+        "where": "sinnoh-route-215",
         "place": "215번 도로"
       }
     ],
     "tm67": [
       {
+        "how": "field",
+        "where": "eterna-city",
         "place": "영원시티"
       }
     ],
     "tm68": [
       {
-        "place": "장막시티 게임코너에서 코인 20000개와 교환"
+        "how": "prize",
+        "where": "veilstone-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 20000,
+            "unit": "coins"
+          }
+        ]
       }
     ],
     "tm69": [
       {
+        "how": "field",
+        "where": "mt-coronet",
         "place": "천관산"
       }
     ],
     "tm70": [
       {
+        "how": "field",
         "place": "무쇠게이트 지하 1층"
       },
       {
-        "place": "장막시티 백화점에서 1000원에 구입"
+        "how": "shop",
+        "where": "veilstone-city",
+        "place": "장막시티 백화점 3층",
+        "cost": [
+          {
+            "amount": 1000,
+            "unit": "money"
+          }
+        ]
       }
     ],
     "tm71": [
       {
+        "how": "field",
+        "where": "sinnoh-victory-road",
         "place": "챔피언로드"
       },
       {
-        "place": "배틀프론티어 BP교환소에서 80BP와 교환"
+        "how": "exchange",
+        "where": "battle-frontier",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 80,
+            "unit": "bp"
+          }
+        ]
       }
     ],
     "tm72": [
       {
-        "place": "선단시티 체육관 관장 무청에게 승리[스토리 진행 중 자동 입수]"
+        "how": "reward",
+        "where": "snowpoint-city",
+        "place": "선단시티 체육관",
+        "detail": "관장 무청 승리"
       }
     ],
     "tm73": [
       {
-        "place": "배틀프론티어 BP교환소에서 32BP와 교환"
+        "how": "exchange",
+        "where": "battle-frontier",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 32,
+            "unit": "bp"
+          }
+        ]
       }
     ],
     "tm74": [
       {
-        "place": "장막시티 게임코너에서 동전 15000개와 교환"
+        "how": "prize",
+        "where": "veilstone-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 15000,
+            "unit": "coins"
+          }
+        ]
       }
     ],
     "tm75": [
       {
-        "place": "장막시티 게임코너에서 동전 4000개와 교환"
+        "how": "prize",
+        "where": "veilstone-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 4000,
+            "unit": "coins"
+          }
+        ]
       }
     ],
     "tm76": [
       {
-        "place": "무쇠시티 체육관 관장 강석에게 승리[스토리 진행 중 자동 입수]"
+        "how": "reward",
+        "where": "oreburgh-city",
+        "place": "무쇠시티 체육관",
+        "detail": "관장 강석 승리"
       }
     ],
     "tm77": [
       {
+        "how": "field",
+        "where": "sinnoh-route-211",
         "place": "211번 도로(동쪽/봉신마을쪽)"
       }
     ],
     "tm78": [
       {
+        "how": "field",
+        "where": "sinnoh-route-204",
         "place": "204번 도로(북쪽/꽃향기마을쪽)"
       }
     ],
     "tm79": [
       {
+        "how": "field",
+        "where": "sinnoh-victory-road",
         "place": "챔피언로드"
       }
     ],
     "tm80": [
       {
+        "how": "field",
+        "where": "mt-coronet",
         "place": "천관산"
       }
     ],
     "tm81": [
       {
+        "how": "field",
+        "where": "sinnoh-route-221",
         "place": "221번 도로"
       },
       {
-        "place": "배틀프론티어 BP교환소에서 64BP와 교환"
+        "how": "exchange",
+        "where": "battle-frontier",
+        "content": {
+          "ko": "배틀프런티어",
+          "en": "Battle Frontier",
+          "ja": "バトルフロンティア"
+        },
+        "cost": [
+          {
+            "amount": 64,
+            "unit": "bp"
+          }
+        ]
       }
     ],
     "tm82": [
       {
+        "how": "field",
+        "where": "eterna-forest",
         "place": "영원의숲(바깥쪽 좁은 길)"
       }
     ],
     "tm83": [
       {
-        "place": "장막시티 백화점에서 2000원에 구입"
+        "how": "shop",
+        "where": "veilstone-city",
+        "place": "장막시티 백화점 3층",
+        "cost": [
+          {
+            "amount": 2000,
+            "unit": "money"
+          }
+        ]
       }
     ],
     "tm84": [
       {
+        "how": "field",
+        "where": "sinnoh-route-212",
         "place": "212번 도로(남쪽/들판시티쪽)"
       }
     ],
     "tm85": [
       {
+        "how": "field",
+        "where": "valor-lakefront",
         "place": "입지호수 근처"
       }
     ],
     "tm86": [
       {
-        "place": "영원시티 체육관 관장 유채에게 승리[스토리 진행 중 자동 입수]"
+        "how": "reward",
+        "where": "eterna-city",
+        "place": "영원시티 체육관",
+        "detail": "관장 유채 승리"
       }
     ],
     "tm87": [
       {
+        "how": "field",
         "place": "212번 도로 포켓몬저택"
       }
     ],
     "tm88": [
       {
+        "how": "field",
+        "where": "floaroma-town",
         "place": "꽃향기마을"
       }
     ],
     "tm89": [
       {
+        "how": "field",
+        "where": "canalave-city",
         "place": "운하시티(파도타기 필요)"
       },
       {
-        "place": "장막시티 게임코너에서 동전 6000개와 교환"
+        "how": "prize",
+        "where": "veilstone-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 6000,
+            "unit": "coins"
+          }
+        ]
       }
     ],
     "tm90": [
       {
+        "how": "field",
         "place": "영원의 숲 내 숲의 양옥집"
       },
       {
-        "place": "장막시티 게임코너에서 동전 2000개와 교환"
+        "how": "prize",
+        "where": "veilstone-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 2000,
+            "unit": "coins"
+          }
+        ]
       }
     ],
     "tm91": [
       {
-        "place": "운하시티 체육관 관장 동관에게 승리[스토리 진행 중 자동 입수]"
+        "how": "reward",
+        "where": "canalave-city",
+        "place": "운하시티 체육관",
+        "detail": "관장 동관 승리"
       }
     ],
     "tm92": [
       {
+        "how": "field",
         "place": "213번 도로 호텔그랜드레이크"
       }
     ],
     "town-map": [
       {
         "where": "jubilife-city",
-        "detail": "From Rival"
+        "detail": {
+          "ko": "라이벌에게서",
+          "en": "From Rival"
+        }
       }
     ],
     "ultra-ball": [
@@ -3450,7 +4043,10 @@
       },
       {
         "where": "jubilife-city",
-        "detail": "Get 1 Number in the Lottery"
+        "detail": {
+          "ko": "복권 1자리 일치",
+          "en": "Get 1 Number in the Lottery"
+        }
       },
       {
         "where": "fuego-ironworks",
@@ -3497,7 +4093,11 @@
         "where": "sinnoh-route-224"
       },
       {
-        "place": "Eterna Galactic Building"
+        "where": "tg-eterna-bldg",
+        "place": {
+          "ko": "갤럭시단 영원 빌딩",
+          "en": "Eterna Galactic Building"
+        }
       }
     ],
     "wacan-berry": [
@@ -3543,8 +4143,15 @@
     ],
     "white-flute": [
       {
-        "place": "Grand Lake Hotel",
-        "detail": "Return Suite Key"
+        "where": "grand-lake",
+        "place": {
+          "ko": "호텔 그랜드레이크",
+          "en": "Grand Lake Hotel"
+        },
+        "detail": {
+          "ko": "룸키를 돌려주면",
+          "en": "Return Suite Key"
+        }
       }
     ],
     "wiki-berry": [
@@ -3590,7 +4197,11 @@
     ],
     "x-speed": [
       {
-        "place": "Eterna Galactic Building"
+        "where": "tg-eterna-bldg",
+        "place": {
+          "ko": "갤럭시단 영원 빌딩",
+          "en": "Eterna Galactic Building"
+        }
       }
     ],
     "yache-berry": [
@@ -3612,7 +4223,10 @@
       },
       {
         "where": "fuego-ironworks",
-        "detail": "From Mr. Fuego"
+        "detail": {
+          "ko": "골풀무에게서",
+          "en": "From Mr. Fuego"
+        }
       },
       {
         "where": "wayward-cave",
@@ -3670,7 +4284,10 @@
         "where": "sinnoh-victory-road"
       },
       {
-        "place": "Galactic Warehouse"
+        "place": {
+          "ko": "갤럭시단 창고",
+          "en": "Galactic Warehouse"
+        }
       }
     ]
   },
@@ -4352,6 +4969,216 @@
         "where": "sinnoh-route-228",
         "place": "228번 도로 민가(도로변)",
         "detail": "스타팅 최종 진화 · 친밀도 최대 (무료)"
+      }
+    ]
+  },
+  "pokemon": {
+    "aerodactyl": [
+      {
+        "how": "fossil",
+        "where": "oreburgh-city",
+        "place": {
+          "ko": "무쇠시티 탄갱박물관",
+          "en": "Oreburgh Mining Museum"
+        },
+        "detail": {
+          "ko": "비밀의호박 복원",
+          "en": "Revived from the Old Amber"
+        },
+        "minLevel": 20,
+        "maxLevel": 20,
+        "replaces": "gift"
+      }
+    ],
+    "anorith": [
+      {
+        "how": "fossil",
+        "where": "oreburgh-city",
+        "place": {
+          "ko": "무쇠시티 탄갱박물관",
+          "en": "Oreburgh Mining Museum"
+        },
+        "detail": {
+          "ko": "발톱화석 복원",
+          "en": "Revived from the Claw Fossil"
+        },
+        "minLevel": 20,
+        "maxLevel": 20,
+        "replaces": "gift"
+      }
+    ],
+    "chimchar": [
+      {
+        "how": "starter",
+        "where": "sinnoh-route-201",
+        "minLevel": 5,
+        "maxLevel": 5,
+        "replaces": "gift"
+      }
+    ],
+    "cranidos": [
+      {
+        "how": "fossil",
+        "where": "oreburgh-city",
+        "place": {
+          "ko": "무쇠시티 탄갱박물관",
+          "en": "Oreburgh Mining Museum"
+        },
+        "detail": {
+          "ko": "두개의화석 복원",
+          "en": "Revived from the Skull Fossil"
+        },
+        "minLevel": 20,
+        "maxLevel": 20,
+        "replaces": "gift"
+      }
+    ],
+    "glameow": [
+      {
+        "how": "transfer",
+        "versionsFrom": [
+          "pearl"
+        ]
+      }
+    ],
+    "kabuto": [
+      {
+        "how": "fossil",
+        "where": "oreburgh-city",
+        "place": {
+          "ko": "무쇠시티 탄갱박물관",
+          "en": "Oreburgh Mining Museum"
+        },
+        "detail": {
+          "ko": "껍질화석 복원",
+          "en": "Revived from the Dome Fossil"
+        },
+        "minLevel": 20,
+        "maxLevel": 20,
+        "replaces": "gift"
+      }
+    ],
+    "lileep": [
+      {
+        "how": "fossil",
+        "where": "oreburgh-city",
+        "place": {
+          "ko": "무쇠시티 탄갱박물관",
+          "en": "Oreburgh Mining Museum"
+        },
+        "detail": {
+          "ko": "뿌리화석 복원",
+          "en": "Revived from the Root Fossil"
+        },
+        "minLevel": 20,
+        "maxLevel": 20,
+        "replaces": "gift"
+      }
+    ],
+    "misdreavus": [
+      {
+        "how": "transfer",
+        "versionsFrom": [
+          "pearl"
+        ]
+      }
+    ],
+    "murkrow": [
+      {
+        "how": "transfer",
+        "versionsFrom": [
+          "diamond"
+        ]
+      }
+    ],
+    "omanyte": [
+      {
+        "how": "fossil",
+        "where": "oreburgh-city",
+        "place": {
+          "ko": "무쇠시티 탄갱박물관",
+          "en": "Oreburgh Mining Museum"
+        },
+        "detail": {
+          "ko": "조개화석 복원",
+          "en": "Revived from the Helix Fossil"
+        },
+        "minLevel": 20,
+        "maxLevel": 20,
+        "replaces": "gift"
+      }
+    ],
+    "piplup": [
+      {
+        "how": "starter",
+        "where": "sinnoh-route-201",
+        "minLevel": 5,
+        "maxLevel": 5,
+        "replaces": "gift"
+      }
+    ],
+    "regice": [
+      {
+        "how": "static",
+        "where": "iceberg-ruins",
+        "detail": {
+          "ko": "배포 레지기가스를 데리고 가요 · 1마리",
+          "en": "Bring an event Regigigas; only one"
+        }
+      }
+    ],
+    "regirock": [
+      {
+        "how": "static",
+        "where": "rock-peak-ruins",
+        "detail": {
+          "ko": "배포 레지기가스를 데리고 가요 · 1마리",
+          "en": "Bring an event Regigigas; only one"
+        }
+      }
+    ],
+    "registeel": [
+      {
+        "how": "static",
+        "where": "iron-ruins",
+        "detail": {
+          "ko": "배포 레지기가스를 데리고 가요 · 1마리",
+          "en": "Bring an event Regigigas; only one"
+        }
+      }
+    ],
+    "shieldon": [
+      {
+        "how": "fossil",
+        "where": "oreburgh-city",
+        "place": {
+          "ko": "무쇠시티 탄갱박물관",
+          "en": "Oreburgh Mining Museum"
+        },
+        "detail": {
+          "ko": "방패의화석 복원",
+          "en": "Revived from the Armor Fossil"
+        },
+        "minLevel": 20,
+        "maxLevel": 20,
+        "replaces": "gift"
+      }
+    ],
+    "stunky": [
+      {
+        "how": "transfer",
+        "versionsFrom": [
+          "diamond"
+        ]
+      }
+    ],
+    "turtwig": [
+      {
+        "how": "starter",
+        "where": "sinnoh-route-201",
+        "minLevel": 5,
+        "maxLevel": 5,
+        "replaces": "gift"
       }
     ]
   }

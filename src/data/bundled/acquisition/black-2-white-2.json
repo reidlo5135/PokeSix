@@ -1,10 +1,19 @@
 {
   "_comment": [
     "게임(버전 그룹)별 입수 사전 (ui/dex/guidebook.h가 읽는다). 형식은 docs/i18n/README.md 참고.",
-    "scripts/i18n/check_acquisition.py로 검증해 넣었다. 출처는 _sources."
+    "scripts/i18n/check_acquisition.py로 검증해 넣었다. 출처는 _sources.",
+    "pokemon 묶음(2026-11-04): 키 = species.identifier, 값 = 출현 줄. how는 encounter-methods.json 키(starter · fossil · prize · bug-contest · swarm · pokewalker · event · transfer · static …). minLevel · maxLevel = 레벨, versionsFrom = transfer일 때 데려올 버전(빈 배열 = 버전 미지정), replaces = 같은 where · 버전의 PokéAPI 행 중 그 방법(gift)을 숨기고 이 줄로 바꾼다.",
+    "TM/HM의 how 없는 옛 Serebii 줄(2026-11-04): Serebii ItemDex가 NPC에게 받는 줄에만 사람을 적는 모양을 따라 detail에 '관장'·'승리' → reward, 사람 · 조건 → gift, detail 없음 → field로 채웠다(스쿼드 공급 집계용). 연고시티 상호교류광장(데리고 걷는 포켓몬이 줍는 것)은 other."
   ],
   "_sources": [
-    "Serebii.net ItemDex (https://www.serebii.net/itemdex/) — 장소는 PokéAPI/게임 텍스트로 한국어화"
+    "Serebii.net ItemDex (https://www.serebii.net/itemdex/) — 장소는 PokéAPI/게임 텍스트로 한국어화",
+    "Bulbapedia — List of TM and HM locations in Generation I–V · 각 백화점 · 게임코너 · 배틀파크 문서 (https://bulbapedia.bulbagarden.net/, web.archive.org 사본) — TM 입수처 · 가격",
+    "Serebii.net TM/HM 목록 (https://www.serebii.net/) — 교차 확인",
+    "TM 입수처 한국어 표기 대조: https://blog.naver.com/riomedevon/110150582814 (REFER.md)",
+    "Bulbapedia 아이템 문서(Acquisition 표: Dragon Scale · King's Rock · Metal Coat · Up-Grade · Deep Sea Scale/Tooth · Electirizer · Magmarizer · Moon/Thunder/Fire Stone · Razor Claw/Fang, web.archive.org 사본) — 진화 도구 입수처 · 소지 확률",
+    "영어로 남은 place · detail 칸 한국어화(2026-11-04): 공식 한국어 이름(장소 · 인물 · 아이템)은 place-names.json · DB · 나무위키 대조, 공식명이 확인되지 않은 역할 이름은 설명형 번역, 포켓워커 코스명은 한국어판 표기 미확인이라 영어 그대로",
+    "Bulbapedia — Move Tutor (세대별 가르침 장소 · BP/조각/코인 비용, web.archive.org 사본) — NPC 가르침 비용",
+    "포켓몬 입수 보충(pokemon 묶음): PokéAPI gift 행의 경품 · 화석 · 스타팅 덮어쓰기(코인은 Bulbapedia Celadon/Goldenrod Game Corner), PokéAPI에 없는 경로(곤충채집대회 · 포켓워커 · 고정 출현 · 데려오기 · 배포)는 Bulbapedia 포켓몬별 Game locations 표(web.archive.org 사본) 대조"
   ],
   "versionGroup": "black-2-white-2",
   "items": {
@@ -63,14 +72,20 @@
       },
       {
         "where": "castelia-city",
-        "detail": "Tuesday - Defeat Three Trainers on Royal Unova"
+        "detail": {
+          "ko": "화요일 · 로열하나호에서 트레이너 3명 승리",
+          "en": "Tuesday - Defeat Three Trainers on Royal Unova"
+        }
       },
       {
         "where": "undella-town"
       },
       {
         "where": "pokestar-studios",
-        "detail": "Guitarist - Good Ending"
+        "detail": {
+          "ko": "포켓우드 팬(기타리스트) · 굿 엔딩",
+          "en": "Guitarist - Good Ending"
+        }
       }
     ],
     "bicycle": [
@@ -155,7 +170,10 @@
       },
       {
         "where": "pokestar-studios",
-        "detail": "Plasma Grunt - Good/Strange Ending"
+        "detail": {
+          "ko": "포켓우드 팬(플라스마단 조무래기) · 굿/이상한 엔딩",
+          "en": "Plasma Grunt - Good/Strange Ending"
+        }
       },
       {
         "where": "relic-passage"
@@ -224,10 +242,13 @@
       },
       {
         "place": {
-          "ko": "PWT",
+          "ko": "포켓몬 월드 토너먼트",
           "en": "PWT"
         },
-        "detail": "Lose at PWT"
+        "detail": {
+          "ko": "PWT에서 지면",
+          "en": "Lose at PWT"
+        }
       },
       {
         "where": "clay-tunnel",
@@ -292,7 +313,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -302,7 +327,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -320,7 +349,10 @@
     "burn-drive": [
       {
         "where": "p2-laboratory",
-        "detail": "Show Genesect - Black 2"
+        "detail": {
+          "ko": "게노세크트를 보여 주면 · 블랙2",
+          "en": "Show Genesect - Black 2"
+        }
       }
     ],
     "burn-heal": [
@@ -388,7 +420,10 @@
     "charcoal": [
       {
         "where": "castelia-city",
-        "detail": "Battle Company"
+        "detail": {
+          "ko": "배틀 컴퍼니",
+          "en": "Battle Company"
+        }
       },
       {
         "where": "castelia-city"
@@ -422,7 +457,10 @@
     "chill-drive": [
       {
         "where": "p2-laboratory",
-        "detail": "Show Genesect - White 2"
+        "detail": {
+          "ko": "게노세크트를 보여 주면 · 화이트2",
+          "en": "Show Genesect - White 2"
+        }
       }
     ],
     "claw-fossil": [
@@ -433,7 +471,10 @@
     "cleanse-tag": [
       {
         "where": "icirrus-city",
-        "detail": "Show Level 99 Pokémon to Fan Club Owner"
+        "detail": {
+          "ko": "애호가클럽 회장에게 Lv.99 포켓몬을 보여 주면",
+          "en": "Show Level 99 Pokémon to Fan Club Owner"
+        }
       }
     ],
     "clever-wing": [
@@ -452,7 +493,10 @@
     "cover-fossil": [
       {
         "where": "nacrene-city",
-        "detail": "From Lenora"
+        "detail": {
+          "ko": "알로에에게서",
+          "en": "From Lenora"
+        }
       }
     ],
     "damp-rock": [
@@ -507,7 +551,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -517,7 +565,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -535,7 +587,10 @@
     "dark-stone": [
       {
         "where": "ns-castle",
-        "detail": "From N"
+        "detail": {
+          "ko": "N에게서",
+          "en": "From N"
+        }
       }
     ],
     "dawn-stone": [
@@ -588,7 +643,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -598,7 +657,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -611,6 +674,36 @@
         "where": "ns-castle",
         "how": "field",
         "detail": "먼지구름"
+      }
+    ],
+    "deep-sea-scale": [
+      {
+        "how": "shop",
+        "where": "join-avenue",
+        "detail": "골동품 가게"
+      },
+      {
+        "how": "held",
+        "place": {
+          "ko": "야생 초라기 · 야생 랜턴 · 야생 분홍장이 · 야생 시라칸 · 야생 배쓰나이(파랑줄무늬)",
+          "en": "Wild Chinchou, Wild Lanturn, Wild Gorebyss, Wild Relicanth, Wild Basculin (Blue-Striped)"
+        },
+        "detail": "5%"
+      }
+    ],
+    "deep-sea-tooth": [
+      {
+        "how": "shop",
+        "where": "join-avenue",
+        "detail": "골동품 가게"
+      },
+      {
+        "how": "held",
+        "place": {
+          "ko": "야생 샤프니아 · 야생 샤크니아 · 야생 헌테일 · 야생 배쓰나이(빨강줄무늬)",
+          "en": "Wild Carvanha, Wild Sharpedo, Wild Huntail, Wild Basculin (Red-Striped)"
+        },
+        "detail": "5%"
       }
     ],
     "destiny-knot": [
@@ -639,19 +732,28 @@
     "dna-splicers": [
       {
         "where": "giant-chasm",
-        "detail": "After defeating Kyurem"
+        "detail": {
+          "ko": "큐레무 승리 후",
+          "en": "After defeating Kyurem"
+        }
       }
     ],
     "dna-splicers--merge": [
       {
         "where": "giant-chasm",
-        "detail": "After defeating Kyurem"
+        "detail": {
+          "ko": "큐레무 승리 후",
+          "en": "After defeating Kyurem"
+        }
       }
     ],
     "dna-splicers--split": [
       {
         "where": "giant-chasm",
-        "detail": "After defeating Kyurem"
+        "detail": {
+          "ko": "큐레무 승리 후",
+          "en": "After defeating Kyurem"
+        }
       }
     ],
     "dome-fossil": [
@@ -662,7 +764,10 @@
     "douse-drive": [
       {
         "where": "p2-laboratory",
-        "detail": "Show Genesect - White 2"
+        "detail": {
+          "ko": "게노세크트를 보여 주면 · 화이트2",
+          "en": "Show Genesect - White 2"
+        }
       }
     ],
     "draco-plate": [
@@ -725,7 +830,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -735,7 +844,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -832,7 +945,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -842,7 +959,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -855,15 +976,6 @@
         "where": "ns-castle",
         "how": "field",
         "detail": "먼지구름"
-      }
-    ],
-    "dynamax-crystal-uma5054": [
-      {
-        "where": "unova-route-11"
-      },
-      {
-        "where": "pokestar-studios",
-        "detail": "Nurse - Bad Ending"
       }
     ],
     "earth-plate": [
@@ -923,7 +1035,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -933,7 +1049,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -970,7 +1090,10 @@
     "energy-powder": [
       {
         "where": "pokestar-studios",
-        "detail": "Plasma Grunt - Bad Ending"
+        "detail": {
+          "ko": "포켓우드 팬(플라스마단 조무래기) · 배드 엔딩",
+          "en": "Plasma Grunt - Bad Ending"
+        }
       }
     ],
     "energy-root": [
@@ -979,7 +1102,10 @@
       },
       {
         "where": "pokestar-studios",
-        "detail": "Plasma Grunt - Good Ending"
+        "detail": {
+          "ko": "포켓우드 팬(플라스마단 조무래기) · 굿 엔딩",
+          "en": "Plasma Grunt - Good Ending"
+        }
       }
     ],
     "escape-rope": [
@@ -991,7 +1117,10 @@
       },
       {
         "where": "pokestar-studios",
-        "detail": "Nurse - Good Ending"
+        "detail": {
+          "ko": "포켓우드 팬(간호사) · 굿 엔딩",
+          "en": "Nurse - Good Ending"
+        }
       },
       {
         "where": "relic-passage"
@@ -1012,7 +1141,7 @@
       },
       {
         "place": {
-          "ko": "PWT",
+          "ko": "포켓몬 월드 토너먼트",
           "en": "PWT"
         },
         "how": "hidden",
@@ -1086,7 +1215,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -1096,7 +1229,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -1161,7 +1298,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -1171,7 +1312,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -1236,7 +1381,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -1246,7 +1395,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -1287,11 +1440,17 @@
     "fluffy-tail": [
       {
         "where": "accumula-town",
-        "detail": "Show Large Pokémon"
+        "detail": {
+          "ko": "큰 포켓몬을 보여 주면",
+          "en": "Show Large Pokémon"
+        }
       },
       {
         "where": "nacrene-city",
-        "detail": "Return Grubby Hanky"
+        "detail": {
+          "ko": "더러운손수건을 돌려주면",
+          "en": "Return Grubby Hanky"
+        }
       }
     ],
     "flying-gem": [
@@ -1341,7 +1500,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -1351,7 +1514,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -1390,7 +1557,10 @@
       },
       {
         "where": "pokestar-studios",
-        "detail": "Backpacker - Bad Ending"
+        "detail": {
+          "ko": "포켓우드 팬(백팩커) · 배드 엔딩",
+          "en": "Backpacker - Bad Ending"
+        }
       },
       {
         "where": "join-avenue",
@@ -1448,7 +1618,10 @@
       },
       {
         "where": "pokestar-studios",
-        "detail": "Plasma Grunt - Max Box Office"
+        "detail": {
+          "ko": "포켓우드 팬(플라스마단 조무래기) · 흥행 최고",
+          "en": "Plasma Grunt - Max Box Office"
+        }
       },
       {
         "where": "join-avenue",
@@ -1531,7 +1704,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -1541,7 +1718,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -1606,7 +1787,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -1616,7 +1801,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -1693,10 +1882,13 @@
       },
       {
         "place": {
-          "ko": "PWT",
+          "ko": "포켓몬 월드 토너먼트",
           "en": "PWT"
         },
-        "detail": "Lose at PWT"
+        "detail": {
+          "ko": "PWT에서 지면",
+          "en": "Lose at PWT"
+        }
       },
       {
         "where": "clay-tunnel"
@@ -1764,7 +1956,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -1774,7 +1970,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -1898,31 +2098,55 @@
     ],
     "hm01": [
       {
+        "how": "gift",
         "where": "virbank-city",
-        "detail": "From Roxie"
+        "detail": {
+          "ko": "보미카에게서",
+          "en": "From Roxie"
+        }
       }
     ],
     "hm02": [
       {
+        "how": "gift",
         "where": "unova-route-5",
-        "detail": "From Bianca"
+        "detail": {
+          "ko": "벨에게서",
+          "en": "From Bianca"
+        }
       }
     ],
     "hm03": [
       {
+        "how": "gift",
         "where": "unova-route-6",
-        "detail": "From Cheren"
+        "detail": {
+          "ko": "체렌에게서",
+          "en": "From Cheren"
+        }
       }
     ],
     "hm04": [
       {
+        "how": "field",
         "where": "castelia-sewers"
       }
     ],
     "hm05": [
       {
+        "how": "gift",
         "where": "unova-victory-road",
-        "detail": "From N"
+        "detail": {
+          "ko": "N에게서",
+          "en": "From N"
+        }
+      }
+    ],
+    "hm06": [
+      {
+        "how": "gift",
+        "where": "undella-town",
+        "detail": "전당 등록 후 게이트 앞 휴이"
       }
     ],
     "hp-up": [
@@ -2042,7 +2266,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -2052,7 +2280,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -2126,191 +2358,26 @@
       },
       {
         "where": "icirrus-city",
-        "detail": "Show Level 50-98 Pokémon to Fan Club Owner"
-      }
-    ],
-    "lagreat-ball": [
-      {
-        "where": "striaton-city"
-      },
-      {
-        "where": "unova-route-20"
-      },
-      {
-        "where": "virbank-city"
-      },
-      {
-        "where": "pokestar-studios"
-      },
-      {
-        "where": "virbank-complex"
-      },
-      {
-        "where": "virbank-complex",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "join-avenue",
-        "how": "gift",
-        "detail": "기념품"
-      }
-    ],
-    "lapoke-ball": [
-      {
-        "where": "accumula-town"
-      },
-      {
-        "where": "unova-route-20",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "unova-route-20",
-        "detail": "가을에만"
-      },
-      {
-        "where": "aspertia-city",
-        "detail": "From Bianca"
-      },
-      {
-        "where": "floccesy-ranch"
-      },
-      {
-        "where": "virbank-city"
-      },
-      {
-        "where": "join-avenue",
-        "how": "gift",
-        "detail": "기념품"
-      }
-    ],
-    "laultra-ball": [
-      {
-        "where": "unova-route-1"
-      },
-      {
-        "where": "unova-route-2"
-      },
-      {
-        "where": "unova-route-3"
-      },
-      {
-        "where": "unova-route-3",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "unova-route-6"
-      },
-      {
-        "where": "unova-route-12",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "unova-route-13"
-      },
-      {
-        "where": "unova-route-15",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "dreamyard"
-      },
-      {
-        "where": "wellspring-cave",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "pinwheel-forest"
-      },
-      {
-        "where": "pinwheel-forest",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "relic-castle"
-      },
-      {
-        "where": "driftveil-city",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "mistralton-cave",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "chargestone-cave",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "twist-mountain",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "dragonspiral-tower"
-      },
-      {
-        "where": "village-bridge"
-      },
-      {
-        "where": "giant-chasm",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "lostlorn-forest"
-      },
-      {
-        "where": "unova-route-23"
-      },
-      {
-        "where": "aspertia-city"
-      },
-      {
-        "where": "castelia-sewers",
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "where": "relic-passage"
-      },
-      {
-        "where": "join-avenue",
-        "how": "gift",
-        "detail": "기념품"
-      },
-      {
-        "place": {
-          "ko": "챔피언로드",
-          "en": "Victory Road B2W2"
-        },
-        "how": "hidden",
-        "detail": "다우징머신"
-      },
-      {
-        "place": {
-          "ko": "챔피언로드",
-          "en": "Victory Road B2W2"
+        "detail": {
+          "ko": "애호가클럽 회장에게 Lv.50–98 포켓몬을 보여 주면",
+          "en": "Show Level 50-98 Pokémon to Fan Club Owner"
         }
       }
     ],
     "lava-cookie": [
       {
         "where": "castelia-city",
-        "detail": "Monday, Wednesday, Friday - Defeat Four Trainers on Royal Unova"
+        "detail": {
+          "ko": "월 · 수 · 금요일 · 로열하나호에서 트레이너 4명 승리",
+          "en": "Monday, Wednesday, Friday - Defeat Four Trainers on Royal Unova"
+        }
       },
       {
         "where": "pokestar-studios",
-        "detail": "Backpacker - Good/Strange Ending"
+        "detail": {
+          "ko": "포켓우드 팬(백팩커) · 굿/이상한 엔딩",
+          "en": "Backpacker - Good/Strange Ending"
+        }
       }
     ],
     "leaf-stone": [
@@ -2363,7 +2430,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -2373,7 +2444,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -2403,13 +2478,19 @@
     "light-stone": [
       {
         "where": "ns-castle",
-        "detail": "From N"
+        "detail": {
+          "ko": "N에게서",
+          "en": "From N"
+        }
       }
     ],
     "lucky-egg": [
       {
         "where": "celestial-tower",
-        "detail": "From Juniper"
+        "detail": {
+          "ko": "주박사에게서",
+          "en": "From Juniper"
+        }
       }
     ],
     "lum-berry": [
@@ -2470,11 +2551,17 @@
     "master-ball": [
       {
         "where": "mistralton-city",
-        "detail": "From Professor Juniper"
+        "detail": {
+          "ko": "주박사에게서",
+          "en": "From Professor Juniper"
+        }
       },
       {
         "where": "plasma-frigate",
-        "detail": "From Corless"
+        "detail": {
+          "ko": "NPC에게서(Corless)",
+          "en": "From Corless"
+        }
       }
     ],
     "max-elixir": [
@@ -2650,7 +2737,10 @@
       },
       {
         "where": "pokestar-studios",
-        "detail": "Guitarist - Max Box Office"
+        "detail": {
+          "ko": "포켓우드 팬(기타리스트) · 흥행 최고",
+          "en": "Guitarist - Max Box Office"
+        }
       },
       {
         "where": "join-avenue",
@@ -2699,7 +2789,10 @@
     "metronome": [
       {
         "where": "accumula-town",
-        "detail": "Show Kricketot & Whismur"
+        "detail": {
+          "ko": "귀뚤뚜기와 소곤룡을 보여 주면",
+          "en": "Show Kricketot & Whismur"
+        }
       },
       {
         "where": "lacunosa-town"
@@ -2713,7 +2806,10 @@
     "miracle-seed": [
       {
         "where": "castelia-city",
-        "detail": "Battle Company"
+        "detail": {
+          "ko": "배틀 컴퍼니",
+          "en": "Battle Company"
+        }
       },
       {
         "where": "castelia-city"
@@ -2722,14 +2818,20 @@
     "moomoo-milk": [
       {
         "where": "skyarrow-bridge",
-        "detail": "Chase guy around all bridges"
+        "detail": {
+          "ko": "다리마다 남자를 쫓아가면",
+          "en": "Chase guy around all bridges"
+        }
       },
       {
         "where": "castelia-city"
       },
       {
         "where": "pokestar-studios",
-        "detail": "Nurse - Good/Strange Ending"
+        "detail": {
+          "ko": "포켓우드 팬(간호사) · 굿/이상한 엔딩",
+          "en": "Nurse - Good/Strange Ending"
+        }
       },
       {
         "where": "join-avenue",
@@ -2793,7 +2895,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -2803,7 +2909,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -2832,7 +2942,10 @@
       },
       {
         "where": "castelia-city",
-        "detail": "Battle Company"
+        "detail": {
+          "ko": "배틀 컴퍼니",
+          "en": "Battle Company"
+        }
       }
     ],
     "nest-ball": [
@@ -2904,7 +3017,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -2914,7 +3031,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -2957,7 +3078,10 @@
       },
       {
         "where": "pokestar-studios",
-        "detail": "Nurse - Max Box Office"
+        "detail": {
+          "ko": "포켓우드 팬(간호사) · 흥행 최고",
+          "en": "Nurse - Max Box Office"
+        }
       },
       {
         "where": "join-avenue",
@@ -2979,15 +3103,24 @@
     "old-gateau": [
       {
         "where": "castelia-city",
-        "detail": "Thursday - Defeat Five Trainers on Royal Unova"
+        "detail": {
+          "ko": "목요일 · 로열하나호에서 트레이너 5명 승리",
+          "en": "Thursday - Defeat Five Trainers on Royal Unova"
+        }
       },
       {
         "where": "dragonspiral-tower",
-        "detail": "From Cedric"
+        "detail": {
+          "ko": "NPC에게서(Cedric)",
+          "en": "From Cedric"
+        }
       },
       {
         "where": "pokestar-studios",
-        "detail": "Socialite - Good/Strange Ending"
+        "detail": {
+          "ko": "포켓우드 팬(귀부인) · 굿/이상한 엔딩",
+          "en": "Socialite - Good/Strange Ending"
+        }
       }
     ],
     "oran-berry": [
@@ -2998,7 +3131,10 @@
     "oval-charm": [
       {
         "where": "nuvema-town",
-        "detail": "From Juniper - Catch all Unova Pokédex"
+        "detail": {
+          "ko": "주박사 · 하나도감을 모두 잡은 뒤",
+          "en": "From Juniper - Catch all Unova Pokédex"
+        }
       }
     ],
     "oval-stone": [
@@ -3095,7 +3231,10 @@
     "permit": [
       {
         "where": "nuvema-town",
-        "detail": "From Juniper - See all Unova Pokédex"
+        "detail": {
+          "ko": "주박사 · 하나도감을 모두 본 뒤",
+          "en": "From Juniper - See all Unova Pokédex"
+        }
       }
     ],
     "persim-berry": [
@@ -3123,7 +3262,10 @@
     "plume-fossil": [
       {
         "where": "nacrene-city",
-        "detail": "From Lenora"
+        "detail": {
+          "ko": "알로에에게서",
+          "en": "From Lenora"
+        }
       }
     ],
     "poison-barb": [
@@ -3178,7 +3320,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -3188,7 +3334,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -3218,7 +3368,10 @@
       },
       {
         "where": "aspertia-city",
-        "detail": "From Bianca"
+        "detail": {
+          "ko": "벨에게서",
+          "en": "From Bianca"
+        }
       },
       {
         "where": "floccesy-ranch"
@@ -3238,7 +3391,10 @@
       },
       {
         "where": "accumula-town",
-        "detail": "Show Small Pokémon"
+        "detail": {
+          "ko": "작은 포켓몬을 보여 주면",
+          "en": "Show Small Pokémon"
+        }
       }
     ],
     "poke-toy": [
@@ -3267,7 +3423,10 @@
       },
       {
         "where": "pokestar-studios",
-        "detail": "Guitarist - Bad Ending"
+        "detail": {
+          "ko": "포켓우드 팬(기타리스트) · 배드 엔딩",
+          "en": "Guitarist - Bad Ending"
+        }
       },
       {
         "where": "join-avenue",
@@ -3386,7 +3545,7 @@
       },
       {
         "place": {
-          "ko": "PWT",
+          "ko": "포켓몬 월드 토너먼트",
           "en": "PWT"
         }
       },
@@ -3409,7 +3568,10 @@
       },
       {
         "where": "pokestar-studios",
-        "detail": "Backpacker - Max Box Office"
+        "detail": {
+          "ko": "포켓우드 팬(백팩커) · 흥행 최고",
+          "en": "Backpacker - Max Box Office"
+        }
       }
     ],
     "prism-scale": [
@@ -3443,7 +3605,10 @@
       },
       {
         "where": "unova-route-4",
-        "detail": "From Corless"
+        "detail": {
+          "ko": "NPC에게서(Corless)",
+          "en": "From Corless"
+        }
       },
       {
         "where": "unova-route-6",
@@ -3518,7 +3683,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -3528,7 +3697,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -3552,23 +3725,35 @@
       },
       {
         "where": "castelia-city",
-        "detail": "Battle Company"
+        "detail": {
+          "ko": "배틀 컴퍼니",
+          "en": "Battle Company"
+        }
       }
     ],
     "quick-claw": [
       {
         "where": "skyarrow-bridge",
-        "detail": "From Girl in Gate"
+        "detail": {
+          "ko": "게이트 소녀에게서",
+          "en": "From Girl in Gate"
+        }
       }
     ],
     "rage-candy-bar": [
       {
         "where": "castelia-city",
-        "detail": "Saturday - Defeat Six Trainers on Royal Unova"
+        "detail": {
+          "ko": "토요일 · 로열하나호에서 트레이너 6명 승리",
+          "en": "Saturday - Defeat Six Trainers on Royal Unova"
+        }
       },
       {
         "where": "pokestar-studios",
-        "detail": "Socialite - Good Ending"
+        "detail": {
+          "ko": "포켓우드 팬(귀부인) · 굿 엔딩",
+          "en": "Socialite - Good Ending"
+        }
       }
     ],
     "rare-bone": [
@@ -3624,7 +3809,10 @@
       },
       {
         "where": "castelia-city",
-        "detail": "Sunday - Defeat Seven Trainers on Royal Unova"
+        "detail": {
+          "ko": "일요일 · 로열하나호에서 트레이너 7명 승리",
+          "en": "Sunday - Defeat Seven Trainers on Royal Unova"
+        }
       },
       {
         "where": "moor-of-icirrus"
@@ -3741,10 +3929,13 @@
       },
       {
         "place": {
-          "ko": "PWT",
+          "ko": "포켓몬 월드 토너먼트",
           "en": "PWT"
         },
-        "detail": "Lose at PWT"
+        "detail": {
+          "ko": "PWT에서 지면",
+          "en": "Lose at PWT"
+        }
       },
       {
         "where": "clay-tunnel"
@@ -3817,7 +4008,10 @@
     "reveal-glass": [
       {
         "where": "abundant-shrine",
-        "detail": "Bring Landorus Therian Forme"
+        "detail": {
+          "ko": "영물폼 랜드로스를 데려가면",
+          "en": "Bring Landorus Therian Forme"
+        }
       }
     ],
     "revive": [
@@ -3900,7 +4094,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -3910,7 +4108,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -3931,7 +4133,7 @@
       },
       {
         "place": {
-          "ko": "PWT",
+          "ko": "포켓몬 월드 토너먼트",
           "en": "PWT"
         }
       }
@@ -3944,7 +4146,10 @@
     "scope-lens": [
       {
         "where": "castelia-city",
-        "detail": "Battle Company"
+        "detail": {
+          "ko": "배틀 컴퍼니",
+          "en": "Battle Company"
+        }
       }
     ],
     "sharp-beak": [
@@ -3960,7 +4165,10 @@
     "shiny-charm": [
       {
         "where": "nuvema-town",
-        "detail": "From Juniper - Catch all National Pokédex"
+        "detail": {
+          "ko": "주박사 · 전국도감을 모두 잡은 뒤",
+          "en": "From Juniper - Catch all National Pokédex"
+        }
       }
     ],
     "shiny-stone": [
@@ -4019,7 +4227,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -4029,7 +4241,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -4059,7 +4275,10 @@
     "shock-drive": [
       {
         "where": "p2-laboratory",
-        "detail": "Show Genesect - Black 2"
+        "detail": {
+          "ko": "게노세크트를 보여 주면 · 블랙2",
+          "en": "Show Genesect - Black 2"
+        }
       }
     ],
     "silk-scarf": [
@@ -4104,7 +4323,10 @@
     "soda-pop": [
       {
         "where": "pokestar-studios",
-        "detail": "Backpacker - Good Ending"
+        "detail": {
+          "ko": "포켓우드 팬(백팩커) · 굿 엔딩",
+          "en": "Backpacker - Good Ending"
+        }
       },
       {
         "where": "join-avenue",
@@ -4125,7 +4347,10 @@
     "soul-dew": [
       {
         "where": "dreamyard",
-        "detail": "After capturing Latios/Latias"
+        "detail": {
+          "ko": "라티오스 · 라티아스를 잡은 뒤",
+          "en": "After capturing Latios/Latias"
+        }
       }
     ],
     "spell-tag": [
@@ -4155,7 +4380,10 @@
       },
       {
         "where": "pinwheel-forest",
-        "detail": "Daily"
+        "detail": {
+          "ko": "매일",
+          "en": "Daily"
+        }
       },
       {
         "where": "desert-resort",
@@ -4180,7 +4408,10 @@
       },
       {
         "where": "pokestar-studios",
-        "detail": "Socialite - Max Box Office"
+        "detail": {
+          "ko": "포켓우드 팬(귀부인) · 흥행 최고",
+          "en": "Socialite - Max Box Office"
+        }
       },
       {
         "where": "reversal-mountain",
@@ -4249,7 +4480,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -4259,7 +4494,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -4304,7 +4543,10 @@
       },
       {
         "where": "pokestar-studios",
-        "detail": "Guitarist - Good/Strange Ending"
+        "detail": {
+          "ko": "포켓우드 팬(기타리스트) · 굿/이상한 엔딩",
+          "en": "Guitarist - Good/Strange Ending"
+        }
       },
       {
         "where": "virbank-complex"
@@ -4328,13 +4570,19 @@
     "super-rod": [
       {
         "where": "nuvema-town",
-        "detail": "From Cedric"
+        "detail": {
+          "ko": "NPC에게서(Cedric)",
+          "en": "From Cedric"
+        }
       }
     ],
     "sweet-heart": [
       {
         "where": "pokestar-studios",
-        "detail": "Socialite - Bad Ending"
+        "detail": {
+          "ko": "포켓우드 팬(귀부인) · 배드 엔딩",
+          "en": "Socialite - Bad Ending"
+        }
       }
     ],
     "swift-wing": [
@@ -4395,7 +4643,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -4405,7 +4657,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -4429,7 +4685,10 @@
       },
       {
         "where": "castelia-city",
-        "detail": "Battle Company"
+        "detail": {
+          "ko": "배틀 컴퍼니",
+          "en": "Battle Company"
+        }
       }
     ],
     "tiny-mushroom": [
@@ -4457,6 +4716,7 @@
     ],
     "tm01": [
       {
+        "how": "field",
         "place": {
           "ko": "챔피언로드",
           "en": "Victory Road B2W2"
@@ -4465,78 +4725,314 @@
     ],
     "tm02": [
       {
+        "how": "field",
         "where": "dragonspiral-tower"
       }
     ],
     "tm03": [
       {
+        "how": "field",
         "where": "giant-chasm"
+      }
+    ],
+    "tm04": [
+      {
+        "how": "shop",
+        "where": "striaton-city",
+        "place": "성신시티 프렌들리숍",
+        "cost": [
+          {
+            "amount": 80000,
+            "unit": "money"
+          }
+        ]
       }
     ],
     "tm05": [
       {
+        "how": "field",
         "where": "unova-route-23"
       }
     ],
     "tm06": [
       {
+        "how": "field",
         "where": "seaside-cave"
+      }
+    ],
+    "tm07": [
+      {
+        "how": "shop",
+        "where": "mistralton-city",
+        "place": "궐수시티 프렌들리숍",
+        "cost": [
+          {
+            "amount": 50000,
+            "unit": "money"
+          }
+        ]
+      }
+    ],
+    "tm08": [
+      {
+        "how": "shop",
+        "where": "striaton-city",
+        "place": "성신시티 프렌들리숍",
+        "cost": [
+          {
+            "amount": 80000,
+            "unit": "money"
+          }
+        ]
       }
     ],
     "tm09": [
       {
+        "how": "gift",
         "where": "virbank-city",
-        "detail": "From Roxie"
+        "detail": {
+          "ko": "보미카에게서",
+          "en": "From Roxie"
+        }
+      }
+    ],
+    "tm10": [
+      {
+        "how": "exchange",
+        "where": "gear-station",
+        "content": {
+          "ko": "배틀서브웨이",
+          "en": "Battle Subway",
+          "ja": "バトルサブウェイ"
+        },
+        "cost": [
+          {
+            "amount": 18,
+            "unit": "bp"
+          }
+        ]
+      },
+      {
+        "how": "exchange",
+        "place": {
+          "ko": "포켓몬 월드 토너먼트",
+          "en": "Pokémon World Tournament",
+          "ja": "ポケモンワールドトーナメント"
+        },
+        "cost": [
+          {
+            "amount": 18,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "tm11": [
+      {
+        "how": "shop",
+        "where": "mistralton-city",
+        "place": "궐수시티 프렌들리숍",
+        "cost": [
+          {
+            "amount": 50000,
+            "unit": "money"
+          }
+        ]
       }
     ],
     "tm12": [
       {
+        "how": "field",
         "where": "unova-route-23"
       }
     ],
     "tm13": [
       {
+        "how": "field",
         "where": "giant-chasm"
+      }
+    ],
+    "tm14": [
+      {
+        "how": "shop",
+        "where": "lacunosa-town",
+        "place": "보배마을 프렌들리숍",
+        "cost": [
+          {
+            "amount": 70000,
+            "unit": "money"
+          }
+        ]
+      }
+    ],
+    "tm15": [
+      {
+        "how": "shop",
+        "where": "unova-shopping-mall",
+        "cost": [
+          {
+            "amount": 90000,
+            "unit": "money"
+          }
+        ]
+      }
+    ],
+    "tm16": [
+      {
+        "how": "shop",
+        "where": "nimbasa-city",
+        "place": "뇌문시티 프렌들리숍",
+        "cost": [
+          {
+            "amount": 30000,
+            "unit": "money"
+          }
+        ]
+      }
+    ],
+    "tm17": [
+      {
+        "how": "exchange",
+        "where": "gear-station",
+        "content": {
+          "ko": "배틀서브웨이",
+          "en": "Battle Subway",
+          "ja": "バトルサブウェイ"
+        },
+        "cost": [
+          {
+            "amount": 6,
+            "unit": "bp"
+          }
+        ]
+      },
+      {
+        "how": "exchange",
+        "place": {
+          "ko": "포켓몬 월드 토너먼트",
+          "en": "Pokémon World Tournament",
+          "ja": "ポケモンワールドトーナメント"
+        },
+        "cost": [
+          {
+            "amount": 6,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "tm18": [
+      {
+        "how": "shop",
+        "where": "mistralton-city",
+        "place": "궐수시티 프렌들리숍",
+        "cost": [
+          {
+            "amount": 50000,
+            "unit": "money"
+          }
+        ]
       }
     ],
     "tm19": [
       {
+        "how": "field",
         "where": "unova-route-18"
       }
     ],
     "tm20": [
       {
+        "how": "field",
         "where": "pinwheel-forest"
       }
     ],
     "tm21": [
       {
+        "how": "field",
         "where": "floccesy-ranch"
+      }
+    ],
+    "tm22": [
+      {
+        "how": "field",
+        "where": "pinwheel-forest"
+      }
+    ],
+    "tm23": [
+      {
+        "how": "exchange",
+        "where": "gear-station",
+        "content": {
+          "ko": "배틀서브웨이",
+          "en": "Battle Subway",
+          "ja": "バトルサブウェイ"
+        },
+        "cost": [
+          {
+            "amount": 18,
+            "unit": "bp"
+          }
+        ]
+      },
+      {
+        "how": "exchange",
+        "place": {
+          "ko": "포켓몬 월드 토너먼트",
+          "en": "Pokémon World Tournament",
+          "ja": "ポケモンワールドトーナメント"
+        },
+        "cost": [
+          {
+            "amount": 18,
+            "unit": "bp"
+          }
+        ]
       }
     ],
     "tm24": [
       {
+        "how": "gift",
         "where": "unova-victory-road",
-        "detail": "From Hugh"
+        "detail": {
+          "ko": "휴이에게서",
+          "en": "From Hugh"
+        }
+      }
+    ],
+    "tm25": [
+      {
+        "how": "shop",
+        "where": "lacunosa-town",
+        "place": "보배마을 프렌들리숍",
+        "cost": [
+          {
+            "amount": 70000,
+            "unit": "money"
+          }
+        ]
       }
     ],
     "tm26": [
       {
+        "how": "field",
         "where": "unova-route-15"
       }
     ],
     "tm27": [
       {
+        "how": "field",
         "where": "aspertia-city"
       }
     ],
     "tm28": [
       {
+        "how": "field",
         "where": "unova-route-4"
       }
     ],
     "tm29": [
       {
+        "how": "field",
         "where": "unova-route-13"
       }
     ],
@@ -4547,219 +5043,796 @@
         "detail": "다우징머신"
       }
     ],
+    "tm31": [
+      {
+        "how": "exchange",
+        "where": "gear-station",
+        "content": {
+          "ko": "배틀서브웨이",
+          "en": "Battle Subway",
+          "ja": "バトルサブウェイ"
+        },
+        "cost": [
+          {
+            "amount": 12,
+            "unit": "bp"
+          }
+        ]
+      },
+      {
+        "how": "exchange",
+        "place": {
+          "ko": "포켓몬 월드 토너먼트",
+          "en": "Pokémon World Tournament",
+          "ja": "ポケモンワールドトーナメント"
+        },
+        "cost": [
+          {
+            "amount": 12,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "tm32": [
+      {
+        "how": "exchange",
+        "where": "gear-station",
+        "content": {
+          "ko": "배틀서브웨이",
+          "en": "Battle Subway",
+          "ja": "バトルサブウェイ"
+        },
+        "cost": [
+          {
+            "amount": 6,
+            "unit": "bp"
+          }
+        ]
+      },
+      {
+        "how": "exchange",
+        "place": {
+          "ko": "포켓몬 월드 토너먼트",
+          "en": "Pokémon World Tournament",
+          "ja": "ポケモンワールドトーナメント"
+        },
+        "cost": [
+          {
+            "amount": 6,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "tm33": [
+      {
+        "how": "shop",
+        "where": "nimbasa-city",
+        "place": "뇌문시티 프렌들리숍",
+        "cost": [
+          {
+            "amount": 30000,
+            "unit": "money"
+          }
+        ]
+      }
+    ],
+    "tm34": [
+      {
+        "how": "exchange",
+        "where": "gear-station",
+        "content": {
+          "ko": "배틀서브웨이",
+          "en": "Battle Subway",
+          "ja": "バトルサブウェイ"
+        },
+        "cost": [
+          {
+            "amount": 24,
+            "unit": "bp"
+          }
+        ]
+      },
+      {
+        "how": "exchange",
+        "place": {
+          "ko": "포켓몬 월드 토너먼트",
+          "en": "Pokémon World Tournament",
+          "ja": "ポケモンワールドトーナメント"
+        },
+        "cost": [
+          {
+            "amount": 24,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
     "tm35": [
       {
+        "how": "field",
         "where": "unova-route-23"
       }
     ],
     "tm36": [
       {
+        "how": "field",
         "where": "unova-route-8"
+      }
+    ],
+    "tm37": [
+      {
+        "how": "shop",
+        "where": "mistralton-city",
+        "place": "궐수시티 프렌들리숍",
+        "cost": [
+          {
+            "amount": 50000,
+            "unit": "money"
+          }
+        ]
+      }
+    ],
+    "tm38": [
+      {
+        "how": "shop",
+        "where": "lacunosa-town",
+        "place": "보배마을 프렌들리숍",
+        "cost": [
+          {
+            "amount": 70000,
+            "unit": "money"
+          }
+        ]
       }
     ],
     "tm39": [
       {
+        "how": "field",
         "where": "relic-castle"
       }
     ],
     "tm40": [
       {
+        "how": "field",
         "where": "mistralton-city"
       }
     ],
     "tm41": [
       {
+        "how": "field",
         "where": "castelia-sewers"
       }
     ],
     "tm42": [
       {
+        "how": "field",
         "where": "marine-tube"
       }
     ],
     "tm43": [
       {
+        "how": "field",
         "where": "tubeline-bridge"
       }
     ],
     "tm44": [
       {
+        "how": "field",
         "where": "castelia-city"
       }
     ],
     "tm45": [
       {
+        "how": "field",
         "where": "castelia-city"
       }
     ],
     "tm46": [
       {
+        "how": "field",
         "where": "virbank-complex"
       }
     ],
     "tm47": [
       {
+        "how": "field",
         "where": "wellspring-cave"
+      }
+    ],
+    "tm48": [
+      {
+        "how": "exchange",
+        "where": "gear-station",
+        "content": {
+          "ko": "배틀서브웨이",
+          "en": "Battle Subway",
+          "ja": "バトルサブウェイ"
+        },
+        "cost": [
+          {
+            "amount": 18,
+            "unit": "bp"
+          }
+        ]
+      },
+      {
+        "how": "exchange",
+        "place": {
+          "ko": "포켓몬 월드 토너먼트",
+          "en": "Pokémon World Tournament",
+          "ja": "ポケモンワールドトーナメント"
+        },
+        "cost": [
+          {
+            "amount": 18,
+            "unit": "bp"
+          }
+        ]
       }
     ],
     "tm49": [
       {
+        "how": "field",
         "where": "nimbasa-city"
       }
     ],
     "tm50": [
       {
+        "how": "field",
         "where": "ns-castle"
+      }
+    ],
+    "tm51": [
+      {
+        "how": "exchange",
+        "where": "gear-station",
+        "content": {
+          "ko": "배틀서브웨이",
+          "en": "Battle Subway",
+          "ja": "バトルサブウェイ"
+        },
+        "cost": [
+          {
+            "amount": 24,
+            "unit": "bp"
+          }
+        ]
+      },
+      {
+        "how": "exchange",
+        "place": {
+          "ko": "포켓몬 월드 토너먼트",
+          "en": "Pokémon World Tournament",
+          "ja": "ポケモンワールドトーナメント"
+        },
+        "cost": [
+          {
+            "amount": 24,
+            "unit": "bp"
+          }
+        ]
       }
     ],
     "tm52": [
       {
+        "how": "field",
         "where": "wellspring-cave"
       }
     ],
     "tm53": [
       {
+        "how": "field",
         "where": "aspertia-city"
       }
     ],
     "tm54": [
       {
+        "how": "field",
         "where": "reversal-mountain"
       }
     ],
     "tm55": [
       {
+        "how": "gift",
         "where": "humilau-city",
-        "detail": "From Marlon"
+        "detail": {
+          "ko": "시즈에게서",
+          "en": "From Marlon"
+        }
       }
     ],
     "tm56": [
       {
+        "how": "field",
         "where": "unova-route-6"
       }
     ],
     "tm57": [
       {
+        "how": "field",
         "where": "lentimas-town"
       }
     ],
     "tm58": [
       {
+        "how": "field",
         "where": "mistralton-city"
+      }
+    ],
+    "tm59": [
+      {
+        "how": "exchange",
+        "where": "gear-station",
+        "content": {
+          "ko": "배틀서브웨이",
+          "en": "Battle Subway",
+          "ja": "バトルサブウェイ"
+        },
+        "cost": [
+          {
+            "amount": 6,
+            "unit": "bp"
+          }
+        ]
+      },
+      {
+        "how": "exchange",
+        "place": {
+          "ko": "포켓몬 월드 토너먼트",
+          "en": "Pokémon World Tournament",
+          "ja": "ポケモンワールドトーナメント"
+        },
+        "cost": [
+          {
+            "amount": 6,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "tm60": [
+      {
+        "how": "exchange",
+        "where": "gear-station",
+        "content": {
+          "ko": "배틀서브웨이",
+          "en": "Battle Subway",
+          "ja": "バトルサブウェイ"
+        },
+        "cost": [
+          {
+            "amount": 24,
+            "unit": "bp"
+          }
+        ]
+      },
+      {
+        "how": "exchange",
+        "place": {
+          "ko": "포켓몬 월드 토너먼트",
+          "en": "Pokémon World Tournament",
+          "ja": "ポケモンワールドトーナメント"
+        },
+        "cost": [
+          {
+            "amount": 24,
+            "unit": "bp"
+          }
+        ]
       }
     ],
     "tm61": [
       {
+        "how": "field",
         "where": "celestial-tower"
       }
     ],
     "tm62": [
       {
+        "how": "gift",
         "where": "mistralton-city",
-        "detail": "From Skyla"
+        "detail": {
+          "ko": "풍란에게서",
+          "en": "From Skyla"
+        }
       }
     ],
     "tm63": [
       {
+        "how": "field",
         "where": "driftveil-city"
+      }
+    ],
+    "tm64": [
+      {
+        "how": "exchange",
+        "where": "gear-station",
+        "content": {
+          "ko": "배틀서브웨이",
+          "en": "Battle Subway",
+          "ja": "バトルサブウェイ"
+        },
+        "cost": [
+          {
+            "amount": 24,
+            "unit": "bp"
+          }
+        ]
+      },
+      {
+        "how": "exchange",
+        "place": {
+          "ko": "포켓몬 월드 토너먼트",
+          "en": "Pokémon World Tournament",
+          "ja": "ポケモンワールドトーナメント"
+        },
+        "cost": [
+          {
+            "amount": 24,
+            "unit": "bp"
+          }
+        ]
       }
     ],
     "tm65": [
       {
+        "how": "field",
         "where": "celestial-tower"
       }
     ],
     "tm66": [
       {
+        "how": "field",
         "where": "unova-route-16"
       }
     ],
     "tm67": [
       {
+        "how": "field",
         "where": "plasma-frigate"
+      }
+    ],
+    "tm68": [
+      {
+        "how": "shop",
+        "where": "unova-shopping-mall",
+        "cost": [
+          {
+            "amount": 90000,
+            "unit": "money"
+          }
+        ]
       }
     ],
     "tm69": [
       {
+        "how": "field",
         "where": "reversal-mountain"
       }
     ],
     "tm70": [
       {
+        "how": "field",
         "where": "castelia-city"
       }
     ],
     "tm71": [
       {
+        "how": "field",
         "where": "twist-mountain"
       }
     ],
     "tm72": [
       {
+        "how": "gift",
         "where": "nimbasa-city",
-        "detail": "From Elesa"
+        "detail": {
+          "ko": "카밀레에게서",
+          "en": "From Elesa"
+        }
+      }
+    ],
+    "tm73": [
+      {
+        "how": "shop",
+        "where": "nimbasa-city",
+        "place": "뇌문시티 프렌들리숍",
+        "cost": [
+          {
+            "amount": 10000,
+            "unit": "money"
+          }
+        ]
+      }
+    ],
+    "tm74": [
+      {
+        "how": "shop",
+        "where": "nimbasa-city",
+        "place": "뇌문시티 프렌들리숍",
+        "cost": [
+          {
+            "amount": 10000,
+            "unit": "money"
+          }
+        ]
+      }
+    ],
+    "tm75": [
+      {
+        "how": "exchange",
+        "where": "gear-station",
+        "content": {
+          "ko": "배틀서브웨이",
+          "en": "Battle Subway",
+          "ja": "バトルサブウェイ"
+        },
+        "cost": [
+          {
+            "amount": 18,
+            "unit": "bp"
+          }
+        ]
+      },
+      {
+        "how": "exchange",
+        "place": {
+          "ko": "포켓몬 월드 토너먼트",
+          "en": "Pokémon World Tournament",
+          "ja": "ポケモンワールドトーナメント"
+        },
+        "cost": [
+          {
+            "amount": 18,
+            "unit": "bp"
+          }
+        ]
       }
     ],
     "tm76": [
       {
+        "how": "gift",
         "where": "castelia-city",
-        "detail": "From Burgh"
+        "detail": {
+          "ko": "아티에게서",
+          "en": "From Burgh"
+        }
+      }
+    ],
+    "tm77": [
+      {
+        "how": "exchange",
+        "where": "gear-station",
+        "content": {
+          "ko": "배틀서브웨이",
+          "en": "Battle Subway",
+          "ja": "バトルサブウェイ"
+        },
+        "cost": [
+          {
+            "amount": 24,
+            "unit": "bp"
+          }
+        ]
+      },
+      {
+        "how": "exchange",
+        "place": {
+          "ko": "포켓몬 월드 토너먼트",
+          "en": "Pokémon World Tournament",
+          "ja": "ポケモンワールドトーナメント"
+        },
+        "cost": [
+          {
+            "amount": 24,
+            "unit": "bp"
+          }
+        ]
       }
     ],
     "tm78": [
       {
+        "how": "field",
         "where": "driftveil-city"
+      }
+    ],
+    "tm79": [
+      {
+        "how": "exchange",
+        "where": "gear-station",
+        "content": {
+          "ko": "배틀서브웨이",
+          "en": "Battle Subway",
+          "ja": "バトルサブウェイ"
+        },
+        "cost": [
+          {
+            "amount": 12,
+            "unit": "bp"
+          }
+        ]
+      },
+      {
+        "how": "exchange",
+        "place": {
+          "ko": "포켓몬 월드 토너먼트",
+          "en": "Pokémon World Tournament",
+          "ja": "ポケモンワールドトーナメント"
+        },
+        "cost": [
+          {
+            "amount": 12,
+            "unit": "bp"
+          }
+        ]
       }
     ],
     "tm80": [
       {
+        "how": "field",
         "where": "mistralton-cave"
       }
     ],
     "tm81": [
       {
+        "how": "field",
         "where": "unova-route-7"
       }
     ],
     "tm82": [
       {
+        "how": "gift",
         "where": "opelucid-city",
-        "detail": "From Drayden"
+        "detail": {
+          "ko": "사간에게서",
+          "en": "From Drayden"
+        }
       }
     ],
     "tm83": [
       {
+        "how": "gift",
         "where": "aspertia-city",
-        "detail": "From Cheren"
+        "detail": {
+          "ko": "체렌에게서",
+          "en": "From Cheren"
+        }
       }
     ],
     "tm84": [
       {
+        "how": "field",
         "where": "moor-of-icirrus"
       }
     ],
     "tm85": [
       {
+        "how": "field",
         "where": "dreamyard"
       }
     ],
     "tm86": [
       {
+        "how": "field",
         "where": "pinwheel-forest"
+      }
+    ],
+    "tm87": [
+      {
+        "how": "exchange",
+        "where": "gear-station",
+        "content": {
+          "ko": "배틀서브웨이",
+          "en": "Battle Subway",
+          "ja": "バトルサブウェイ"
+        },
+        "cost": [
+          {
+            "amount": 18,
+            "unit": "bp"
+          }
+        ]
+      },
+      {
+        "how": "exchange",
+        "place": {
+          "ko": "포켓몬 월드 토너먼트",
+          "en": "Pokémon World Tournament",
+          "ja": "ポケモンワールドトーナメント"
+        },
+        "cost": [
+          {
+            "amount": 18,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "tm88": [
+      {
+        "how": "exchange",
+        "where": "gear-station",
+        "content": {
+          "ko": "배틀서브웨이",
+          "en": "Battle Subway",
+          "ja": "バトルサブウェイ"
+        },
+        "cost": [
+          {
+            "amount": 18,
+            "unit": "bp"
+          }
+        ]
+      },
+      {
+        "how": "exchange",
+        "place": {
+          "ko": "포켓몬 월드 토너먼트",
+          "en": "Pokémon World Tournament",
+          "ja": "ポケモンワールドトーナメント"
+        },
+        "cost": [
+          {
+            "amount": 18,
+            "unit": "bp"
+          }
+        ]
+      }
+    ],
+    "tm89": [
+      {
+        "how": "exchange",
+        "where": "gear-station",
+        "content": {
+          "ko": "배틀서브웨이",
+          "en": "Battle Subway",
+          "ja": "バトルサブウェイ"
+        },
+        "cost": [
+          {
+            "amount": 12,
+            "unit": "bp"
+          }
+        ]
+      },
+      {
+        "how": "exchange",
+        "place": {
+          "ko": "포켓몬 월드 토너먼트",
+          "en": "Pokémon World Tournament",
+          "ja": "ポケモンワールドトーナメント"
+        },
+        "cost": [
+          {
+            "amount": 12,
+            "unit": "bp"
+          }
+        ]
       }
     ],
     "tm90": [
       {
+        "how": "field",
+        "where": "twist-mountain"
+      }
+    ],
+    "tm91": [
+      {
+        "how": "field",
         "where": "twist-mountain"
       }
     ],
     "tm92": [
       {
+        "how": "field",
         "where": "abundant-shrine"
       }
     ],
     "tm93": [
       {
+        "how": "field",
         "place": {
           "ko": "챔피언로드",
           "en": "Victory Road B2W2"
@@ -4768,13 +5841,18 @@
     ],
     "tm94": [
       {
+        "how": "field",
         "where": "virbank-complex"
       }
     ],
     "tm95": [
       {
+        "how": "gift",
         "where": "lostlorn-forest",
-        "detail": "From Zoroark"
+        "detail": {
+          "ko": "조로아크에게서",
+          "en": "From Zoroark"
+        }
       }
     ],
     "town-map": [
@@ -4921,7 +5999,10 @@
       },
       {
         "where": "pinwheel-forest",
-        "detail": "From Gorm"
+        "detail": {
+          "ko": "칠현인에게서",
+          "en": "From Gorm"
+        }
       }
     ],
     "water-gem": [
@@ -4974,7 +6055,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -4984,7 +6069,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -5049,7 +6138,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Clay Road",
+        "where": "clay-tunnel",
+        "place": {
+          "ko": "야콘로드",
+          "en": "Clay Road"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -5059,7 +6152,11 @@
         "detail": "먼지구름"
       },
       {
-        "place": "Relic Path",
+        "where": "relic-passage",
+        "place": {
+          "ko": "고대샛길",
+          "en": "Relic Path"
+        },
         "how": "field",
         "detail": "먼지구름"
       },
@@ -5157,10 +6254,13 @@
       },
       {
         "place": {
-          "ko": "PWT",
+          "ko": "포켓몬 월드 토너먼트",
           "en": "PWT"
         },
-        "detail": "Lose at PWT"
+        "detail": {
+          "ko": "PWT에서 지면",
+          "en": "Lose at PWT"
+        }
       }
     ],
     "zap-plate": [
@@ -5190,7 +6290,7 @@
       },
       {
         "place": {
-          "ko": "PWT",
+          "ko": "포켓몬 월드 토너먼트",
           "en": "PWT"
         }
       },
@@ -5199,5 +6299,1066 @@
       }
     ]
   },
-  "tutors": {}
+  "tutors": {
+    "after-you": [
+      {
+        "how": "tutor",
+        "where": "nacrene-city",
+        "cost": [
+          {
+            "amount": 8,
+            "unit": "green-shard"
+          }
+        ]
+      }
+    ],
+    "aqua-tail": [
+      {
+        "how": "tutor",
+        "where": "lentimas-town",
+        "cost": [
+          {
+            "amount": 8,
+            "unit": "blue-shard"
+          }
+        ]
+      }
+    ],
+    "bind": [
+      {
+        "how": "tutor",
+        "where": "humilau-city",
+        "cost": [
+          {
+            "amount": 2,
+            "unit": "yellow-shard"
+          }
+        ]
+      }
+    ],
+    "blast-burn": [
+      {
+        "how": "tutor",
+        "place": {
+          "ko": "포켓몬 월드 토너먼트",
+          "en": "Pokémon World Tournament",
+          "ja": "ポケモンワールドトーナメント"
+        },
+        "detail": "최대 친밀도 · 최종 진화 스타팅"
+      }
+    ],
+    "block": [
+      {
+        "how": "tutor",
+        "where": "lentimas-town",
+        "cost": [
+          {
+            "amount": 6,
+            "unit": "blue-shard"
+          }
+        ]
+      }
+    ],
+    "bounce": [
+      {
+        "how": "tutor",
+        "where": "driftveil-city",
+        "cost": [
+          {
+            "amount": 4,
+            "unit": "red-shard"
+          }
+        ]
+      }
+    ],
+    "bug-bite": [
+      {
+        "how": "tutor",
+        "where": "driftveil-city",
+        "cost": [
+          {
+            "amount": 2,
+            "unit": "red-shard"
+          }
+        ]
+      }
+    ],
+    "covet": [
+      {
+        "how": "tutor",
+        "where": "driftveil-city",
+        "cost": [
+          {
+            "amount": 2,
+            "unit": "red-shard"
+          }
+        ]
+      }
+    ],
+    "dark-pulse": [
+      {
+        "how": "tutor",
+        "where": "lentimas-town",
+        "cost": [
+          {
+            "amount": 10,
+            "unit": "blue-shard"
+          }
+        ]
+      }
+    ],
+    "draco-meteor": [
+      {
+        "how": "tutor",
+        "where": "opelucid-city",
+        "detail": "드래곤 타입"
+      }
+    ],
+    "dragon-pulse": [
+      {
+        "how": "tutor",
+        "where": "lentimas-town",
+        "cost": [
+          {
+            "amount": 10,
+            "unit": "blue-shard"
+          }
+        ]
+      }
+    ],
+    "drain-punch": [
+      {
+        "how": "tutor",
+        "where": "humilau-city",
+        "cost": [
+          {
+            "amount": 10,
+            "unit": "yellow-shard"
+          }
+        ]
+      }
+    ],
+    "drill-run": [
+      {
+        "how": "tutor",
+        "where": "driftveil-city",
+        "cost": [
+          {
+            "amount": 4,
+            "unit": "red-shard"
+          }
+        ]
+      }
+    ],
+    "dual-chop": [
+      {
+        "how": "tutor",
+        "where": "driftveil-city",
+        "cost": [
+          {
+            "amount": 6,
+            "unit": "red-shard"
+          }
+        ]
+      }
+    ],
+    "earth-power": [
+      {
+        "how": "tutor",
+        "where": "lentimas-town",
+        "cost": [
+          {
+            "amount": 8,
+            "unit": "blue-shard"
+          }
+        ]
+      }
+    ],
+    "electroweb": [
+      {
+        "how": "tutor",
+        "where": "lentimas-town",
+        "cost": [
+          {
+            "amount": 6,
+            "unit": "blue-shard"
+          }
+        ]
+      }
+    ],
+    "endeavor": [
+      {
+        "how": "tutor",
+        "where": "nacrene-city",
+        "cost": [
+          {
+            "amount": 12,
+            "unit": "green-shard"
+          }
+        ]
+      }
+    ],
+    "fire-pledge": [
+      {
+        "how": "tutor",
+        "place": {
+          "ko": "포켓몬 월드 토너먼트",
+          "en": "Pokémon World Tournament",
+          "ja": "ポケモンワールドトーナメント"
+        },
+        "detail": "스타팅 계열"
+      }
+    ],
+    "fire-punch": [
+      {
+        "how": "tutor",
+        "where": "driftveil-city",
+        "cost": [
+          {
+            "amount": 10,
+            "unit": "red-shard"
+          }
+        ]
+      }
+    ],
+    "foul-play": [
+      {
+        "how": "tutor",
+        "where": "lentimas-town",
+        "cost": [
+          {
+            "amount": 8,
+            "unit": "blue-shard"
+          }
+        ]
+      }
+    ],
+    "frenzy-plant": [
+      {
+        "how": "tutor",
+        "place": {
+          "ko": "포켓몬 월드 토너먼트",
+          "en": "Pokémon World Tournament",
+          "ja": "ポケモンワールドトーナメント"
+        },
+        "detail": "최대 친밀도 · 최종 진화 스타팅"
+      }
+    ],
+    "gastro-acid": [
+      {
+        "how": "tutor",
+        "where": "nacrene-city",
+        "cost": [
+          {
+            "amount": 6,
+            "unit": "green-shard"
+          }
+        ]
+      }
+    ],
+    "giga-drain": [
+      {
+        "how": "tutor",
+        "where": "humilau-city",
+        "cost": [
+          {
+            "amount": 10,
+            "unit": "yellow-shard"
+          }
+        ]
+      }
+    ],
+    "grass-pledge": [
+      {
+        "how": "tutor",
+        "place": {
+          "ko": "포켓몬 월드 토너먼트",
+          "en": "Pokémon World Tournament",
+          "ja": "ポケモンワールドトーナメント"
+        },
+        "detail": "스타팅 계열"
+      }
+    ],
+    "gravity": [
+      {
+        "how": "tutor",
+        "where": "lentimas-town",
+        "cost": [
+          {
+            "amount": 10,
+            "unit": "blue-shard"
+          }
+        ]
+      }
+    ],
+    "gunk-shot": [
+      {
+        "how": "tutor",
+        "where": "driftveil-city",
+        "cost": [
+          {
+            "amount": 8,
+            "unit": "red-shard"
+          }
+        ]
+      }
+    ],
+    "heal-bell": [
+      {
+        "how": "tutor",
+        "where": "humilau-city",
+        "cost": [
+          {
+            "amount": 4,
+            "unit": "yellow-shard"
+          }
+        ]
+      }
+    ],
+    "heat-wave": [
+      {
+        "how": "tutor",
+        "where": "humilau-city",
+        "cost": [
+          {
+            "amount": 10,
+            "unit": "yellow-shard"
+          }
+        ]
+      }
+    ],
+    "helping-hand": [
+      {
+        "how": "tutor",
+        "where": "nacrene-city",
+        "cost": [
+          {
+            "amount": 8,
+            "unit": "green-shard"
+          }
+        ]
+      }
+    ],
+    "hydro-cannon": [
+      {
+        "how": "tutor",
+        "place": {
+          "ko": "포켓몬 월드 토너먼트",
+          "en": "Pokémon World Tournament",
+          "ja": "ポケモンワールドトーナメント"
+        },
+        "detail": "최대 친밀도 · 최종 진화 스타팅"
+      }
+    ],
+    "hyper-voice": [
+      {
+        "how": "tutor",
+        "where": "lentimas-town",
+        "cost": [
+          {
+            "amount": 6,
+            "unit": "blue-shard"
+          }
+        ]
+      }
+    ],
+    "ice-punch": [
+      {
+        "how": "tutor",
+        "where": "driftveil-city",
+        "cost": [
+          {
+            "amount": 10,
+            "unit": "red-shard"
+          }
+        ]
+      }
+    ],
+    "icy-wind": [
+      {
+        "how": "tutor",
+        "where": "lentimas-town",
+        "cost": [
+          {
+            "amount": 6,
+            "unit": "blue-shard"
+          }
+        ]
+      }
+    ],
+    "iron-defense": [
+      {
+        "how": "tutor",
+        "where": "lentimas-town",
+        "cost": [
+          {
+            "amount": 2,
+            "unit": "blue-shard"
+          }
+        ]
+      }
+    ],
+    "iron-head": [
+      {
+        "how": "tutor",
+        "where": "driftveil-city",
+        "cost": [
+          {
+            "amount": 4,
+            "unit": "red-shard"
+          }
+        ]
+      }
+    ],
+    "iron-tail": [
+      {
+        "how": "tutor",
+        "where": "lentimas-town",
+        "cost": [
+          {
+            "amount": 6,
+            "unit": "blue-shard"
+          }
+        ]
+      }
+    ],
+    "knock-off": [
+      {
+        "how": "tutor",
+        "where": "humilau-city",
+        "cost": [
+          {
+            "amount": 4,
+            "unit": "yellow-shard"
+          }
+        ]
+      }
+    ],
+    "last-resort": [
+      {
+        "how": "tutor",
+        "where": "lentimas-town",
+        "cost": [
+          {
+            "amount": 2,
+            "unit": "blue-shard"
+          }
+        ]
+      }
+    ],
+    "low-kick": [
+      {
+        "how": "tutor",
+        "where": "driftveil-city",
+        "cost": [
+          {
+            "amount": 8,
+            "unit": "red-shard"
+          }
+        ]
+      }
+    ],
+    "magic-coat": [
+      {
+        "how": "tutor",
+        "where": "lentimas-town",
+        "cost": [
+          {
+            "amount": 4,
+            "unit": "blue-shard"
+          }
+        ]
+      }
+    ],
+    "magic-room": [
+      {
+        "how": "tutor",
+        "where": "nacrene-city",
+        "cost": [
+          {
+            "amount": 8,
+            "unit": "green-shard"
+          }
+        ]
+      }
+    ],
+    "magnet-rise": [
+      {
+        "how": "tutor",
+        "where": "lentimas-town",
+        "cost": [
+          {
+            "amount": 4,
+            "unit": "blue-shard"
+          }
+        ]
+      }
+    ],
+    "outrage": [
+      {
+        "how": "tutor",
+        "where": "nacrene-city",
+        "cost": [
+          {
+            "amount": 10,
+            "unit": "green-shard"
+          }
+        ]
+      }
+    ],
+    "pain-split": [
+      {
+        "how": "tutor",
+        "where": "humilau-city",
+        "cost": [
+          {
+            "amount": 10,
+            "unit": "yellow-shard"
+          }
+        ]
+      }
+    ],
+    "recycle": [
+      {
+        "how": "tutor",
+        "where": "nacrene-city",
+        "cost": [
+          {
+            "amount": 10,
+            "unit": "green-shard"
+          }
+        ]
+      }
+    ],
+    "relic-song": [
+      {
+        "how": "tutor",
+        "where": "castelia-city",
+        "place": "구름시티 카페",
+        "detail": "배포 메로엣타만"
+      }
+    ],
+    "role-play": [
+      {
+        "how": "tutor",
+        "where": "humilau-city",
+        "cost": [
+          {
+            "amount": 8,
+            "unit": "yellow-shard"
+          }
+        ]
+      }
+    ],
+    "roost": [
+      {
+        "how": "tutor",
+        "where": "humilau-city",
+        "cost": [
+          {
+            "amount": 6,
+            "unit": "yellow-shard"
+          }
+        ]
+      }
+    ],
+    "secret-sword": [
+      {
+        "how": "tutor",
+        "where": "pledge-grove",
+        "detail": "배포 케르디오만"
+      }
+    ],
+    "seed-bomb": [
+      {
+        "how": "tutor",
+        "where": "driftveil-city",
+        "cost": [
+          {
+            "amount": 6,
+            "unit": "red-shard"
+          }
+        ]
+      }
+    ],
+    "signal-beam": [
+      {
+        "how": "tutor",
+        "where": "driftveil-city",
+        "cost": [
+          {
+            "amount": 4,
+            "unit": "red-shard"
+          }
+        ]
+      }
+    ],
+    "skill-swap": [
+      {
+        "how": "tutor",
+        "where": "nacrene-city",
+        "cost": [
+          {
+            "amount": 12,
+            "unit": "green-shard"
+          }
+        ]
+      }
+    ],
+    "sky-attack": [
+      {
+        "how": "tutor",
+        "where": "humilau-city",
+        "cost": [
+          {
+            "amount": 8,
+            "unit": "yellow-shard"
+          }
+        ]
+      }
+    ],
+    "sleep-talk": [
+      {
+        "how": "tutor",
+        "where": "nacrene-city",
+        "cost": [
+          {
+            "amount": 12,
+            "unit": "green-shard"
+          }
+        ]
+      }
+    ],
+    "snatch": [
+      {
+        "how": "tutor",
+        "where": "nacrene-city",
+        "cost": [
+          {
+            "amount": 12,
+            "unit": "green-shard"
+          }
+        ]
+      }
+    ],
+    "snore": [
+      {
+        "how": "tutor",
+        "where": "humilau-city",
+        "cost": [
+          {
+            "amount": 2,
+            "unit": "yellow-shard"
+          }
+        ]
+      }
+    ],
+    "spite": [
+      {
+        "how": "tutor",
+        "where": "nacrene-city",
+        "cost": [
+          {
+            "amount": 8,
+            "unit": "green-shard"
+          }
+        ]
+      }
+    ],
+    "stealth-rock": [
+      {
+        "how": "tutor",
+        "where": "nacrene-city",
+        "cost": [
+          {
+            "amount": 10,
+            "unit": "green-shard"
+          }
+        ]
+      }
+    ],
+    "super-fang": [
+      {
+        "how": "tutor",
+        "where": "driftveil-city",
+        "cost": [
+          {
+            "amount": 6,
+            "unit": "red-shard"
+          }
+        ]
+      }
+    ],
+    "superpower": [
+      {
+        "how": "tutor",
+        "where": "lentimas-town",
+        "cost": [
+          {
+            "amount": 10,
+            "unit": "blue-shard"
+          }
+        ]
+      }
+    ],
+    "synthesis": [
+      {
+        "how": "tutor",
+        "where": "humilau-city",
+        "cost": [
+          {
+            "amount": 6,
+            "unit": "yellow-shard"
+          }
+        ]
+      }
+    ],
+    "tailwind": [
+      {
+        "how": "tutor",
+        "where": "humilau-city",
+        "cost": [
+          {
+            "amount": 10,
+            "unit": "yellow-shard"
+          }
+        ]
+      }
+    ],
+    "thunder-punch": [
+      {
+        "how": "tutor",
+        "where": "driftveil-city",
+        "cost": [
+          {
+            "amount": 10,
+            "unit": "red-shard"
+          }
+        ]
+      }
+    ],
+    "trick": [
+      {
+        "how": "tutor",
+        "where": "nacrene-city",
+        "cost": [
+          {
+            "amount": 10,
+            "unit": "green-shard"
+          }
+        ]
+      }
+    ],
+    "uproar": [
+      {
+        "how": "tutor",
+        "where": "driftveil-city",
+        "cost": [
+          {
+            "amount": 6,
+            "unit": "red-shard"
+          }
+        ]
+      }
+    ],
+    "water-pledge": [
+      {
+        "how": "tutor",
+        "place": {
+          "ko": "포켓몬 월드 토너먼트",
+          "en": "Pokémon World Tournament",
+          "ja": "ポケモンワールドトーナメント"
+        },
+        "detail": "스타팅 계열"
+      }
+    ],
+    "wonder-room": [
+      {
+        "how": "tutor",
+        "where": "nacrene-city",
+        "cost": [
+          {
+            "amount": 8,
+            "unit": "green-shard"
+          }
+        ]
+      }
+    ],
+    "worry-seed": [
+      {
+        "how": "tutor",
+        "where": "nacrene-city",
+        "cost": [
+          {
+            "amount": 6,
+            "unit": "green-shard"
+          }
+        ]
+      }
+    ],
+    "zen-headbutt": [
+      {
+        "how": "tutor",
+        "where": "lentimas-town",
+        "cost": [
+          {
+            "amount": 8,
+            "unit": "blue-shard"
+          }
+        ]
+      }
+    ]
+  },
+  "pokemon": {
+    "aerodactyl": [
+      {
+        "how": "fossil",
+        "where": "nacrene-city",
+        "place": {
+          "ko": "칠보시티 박물관",
+          "en": "Nacrene Museum"
+        },
+        "detail": {
+          "ko": "비밀의호박 복원",
+          "en": "Revived from the Old Amber"
+        },
+        "minLevel": 25,
+        "maxLevel": 25,
+        "replaces": "gift"
+      }
+    ],
+    "anorith": [
+      {
+        "how": "fossil",
+        "where": "nacrene-city",
+        "place": {
+          "ko": "칠보시티 박물관",
+          "en": "Nacrene Museum"
+        },
+        "detail": {
+          "ko": "발톱화석 복원",
+          "en": "Revived from the Claw Fossil"
+        },
+        "minLevel": 25,
+        "maxLevel": 25,
+        "replaces": "gift"
+      }
+    ],
+    "archen": [
+      {
+        "how": "fossil",
+        "where": "nacrene-city",
+        "place": {
+          "ko": "칠보시티 박물관",
+          "en": "Nacrene Museum"
+        },
+        "detail": {
+          "ko": "깃털화석 복원",
+          "en": "Revived from the Plume Fossil"
+        },
+        "minLevel": 25,
+        "maxLevel": 25,
+        "replaces": "gift"
+      }
+    ],
+    "cranidos": [
+      {
+        "how": "fossil",
+        "where": "nacrene-city",
+        "place": {
+          "ko": "칠보시티 박물관",
+          "en": "Nacrene Museum"
+        },
+        "detail": {
+          "ko": "두개의화석 복원",
+          "en": "Revived from the Skull Fossil"
+        },
+        "minLevel": 25,
+        "maxLevel": 25,
+        "replaces": "gift"
+      }
+    ],
+    "genesect": [
+      {
+        "how": "event",
+        "detail": {
+          "ko": "배포 이벤트",
+          "en": "Distribution event"
+        }
+      }
+    ],
+    "kabuto": [
+      {
+        "how": "fossil",
+        "where": "nacrene-city",
+        "place": {
+          "ko": "칠보시티 박물관",
+          "en": "Nacrene Museum"
+        },
+        "detail": {
+          "ko": "껍질화석 복원",
+          "en": "Revived from the Dome Fossil"
+        },
+        "minLevel": 25,
+        "maxLevel": 25,
+        "replaces": "gift"
+      }
+    ],
+    "keldeo": [
+      {
+        "how": "event",
+        "detail": {
+          "ko": "배포 이벤트",
+          "en": "Distribution event"
+        }
+      }
+    ],
+    "landorus": [
+      {
+        "how": "transfer",
+        "detail": {
+          "ko": "포켓몬 드림레이더(3DS)에서 데려와요",
+          "en": "Transfer from Pokémon Dream Radar (3DS)"
+        },
+        "versionsFrom": []
+      }
+    ],
+    "lileep": [
+      {
+        "how": "fossil",
+        "where": "nacrene-city",
+        "place": {
+          "ko": "칠보시티 박물관",
+          "en": "Nacrene Museum"
+        },
+        "detail": {
+          "ko": "뿌리화석 복원",
+          "en": "Revived from the Root Fossil"
+        },
+        "minLevel": 25,
+        "maxLevel": 25,
+        "replaces": "gift"
+      }
+    ],
+    "meloetta": [
+      {
+        "how": "event",
+        "detail": {
+          "ko": "배포 이벤트",
+          "en": "Distribution event"
+        }
+      }
+    ],
+    "omanyte": [
+      {
+        "how": "fossil",
+        "where": "nacrene-city",
+        "place": {
+          "ko": "칠보시티 박물관",
+          "en": "Nacrene Museum"
+        },
+        "detail": {
+          "ko": "조개화석 복원",
+          "en": "Revived from the Helix Fossil"
+        },
+        "minLevel": 25,
+        "maxLevel": 25,
+        "replaces": "gift"
+      }
+    ],
+    "oshawott": [
+      {
+        "how": "starter",
+        "where": "aspertia-city",
+        "minLevel": 5,
+        "maxLevel": 5,
+        "replaces": "gift"
+      }
+    ],
+    "shieldon": [
+      {
+        "how": "fossil",
+        "where": "nacrene-city",
+        "place": {
+          "ko": "칠보시티 박물관",
+          "en": "Nacrene Museum"
+        },
+        "detail": {
+          "ko": "방패의화석 복원",
+          "en": "Revived from the Armor Fossil"
+        },
+        "minLevel": 25,
+        "maxLevel": 25,
+        "replaces": "gift"
+      }
+    ],
+    "snivy": [
+      {
+        "how": "starter",
+        "where": "aspertia-city",
+        "minLevel": 5,
+        "maxLevel": 5,
+        "replaces": "gift"
+      }
+    ],
+    "tepig": [
+      {
+        "how": "starter",
+        "where": "aspertia-city",
+        "minLevel": 5,
+        "maxLevel": 5,
+        "replaces": "gift"
+      }
+    ],
+    "thundurus": [
+      {
+        "how": "transfer",
+        "detail": {
+          "ko": "포켓몬 드림레이더(3DS)에서 데려와요",
+          "en": "Transfer from Pokémon Dream Radar (3DS)"
+        },
+        "versionsFrom": []
+      }
+    ],
+    "tirtouga": [
+      {
+        "how": "fossil",
+        "where": "nacrene-city",
+        "place": {
+          "ko": "칠보시티 박물관",
+          "en": "Nacrene Museum"
+        },
+        "detail": {
+          "ko": "덮개화석 복원",
+          "en": "Revived from the Cover Fossil"
+        },
+        "minLevel": 25,
+        "maxLevel": 25,
+        "replaces": "gift"
+      }
+    ],
+    "tornadus": [
+      {
+        "how": "transfer",
+        "detail": {
+          "ko": "포켓몬 드림레이더(3DS)에서 데려와요",
+          "en": "Transfer from Pokémon Dream Radar (3DS)"
+        },
+        "versionsFrom": []
+      }
+    ],
+    "victini": [
+      {
+        "how": "transfer",
+        "detail": {
+          "ko": "블랙 · 화이트의 리버티가든섬(배포 리버티패스)",
+          "en": "Liberty Garden in Black/White (Liberty Pass event)"
+        },
+        "versionsFrom": [
+          "black",
+          "white"
+        ]
+      }
+    ]
+  }
 }

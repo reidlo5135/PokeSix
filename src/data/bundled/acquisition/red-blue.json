@@ -1,10 +1,18 @@
 {
   "_comment": [
     "게임(버전 그룹)별 입수 사전 (ui/dex/guidebook.h가 읽는다). 형식은 docs/i18n/README.md 참고.",
-    "scripts/i18n/check_acquisition.py로 검증해 넣었다. 출처는 _sources."
+    "scripts/i18n/check_acquisition.py로 검증해 넣었다. 출처는 _sources.",
+    "pokemon 묶음(2026-11-04): 키 = species.identifier, 값 = 출현 줄. how는 encounter-methods.json 키(starter · fossil · prize · bug-contest · swarm · pokewalker · event · transfer · static …). minLevel · maxLevel = 레벨, versionsFrom = transfer일 때 데려올 버전(빈 배열 = 버전 미지정), replaces = 같은 where · 버전의 PokéAPI 행 중 그 방법(gift)을 숨기고 이 줄로 바꾼다.",
+    "TM/HM의 how 없는 옛 Serebii 줄(2026-11-04): Serebii ItemDex가 NPC에게 받는 줄에만 사람을 적는 모양을 따라 detail에 '관장'·'승리' → reward, 사람 · 조건 → gift, detail 없음 → field로 채웠다(스쿼드 공급 집계용). 연고시티 상호교류광장(데리고 걷는 포켓몬이 줍는 것)은 other."
   ],
   "_sources": [
-    "Serebii.net ItemDex (https://www.serebii.net/itemdex/) — 장소는 PokéAPI/게임 텍스트로 한국어화"
+    "Serebii.net ItemDex (https://www.serebii.net/itemdex/) — 장소는 PokéAPI/게임 텍스트로 한국어화",
+    "Bulbapedia — List of TM and HM locations in Generation I–V · 각 백화점 · 게임코너 · 배틀파크 문서 (https://bulbapedia.bulbagarden.net/, web.archive.org 사본) — TM 입수처 · 가격",
+    "Serebii.net TM/HM 목록 (https://www.serebii.net/) — 교차 확인",
+    "TM 입수처 한국어 표기 대조: https://blog.naver.com/thanks-4/222251079541 (REFER.md)",
+    "Bulbapedia 아이템 문서(Acquisition 표: Dragon Scale · King's Rock · Metal Coat · Up-Grade · Deep Sea Scale/Tooth · Electirizer · Magmarizer · Moon/Thunder/Fire Stone · Razor Claw/Fang, web.archive.org 사본) — 진화 도구 입수처 · 소지 확률",
+    "영어로 남은 place · detail 칸 한국어화(2026-11-04): 공식 한국어 이름(장소 · 인물 · 아이템)은 place-names.json · DB · 나무위키 대조, 공식명이 확인되지 않은 역할 이름은 설명형 번역, 포켓워커 코스명은 한국어판 표기 미확인이라 영어 그대로",
+    "포켓몬 입수 보충(pokemon 묶음): PokéAPI gift 행의 경품 · 화석 · 스타팅 덮어쓰기(코인은 Bulbapedia Celadon/Goldenrod Game Corner), PokéAPI에 없는 경로(곤충채집대회 · 포켓워커 · 고정 출현 · 데려오기 · 배포)는 Bulbapedia 포켓몬별 Game locations 표(web.archive.org 사본) 대조"
   ],
   "versionGroup": "red-blue",
   "items": {
@@ -29,7 +37,10 @@
           "ko": "갈색시티",
           "en": "Vermillion City"
         },
-        "detail": "Pokemon Fanclub President"
+        "detail": {
+          "ko": "애호가클럽 회장",
+          "en": "Pokemon Fanclub President"
+        }
       }
     ],
     "calcium": [
@@ -77,24 +88,22 @@
         }
       }
     ],
-    "card-key--letsgo": [
-      {
-        "place": {
-          "ko": "실프주식회사",
-          "en": "Silph Co"
-        }
-      }
-    ],
     "coin-case": [
       {
         "where": "celadon-city",
-        "detail": "Man in restaurant"
+        "detail": {
+          "ko": "식당 안 남자",
+          "en": "Man in restaurant"
+        }
       }
     ],
     "dome-fossil": [
       {
         "where": "mt-moon",
-        "detail": "Trainer"
+        "detail": {
+          "ko": "트레이너",
+          "en": "Trainer"
+        }
       }
     ],
     "elixir": [
@@ -133,6 +142,19 @@
         "where": "ss-anne"
       }
     ],
+    "fire-stone": [
+      {
+        "how": "shop",
+        "where": "celadon-city",
+        "place": "무지개시티 백화점 4층",
+        "cost": [
+          {
+            "amount": 2100,
+            "unit": "money"
+          }
+        ]
+      }
+    ],
     "full-heal": [
       {
         "place": {
@@ -163,7 +185,10 @@
     "good-rod": [
       {
         "where": "fuchsia-city",
-        "detail": "Fishing Guru"
+        "detail": {
+          "ko": "낚시광",
+          "en": "Fishing Guru"
+        }
       }
     ],
     "great-ball": [
@@ -174,25 +199,56 @@
     "helix-fossil": [
       {
         "where": "mt-moon",
-        "detail": "Trainer"
+        "detail": {
+          "ko": "트레이너",
+          "en": "Trainer"
+        }
       }
     ],
     "hm01": [
       {
+        "how": "gift",
         "where": "ss-anne",
-        "detail": "Captain"
+        "detail": {
+          "ko": "선장",
+          "en": "Captain"
+        }
+      }
+    ],
+    "hm02": [
+      {
+        "how": "gift",
+        "where": "kanto-route-16",
+        "place": "16번 도로 민가",
+        "detail": "풀베기 필요"
       }
     ],
     "hm03": [
       {
+        "how": "gift",
         "where": "kanto-safari-zone",
-        "detail": "Man in Secret House"
+        "detail": {
+          "ko": "비밀의 집 남자",
+          "en": "Man in Secret House"
+        }
       }
     ],
     "hm04": [
       {
+        "how": "gift",
         "where": "fuchsia-city",
-        "detail": "Warden"
+        "detail": {
+          "ko": "사파리존 원장",
+          "en": "Warden"
+        }
+      }
+    ],
+    "hm05": [
+      {
+        "how": "gift",
+        "where": "kanto-route-2",
+        "place": "2번 도로 게이트",
+        "detail": "오박사 조수 · 포켓몬 10종 이상 잡은 뒤"
       }
     ],
     "hp-up": [
@@ -246,19 +302,17 @@
         "where": "pokemon-mansion"
       }
     ],
-    "lagreat-ball": [
+    "leaf-stone": [
       {
-        "where": "ss-anne"
-      }
-    ],
-    "lapoke-ball": [
-      {
-        "where": "viridian-forest"
-      }
-    ],
-    "laultra-ball": [
-      {
-        "where": "cerulean-cave"
+        "how": "shop",
+        "where": "celadon-city",
+        "place": "무지개시티 백화점 4층",
+        "cost": [
+          {
+            "amount": 2100,
+            "unit": "money"
+          }
+        ]
       }
     ],
     "lift-key": [
@@ -275,7 +329,10 @@
           "ko": "실프주식회사",
           "en": "Silph Co"
         },
-        "detail": "Silph Co President"
+        "detail": {
+          "ko": "실프 사장",
+          "en": "Silph Co President"
+        }
       }
     ],
     "max-elixir": [
@@ -336,7 +393,10 @@
     "nugget": [
       {
         "where": "kanto-route-24",
-        "detail": "Trainer at the end of Nugget Bridge"
+        "detail": {
+          "ko": "골든볼 브릿지 끝 트레이너",
+          "en": "Trainer at the end of Nugget Bridge"
+        }
       },
       {
         "where": "cerulean-cave"
@@ -357,7 +417,10 @@
     "old-amber": [
       {
         "where": "pewter-city",
-        "detail": "Scientist at Museum"
+        "detail": {
+          "ko": "박물관 과학자",
+          "en": "Scientist at Museum"
+        }
       }
     ],
     "old-rod": [
@@ -366,7 +429,10 @@
           "ko": "갈색시티",
           "en": "Vermillion City"
         },
-        "detail": "Fishing Guru"
+        "detail": {
+          "ko": "낚시광",
+          "en": "Fishing Guru"
+        }
       }
     ],
     "poke-ball": [
@@ -377,7 +443,10 @@
     "poke-flute": [
       {
         "where": "pokemon-tower",
-        "detail": "Mr. Fuji"
+        "detail": {
+          "ko": "등나무노인",
+          "en": "Mr. Fuji"
+        }
       }
     ],
     "potion": [
@@ -449,11 +518,6 @@
         "where": "pokemon-mansion"
       }
     ],
-    "secret-key--letsgo": [
-      {
-        "where": "pokemon-mansion"
-      }
-    ],
     "silph-scope": [
       {
         "place": {
@@ -473,16 +537,34 @@
     "super-rod": [
       {
         "where": "kanto-route-12",
-        "detail": "Fishing Guru"
+        "detail": {
+          "ko": "낚시광",
+          "en": "Fishing Guru"
+        }
+      }
+    ],
+    "thunder-stone": [
+      {
+        "how": "shop",
+        "where": "celadon-city",
+        "place": "무지개시티 백화점 4층",
+        "cost": [
+          {
+            "amount": 2100,
+            "unit": "money"
+          }
+        ]
       }
     ],
     "tm01": [
       {
+        "how": "field",
         "where": "mt-moon"
       }
     ],
     "tm02": [
       {
+        "how": "field",
         "place": {
           "ko": "로켓단아지트",
           "en": "Rocket Hideout"
@@ -491,6 +573,7 @@
     ],
     "tm03": [
       {
+        "how": "field",
         "place": {
           "ko": "실프주식회사",
           "en": "Silph Co"
@@ -499,22 +582,29 @@
     ],
     "tm04": [
       {
+        "how": "field",
         "where": "kanto-route-4"
       }
     ],
     "tm05": [
       {
+        "how": "field",
         "where": "kanto-victory-road-1"
       }
     ],
     "tm06": [
       {
+        "how": "reward",
         "where": "fuchsia-city",
-        "detail": "Koga"
+        "detail": {
+          "ko": "관장 독수",
+          "en": "Koga"
+        }
       }
     ],
     "tm07": [
       {
+        "how": "field",
         "place": {
           "ko": "로켓단아지트",
           "en": "Rocket Hideout"
@@ -523,11 +613,13 @@
     ],
     "tm08": [
       {
+        "how": "field",
         "where": "ss-anne"
       }
     ],
     "tm09": [
       {
+        "how": "field",
         "place": {
           "ko": "실프주식회사",
           "en": "Silph Co"
@@ -536,6 +628,7 @@
     ],
     "tm10": [
       {
+        "how": "field",
         "place": {
           "ko": "로켓단아지트",
           "en": "Rocket Hideout"
@@ -544,57 +637,132 @@
     ],
     "tm11": [
       {
+        "how": "reward",
         "where": "cerulean-city",
-        "detail": "Misty"
+        "detail": {
+          "ko": "관장 이슬",
+          "en": "Misty"
+        }
       }
     ],
     "tm12": [
       {
+        "how": "field",
         "where": "mt-moon"
+      }
+    ],
+    "tm13": [
+      {
+        "how": "gift",
+        "where": "celadon-city",
+        "place": "무지개시티 백화점 옥상",
+        "detail": "목마른 소녀에게 맛있는물을 주면 · 1회"
       }
     ],
     "tm14": [
       {
+        "how": "field",
         "where": "pokemon-mansion"
+      }
+    ],
+    "tm15": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 5500,
+            "unit": "coins"
+          }
+        ]
       }
     ],
     "tm16": [
       {
+        "how": "field",
         "where": "kanto-route-12"
       }
     ],
     "tm17": [
       {
+        "how": "field",
         "where": "kanto-victory-road-1"
+      }
+    ],
+    "tm18": [
+      {
+        "how": "gift",
+        "where": "celadon-city",
+        "place": "무지개시티 백화점 3층",
+        "detail": "카운터 뒤 남자 · 1회"
       }
     ],
     "tm19": [
       {
+        "how": "field",
         "where": "kanto-route-25"
+      }
+    ],
+    "tm20": [
+      {
+        "how": "field",
+        "where": "kanto-route-15"
       }
     ],
     "tm21": [
       {
+        "how": "reward",
         "where": "celadon-city",
-        "detail": "Erika"
+        "detail": {
+          "ko": "관장 민화",
+          "en": "Erika"
+        }
       }
     ],
     "tm22": [
       {
+        "how": "field",
         "where": "pokemon-mansion"
+      }
+    ],
+    "tm23": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 3300,
+            "unit": "coins"
+          }
+        ]
       }
     ],
     "tm24": [
       {
+        "how": "reward",
         "place": {
           "ko": "갈색시티",
           "en": "Vermillion City"
         },
-        "detail": "Lt. Surge"
+        "detail": {
+          "ko": "관장 마티스",
+          "en": "Lt. Surge"
+        }
       }
     ],
     "tm25": [
       {
+        "how": "field",
         "place": {
           "ko": "무인발전소",
           "en": "Power Plant"
@@ -603,6 +771,7 @@
     ],
     "tm26": [
       {
+        "how": "field",
         "place": {
           "ko": "실프주식회사",
           "en": "Silph Co"
@@ -611,40 +780,59 @@
     ],
     "tm27": [
       {
+        "how": "reward",
         "where": "viridian-city",
-        "detail": "Giovanni"
+        "detail": {
+          "ko": "관장 비주기",
+          "en": "Giovanni"
+        }
       }
     ],
     "tm28": [
       {
+        "how": "gift",
         "where": "cerulean-city",
-        "detail": "Man in house"
+        "detail": {
+          "ko": "민가 남자",
+          "en": "Man in house"
+        }
       }
     ],
     "tm29": [
       {
+        "how": "gift",
         "where": "saffron-city",
-        "detail": "Mr. Psychic"
+        "detail": {
+          "ko": "에스퍼 아저씨",
+          "en": "Mr. Psychic"
+        }
       }
     ],
     "tm30": [
       {
+        "how": "field",
         "where": "kanto-route-9"
       }
     ],
     "tm31": [
       {
+        "how": "gift",
         "where": "saffron-city",
-        "detail": "Copycat"
+        "detail": {
+          "ko": "흉내쟁이",
+          "en": "Copycat"
+        }
       }
     ],
     "tm32": [
       {
+        "how": "field",
         "where": "kanto-safari-zone"
       }
     ],
     "tm33": [
       {
+        "how": "field",
         "place": {
           "ko": "무인발전소",
           "en": "Power Plant"
@@ -653,12 +841,25 @@
     ],
     "tm34": [
       {
+        "how": "reward",
         "where": "pewter-city",
-        "detail": "Brock"
+        "detail": {
+          "ko": "관장 웅",
+          "en": "Brock"
+        }
+      }
+    ],
+    "tm35": [
+      {
+        "how": "gift",
+        "where": "cinnabar-island",
+        "place": "홍련마을 포켓몬 연구소",
+        "detail": "연구원 · 1회"
       }
     ],
     "tm36": [
       {
+        "how": "field",
         "place": {
           "ko": "실프주식회사",
           "en": "Silph Co"
@@ -667,73 +868,148 @@
     ],
     "tm37": [
       {
+        "how": "field",
         "where": "kanto-safari-zone"
       }
     ],
     "tm38": [
       {
+        "how": "reward",
         "where": "cinnabar-island",
-        "detail": "Blaine"
+        "detail": {
+          "ko": "관장 강연",
+          "en": "Blaine"
+        }
       }
     ],
     "tm39": [
       {
+        "how": "gift",
         "where": "kanto-route-12",
-        "detail": "Girl in guard tower"
+        "detail": {
+          "ko": "게이트 2층 소녀",
+          "en": "Girl in guard tower"
+        }
       }
     ],
     "tm40": [
       {
+        "how": "field",
         "where": "kanto-safari-zone"
       }
     ],
     "tm41": [
       {
+        "how": "gift",
         "where": "celadon-city",
-        "detail": "Man behind pond"
+        "detail": {
+          "ko": "연못 뒤 남자",
+          "en": "Man behind pond"
+        }
       }
     ],
     "tm42": [
       {
+        "how": "gift",
         "where": "viridian-city",
-        "detail": "Person behind shrub"
+        "detail": {
+          "ko": "나무 뒤 사람",
+          "en": "Person behind shrub"
+        }
       }
     ],
     "tm43": [
       {
+        "how": "field",
         "where": "kanto-victory-road-1"
       }
     ],
     "tm44": [
       {
+        "how": "field",
         "where": "ss-anne"
       }
     ],
     "tm45": [
       {
+        "how": "field",
         "where": "kanto-route-24"
       }
     ],
     "tm46": [
       {
+        "how": "reward",
         "where": "saffron-city",
-        "detail": "Sabrina"
+        "detail": {
+          "ko": "관장 초련",
+          "en": "Sabrina"
+        }
       }
     ],
     "tm47": [
       {
+        "how": "field",
         "where": "kanto-victory-road-1"
+      }
+    ],
+    "tm48": [
+      {
+        "how": "gift",
+        "where": "celadon-city",
+        "place": "무지개시티 백화점 옥상",
+        "detail": "목마른 소녀에게 미네랄사이다를 주면 · 1회"
+      }
+    ],
+    "tm49": [
+      {
+        "how": "gift",
+        "where": "celadon-city",
+        "place": "무지개시티 백화점 옥상",
+        "detail": "목마른 소녀에게 후르츠밀크를 주면 · 1회"
+      }
+    ],
+    "tm50": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 7700,
+            "unit": "coins"
+          }
+        ]
       }
     ],
     "town-map": [
       {
         "where": "pallet-town",
-        "detail": "Blue's Sister"
+        "detail": {
+          "ko": "남나리(그린의 누나)",
+          "en": "Blue's Sister"
+        }
       }
     ],
     "ultra-ball": [
       {
         "where": "cerulean-cave"
+      }
+    ],
+    "water-stone": [
+      {
+        "how": "shop",
+        "where": "celadon-city",
+        "place": "무지개시티 백화점 4층",
+        "cost": [
+          {
+            "amount": 2100,
+            "unit": "money"
+          }
+        ]
       }
     ],
     "x-accuracy": [
@@ -748,5 +1024,362 @@
       }
     ]
   },
-  "tutors": {}
+  "tutors": {},
+  "pokemon": {
+    "abra": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 180,
+            "unit": "coins"
+          }
+        ],
+        "versions": [
+          "red"
+        ],
+        "minLevel": 9,
+        "maxLevel": 9,
+        "replaces": "gift"
+      },
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 120,
+            "unit": "coins"
+          }
+        ],
+        "versions": [
+          "blue"
+        ],
+        "minLevel": 6,
+        "maxLevel": 6,
+        "replaces": "gift"
+      }
+    ],
+    "aerodactyl": [
+      {
+        "how": "fossil",
+        "where": "cinnabar-island",
+        "place": {
+          "ko": "홍련마을 포켓몬 연구소",
+          "en": "Cinnabar Lab"
+        },
+        "detail": {
+          "ko": "비밀의호박 복원",
+          "en": "Revived from the Old Amber"
+        },
+        "minLevel": 30,
+        "maxLevel": 30,
+        "replaces": "gift"
+      }
+    ],
+    "bulbasaur": [
+      {
+        "how": "starter",
+        "where": "pallet-town",
+        "minLevel": 5,
+        "maxLevel": 5,
+        "replaces": "gift"
+      }
+    ],
+    "charmander": [
+      {
+        "how": "starter",
+        "where": "pallet-town",
+        "minLevel": 5,
+        "maxLevel": 5,
+        "replaces": "gift"
+      }
+    ],
+    "clefairy": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 500,
+            "unit": "coins"
+          }
+        ],
+        "versions": [
+          "red"
+        ],
+        "minLevel": 8,
+        "maxLevel": 8,
+        "replaces": "gift"
+      },
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 750,
+            "unit": "coins"
+          }
+        ],
+        "versions": [
+          "blue"
+        ],
+        "minLevel": 12,
+        "maxLevel": 12,
+        "replaces": "gift"
+      }
+    ],
+    "dratini": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 2800,
+            "unit": "coins"
+          }
+        ],
+        "versions": [
+          "red"
+        ],
+        "minLevel": 18,
+        "maxLevel": 18,
+        "replaces": "gift"
+      },
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 4600,
+            "unit": "coins"
+          }
+        ],
+        "versions": [
+          "blue"
+        ],
+        "minLevel": 24,
+        "maxLevel": 24,
+        "replaces": "gift"
+      }
+    ],
+    "kabuto": [
+      {
+        "how": "fossil",
+        "where": "cinnabar-island",
+        "place": {
+          "ko": "홍련마을 포켓몬 연구소",
+          "en": "Cinnabar Lab"
+        },
+        "detail": {
+          "ko": "껍질화석 복원",
+          "en": "Revived from the Dome Fossil"
+        },
+        "minLevel": 30,
+        "maxLevel": 30,
+        "replaces": "gift"
+      }
+    ],
+    "mew": [
+      {
+        "how": "event",
+        "detail": {
+          "ko": "배포 이벤트",
+          "en": "Distribution event"
+        }
+      }
+    ],
+    "nidorina": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 1200,
+            "unit": "coins"
+          }
+        ],
+        "versions": [
+          "red"
+        ],
+        "minLevel": 17,
+        "maxLevel": 17,
+        "replaces": "gift"
+      }
+    ],
+    "nidorino": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 1200,
+            "unit": "coins"
+          }
+        ],
+        "versions": [
+          "blue"
+        ],
+        "minLevel": 17,
+        "maxLevel": 17,
+        "replaces": "gift"
+      }
+    ],
+    "omanyte": [
+      {
+        "how": "fossil",
+        "where": "cinnabar-island",
+        "place": {
+          "ko": "홍련마을 포켓몬 연구소",
+          "en": "Cinnabar Lab"
+        },
+        "detail": {
+          "ko": "조개화석 복원",
+          "en": "Revived from the Helix Fossil"
+        },
+        "minLevel": 30,
+        "maxLevel": 30,
+        "replaces": "gift"
+      }
+    ],
+    "pinsir": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 2500,
+            "unit": "coins"
+          }
+        ],
+        "versions": [
+          "blue"
+        ],
+        "minLevel": 20,
+        "maxLevel": 20,
+        "replaces": "gift"
+      }
+    ],
+    "porygon": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 9999,
+            "unit": "coins"
+          }
+        ],
+        "versions": [
+          "red"
+        ],
+        "minLevel": 26,
+        "maxLevel": 26,
+        "replaces": "gift"
+      },
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 6500,
+            "unit": "coins"
+          }
+        ],
+        "versions": [
+          "blue"
+        ],
+        "minLevel": 18,
+        "maxLevel": 18,
+        "replaces": "gift"
+      }
+    ],
+    "scyther": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 5500,
+            "unit": "coins"
+          }
+        ],
+        "versions": [
+          "red"
+        ],
+        "minLevel": 25,
+        "maxLevel": 25,
+        "replaces": "gift"
+      }
+    ],
+    "squirtle": [
+      {
+        "how": "starter",
+        "where": "pallet-town",
+        "minLevel": 5,
+        "maxLevel": 5,
+        "replaces": "gift"
+      }
+    ]
+  }
 }

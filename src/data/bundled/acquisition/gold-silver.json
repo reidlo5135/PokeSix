@@ -1,16 +1,26 @@
 {
   "_comment": [
     "게임(버전 그룹)별 입수 사전 (ui/dex/guidebook.h가 읽는다). 형식은 docs/i18n/README.md 참고.",
-    "scripts/i18n/check_acquisition.py로 검증해 넣었다. 출처는 _sources."
+    "scripts/i18n/check_acquisition.py로 검증해 넣었다. 출처는 _sources.",
+    "pokemon 묶음(2026-11-04): 키 = species.identifier, 값 = 출현 줄. how는 encounter-methods.json 키(starter · fossil · prize · bug-contest · swarm · pokewalker · event · transfer · static …). minLevel · maxLevel = 레벨, versionsFrom = transfer일 때 데려올 버전(빈 배열 = 버전 미지정), replaces = 같은 where · 버전의 PokéAPI 행 중 그 방법(gift)을 숨기고 이 줄로 바꾼다."
   ],
   "_sources": [
-    "Serebii.net ItemDex (https://www.serebii.net/itemdex/) — 장소는 PokéAPI/게임 텍스트로 한국어화"
+    "Serebii.net ItemDex (https://www.serebii.net/itemdex/) — 장소는 PokéAPI/게임 텍스트로 한국어화",
+    "Bulbapedia — List of TM and HM locations in Generation I–V · 각 백화점 · 게임코너 · 배틀파크 문서 (https://bulbapedia.bulbagarden.net/, web.archive.org 사본) — TM 입수처 · 가격",
+    "Serebii.net TM/HM 목록 (https://www.serebii.net/) — 교차 확인",
+    "TM 입수처 한국어 표기 대조: https://blog.naver.com/rbwls3521/223499623120 (REFER.md)",
+    "영어로 남은 place · detail 칸 한국어화(2026-11-04): 공식 한국어 이름(장소 · 인물 · 아이템)은 place-names.json · DB · 나무위키 대조, 공식명이 확인되지 않은 역할 이름은 설명형 번역, 포켓워커 코스명은 한국어판 표기 미확인이라 영어 그대로",
+    "포켓몬 입수 보충(pokemon 묶음): PokéAPI gift 행의 경품 · 화석 · 스타팅 덮어쓰기(코인은 Bulbapedia Celadon/Goldenrod Game Corner), PokéAPI에 없는 경로(곤충채집대회 · 포켓워커 · 고정 출현 · 데려오기 · 배포)는 Bulbapedia 포켓몬별 Game locations 표(web.archive.org 사본) 대조"
   ],
   "versionGroup": "gold-silver",
   "items": {
     "amulet-coin": [
       {
-        "place": "Goldenrod Underground"
+        "where": "goldenrod-tunnel",
+        "place": {
+          "ko": "금빛시티 지하통로",
+          "en": "Goldenrod Underground"
+        }
       }
     ],
     "antidote": [
@@ -18,7 +28,11 @@
         "where": "johto-route-31"
       },
       {
-        "place": "Goldenrod Underground"
+        "where": "goldenrod-tunnel",
+        "place": {
+          "ko": "금빛시티 지하통로",
+          "en": "Goldenrod Underground"
+        }
       }
     ],
     "awakening": [
@@ -29,31 +43,28 @@
     "basement-key": [
       {
         "where": "radio-tower",
-        "detail": "False Manager"
-      }
-    ],
-    "basement-key--goldenrod": [
-      {
-        "where": "radio-tower",
-        "detail": "False Manager"
-      }
-    ],
-    "basement-key--new-mauville": [
-      {
-        "where": "radio-tower",
-        "detail": "False Manager"
+        "detail": {
+          "ko": "가짜 국장",
+          "en": "False Manager"
+        }
       }
     ],
     "berry-juice": [
       {
         "where": "cianwood-city",
-        "detail": "Attached to Shuckle"
+        "detail": {
+          "ko": "단단지가 지니고 있음",
+          "en": "Attached to Shuckle"
+        }
       }
     ],
     "bicycle": [
       {
         "where": "goldenrod-city",
-        "detail": "Shop Owner"
+        "detail": {
+          "ko": "가게 주인",
+          "en": "Shop Owner"
+        }
       }
     ],
     "black-apricorn": [
@@ -64,13 +75,19 @@
     "black-belt": [
       {
         "where": "lake-of-rage",
-        "detail": "Wesley, Wednesday only"
+        "detail": {
+          "ko": "요일 형제 · 수요일만",
+          "en": "Wesley, Wednesday only"
+        }
       }
     ],
     "black-glasses": [
       {
         "where": "dark-cave",
-        "detail": "Shady Guy"
+        "detail": {
+          "ko": "수상한 남자",
+          "en": "Shady Guy"
+        }
       }
     ],
     "blue-apricorn": [
@@ -81,15 +98,26 @@
     "blue-card": [
       {
         "where": "radio-tower",
-        "detail": "Buena"
+        "detail": {
+          "ko": "규화",
+          "en": "Buena"
+        }
       }
     ],
     "burn-heal": [
       {
-        "place": "Burnt Tower"
+        "where": "burned-tower",
+        "place": {
+          "ko": "불탄탑",
+          "en": "Burnt Tower"
+        }
       },
       {
-        "place": "Goldenrod Underground"
+        "where": "goldenrod-tunnel",
+        "place": {
+          "ko": "금빛시티 지하통로",
+          "en": "Goldenrod Underground"
+        }
       }
     ],
     "calcium": [
@@ -116,37 +144,51 @@
     ],
     "card-key": [
       {
-        "place": "Goldenrod Underground",
-        "detail": "Manager"
-      }
-    ],
-    "card-key--letsgo": [
-      {
-        "place": "Goldenrod Underground",
-        "detail": "Manager"
+        "where": "goldenrod-tunnel",
+        "place": {
+          "ko": "금빛시티 지하통로",
+          "en": "Goldenrod Underground"
+        },
+        "detail": {
+          "ko": "국장",
+          "en": "Manager"
+        }
       }
     ],
     "charcoal": [
       {
         "where": "azalea-town",
-        "detail": "Charcoal Maker, Save apprentice"
+        "detail": {
+          "ko": "숯 장인 · 제자를 도와준 뒤",
+          "en": "Charcoal Maker, Save apprentice"
+        }
       }
     ],
     "cleanse-tag": [
       {
         "where": "kanto-route-5",
-        "detail": "Woman inside House"
+        "detail": {
+          "ko": "민가 여성",
+          "en": "Woman inside House"
+        }
       }
     ],
     "clear-bell": [
       {
         "where": "radio-tower",
-        "detail": "Manager"
+        "detail": {
+          "ko": "국장",
+          "en": "Manager"
+        }
       }
     ],
     "coin-case": [
       {
-        "place": "Goldenrod Underground"
+        "where": "goldenrod-tunnel",
+        "place": {
+          "ko": "금빛시티 지하통로",
+          "en": "Goldenrod Underground"
+        }
       }
     ],
     "dire-hit": [
@@ -222,7 +264,10 @@
       },
       {
         "where": "union-cave",
-        "detail": "Requires Surf"
+        "detail": {
+          "ko": "파도타기 필요",
+          "en": "Requires Surf"
+        }
       },
       {
         "where": "ilex-forest"
@@ -234,10 +279,18 @@
         "where": "lake-of-rage"
       },
       {
-        "place": "Shining Lighthouse"
+        "where": "johto-lighthouse",
+        "place": {
+          "ko": "담청등대",
+          "en": "Shining Lighthouse"
+        }
       },
       {
-        "place": "Goldenrod Underground"
+        "where": "goldenrod-tunnel",
+        "place": {
+          "ko": "금빛시티 지하통로",
+          "en": "Goldenrod Underground"
+        }
       },
       {
         "where": "kanto-route-9"
@@ -246,39 +299,60 @@
     "everstone": [
       {
         "where": "new-bark-town",
-        "detail": "Prof. Elm"
+        "detail": {
+          "ko": "공박사",
+          "en": "Prof. Elm"
+        }
       },
       {
         "where": "national-park",
-        "detail": "2nd Prize in Bug Catching"
+        "detail": {
+          "ko": "곤충채집대회 2등",
+          "en": "2nd Prize in Bug Catching"
+        }
       },
       {
         "where": "kanto-route-25",
-        "detail": "Bill's Grandfather"
+        "detail": {
+          "ko": "이수재의 할아버지",
+          "en": "Bill's Grandfather"
+        }
       }
     ],
     "fast-ball": [
       {
         "where": "azalea-town",
-        "detail": "Kurt"
+        "detail": {
+          "ko": "강집",
+          "en": "Kurt"
+        }
       }
     ],
     "fire-stone": [
       {
         "where": "kanto-route-25",
-        "detail": "Bill's Grandfather"
+        "detail": {
+          "ko": "이수재의 할아버지",
+          "en": "Bill's Grandfather"
+        }
       }
     ],
     "focus-band": [
       {
         "where": "saffron-city",
-        "detail": "Dojo Master"
+        "detail": {
+          "ko": "격투도장 주인",
+          "en": "Dojo Master"
+        }
       }
     ],
     "friend-ball": [
       {
         "where": "azalea-town",
-        "detail": "Kurt"
+        "detail": {
+          "ko": "강집",
+          "en": "Kurt"
+        }
       }
     ],
     "full-heal": [
@@ -310,7 +384,11 @@
         }
       },
       {
-        "place": "Goldenrod Underground"
+        "where": "goldenrod-tunnel",
+        "place": {
+          "ko": "금빛시티 지하통로",
+          "en": "Goldenrod Underground"
+        }
       },
       {
         "where": "kanto-route-2"
@@ -348,7 +426,11 @@
         "where": "kanto-route-2"
       },
       {
-        "place": "Underground Path 5-6"
+        "where": "kanto-underground-path",
+        "place": {
+          "ko": "지하통로(5–6번 도로)",
+          "en": "Underground Path 5-6"
+        }
       },
       {
         "where": "kanto-victory-road-1"
@@ -357,7 +439,10 @@
     "good-rod": [
       {
         "where": "olivine-city",
-        "detail": "Sailor - House by the Pokemart"
+        "detail": {
+          "ko": "뱃사람 · 프렌들리숍 옆 민가",
+          "en": "Sailor - House by the Pokemart"
+        }
       }
     ],
     "great-ball": [
@@ -368,7 +453,11 @@
         "where": "union-cave"
       },
       {
-        "place": "Shining Lighthouse"
+        "where": "johto-lighthouse",
+        "place": {
+          "ko": "담청등대",
+          "en": "Shining Lighthouse"
+        }
       }
     ],
     "green-apricorn": [
@@ -379,22 +468,93 @@
     "hard-stone": [
       {
         "where": "johto-route-36",
-        "detail": "Arthur, Thursday only"
+        "detail": {
+          "ko": "요일 형제 · 목요일만",
+          "en": "Arthur, Thursday only"
+        }
       }
     ],
     "heavy-ball": [
       {
         "where": "azalea-town",
-        "detail": "Kurt"
+        "detail": {
+          "ko": "강집",
+          "en": "Kurt"
+        }
+      }
+    ],
+    "hm01": [
+      {
+        "how": "gift",
+        "where": "ilex-forest",
+        "detail": "달아난 파오리를 찾아 준 뒤 숯 장인",
+        "region": "johto"
+      }
+    ],
+    "hm02": [
+      {
+        "how": "gift",
+        "where": "cianwood-city",
+        "detail": "체육관 승리 후 체육관 앞 여성",
+        "region": "johto"
+      }
+    ],
+    "hm03": [
+      {
+        "how": "gift",
+        "where": "ecruteak-city",
+        "place": "인주시티 무도장",
+        "detail": "무희 5명 승리 후",
+        "region": "johto"
+      }
+    ],
+    "hm04": [
+      {
+        "how": "gift",
+        "where": "olivine-city",
+        "place": "담청시티 카페",
+        "detail": "뱃사람",
+        "region": "johto"
+      }
+    ],
+    "hm05": [
+      {
+        "how": "reward",
+        "where": "sprout-tower",
+        "place": "모다피의 탑 3층",
+        "detail": "장로 승리",
+        "region": "johto"
+      }
+    ],
+    "hm06": [
+      {
+        "how": "gift",
+        "where": "mahogany-town",
+        "detail": "로켓단 아지트 퇴치 후 목호",
+        "region": "johto"
+      }
+    ],
+    "hm07": [
+      {
+        "how": "field",
+        "where": "ice-path",
+        "region": "johto"
       }
     ],
     "hp-up": [
       {
         "where": "johto-route-35",
-        "detail": "Southern Guardhouse"
+        "detail": {
+          "ko": "남쪽 게이트",
+          "en": "Southern Guardhouse"
+        }
       },
       {
-        "place": "Burnt Tower"
+        "where": "burned-tower",
+        "place": {
+          "ko": "불탄탑",
+          "en": "Burnt Tower"
+        }
       },
       {
         "where": "kanto-route-4"
@@ -404,7 +564,10 @@
           "ko": "갈색시티",
           "en": "Vermillion City"
         },
-        "detail": "Man by Snorelax"
+        "detail": {
+          "ko": "잠만보 옆 남자",
+          "en": "Man by Snorelax"
+        }
       }
     ],
     "hyper-potion": [
@@ -416,14 +579,20 @@
       },
       {
         "where": "violet-city",
-        "detail": "Requires Cut"
+        "detail": {
+          "ko": "풀베기 필요",
+          "en": "Requires Cut"
+        }
       },
       {
         "where": "ecruteak-city"
       },
       {
         "where": "union-cave",
-        "detail": "Requires Surf"
+        "detail": {
+          "ko": "파도타기 필요",
+          "en": "Requires Surf"
+        }
       },
       {
         "where": "mt-mortar"
@@ -438,7 +607,11 @@
         }
       },
       {
-        "place": "Shining Lighthouse"
+        "where": "johto-lighthouse",
+        "place": {
+          "ko": "담청등대",
+          "en": "Shining Lighthouse"
+        }
       }
     ],
     "ice-heal": [
@@ -469,64 +642,19 @@
     "kings-rock": [
       {
         "where": "slowpoke-well",
-        "detail": "Requires Surf"
-      }
-    ],
-    "lagreat-ball": [
-      {
-        "where": "johto-route-32"
-      },
-      {
-        "where": "union-cave"
-      },
-      {
-        "place": "Shining Lighthouse"
-      }
-    ],
-    "laheavy-ball": [
-      {
-        "where": "azalea-town",
-        "detail": "Kurt"
-      }
-    ],
-    "lapoke-ball": [
-      {
-        "where": "johto-route-31"
-      }
-    ],
-    "laultra-ball": [
-      {
-        "where": "johto-route-42"
-      },
-      {
-        "where": "johto-route-44"
-      },
-      {
-        "place": {
-          "ko": "방울탑",
-          "en": "Tin Tower"
+        "detail": {
+          "ko": "파도타기 필요",
+          "en": "Requires Surf"
         }
-      },
-      {
-        "place": "Burnt Tower"
-      },
-      {
-        "where": "whirl-islands"
-      },
-      {
-        "where": "mt-silver"
-      },
-      {
-        "place": "Goldenrod Underground"
-      },
-      {
-        "where": "kanto-route-4"
       }
     ],
     "leaf-stone": [
       {
         "where": "kanto-route-25",
-        "detail": "Bill's Grandfather"
+        "detail": {
+          "ko": "이수재의 할아버지",
+          "en": "Bill's Grandfather"
+        }
       }
     ],
     "leftovers": [
@@ -537,7 +665,10 @@
     "level-ball": [
       {
         "where": "azalea-town",
-        "detail": "Kurt"
+        "detail": {
+          "ko": "강집",
+          "en": "Kurt"
+        }
       }
     ],
     "lost-item": [
@@ -551,13 +682,19 @@
     "love-ball": [
       {
         "where": "azalea-town",
-        "detail": "Kurt"
+        "detail": {
+          "ko": "강집",
+          "en": "Kurt"
+        }
       }
     ],
     "lure-ball": [
       {
         "where": "azalea-town",
-        "detail": "Kurt"
+        "detail": {
+          "ko": "강집",
+          "en": "Kurt"
+        }
       }
     ],
     "machine-part": [
@@ -568,13 +705,19 @@
     "magnet": [
       {
         "where": "johto-route-37",
-        "detail": "Sunny, Sunday only"
+        "detail": {
+          "ko": "요일 형제 · 일요일만",
+          "en": "Sunny, Sunday only"
+        }
       }
     ],
     "master-ball": [
       {
         "where": "new-bark-town",
-        "detail": "Prof. Elm"
+        "detail": {
+          "ko": "공박사",
+          "en": "Prof. Elm"
+        }
       }
     ],
     "max-elixir": [
@@ -614,7 +757,11 @@
         "where": "lake-of-rage"
       },
       {
-        "place": "Goldenrod Underground"
+        "where": "goldenrod-tunnel",
+        "place": {
+          "ko": "금빛시티 지하통로",
+          "en": "Goldenrod Underground"
+        }
       },
       {
         "where": "kanto-route-2"
@@ -652,7 +799,11 @@
         "where": "ice-path"
       },
       {
-        "place": "Goldenrod Underground"
+        "where": "goldenrod-tunnel",
+        "place": {
+          "ko": "금빛시티 지하통로",
+          "en": "Goldenrod Underground"
+        }
       },
       {
         "where": "kanto-route-2"
@@ -695,25 +846,37 @@
     "metal-coat": [
       {
         "where": "ss-aqua",
-        "detail": "Man in lower right room"
+        "detail": {
+          "ko": "오른쪽 아래 방 남자",
+          "en": "Man in lower right room"
+        }
       }
     ],
     "miracle-seed": [
       {
         "where": "johto-route-32",
-        "detail": "Trainer near the ruins"
+        "detail": {
+          "ko": "유적 근처 트레이너",
+          "en": "Trainer near the ruins"
+        }
       }
     ],
     "moon-ball": [
       {
         "where": "azalea-town",
-        "detail": "Kurt"
+        "detail": {
+          "ko": "강집",
+          "en": "Kurt"
+        }
       }
     ],
     "moon-stone": [
       {
         "where": "ruins-of-alph",
-        "detail": "Monday Night"
+        "detail": {
+          "ko": "월요일 밤",
+          "en": "Monday Night"
+        }
       },
       {
         "place": {
@@ -730,7 +893,10 @@
     "mystic-water": [
       {
         "where": "cherrygrove-city",
-        "detail": "Fisherman, Requires Surf"
+        "detail": {
+          "ko": "낚시꾼 · 파도타기 필요",
+          "en": "Fisherman, Requires Surf"
+        }
       }
     ],
     "nugget": [
@@ -760,19 +926,28 @@
       },
       {
         "where": "kanto-route-25",
-        "detail": "Beat All Trainers"
+        "detail": {
+          "ko": "트레이너 전원 승리",
+          "en": "Beat All Trainers"
+        }
       }
     ],
     "old-rod": [
       {
         "where": "johto-route-32",
-        "detail": "Man inside Pokemon Center"
+        "detail": {
+          "ko": "포켓몬센터 안 남자",
+          "en": "Man inside Pokemon Center"
+        }
       }
     ],
     "pass": [
       {
         "where": "saffron-city",
-        "detail": "Copycat Girl"
+        "detail": {
+          "ko": "흉내쟁이 소녀",
+          "en": "Copycat Girl"
+        }
       }
     ],
     "pink-apricorn": [
@@ -783,7 +958,10 @@
     "poison-barb": [
       {
         "where": "johto-route-32",
-        "detail": "Frieda, Friday Only"
+        "detail": {
+          "ko": "요일 형제 · 금요일만",
+          "en": "Frieda, Friday Only"
+        }
       }
     ],
     "poke-ball": [
@@ -803,7 +981,10 @@
       },
       {
         "where": "new-bark-town",
-        "detail": "Prof. Elm"
+        "detail": {
+          "ko": "공박사",
+          "en": "Prof. Elm"
+        }
       },
       {
         "where": "sprout-tower"
@@ -846,21 +1027,33 @@
     "quick-claw": [
       {
         "where": "national-park",
-        "detail": "Woman at Park entrance"
+        "detail": {
+          "ko": "공원 입구 여성",
+          "en": "Woman at Park entrance"
+        }
       }
     ],
     "rainbow-wing": [
       {
         "where": "ecruteak-city",
-        "detail": "Wise Trio - All three Beasts caught"
+        "detail": {
+          "ko": "인주시티 세 현자 · 전설의 포켓몬 셋을 잡은 뒤",
+          "en": "Wise Trio - All three Beasts caught"
+        }
       },
       {
         "where": "radio-tower",
-        "detail": "Manager"
+        "detail": {
+          "ko": "국장",
+          "en": "Manager"
+        }
       },
       {
         "where": "pewter-city",
-        "detail": "Old Man"
+        "detail": {
+          "ko": "할아버지",
+          "en": "Old Man"
+        }
       }
     ],
     "rare-candy": [
@@ -869,7 +1062,10 @@
       },
       {
         "where": "violet-city",
-        "detail": "Requires Surf"
+        "detail": {
+          "ko": "파도타기 필요",
+          "en": "Requires Surf"
+        }
       },
       {
         "where": "mt-mortar"
@@ -887,7 +1083,11 @@
         "where": "lake-of-rage"
       },
       {
-        "place": "Shining Lighthouse"
+        "where": "johto-lighthouse",
+        "place": {
+          "ko": "담청등대",
+          "en": "Shining Lighthouse"
+        }
       },
       {
         "where": "kanto-route-28"
@@ -904,7 +1104,10 @@
     "red-scale": [
       {
         "where": "lake-of-rage",
-        "detail": "Attached to Red Gyarados"
+        "detail": {
+          "ko": "붉은 갸라도스에게서",
+          "en": "Attached to Red Gyarados"
+        }
       }
     ],
     "revive": [
@@ -927,7 +1130,11 @@
         }
       },
       {
-        "place": "Goldenrod Underground"
+        "where": "goldenrod-tunnel",
+        "place": {
+          "ko": "금빛시티 지하통로",
+          "en": "Goldenrod Underground"
+        }
       },
       {
         "where": "kanto-route-2"
@@ -958,36 +1165,55 @@
           "ko": "40번수로",
           "en": "Route 40"
         },
-        "detail": "Monica - Monday only"
+        "detail": {
+          "ko": "요일 형제 · 월요일만",
+          "en": "Monica - Monday only"
+        }
       }
     ],
     "silver-wing": [
       {
         "where": "pewter-city",
-        "detail": "Old Man"
+        "detail": {
+          "ko": "할아버지",
+          "en": "Old Man"
+        }
       }
     ],
     "smoke-ball": [
       {
-        "place": "Goldenrod Underground"
+        "where": "goldenrod-tunnel",
+        "place": {
+          "ko": "금빛시티 지하통로",
+          "en": "Goldenrod Underground"
+        }
       }
     ],
     "spell-tag": [
       {
         "where": "blackthorn-city",
-        "detail": "Santos, Saturday only"
+        "detail": {
+          "ko": "요일 형제 · 토요일만",
+          "en": "Santos, Saturday only"
+        }
       }
     ],
     "squirt-bottle": [
       {
         "where": "goldenrod-city",
-        "detail": "Building West of Gym - with Plain Badge"
+        "detail": {
+          "ko": "체육관 서쪽 건물 · 레귤러배지 이후",
+          "en": "Building West of Gym - with Plain Badge"
+        }
       }
     ],
     "sun-stone": [
       {
         "where": "national-park",
-        "detail": "1st Prize in Bug Catching"
+        "detail": {
+          "ko": "곤충채집대회 1등",
+          "en": "1st Prize in Bug Catching"
+        }
       }
     ],
     "super-potion": [
@@ -1013,22 +1239,628 @@
         }
       },
       {
-        "place": "Shining Lighthouse"
+        "where": "johto-lighthouse",
+        "place": {
+          "ko": "담청등대",
+          "en": "Shining Lighthouse"
+        }
       },
       {
-        "place": "Goldenrod Underground"
+        "where": "goldenrod-tunnel",
+        "place": {
+          "ko": "금빛시티 지하통로",
+          "en": "Goldenrod Underground"
+        }
       }
     ],
     "super-rod": [
       {
         "where": "kanto-route-12",
-        "detail": "Fisherman in the house"
+        "detail": {
+          "ko": "민가 낚시꾼",
+          "en": "Fisherman in the house"
+        }
       }
     ],
     "thunder-stone": [
       {
         "where": "kanto-route-25",
-        "detail": "Bill's Grandfather"
+        "detail": {
+          "ko": "이수재의 할아버지",
+          "en": "Bill's Grandfather"
+        }
+      }
+    ],
+    "tm01": [
+      {
+        "how": "reward",
+        "where": "cianwood-city",
+        "place": "진청시티 체육관",
+        "detail": "관장 사도 승리",
+        "region": "johto"
+      }
+    ],
+    "tm02": [
+      {
+        "how": "gift",
+        "where": "ilex-forest",
+        "detail": "숲 북동쪽 사람",
+        "region": "johto"
+      },
+      {
+        "how": "shop",
+        "where": "goldenrod-city",
+        "place": "금빛시티 백화점 5층",
+        "cost": [
+          {
+            "amount": 2000,
+            "unit": "money"
+          }
+        ],
+        "detail": "너도밤나무숲에서 받은 뒤",
+        "region": "johto"
+      }
+    ],
+    "tm03": [
+      {
+        "how": "gift",
+        "where": "celadon-city",
+        "place": "무지개시티 맨션 옥상",
+        "detail": "밤에만",
+        "region": "kanto"
+      }
+    ],
+    "tm04": [
+      {
+        "how": "field",
+        "where": "johto-route-35",
+        "region": "johto"
+      }
+    ],
+    "tm05": [
+      {
+        "how": "gift",
+        "where": "johto-route-32",
+        "detail": "풀베기 필요",
+        "region": "johto"
+      }
+    ],
+    "tm06": [
+      {
+        "how": "reward",
+        "where": "fuchsia-city",
+        "place": "연분홍시티 체육관",
+        "detail": "관장 도희 승리",
+        "region": "kanto"
+      }
+    ],
+    "tm07": [
+      {
+        "how": "gift",
+        "where": "kanto-power-plant",
+        "detail": "발전소장에게 기계부품을 찾아 주면",
+        "region": "kanto"
+      }
+    ],
+    "tm08": [
+      {
+        "how": "gift",
+        "where": "johto-route-36",
+        "detail": "꼬지모를 비키게 한 뒤 옆 사람",
+        "region": "johto"
+      },
+      {
+        "how": "shop",
+        "where": "goldenrod-city",
+        "place": "금빛시티 백화점 5층",
+        "cost": [
+          {
+            "amount": 1000,
+            "unit": "money"
+          }
+        ],
+        "detail": "36번 도로에서 받은 뒤",
+        "region": "johto"
+      }
+    ],
+    "tm09": [
+      {
+        "how": "trade",
+        "place": {
+          "ko": "1세대에서 데려온 캐이시",
+          "en": "Abra traded from Generation I",
+          "ja": "初代から連れてきたケーシィ"
+        },
+        "detail": "타임캡슐로 교환한 캐이시가 지니고 와요"
+      }
+    ],
+    "tm10": [
+      {
+        "how": "gift",
+        "where": "lake-of-rage",
+        "place": "분노의 호수 북서쪽 민가",
+        "region": "johto"
+      },
+      {
+        "how": "shop",
+        "where": "celadon-city",
+        "place": "무지개시티 백화점 3층",
+        "cost": [
+          {
+            "amount": 3000,
+            "unit": "money"
+          }
+        ],
+        "region": "kanto"
+      }
+    ],
+    "tm11": [
+      {
+        "how": "gift",
+        "where": "radio-tower",
+        "place": "라디오타워 3층",
+        "detail": "로켓단 퇴치 후",
+        "region": "johto"
+      },
+      {
+        "how": "shop",
+        "where": "celadon-city",
+        "place": "무지개시티 백화점 3층",
+        "cost": [
+          {
+            "amount": 2000,
+            "unit": "money"
+          }
+        ],
+        "region": "kanto"
+      }
+    ],
+    "tm12": [
+      {
+        "how": "gift",
+        "where": "johto-route-34",
+        "place": "34번 도로 게이트",
+        "detail": "너도밤나무숲 쪽 게이트",
+        "region": "johto"
+      }
+    ],
+    "tm13": [
+      {
+        "how": "gift",
+        "where": "johto-route-39",
+        "place": "튼튼목장",
+        "detail": "아픈 밀탱크에게 나무열매 7개를 먹인 뒤",
+        "region": "johto"
+      },
+      {
+        "how": "field",
+        "where": "dark-cave",
+        "detail": "45번 도로 쪽 입구 · 파도타기 필요",
+        "region": "johto"
+      }
+    ],
+    "tm14": [
+      {
+        "how": "prize",
+        "where": "goldenrod-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 5500,
+            "unit": "coins"
+          }
+        ],
+        "region": "johto"
+      }
+    ],
+    "tm15": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 7500,
+            "unit": "coins"
+          }
+        ],
+        "region": "kanto"
+      }
+    ],
+    "tm16": [
+      {
+        "how": "reward",
+        "where": "mahogany-town",
+        "place": "황토마을 체육관",
+        "detail": "관장 류옹 승리",
+        "region": "johto"
+      }
+    ],
+    "tm17": [
+      {
+        "how": "shop",
+        "where": "celadon-city",
+        "place": "무지개시티 백화점 3층",
+        "cost": [
+          {
+            "amount": 3000,
+            "unit": "money"
+          }
+        ],
+        "region": "kanto"
+      }
+    ],
+    "tm18": [
+      {
+        "how": "field",
+        "where": "slowpoke-well",
+        "detail": "파도타기 필요",
+        "region": "johto"
+      },
+      {
+        "how": "shop",
+        "where": "celadon-city",
+        "place": "무지개시티 백화점 3층",
+        "cost": [
+          {
+            "amount": 2000,
+            "unit": "money"
+          }
+        ],
+        "region": "kanto"
+      }
+    ],
+    "tm19": [
+      {
+        "how": "reward",
+        "where": "celadon-city",
+        "place": "무지개시티 체육관",
+        "detail": "관장 민화 승리",
+        "region": "kanto"
+      }
+    ],
+    "tm20": [
+      {
+        "how": "field",
+        "where": "burned-tower",
+        "place": "불탄탑 지하",
+        "region": "johto"
+      }
+    ],
+    "tm21": [
+      {
+        "how": "gift",
+        "where": "goldenrod-city",
+        "place": "금빛시티 백화점 5층",
+        "detail": "일요일 · 선두 포켓몬 친밀도가 낮을 때 · 주 1회",
+        "region": "johto"
+      }
+    ],
+    "tm22": [
+      {
+        "how": "field",
+        "where": "kanto-route-27",
+        "detail": "파도타기 · 바다회오리 필요",
+        "region": "johto"
+      }
+    ],
+    "tm23": [
+      {
+        "how": "reward",
+        "where": "olivine-city",
+        "place": "담청시티 체육관",
+        "detail": "관장 규리 승리",
+        "region": "johto"
+      }
+    ],
+    "tm24": [
+      {
+        "how": "reward",
+        "where": "dragons-den",
+        "place": "용의 굴",
+        "detail": "관장 이향 승리 뒤 용의 굴 시험 통과",
+        "region": "johto"
+      }
+    ],
+    "tm25": [
+      {
+        "how": "prize",
+        "where": "goldenrod-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 5500,
+            "unit": "coins"
+          }
+        ],
+        "region": "johto"
+      }
+    ],
+    "tm26": [
+      {
+        "how": "field",
+        "where": "kanto-victory-road-1",
+        "region": "kanto"
+      }
+    ],
+    "tm27": [
+      {
+        "how": "gift",
+        "where": "goldenrod-city",
+        "place": "금빛시티 백화점 5층",
+        "detail": "일요일 · 선두 포켓몬 친밀도가 높을 때 · 주 1회",
+        "region": "johto"
+      }
+    ],
+    "tm28": [
+      {
+        "how": "field",
+        "where": "national-park",
+        "region": "johto"
+      }
+    ],
+    "tm29": [
+      {
+        "how": "gift",
+        "where": "saffron-city",
+        "place": "노랑시티 에스퍼 아저씨 집",
+        "region": "kanto"
+      },
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 3500,
+            "unit": "coins"
+          }
+        ],
+        "region": "kanto"
+      }
+    ],
+    "tm30": [
+      {
+        "how": "reward",
+        "where": "ecruteak-city",
+        "place": "인주시티 체육관",
+        "detail": "관장 유빈 승리",
+        "region": "johto"
+      }
+    ],
+    "tm31": [
+      {
+        "how": "reward",
+        "where": "violet-city",
+        "place": "도라지시티 체육관",
+        "detail": "관장 비상 승리",
+        "region": "johto"
+      }
+    ],
+    "tm32": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 1500,
+            "unit": "coins"
+          }
+        ],
+        "region": "kanto"
+      }
+    ],
+    "tm33": [
+      {
+        "how": "shop",
+        "where": "goldenrod-city",
+        "place": "금빛시티 백화점 5층",
+        "cost": [
+          {
+            "amount": 3000,
+            "unit": "money"
+          }
+        ],
+        "region": "johto"
+      }
+    ],
+    "tm34": [
+      {
+        "how": "field",
+        "where": "johto-lighthouse",
+        "place": "담청등대 5층",
+        "region": "johto"
+      }
+    ],
+    "tm35": [
+      {
+        "how": "field",
+        "where": "goldenrod-city",
+        "place": "금빛시티 백화점 지하",
+        "region": "johto"
+      }
+    ],
+    "tm36": [
+      {
+        "how": "gift",
+        "where": "johto-route-43",
+        "place": "43번 도로 게이트",
+        "detail": "로켓단 아지트 퇴치 후 경비원",
+        "region": "johto"
+      }
+    ],
+    "tm37": [
+      {
+        "how": "gift",
+        "where": "kanto-route-27",
+        "place": "27번 도로 민가",
+        "detail": "친밀도가 최대인 포켓몬을 보여 주면",
+        "region": "johto"
+      },
+      {
+        "how": "shop",
+        "where": "celadon-city",
+        "place": "무지개시티 백화점 3층",
+        "cost": [
+          {
+            "amount": 2000,
+            "unit": "money"
+          }
+        ],
+        "region": "kanto"
+      }
+    ],
+    "tm38": [
+      {
+        "how": "prize",
+        "where": "goldenrod-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 5500,
+            "unit": "coins"
+          }
+        ],
+        "region": "johto"
+      }
+    ],
+    "tm39": [
+      {
+        "how": "field",
+        "where": "union-cave",
+        "place": "연결동굴 지하 1층",
+        "region": "johto"
+      }
+    ],
+    "tm40": [
+      {
+        "how": "field",
+        "where": "mt-mortar",
+        "region": "johto"
+      }
+    ],
+    "tm41": [
+      {
+        "how": "shop",
+        "where": "goldenrod-city",
+        "place": "금빛시티 백화점 5층",
+        "cost": [
+          {
+            "amount": 3000,
+            "unit": "money"
+          }
+        ],
+        "region": "johto"
+      }
+    ],
+    "tm42": [
+      {
+        "how": "gift",
+        "where": "viridian-city",
+        "detail": "연못 옆 사람",
+        "region": "kanto"
+      }
+    ],
+    "tm43": [
+      {
+        "how": "field",
+        "where": "lake-of-rage",
+        "detail": "서쪽 풀숲 미로",
+        "region": "johto"
+      }
+    ],
+    "tm44": [
+      {
+        "how": "field",
+        "where": "ice-path",
+        "region": "johto"
+      }
+    ],
+    "tm45": [
+      {
+        "how": "reward",
+        "where": "goldenrod-city",
+        "place": "금빛시티 체육관",
+        "detail": "관장 꼭두 승리",
+        "region": "johto"
+      }
+    ],
+    "tm46": [
+      {
+        "how": "field",
+        "where": "team-rocket-hq",
+        "place": "황토마을 로켓단 아지트 지하 2층",
+        "region": "johto"
+      }
+    ],
+    "tm47": [
+      {
+        "how": "gift",
+        "where": "kanto-route-28",
+        "place": "28번 도로 민가",
+        "detail": "풀베기 필요",
+        "region": "kanto"
+      },
+      {
+        "how": "field",
+        "where": "rock-tunnel",
+        "region": "kanto"
+      }
+    ],
+    "tm48": [
+      {
+        "how": "shop",
+        "where": "goldenrod-city",
+        "place": "금빛시티 백화점 5층",
+        "cost": [
+          {
+            "amount": 3000,
+            "unit": "money"
+          }
+        ],
+        "region": "johto"
+      }
+    ],
+    "tm49": [
+      {
+        "how": "reward",
+        "where": "azalea-town",
+        "place": "고동마을 체육관",
+        "detail": "관장 호일 승리",
+        "region": "johto"
+      }
+    ],
+    "tm50": [
+      {
+        "how": "gift",
+        "where": "johto-route-31",
+        "detail": "금빛시티 북쪽 게이트에서 맡은 편지를 전해 주면",
+        "region": "johto"
       }
     ],
     "ultra-ball": [
@@ -1045,7 +1877,11 @@
         }
       },
       {
-        "place": "Burnt Tower"
+        "where": "burned-tower",
+        "place": {
+          "ko": "불탄탑",
+          "en": "Burnt Tower"
+        }
       },
       {
         "where": "whirl-islands"
@@ -1054,7 +1890,11 @@
         "where": "mt-silver"
       },
       {
-        "place": "Goldenrod Underground"
+        "where": "goldenrod-tunnel",
+        "place": {
+          "ko": "금빛시티 지하통로",
+          "en": "Goldenrod Underground"
+        }
       },
       {
         "where": "kanto-route-4"
@@ -1071,7 +1911,10 @@
     "water-stone": [
       {
         "where": "kanto-route-25",
-        "detail": "Bill's Grandfather"
+        "detail": {
+          "ko": "이수재의 할아버지",
+          "en": "Bill's Grandfather"
+        }
       }
     ],
     "white-apricorn": [
@@ -1111,7 +1954,11 @@
     ],
     "x-speed": [
       {
-        "place": "Burnt Tower"
+        "where": "burned-tower",
+        "place": {
+          "ko": "불탄탑",
+          "en": "Burnt Tower"
+        }
       }
     ],
     "yellow-apricorn": [
@@ -1120,5 +1967,344 @@
       }
     ]
   },
-  "tutors": {}
+  "tutors": {},
+  "pokemon": {
+    "abra": [
+      {
+        "how": "prize",
+        "where": "goldenrod-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 200,
+            "unit": "coins"
+          }
+        ],
+        "minLevel": 10,
+        "maxLevel": 10,
+        "replaces": "gift"
+      }
+    ],
+    "articuno": [
+      {
+        "how": "transfer",
+        "detail": {
+          "ko": "타임캡슐(1세대와 통신교환)",
+          "en": "Time Capsule (trade with Generation I)"
+        },
+        "versionsFrom": [
+          "red",
+          "blue",
+          "yellow"
+        ]
+      }
+    ],
+    "bulbasaur": [
+      {
+        "how": "transfer",
+        "detail": {
+          "ko": "타임캡슐(1세대와 통신교환)",
+          "en": "Time Capsule (trade with Generation I)"
+        },
+        "versionsFrom": [
+          "red",
+          "blue",
+          "yellow"
+        ]
+      }
+    ],
+    "celebi": [
+      {
+        "how": "event",
+        "detail": {
+          "ko": "배포 이벤트(골드 · 실버에서는 얻을 수 없어요)",
+          "en": "Event only (not obtainable in Gold/Silver)"
+        }
+      }
+    ],
+    "charmander": [
+      {
+        "how": "transfer",
+        "detail": {
+          "ko": "타임캡슐(1세대와 통신교환)",
+          "en": "Time Capsule (trade with Generation I)"
+        },
+        "versionsFrom": [
+          "red",
+          "blue",
+          "yellow"
+        ]
+      }
+    ],
+    "chikorita": [
+      {
+        "how": "starter",
+        "where": "new-bark-town",
+        "minLevel": 5,
+        "maxLevel": 5,
+        "replaces": "gift"
+      }
+    ],
+    "cyndaquil": [
+      {
+        "how": "starter",
+        "where": "new-bark-town",
+        "minLevel": 5,
+        "maxLevel": 5,
+        "replaces": "gift"
+      }
+    ],
+    "dratini": [
+      {
+        "how": "prize",
+        "where": "goldenrod-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 2100,
+            "unit": "coins"
+          }
+        ],
+        "minLevel": 10,
+        "maxLevel": 10,
+        "replaces": "gift"
+      }
+    ],
+    "eevee": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 6666,
+            "unit": "coins"
+          }
+        ],
+        "minLevel": 15,
+        "maxLevel": 15,
+        "replaces": "gift"
+      }
+    ],
+    "ekans": [
+      {
+        "how": "prize",
+        "where": "goldenrod-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 700,
+            "unit": "coins"
+          }
+        ],
+        "versions": [
+          "gold"
+        ],
+        "minLevel": 10,
+        "maxLevel": 10,
+        "replaces": "gift"
+      }
+    ],
+    "kabuto": [
+      {
+        "how": "transfer",
+        "detail": {
+          "ko": "타임캡슐(1세대와 통신교환)",
+          "en": "Time Capsule (trade with Generation I)"
+        },
+        "versionsFrom": [
+          "red",
+          "blue",
+          "yellow"
+        ]
+      }
+    ],
+    "mew": [
+      {
+        "how": "event",
+        "detail": {
+          "ko": "배포 이벤트",
+          "en": "Distribution event"
+        }
+      }
+    ],
+    "mewtwo": [
+      {
+        "how": "transfer",
+        "detail": {
+          "ko": "타임캡슐(1세대와 통신교환)",
+          "en": "Time Capsule (trade with Generation I)"
+        },
+        "versionsFrom": [
+          "red",
+          "blue",
+          "yellow"
+        ]
+      }
+    ],
+    "moltres": [
+      {
+        "how": "transfer",
+        "detail": {
+          "ko": "타임캡슐(1세대와 통신교환)",
+          "en": "Time Capsule (trade with Generation I)"
+        },
+        "versionsFrom": [
+          "red",
+          "blue",
+          "yellow"
+        ]
+      }
+    ],
+    "mr-mime": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 3333,
+            "unit": "coins"
+          }
+        ],
+        "minLevel": 15,
+        "maxLevel": 15,
+        "replaces": "gift"
+      }
+    ],
+    "omanyte": [
+      {
+        "how": "transfer",
+        "detail": {
+          "ko": "타임캡슐(1세대와 통신교환)",
+          "en": "Time Capsule (trade with Generation I)"
+        },
+        "versionsFrom": [
+          "red",
+          "blue",
+          "yellow"
+        ]
+      }
+    ],
+    "pinsir": [
+      {
+        "how": "bug-contest",
+        "where": "national-park",
+        "detail": {
+          "ko": "화 · 목 · 토요일 곤충채집대회",
+          "en": "Bug-Catching Contest (Tue, Thu, Sat)"
+        }
+      }
+    ],
+    "porygon": [
+      {
+        "how": "prize",
+        "where": "celadon-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 9999,
+            "unit": "coins"
+          }
+        ],
+        "minLevel": 20,
+        "maxLevel": 20,
+        "replaces": "gift"
+      }
+    ],
+    "sandshrew": [
+      {
+        "how": "prize",
+        "where": "goldenrod-city",
+        "content": {
+          "ko": "게임코너",
+          "en": "Game Corner",
+          "ja": "ゲームコーナー"
+        },
+        "cost": [
+          {
+            "amount": 700,
+            "unit": "coins"
+          }
+        ],
+        "versions": [
+          "silver"
+        ],
+        "minLevel": 10,
+        "maxLevel": 10,
+        "replaces": "gift"
+      }
+    ],
+    "scyther": [
+      {
+        "how": "bug-contest",
+        "where": "national-park",
+        "detail": {
+          "ko": "화 · 목 · 토요일 곤충채집대회",
+          "en": "Bug-Catching Contest (Tue, Thu, Sat)"
+        }
+      }
+    ],
+    "squirtle": [
+      {
+        "how": "transfer",
+        "detail": {
+          "ko": "타임캡슐(1세대와 통신교환)",
+          "en": "Time Capsule (trade with Generation I)"
+        },
+        "versionsFrom": [
+          "red",
+          "blue",
+          "yellow"
+        ]
+      }
+    ],
+    "totodile": [
+      {
+        "how": "starter",
+        "where": "new-bark-town",
+        "minLevel": 5,
+        "maxLevel": 5,
+        "replaces": "gift"
+      }
+    ],
+    "zapdos": [
+      {
+        "how": "transfer",
+        "detail": {
+          "ko": "타임캡슐(1세대와 통신교환)",
+          "en": "Time Capsule (trade with Generation I)"
+        },
+        "versionsFrom": [
+          "red",
+          "blue",
+          "yellow"
+        ]
+      }
+    ]
+  }
 }

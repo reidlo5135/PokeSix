@@ -4,7 +4,8 @@
     "PokéAPI에는 신오 · 성도 · 관동 장소의 한국어 이름이 없다. 도로 · 수로 번호는 코드가 바꾼다(201번 도로 · 220번 수로).",
     "형식: PokéAPI locations.identifier → 한국어 이름(글자) 또는 {ko, en, ja}.",
     "출처: PKHeX가 게임에서 뽑은 장소 문자열(4–9세대, github.com/kwsch/PKHeX), WikiDex 전 언어 장소 목록, 한국어 포켓몬 위키 · 나무위키를 교차 검증했다(scripts/i18n/merge_places.py).",
-    "정발되지 않은 곳(오레 지방 · 세비 제도 등)은 팬 위키 표기다. 검토 목록: docs/i18n/review-places.md"
+    "정발되지 않은 곳(오레 지방 · 세비 제도 등)은 팬 위키 표기다. 검토 목록: docs/i18n/review-places.md",
+    "2026-11-04 보충: PokéAPI 가짜 장소 roaming-<지방> → '<지방> 각지(배회)', unknown-all-* → '장소 미상(PokéAPI)'(PokéAPI도 장소를 모른다). FRLG kanto-altering-cave · pattern-bush · rixy-chamber는 한국어 표기 출처가 갈려 비워 둔다."
   ],
   "places": {
     "abandoned-ship": {
@@ -1703,6 +1704,26 @@
       "ko": "현이",
       "ja": "ゲン"
     },
+    "roaming-hoenn": {
+      "ko": "호연 각지(배회)",
+      "en": "Roaming Hoenn",
+      "ja": "ホウエン各地(はいかい)"
+    },
+    "roaming-johto": {
+      "ko": "성도 각지(배회)",
+      "en": "Roaming Johto",
+      "ja": "ジョウト各地(はいかい)"
+    },
+    "roaming-kanto": {
+      "ko": "관동 각지(배회)",
+      "en": "Roaming Kanto",
+      "ja": "カントー各地(はいかい)"
+    },
+    "roaming-sinnoh": {
+      "ko": "신오 각지(배회)",
+      "en": "Roaming Sinnoh",
+      "ja": "シンオウ各地(はいかい)"
+    },
     "roaring-sea-caves": {
       "ko": "해명 동굴",
       "ja": "うみなりのどうくつ"
@@ -2221,6 +2242,18 @@
       "ja": "つながりのどうくつ"
     },
     "unity-tower": "유나이티드타워",
+    "unknown-all-bugs": {
+      "ko": "장소 미상(PokéAPI)",
+      "en": "Unknown; all bugs"
+    },
+    "unknown-all-poliwag": {
+      "ko": "장소 미상(PokéAPI)",
+      "en": "Unknown; all Poliwag"
+    },
+    "unknown-all-rattata": {
+      "ko": "장소 미상(PokéAPI)",
+      "en": "Unknown; all Rattata"
+    },
     "unova-faraway-place": "먼 곳",
     "unova-mystery-zone": "수수께끼의 장소",
     "unova-pokemon-league": "포켓몬리그",

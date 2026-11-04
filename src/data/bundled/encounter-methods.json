@@ -1,6 +1,7 @@
 {
   "_comment": [
-    "야생 출현 방법 이름 (PokéAPI encounter_methods.identifier → {ko, en, ja}). 없는 방법은 identifier로 보인다."
+    "야생 출현 방법 이름 (PokéAPI encounter_methods.identifier → {ko, en, ja}). 없는 방법은 identifier로 보인다.",
+    "2026-11-04 보충: 1–5세대 빈 방법 17개 + 사전 pokemon 묶음용 방법 9개(starter · fossil · prize · bug-contest · swarm · pokewalker · radio · event · transfer). 흔들리는 풀숲 · 해초 · 은혈은 Bulbapedia 다국어 표 · 나무위키 표기, 고래왕자물뿌리개 · 데봉스코프 · 꼬부기물뿌리개는 아이템 공식 이름. 흙먼지 · 물보라 · 새 포켓몬 그림자 · 박치기 나무 구분 · 콜로세움/채널 특전은 공식 한국어 표기를 확인하지 못한 설명형 이름이다(ja가 없는 칸은 확인 못 한 것)."
   ],
   "methods": {
     "walk": {
@@ -84,9 +85,131 @@
       "ja": "ポケモンのふえ"
     },
     "squirt-bottle": {
-      "ko": "물뿌리개",
+      "ko": "꼬부기물뿌리개",
       "en": "Squirt Bottle",
       "ja": "ゼニガメじょうろ"
+    },
+    "grass-spots": {
+      "ko": "흔들리는 풀숲",
+      "en": "Rustling grass",
+      "ja": "ゆれるくさむら"
+    },
+    "cave-spots": {
+      "ko": "흙먼지",
+      "en": "Dust cloud"
+    },
+    "bridge-spots": {
+      "ko": "새 포켓몬 그림자",
+      "en": "Flying Pokémon's shadow"
+    },
+    "super-rod-spots": {
+      "ko": "물보라(낚시)",
+      "en": "Rippling water (fishing)"
+    },
+    "surf-spots": {
+      "ko": "물보라(파도타기)",
+      "en": "Rippling water (surfing)"
+    },
+    "hidden-grotto": {
+      "ko": "은혈",
+      "en": "Hidden Grotto",
+      "ja": "かくしあな"
+    },
+    "headbutt-low": {
+      "ko": "박치기(드물게 나오는 나무)",
+      "en": "Headbutt (low-rate tree)",
+      "ja": "ずつき(でにくい木)"
+    },
+    "headbutt-normal": {
+      "ko": "박치기(나무)",
+      "en": "Headbutt (tree)",
+      "ja": "ずつき(木)"
+    },
+    "headbutt-high": {
+      "ko": "박치기(잘 나오는 나무)",
+      "en": "Headbutt (high-rate tree)",
+      "ja": "ずつき(でやすい木)"
+    },
+    "wailmer-pail": {
+      "ko": "고래왕자물뿌리개",
+      "en": "Wailmer Pail",
+      "ja": "ホエルコじょうろ"
+    },
+    "seaweed": {
+      "ko": "해초(다이빙)",
+      "en": "Seaweed (Dive)",
+      "ja": "かいそう(ダイビング)"
+    },
+    "devon-scope": {
+      "ko": "데봉스코프",
+      "en": "Devon Scope",
+      "ja": "デボンスコープ"
+    },
+    "feebas-tile-fishing": {
+      "ko": "빈티나 낚시 포인트",
+      "en": "Feebas tile fishing",
+      "ja": "ヒンバスのつりば"
+    },
+    "colosseum-bonus-disc-us": {
+      "ko": "콜로세움 보너스 디스크(북미)",
+      "en": "Colosseum Bonus Disc (US)"
+    },
+    "colosseum-bonus-disc-jpn": {
+      "ko": "콜로세움 예약 특전 디스크(일본)",
+      "en": "Colosseum Bonus Disc (Japan)",
+      "ja": "ポケモンコロシアム 予約特典ディスク"
+    },
+    "pokemon-channel-pal": {
+      "ko": "포켓몬 채널(유럽판)",
+      "en": "Pokémon Channel (PAL)"
+    },
+    "pokemon-ranger": {
+      "ko": "포켓몬 레인저(알 보내기)",
+      "en": "Pokémon Ranger (egg)",
+      "ja": "ポケモンレンジャー(タマゴ)"
+    },
+    "starter": {
+      "ko": "스타팅",
+      "en": "Starter",
+      "ja": "さいしょのポケモン"
+    },
+    "fossil": {
+      "ko": "화석 복원",
+      "en": "Fossil",
+      "ja": "かせきのふくげん"
+    },
+    "prize": {
+      "ko": "경품",
+      "en": "Prize",
+      "ja": "けいひん"
+    },
+    "bug-contest": {
+      "ko": "곤충채집대회",
+      "en": "Bug-Catching Contest",
+      "ja": "むしとりたいかい"
+    },
+    "swarm": {
+      "ko": "대량발생",
+      "en": "Swarm",
+      "ja": "たいりょうはっせい"
+    },
+    "pokewalker": {
+      "ko": "포켓워커",
+      "en": "Pokéwalker",
+      "ja": "ポケウォーカー"
+    },
+    "radio": {
+      "ko": "라디오(호연 · 신오 사운드)",
+      "en": "Radio (Hoenn/Sinnoh Sound)"
+    },
+    "event": {
+      "ko": "배포 이벤트",
+      "en": "Event",
+      "ja": "はいふ"
+    },
+    "transfer": {
+      "ko": "다른 게임에서 데려오기",
+      "en": "Transfer from another game"
     }
   }
 }
